@@ -1,4 +1,4 @@
-package com.whisky.rvcom.misc;
+package com.whiskey.rvcom.misc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

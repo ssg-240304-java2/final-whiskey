@@ -1,4 +1,4 @@
-package com.whisky.rvcom;
+package com.whiskey.rvcom;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
