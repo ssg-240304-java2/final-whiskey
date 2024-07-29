@@ -81,6 +81,7 @@ jobs:
         port: ${{ secrets.DEV_NCP_PORT }}
         script: |
           zsh
+          echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           sudo docker stop $(sudo docker ps -a -q)
           sudo docker rm -f $(sudo docker ps -a -q)
