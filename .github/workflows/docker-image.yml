@@ -77,7 +77,6 @@ jobs:
         host: ${{ secrets.DEV_NCP_HOST }}
         username: ${{ secrets.DEV_NCP_USERNAME }}
         password: ${{ secrets.DEV_NCP_PASSWORD }}
-        key: ${{ secrets.DEV_NCP_KEY }}
         port: ${{ secrets.DEV_NCP_PORT }}
         script: |
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
