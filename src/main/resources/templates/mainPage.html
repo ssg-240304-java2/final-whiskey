@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodPolio - 메인 페이지</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 15p x;
+        }
+        header {
+            background-color: #c41200;
+            color: white;
+            padding: 20px 0;
+        }
+        .header-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 15px;
+        }
+        .search-bar input {
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+        }
+        .search-bar button {
+            padding: 12px 20px;
+            background-color: #c41200;
+            color: white;
+            border: 1px solid white;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+        .banner {
+            background-color: #fff;
+            text-align: left;
+            padding: 20px;
+            margin: 20px 0;
+            border-bottom: 1px solid #e6e6e6;
+        }
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .restaurant-card {
+            display: flex;
+            justify-content: space-between;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-bottom: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .restaurant-card:hover {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .restaurant-info {
+            flex: 1;
+        }
+        .restaurant-image-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+        }
+        .rating {
+            color: #f15c4f;
+        }
+        .find-order {
+            background-color: #c41200;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        @media (max-width: 768px) {
+            .restaurant-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 480px) {
+            .restaurant-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">FoodPolio</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="맛집을 검색해보세요">
+                    <button>검색</button>
+                </div>
+                <nav>
+                    <a href="login.html">로그인</a>
+                    <a href="register.html">회원가입</a>
+                    <a href="#">내 정보</a>
+                    <a href="#">내 맛집</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="banner">
+            <h2>주변 맛집</h2>
+            <p>현재 위치: 인천시, ...</p>
+        </div>
+        
+        <div class="restaurant-grid">
+            <div class="restaurant-card">
+                <div class="restaurant-info">
+                    <h3>맛있는 파스타</h3>
+                    <p>50m • 이탈리안 • 파스타 • 피자</p>
+                    <p>영업시간 11:00 - 21:00</p>
+                    <div class="rating">★★★★★</div>
+                    <button class="find-order">상세 정보 / 주문</button>
+                </div>
+                <div class="restaurant-image-placeholder">
+                    음식점 사진
+                </div>
+            </div>
+            
+            <div class="restaurant-card">
+                <div class="restaurant-info">
+                    <h3>정통 일식</h3>
+                    <p>100m • 일식 • 스시 • 사케</p>
+                    <p>영업시간 12:00 - 22:00</p>
+                    <div class="rating">★★★★☆</div>
+                    <button class="find-order">상세 정보 / 주문</button>
+                </div>
+                <div class="restaurant-image-placeholder">
+                    음식점 사진
+                </div>
+            </div>
+            
+            <div class="restaurant-card">
+                <div class="restaurant-info">
+                    <h3>한옥 찜닭</h3>
+                    <p>150m • 한식 • 찜닭 • 백반</p>
+                    <p>영업시간 10:00 - 21:00</p>
+                    <div class="rating">★★★★★</div>
+                    <button class="find-order">상세 정보 / 주문</button>
+                </div>
+                <div class="restaurant-image-placeholder">
+                    음식점 사진
+                </div>
+            </div>
+            
+            <div class="restaurant-card">
+                <div class="restaurant-info">
+                    <h3>베트남 쌀국수</h3>
+                    <p>200m • 베트남 • 쌀국수 • 반미</p>
+                    <p>영업시간 11:00 - 20:00</p>
+                    <div class="rating">★★★☆☆</div>
+                    <button class="find-order">상세 정보 / 주문</button>
+                </div>
+                <div class="restaurant-image-placeholder">
+                    음식점 사진
+                </div>
+            </div>
+            
+            <div class="restaurant-card">
+                <div class="restaurant-info">
+                    <h3>궁중 떡볶이</h3>
+                    <p>250m • 분식 • 떡볶이 • 튀김</p>
+                    <p>영업시간 11:00 - 23:00</p>
+                    <div class="rating">★★★★☆</div>
+                    <button class="find-order">상세 정보 / 주문</button>
+                </div>
+                <div class="restaurant-image-placeholder">
+                    음식점 사진
+                </div>
+            </div>
+            
+            <div class="restaurant-card">
+                <div class="restaurant-info">
+                    <h3>명품 갈비찜</h3>
+                    <p>300m • 한식 • 갈비찜 • 불고기</p>
+                    <p>영업시간 11:30 - 21:30</p>
+                    <div class="rating">★★★★★</div>
+                    <button class="find-order">상세 정보 / 주문</button>
+                </div>
+                <div class="restaurant-image-placeholder">
+                    음식점 사진
+                </div>
+            </div>
+        </div>        
+    </div>
+</body>
+</html>
