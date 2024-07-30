@@ -152,10 +152,13 @@
         }
 
         .popular-review-card {
+            display: flex;
+            justify-content: space-between;
             background-color: #fff;
             border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            overflow: hidden;
         }
 
         .review-card {
@@ -198,7 +201,8 @@
         }
 
         .review-content {
-            padding: 15px;
+            flex: 1;
+            padding-right: 15px;
         }
 
         .review-content h4 {
@@ -215,6 +219,7 @@
 
         .reviewer {
             font-weight: bold;
+            color: #555;
         }
 
         .likes {
@@ -303,6 +308,42 @@
             margin-left: 10px;
         }
 
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -363,7 +404,15 @@
                 </table>
                 <button class="add-favorite">즐겨찾기에 추가</button>
             </div>
-
+        <!-- 리뷰 내용 모달 -->
+            <div id="reviewModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 id="modalReviewTitle"></h2>
+                    <p id="modalReviewContent"></p>
+                    <div id="modalReviewInfo"></div>
+                </div>
+            </div>            
             <div id="reviews" class="tab-content">
                 <!-- 리뷰 내용 -->
                 <h2>평균 평점</h2>
@@ -390,29 +439,28 @@
                 <h3>인기 리뷰</h3>
                 <div class="popular-reviews">
                     <div class="popular-review-card">
-                        <div class="image-placeholder">인기 리뷰 이미지</div>
                         <div class="review-content">
                             <h4>최고의 파스타 맛집!</h4>
                             <p>트러플 크림 파스타가 정말 일품이에요. 분위기도 좋고 서비스도 친절해요.</p>
                             <div class="review-footer">
-                                <span class="reviewer">김맛있다</span>
+                                <span class="reviewer">작성자: 김맛있다</span>
                                 <span class="likes">👍 좋아요 128</span>
                             </div>
                         </div>
+                        <div class="image-placeholder">인기 리뷰 이미지</div>
                     </div>
                     <div class="popular-review-card">
-                        <div class="image-placeholder">인기 리뷰 이미지</div>
                         <div class="review-content">
                             <h4>데이트 코스로 완벽해요</h4>
                             <p>와인과 스테이크의 조화가 환상적이에요. 연인과 함께 오기 좋은 곳입니다.</p>
                             <div class="review-footer">
-                                <span class="reviewer">박데이트</span>
+                                <span class="reviewer">작성자: 박데이트</span>
                                 <span class="likes">👍 좋아요 95</span>
                             </div>
                         </div>
+                        <div class="image-placeholder">인기 리뷰 이미지</div>
                     </div>
                 </div>
-
 
                 <h3>최근 리뷰</h3>
                 <div class="recent-reviews">
@@ -472,6 +520,35 @@
                     }
                 });
             });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById("reviewModal");
+            var span = document.getElementsByClassName("close")[0];
+
+            // 이미지 클릭 시 모달 열기
+            var reviewImages = document.querySelectorAll('.image-placeholder');
+            reviewImages.forEach(function(img, index) {
+                img.onclick = function() {
+                    modal.style.display = "block";
+                    // 여기에 실제 리뷰 데이터를 채워넣어야 합니다.
+                    document.getElementById("modalReviewTitle").innerText = "리뷰 제목 " + (index + 1);
+                    document.getElementById("modalReviewContent").innerText = "이곳에 상세 리뷰 내용이 들어갑니다.";
+                    document.getElementById("modalReviewInfo").innerText = "작성자: 사용자" + (index + 1) + " | 날짜: 2023-05-0" + (index + 1);
+                }
+            });
+
+            // 닫기 버튼 클릭 시 모달 닫기
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // 모달 외부 클릭 시 모달 닫기
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
         });
     </script>
 </body>
