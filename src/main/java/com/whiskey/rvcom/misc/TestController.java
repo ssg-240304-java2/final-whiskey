@@ -8,6 +8,11 @@ public class TestController {
 
     @GetMapping("/")
     public String getMain() {
+        return "main";
+    }
+
+    @GetMapping("/mainPage")
+    public String getMainPage() {
         return "mainPage";
     }
 
