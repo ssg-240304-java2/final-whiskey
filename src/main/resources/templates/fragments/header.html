@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <header th:fragment="header">
+        <!-- 여기에 헤더 내용을 넣습니다 -->
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">FoodPolio</div>
+                <div class="search-bar">
+                    <input type="text" placeholder="맛집을 검색해보세요">
+                    <button>검색</button>
+                </div>
+                <nav>
+                    <a href="login.html">로그인</a>
+                    <a href="register.html">회원가입</a>
+                    <a href="#">내 정보</a>
+                    <a href="#">내 맛집</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+</body>
+</html>
