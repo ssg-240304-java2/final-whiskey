@@ -8,11 +8,21 @@ public class TestController {
 
     @GetMapping("/")
     public String getMain() {
-        return "main";
+        return "mainPage";
     }
 
-    @GetMapping("/sub")
-    public String getSub() {
-        return "sub";
+    @GetMapping("/login")
+    public String getLogin() {
+        return "login";
+    }
+
+    @GetMapping("/register")
+    public String getRegister() {
+        return "register";
+    }
+
+    @GetMapping("/restaurant")
+    public String getRestaurantDetail() {
+        return "restaurantDetail";
     }
 }
