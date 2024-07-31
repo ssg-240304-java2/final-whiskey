@@ -1,377 +1,17 @@
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Global styles */
-body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f7f7f7;
-    color: #333;
-}
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
-/* 헤더 스타일 */
-header {
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 15px 0;
-}
-.container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #c41200;
-}
-.search-bar {
-    display: flex;
-    align-items: center;
-    width: 50%;
-}
-.search-bar input {
-    padding: 10px;
-    width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 4px 0 0 4px;
-    font-size: 14px;
-}
-.search-bar button {
-    padding: 10px 15px;
-    background-color: #c41200;
-    color: white;
-    border: none;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    font-size: 14px;
-}
+/* 네비게이션 링크 스타일 */
 nav a {
     color: #333;
     text-decoration: none;
     margin-left: 15px;
     font-size: 14px;
 }
+
 nav a:hover {
     color: #c41200;
 }
 
-/* Restaurant banner styles */
+/* 레스토랑 배너 스타일 */
 .restaurant-banner {
     background-size: cover;
     background-position: center;
@@ -379,6 +19,7 @@ nav a:hover {
     padding: 60px 0;
     position: relative;
 }
+
 .restaurant-banner::before {
     content: '';
     position: absolute;
@@ -388,71 +29,85 @@ nav a:hover {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
 }
+
 .restaurant-info {
     position: relative;
     z-index: 1;
 }
+
 .restaurant-name {
     font-size: 48px;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
+
 .restaurant-meta {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
 }
+
 .rating {
     display: flex;
     align-items: center;
     margin-right: 15px;
 }
+
 .stars {
     color: #f8e71c;
     margin-right: 5px;
 }
+
 .review-count {
     font-size: 14px;
 }
+
 .price-category {
     font-size: 16px;
 }
+
 .restaurant-status {
     font-size: 14px;
 }
+
 .open-now {
     color: #00ff00;
     font-weight: bold;
     margin-right: 10px;
 }
 
-/* Tab styles */
+/* 탭 스타일 */
 .tabs {
     display: flex;
     margin-bottom: 20px;
 }
+
 .tab {
     padding: 10px 20px;
     background-color: #f0f0f0;
     cursor: pointer;
 }
+
 .tab.active {
     background-color: #c41200;
     color: white;
 }
+
 .content-area {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
 }
+
 .tab-content {
     display: none;
 }
+
 .tab-content.active {
     display: block;
 }
 
-/* Map and hours table styles */
+/* 지도 및 영업시간 테이블 스타일 */
 .map-placeholder {
     width: 100%;
     height: 300px;
@@ -463,16 +118,18 @@ nav a:hover {
     font-size: 18px;
     margin-bottom: 20px;
 }
+
 .hours-table {
     width: 100%;
     border-collapse: collapse;
 }
+
 .hours-table td {
     padding: 8px;
     border-bottom: 1px solid #e0e0e0;
 }
 
-/* Review styles */
+/* 리뷰 스타일 */
 .reviews-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -526,6 +183,7 @@ nav a:hover {
     border-radius: 4px;
 }
 
+/* 리뷰 작성 버튼 스타일 */
 .write-review {
     text-align: center;
     margin-top: 20px;
@@ -545,63 +203,76 @@ nav a:hover {
     background-color: #a30f00;
 }
 
+/* 리뷰 상세 스타일 */
 .review-header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
 }
+
 .review-info {
     text-align: right;
 }
+
 .review-footer {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
     font-size: 0.9em;
 }
+
 .reviewer-name {
     font-weight: bold;
     display: block;
 }
+
 .review-date {
     color: #777;
     font-size: 0.9em;
 }
+
 .review-text {
     line-height: 1.6;
 }
+
 .review-images {
     display: flex;
     gap: 10px;
     margin: 15px 0;
 }
+
 .review-images img, .more-images {
     width: 100px;
     height: 100px;
     border-radius: 4px;
     object-fit: cover;
 }
+
 .more-images {
     background-color: rgba(0,0,0,0.5);
     color: white;
     font-weight: bold;
     cursor: pointer;
 }
+
 .menu-info {
     background-color: #f0f0f0;
     padding: 10px;
     border-radius: 4px;
     margin: 10px 0;
 }
+
 .menu-name {
     font-weight: bold;
     margin-right: 10px;
 }
+
 .review-actions {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
 }
+
 .review-actions button {
     background: none;
     border: 1px solid #ddd;
@@ -611,7 +282,7 @@ nav a:hover {
     margin-left: 10px;
 }
 
-/* Modal styles */
+/* 모달 스타일 */
 .modal {
     display: none;
     position: fixed;
@@ -623,6 +294,7 @@ nav a:hover {
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
 }
+
 .modal-content {
     background-color: #fefefe;
     margin: 15% auto;
@@ -632,6 +304,7 @@ nav a:hover {
     max-width: 600px;
     border-radius: 8px;
 }
+
 .close {
     color: #aaa;
     float: right;
@@ -639,6 +312,7 @@ nav a:hover {
     font-weight: bold;
     cursor: pointer;
 }
+
 .close:hover,
 .close:focus {
     color: black;

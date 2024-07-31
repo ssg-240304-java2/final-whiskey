@@ -1,3 +1,12 @@
+/* 전역 스타일 */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    color: #333;
+}
+/* 푸터 스타일 */
 .test-footer {
     background-color: #333;
     color: white;
@@ -7,16 +16,19 @@
     width: 100%;
 }
 
+/* 푸터 내용 스타일 */
 .footer-content {
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
 }
 
+/* 푸터 내비게이션 스타일 */
 .footer-nav {
     margin-top: 10px;
 }
 
+/* 푸터 내비게이션 링크 스타일 */
 .footer-nav a {
     color: white;
     text-decoration: none;
@@ -24,35 +36,47 @@
     font-size: 14px;
 }
 
+/* 푸터 내비게이션 링크 호버 효과 */
 .footer-nav a:hover {
     text-decoration: underline;
 }
 
+/* 헤더 스타일 */
 header {
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     padding: 15px 0;
 }
+
+/* 컨테이너 스타일 */
 .container {
     max-width: 1000px;
     margin: 0 auto;
     padding: 0 15px;
 }
+
+/* 헤더 내용 레이아웃 */
 .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
+/* 로고 스타일 */
 .logo {
     font-size: 24px;
     font-weight: bold;
     color: #c41200;
 }
+
+/* 검색바 레이아웃 */
 .search-bar {
     display: flex;
     align-items: center;
     width: 50%;
 }
+
+/* 검색 입력 필드 스타일 */
 .search-bar input {
     padding: 10px;
     width: 100%;
@@ -60,6 +84,8 @@ header {
     border-radius: 4px 0 0 4px;
     font-size: 14px;
 }
+
+/* 검색 버튼 스타일 */
 .search-bar button {
     padding: 10px 15px;
     background-color: #c41200;
@@ -69,12 +95,16 @@ header {
     cursor: pointer;
     font-size: 14px;
 }
+
+/* 내비게이션 링크 스타일 */
 nav a {
     color: #333;
     text-decoration: none;
     margin-left: 15px;
     font-size: 14px;
 }
+
+/* 내비게이션 링크 호버 효과 */
 nav a:hover {
     color: #c41200;
 }
