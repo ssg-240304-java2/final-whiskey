@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FoodPolio - 메인 페이지</title>
     <style>
+        /* 전체 페이지 스타일 */
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
@@ -12,26 +13,34 @@
             background-color: #f7f7f7;
             color: #333;
         }
+
+        /* 컨테이너 스타일 */
         .container {
             max-width: 1000px;
             margin: 0 auto;
-            padding: 0 15p x;
+            padding: 0 15px;
         }
+
+        /* 헤더 스타일 */
         header {
             background-color: #c41200;
             color: white;
             padding: 20px 0;
         }
+
         .header-content {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         .logo {
             font-size: 28px;
             font-weight: bold;
             margin-bottom: 15px;
         }
+
+        /* 검색바 스타일 */
         .search-bar {
             display: flex;
             align-items: center;
@@ -39,6 +48,7 @@
             max-width: 600px;
             margin-bottom: 15px;
         }
+
         .search-bar input {
             padding: 12px;
             width: 100%;
@@ -46,6 +56,7 @@
             border-radius: 4px 0 0 4px;
             font-size: 16px;
         }
+
         .search-bar button {
             padding: 12px 20px;
             background-color: #c41200;
@@ -55,17 +66,22 @@
             cursor: pointer;
             font-size: 16px;
         }
+
+        /* 네비게이션 스타일 */
         nav {
             display: flex;
             justify-content: center;
             width: 100%;
         }
+
         nav a {
             color: white;
             text-decoration: none;
             margin: 0 15px;
             font-size: 14px;
         }
+
+        /* 배너 스타일 */
         .banner {
             background-color: #fff;
             text-align: left;
@@ -73,11 +89,15 @@
             margin: 20px 0;
             border-bottom: 1px solid #e6e6e6;
         }
+
+        /* 레스토랑 그리드 스타일 */
         .restaurant-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
         }
+
+        /* 레스토랑 카드 스타일 */
         .restaurant-card {
             display: flex;
             justify-content: space-between;
@@ -96,6 +116,7 @@
         .restaurant-info {
             flex: 1;
         }
+
         .restaurant-image-placeholder {
             width: 100px;
             height: 100px;
@@ -106,9 +127,13 @@
             justify-content: center;
             margin-left: 15px;
         }
+
+        /* 평점 스타일 */
         .rating {
             color: #f15c4f;
         }
+
+        /* 버튼 스타일 */
         .find-order {
             background-color: #c41200;
             color: white;
@@ -119,11 +144,14 @@
             margin-top: 10px;
             font-size: 14px;
         }
+
+        /* 반응형 디자인 */
         @media (max-width: 768px) {
             .restaurant-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
         @media (max-width: 480px) {
             .restaurant-grid {
                 grid-template-columns: 1fr;
@@ -133,23 +161,6 @@
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
-    <!-- <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">FoodPolio</div>
-                <div class="search-bar">
-                    <input type="text" placeholder="맛집을 검색해보세요">
-                    <button>검색</button>
-                </div>
-                <nav>
-                    <a href="login.html">로그인</a>
-                    <a href="register.html">회원가입</a>
-                    <a href="#">내 정보</a>
-                    <a href="#">내 맛집</a>
-                </nav>
-            </div>
-        </div>
-    </header> -->
     
     <div class="container">
         <div class="banner">
