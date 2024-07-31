@@ -1,0 +1,80 @@
+.test-footer {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.footer-nav {
+    margin-top: 10px;
+}
+
+.footer-nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 14px;
+}
+
+.footer-nav a:hover {
+    text-decoration: underline;
+}
+
+header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px 0;
+}
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #c41200;
+}
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 50%;
+}
+.search-bar input {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    font-size: 14px;
+}
+.search-bar button {
+    padding: 10px 15px;
+    background-color: #c41200;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 14px;
+}
+nav a {
+    color: #333;
+    text-decoration: none;
+    margin-left: 15px;
+    font-size: 14px;
+}
+nav a:hover {
+    color: #c41200;
+}
