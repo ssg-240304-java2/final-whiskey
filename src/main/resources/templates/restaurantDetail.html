@@ -21,28 +21,57 @@
 
         /* Restaurant banner styles */
         .restaurant-banner {
-            background-image: url('restaurant-banner.jpg');
             background-size: cover;
             background-position: center;
             color: white;
-            padding: 40px 0;
-            margin-bottom: 20px;
+            padding: 60px 0;
+            position: relative;
+        }
+        .restaurant-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
         }
         .restaurant-info {
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 20px;
-            border-radius: 8px;
+            position: relative;
+            z-index: 1;
         }
         .restaurant-name {
-            font-size: 36px;
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .restaurant-meta {
+            display: flex;
+            align-items: center;
             margin-bottom: 10px;
         }
         .rating {
-            font-size: 18px;
-            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
         }
-        .restaurant-details {
+        .stars {
+            color: #f8e71c;
+            margin-right: 5px;
+        }
+        .review-count {
+            font-size: 14px;
+        }
+        .price-category {
             font-size: 16px;
+        }
+        .restaurant-status {
+            font-size: 14px;
+        }
+        .open-now {
+            color: #00ff00;
+            font-weight: bold;
+            margin-right: 10px;
         }
 
         /* Tab styles */
@@ -233,9 +262,10 @@
             cursor: pointer;
         }
     </style>
+    <th:block th:replace="fragments/header :: header-css"></th:block>
 </head>
 <body>
-    <div th:replace="fragments/header :: header"></div>
+    <th:block th:replace="fragments/header :: header"></th:block>
     <!-- <header>
         <div class="container">
             <div class="header-content">
@@ -254,14 +284,23 @@
         </div>
     </header>     -->
     
-    <div class="restaurant-banner">
+    <div class="restaurant-banner" style="background-image: url('https://via.placeholder.com/1200x400');">
         <div class="container">
             <div class="restaurant-info">
-                <h1 class="restaurant-name">Bogetta</h1>
-                <div class="rating">★★★★★ 4.5 / 5 (1.2k 리뷰)</div>
-                <div class="restaurant-details">
-                    영업중 • 11:00 - 21:00<br>
-                    이탈리안 • 파스타 • 피자
+                <h1 class="restaurant-name">추형진의 양식집</h1>
+                <div class="restaurant-meta">
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="review-count">1,234 리뷰</span>
+                    </div>
+                    <div class="price-category">
+                        <span class="price">₩₩</span>
+                        <span class="category">• 이탈리안 • 파스타 • 피자</span>
+                    </div>
+                </div>
+                <div class="restaurant-status">
+                    <span class="open-now">영업중</span>
+                    <span class="hours">11:00 - 21:00</span>
                 </div>
             </div>
         </div>
@@ -290,7 +329,6 @@
                     <tr><td>토요일</td><td>11:00 AM - 12:00 AM (다음날)</td></tr>
                     <tr><td>일요일</td><td>11:00 AM - 11:00 PM</td></tr>
                 </table>
-                <button class="add-favorite">즐겨찾기에 추가</button>
             </div>
         <!-- 리뷰 내용 모달 -->
             <div id="reviewModal" class="modal">
