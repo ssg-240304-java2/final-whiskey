@@ -49,3 +49,4 @@ src/main/resources/config/connection-info.properties
 #src/main/resources/application.yml
 #src/main/resources/application.yml
 #application.yml
+build/tmp/compileJava/previous-compilation-data.bin
