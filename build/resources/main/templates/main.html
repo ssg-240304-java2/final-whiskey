@@ -1,11 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>main</title>
-    </head>
-    <body>
-        This is Main Page
-<!--        <a th:href="/sub"></a>-->
-    </body>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodfolio 테스트 페이지</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        h1 {
+            color: #333;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #c41200;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .button:hover {
+            background-color: #a30f00;
+        }
+    </style>
+</head>
+<body>
+    <h1>Foodfolio 테스트 페이지</h1>
+    <p>각 페이지로 이동하여 테스트해보세요.</p>
+    <div class="button-container">
+        <a href="/mainPage" class="button">메인 페이지</a>
+        <a href="/restaurant" class="button">음식점 상세 정보</a>
+        <a href="/login" class="button">로그인</a>
+        <a href="/register" class="button">회원가입</a>
+    </div>
+</body>
 </html>
