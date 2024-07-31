@@ -35,7 +35,12 @@ public class TestController {
 
     @GetMapping("/receipt-verification")
     public String getReceiptVerification() {
-        return "receipt-verification";
+        return "receiptVerification";
+    }
+    
+    @GetMapping("/write-review")
+    public String getWriteReview() {
+        return "writeReview";
     }
     
 }
