@@ -38,12 +38,11 @@
         <div class="tabs">
             <div class="tab active" data-tab="info">정보</div>
             <div class="tab" data-tab="reviews">리뷰</div>
-            <!-- <div class="tab" data-tab="community">커뮤니티</div> -->
+            <div class="tab" data-tab="community">커뮤니티</div>
         </div>
         
         <div class="content-area">
             <div id="info" class="tab-content active">
-                <!-- 정보 내용 -->
                 <h2>위치 및 영업시간</h2>
                 <div class="map-placeholder">
                     네이버 지도 API가 여기에 표시
@@ -58,120 +57,124 @@
                     <tr><td>일요일</td><td>11:00 AM - 11:00 PM</td></tr>
                 </table>
             </div>
-        <!-- 리뷰 내용 모달 -->
-            <div id="reviewModal" class="modal">
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <h2 id="modalReviewTitle"></h2>
-                    <p id="modalReviewContent"></p>
-                    <div id="modalReviewInfo"></div>
-                </div>
-            </div>            
+            
             <div id="reviews" class="tab-content">
-    <div class="reviews-container">
-        <div class="review-summary">
-            <h2>평균 평점</h2>
-            <div class="review-cards">
-                <div class="review-card">
-                    <h3>전체 평점</h3>
-                    <div class="rating">★★★★☆ 4.5</div>
-                    <p>1,234 리뷰</p>
-                </div>
-                <div class="review-card">
-                    <h3>음식</h3>
-                    <div class="rating">★★★★☆ 4.3</div>
-                </div>
-                <div class="review-card">
-                    <h3>서비스</h3>
-                    <div class="rating">★★★★★ 4.7</div>
-                </div>
-                <div class="review-card">
-                    <h3>분위기</h3>
-                    <div class="rating">★★★★☆ 4.4</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="popular-reviews">
-            <h3>인기 리뷰</h3>
-            <div class="popular-review-cards">
-                <div class="popular-review-card">
-                    <div class="review-content">
-                        <h4>최고의 파스타 맛집!</h4>
-                        <p>트러플 크림 파스타가 정말 일품이에요. 분위기도 좋고 서비스도 친절해요.</p>
-                        <div class="review-footer">
-                            <span class="reviewer">작성자: 김맛있다</span>
-                            <span class="likes">👍 좋아요 128</span>
-                        </div>
-                    </div>
-                    <div class="image-placeholder">인기 리뷰 이미지</div>
-                </div>
-                <div class="popular-review-card">
-                    <div class="review-content">
-                        <h4>데이트 코스로 완벽해요</h4>
-                        <p>와인과 스테이크의 조화가 환상적이에요. 연인과 함께 오기 좋은 곳입니다.</p>
-                        <div class="review-footer">
-                            <span class="reviewer">작성자: 박데이트</span>
-                            <span class="likes">👍 좋아요 95</span>
-                        </div>
-                    </div>
-                    <div class="image-placeholder">인기 리뷰 이미지</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="recent-reviews">
-            <h3>최근 리뷰</h3>
-            <div class="review-items">
-                <div class="review-item">
-                    <h4 class="review-title">맛있는 파스타와 분위기 좋은 레스토랑</h4>
-                    <div class="review-header">
-                        <div class="review-text">
-                            <p>파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!</p>
-                        </div>
-                        <div class="review-info">
-                            <span class="reviewer-name">홍길동</span>
-                            <span class="review-date">2023-05-01</span>
+                <h2>리뷰</h2>
+                <div class="review-summary">
+                    <div class="review-cards">
+                        <div class="review-card">
+                            <h3>전체 평점</h3>
                             <div class="rating">★★★★☆ 4.5</div>
+                            <p>1,234 리뷰</p>
+                        </div>
+                        <div class="review-card">
+                            <h3>음식</h3>
+                            <div class="rating">★★★★☆ 4.3</div>
+                        </div>
+                        <div class="review-card">
+                            <h3>서비스</h3>
+                            <div class="rating">★★★★★ 4.7</div>
+                        </div>
+                        <div class="review-card">
+                            <h3>분위기</h3>
+                            <div class="rating">★★★★☆ 4.4</div>
                         </div>
                     </div>
-                    <div class="review-images">
-                        <div class="image-placeholder">사진 1</div>
-                        <div class="image-placeholder">사진 2</div>
-                        <div class="more-images">+2</div>
-                    </div>
-                    <div class="menu-info">
-                        <span class="menu-name">트러플 크림 파스타</span>
-                        <span class="menu-price">18,000원</span>
-                    </div>
-                    <div class="review-actions">
-                        <button class="like-button">👍 좋아요 (15)</button>
-                        <button class="dislike-button">👎 싫어요 (2)</button>
-                        <button class="comment-button">💬 댓글 (3)</button>
-                    </div>
-                    <div class="comments-section" style="display: none;">
-                        <div class="comment">
-                            <p><strong>홍길동:</strong> 정말 맛있어 보이네요! 저도 꼭 가보고 싶어요.</p>
+                </div>
+                <div class="review-list">
+                    <div class="popular-reviews">
+                        <h3>인기 리뷰</h3>
+                        <div class="popular-review-cards">
+                            <div class="popular-review-card">
+                                <div class="review-content">
+                                    <h4>최고의 파스타 맛집!</h4>
+                                    <p>트러플 크림 파스타가 정말 일품이에요. 분위기도 좋고 서비스도 친절해요.</p>
+                                    <div class="review-footer">
+                                        <span class="reviewer">작성자: 김맛있다</span>
+                                        <span class="likes">👍 좋아요 128</span>
+                                    </div>
+                                </div>
+                                <div class="image-placeholder">인기 리뷰 이미지</div>
+                            </div>
+                            <div class="popular-review-card">
+                                <div class="review-content">
+                                    <h4>데이트 코스로 완벽해요</h4>
+                                    <p>와인과 스테이크의 조화가 환상적이에요. 연인과 함께 오기 좋은 곳입니다.</p>
+                                    <div class="review-footer">
+                                        <span class="reviewer">작성자: 박데이트</span>
+                                        <span class="likes">👍 좋아요 95</span>
+                                    </div>
+                                </div>
+                                <div class="image-placeholder">인기 리뷰 이미지</div>
+                            </div>
                         </div>
-                        <div class="comment">
-                            <p><strong>김철수:</strong> 파스타가 특히 맛있다고 하던데 사실인가요?</p>
+                    </div>
+                    <div class="recent-reviews">
+                        <h3>최근 리뷰</h3>
+                        <div class="review-items">
+                            <div class="review-item">
+                                <h4 class="review-title">맛있는 파스타와 분위기 좋은 레스토랑</h4>
+                                <div class="review-header">
+                                    <div class="review-text">
+                                        <p>파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!</p>
+                                    </div>
+                                    <div class="review-info">
+                                        <span class="reviewer-name">홍길동</span>
+                                        <span class="review-date">2023-05-01</span>
+                                        <div class="rating">★★★★☆ 4.5</div>
+                                    </div>
+                                </div>
+                                <div class="review-images">
+                                    <div class="image-placeholder">사진 1</div>
+                                    <div class="image-placeholder">사진 2</div>
+                                    <div class="more-images">+2</div>
+                                </div>
+                                <div class="menu-info">
+                                    <span class="menu-name">트러플 크림 파스타</span>
+                                    <span class="menu-price">18,000원</span>
+                                </div>
+                                <div class="review-actions">
+                                    <button class="like-button">👍 좋아요 (15)</button>
+                                    <button class="dislike-button">👎 싫어요 (2)</button>
+                                    <button class="comment-button">💬 댓글 (3)</button>
+                                </div>
+                                <div class="comments-section" style="display: none;">
+                                    <div class="comment">
+                                        <p><strong>홍길동:</strong> 정말 맛있어 보이네요! 저도 꼭 가보고 싶어요.</p>
+                                    </div>
+                                    <div class="comment">
+                                        <p><strong>김철수:</strong> 파스타가 특히 맛있다고 하던데 사실인가요?</p>
+                                    </div>
+                                    <form class="comment-form">
+                                        <textarea placeholder="댓글을 입력하세요..." required></textarea>
+                                        <button type="submit">댓글 작성</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <form class="comment-form">
-                            <textarea placeholder="댓글을 입력하세요..." required></textarea>
-                            <button type="submit">댓글 작성</button>
-                        </form>
+                    </div>
+                    <div class="write-review">
+                        <a href="/receipt-verification" class="write-review-button">리뷰 작성하기</a>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="write-review">
-            <a href="/receipt-verification" class="write-review-button">리뷰 작성하기</a>
+            
+            <div id="community" class="tab-content">
+                <h2>커뮤니티</h2>
+                <div class="community-posts">
+                    <!-- 커뮤니티 게시글 목록 -->
+                </div>
+            </div>
         </div>
     </div>
-</div>
-        </div>
 
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2 id="modalReviewTitle"></h2>
+            <p id="modalReviewContent"></p>
+            <div id="modalReviewInfo"></div>
+        </div>
     </div>
 
     <script>
