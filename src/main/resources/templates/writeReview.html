@@ -57,11 +57,67 @@
         .submit-btn:hover {
             background-color: #e03131;
         }
+        /* 레스토랑 정보를 표시하는 컨테이너의 스타일 */
+        .restaurant-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        /* 별점 설명 텍스트의 스타일 */
+        .rating-description {
+            font-size: 14px;
+            color: #666;
+        }
+        /* 리뷰 길이 표시 텍스트의 스타일 */
+        .review-length {
+            font-size: 14px;
+            color: #666;
+            text-align: right;
+        }
+        /* 사진 미리보기 컨테이너의 스타일 */
+        .photo-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        /* 사진 미리보기 이미지의 스타일 */
+        .photo-preview img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .cancel-btn {
+            background-color: #ccc;
+            color: #333;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .cancel-btn:hover {
+            background-color: #bbb;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="restaurant-info">
+            <h2>레스토랑 이름</h2>
+            <p>주소: 서울시 강남구 테헤란로 123</p>
+        </div>
+
         <h1>리뷰 작성</h1>
+
         <form id="reviewForm">
             <div class="rating-input">
                 <p>별점을 선택하세요:</p>
@@ -72,15 +128,22 @@
                     <span class="star" data-rating="4">★</span>
                     <span class="star" data-rating="5">★</span>
                 </div>
+                <p class="rating-description">1: 별로에요, 2: 그저 그래요, 3: 괜찮아요, 4: 좋아요, 5: 최고에요!</p>
             </div>
-            <textarea id="reviewText" placeholder="음식의 맛, 양, 가격에 대해 어떠셨나요? 특별히 추천하고 싶은 메뉴가 있나요?
-            서비스와 분위기는 어땠나요? 재방문하고 싶은 곳인가요?
-            다른 사람들에게 알려주고 싶은 꿀팁이 있다면 공유해주세요!" required></textarea>
+
+            <textarea id="reviewText" placeholder="음식의 맛, 양, 가격에 대해 어떠셨나요? 특별히 추천하고 싶은 메뉴가 있나요? 서비스와 분위기는 어땠나요? 재방문하고 싶은 곳인가요? 다른 사람들에게 알려주고 싶은 꿀팁이 있다면 공유해주세요!" required></textarea>
+            <p class="review-length">글자 수: <span id="charCount">0</span> / 500</p>
+
             <div class="photo-upload">
                 <p>사진 추가 (최대 5장):</p>
                 <input type="file" id="photoUpload" accept="image/*" multiple>
+                <div class="photo-preview" id="photoPreview"></div>
             </div>
-            <button type="submit" class="submit-btn">리뷰 등록</button>
+
+            <div class="button-group">
+                <button type="submit" class="submit-btn">리뷰 등록</button>
+                <button type="button" class="cancel-btn" id="cancelBtn">취소</button>
+            </div>
         </form>
     </div>
 
@@ -130,6 +193,35 @@
             // 리뷰 등록 완료 메시지를 표시합니다.
             alert('리뷰가 성공적으로 등록되었습니다!');
         });
+        // 취소 버튼 기능
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            if (confirm('리뷰 작성을 취소하시겠습니까? 작성 중인 내용은 저장되지 않습니다.')) {
+                window.history.back();
+            }
+        });
+
+
+        // 리뷰 길이 표시
+        const reviewText = document.getElementById('reviewText');
+        const charCount = document.getElementById('charCount');
+
+        reviewText.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+
+        // 사진 미리보기
+        const photoUpload = document.getElementById('photoUpload');
+        const photoPreview = document.getElementById('photoPreview');
+
+        photoUpload.addEventListener('change', function() {
+            photoPreview.innerHTML = '';
+            for (let i = 0; i < this.files.length && i < 5; i++) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(this.files[i]);
+                photoPreview.appendChild(img);
+            }
+        });
+        
     </script>
 </body>
 </html>
