@@ -115,3 +115,13 @@ nav a:hover {
     margin: 0 auto;
     padding: 0 15px;
 }
+
+.tab-divider {
+    border-bottom: 1px solid #e0e0e0;
+    margin: 20px 0;
+    width: 100%;
+}
+
+.tab-content {
+    padding-bottom: 20px;
+}
