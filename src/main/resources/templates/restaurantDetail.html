@@ -175,18 +175,25 @@
     </div>
 
     <script>
+        // 문서가 로드되면 실행되는 이벤트 리스너
         document.addEventListener('DOMContentLoaded', function() {
+            // 탭 요소들과 탭 내용 요소들을 선택
             const tabs = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
         
+            // 각 탭에 대해 클릭 이벤트 리스너 추가
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
+                    // 클릭된 탭의 data-tab 속성 값을 가져옴
                     const tabId = tab.getAttribute('data-tab');
                     
+                    // 모든 탭과 탭 내용에서 'active' 클래스 제거
                     tabs.forEach(t => t.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
         
+                    // 클릭된 탭에 'active' 클래스 추가
                     tab.classList.add('active');
+                    // 해당 탭 내용을 찾아 'active' 클래스 추가
                     const activeContent = document.getElementById(tabId);
                     if (activeContent) {
                         activeContent.classList.add('active');
