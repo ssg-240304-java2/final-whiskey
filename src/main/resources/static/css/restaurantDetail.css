@@ -1,40 +1,85 @@
+  /* 네비게이션 링크 스타일 */
+  nav a {
+      color: #333;
+      text-decoration: none;
+      margin-left: 15px;
+      font-size: 14px;
+  }
 
-/* 네비게이션 링크 스타일 */
-nav a {
-    color: #333;
-    text-decoration: none;
-    margin-left: 15px;
-    font-size: 14px;
-}
+  nav a:hover {
+      color: #c41200;
+  }
 
-nav a:hover {
-    color: #c41200;
-}
+  /* 콘텐츠 영역 스크롤 설정 */
+  .content-area {
+      overflow-x: auto;
+  }
 
-/* 레스토랑 배너 스타일 */
-.restaurant-banner {
-    background-size: cover;
-    background-position: center;
-    color: white;
-    padding: 60px 0;
-    position: relative;
-}
+  /* 플렉스 컨테이너 설정 */
+  .flex-container {
+      display: flex;
+      gap: 20px;
+      padding: 20px;
+  }
 
-.restaurant-banner::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-}
+  /* 탭 콘텐츠 스타일 */
+  .tab-content {
+      flex: 0 0 auto;
+      width: 100%;
+      max-width: 600px;
+  }
 
-.restaurant-info {
-    position: relative;
-    z-index: 1;
-}
+  /* 컨테이너 레이아웃 설정 */
+  .container {
+      display: flex;
+      justify-content: space-between;
+  }
 
+  /* 메인 콘텐츠 영역 */
+  .main-content {
+      width: 70%;
+  }
+
+  /* 사이드바 콘텐츠 영역 */
+  .sidebar-content {
+      width: 25%;
+  }
+
+  /* 사이드바 정보 스타일 */
+  .sidebar-info {
+      position: sticky;
+      top: 20px;
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  /* 레스토랑 배너 스타일 */
+  .restaurant-banner {
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 60px 0;
+      position: relative;
+  }
+
+  /* 레스토랑 배너 오버레이 */
+  .restaurant-banner::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+  }
+
+  /* 레스토랑 정보 스타일 */
+  .restaurant-info {
+      position: relative;
+      z-index: 1;
+  }
 .restaurant-name {
     font-size: 48px;
     margin-bottom: 10px;
