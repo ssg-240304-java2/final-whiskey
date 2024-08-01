@@ -147,6 +147,19 @@
                     <div class="review-actions">
                         <button class="like-button">👍 좋아요 (15)</button>
                         <button class="dislike-button">👎 싫어요 (2)</button>
+                        <button class="comment-button">💬 댓글 (3)</button>
+                    </div>
+                    <div class="comments-section" style="display: none;">
+                        <div class="comment">
+                            <p><strong>홍길동:</strong> 정말 맛있어 보이네요! 저도 꼭 가보고 싶어요.</p>
+                        </div>
+                        <div class="comment">
+                            <p><strong>김철수:</strong> 파스타가 특히 맛있다고 하던데 사실인가요?</p>
+                        </div>
+                        <form class="comment-form">
+                            <textarea placeholder="댓글을 입력하세요..." required></textarea>
+                            <button type="submit">댓글 작성</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -209,6 +222,13 @@
                     modal.style.display = "none";
                 }
             }
+        });
+        // 댓글 버튼 클릭 시 댓글 표시 토글
+        document.querySelectorAll('.comment-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentsSection = this.closest('.review-item').querySelector('.comments-section');
+                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+            });
         });
     </script>
 </body>

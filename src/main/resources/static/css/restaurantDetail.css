@@ -319,3 +319,39 @@ nav a:hover {
     text-decoration: none;
     cursor: pointer;
 }
+
+/* 댓글 스타일 */
+.comment-button {
+    background: none;
+    border: none;
+    color: #0073bb;
+    cursor: pointer;
+}
+
+.comments-section {
+    margin-top: 10px;
+    border-top: 1px solid #e6e6e6;
+    padding-top: 10px;
+}
+
+.comment {
+    margin-bottom: 10px;
+}
+
+.comment-form textarea {
+    width: 100%;
+    height: 60px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.comment-form button {
+    background-color: #0073bb;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
