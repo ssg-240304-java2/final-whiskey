@@ -45,6 +45,25 @@
             <div class="content-area">
                 <div class="flex-container">
                     <div id="info" class="tab-content">
+                        <div class="menu-section">
+                            <h2>인기 메뉴</h2>
+                            <div class="menu-items-container">
+                                <div class="menu-items">
+                                    <div class="menu-item">
+                                        <div class="image-placeholder" alt="트러플 크림 파스타"></div>
+                                        <h3>트러플 크림 파스타</h3>
+                                        <p>18,000원</p>
+                                    </div>
+                                    <div class="menu-item">
+                                        <div class="image-placeholder" alt="마르게리타 피자"></div>
+                                        <h3>마르게리타 피자</h3>
+                                        <p>22,000원</p>
+                                    </div>
+                                    <!-- 추가 메뉴 아이템 -->
+                                </div>
+                            </div>
+                            <button class="view-full-menu">전체 메뉴 보기</button>
+                        </div>                        
                         <h2>위치 및 영업시간</h2>
                         <div class="map-placeholder">
                             네이버 지도 API가 여기에 표시
@@ -58,6 +77,17 @@
                             <tr><td>토요일</td><td>11:00 AM - 12:00 AM (다음날)</td></tr>
                             <tr><td>일요일</td><td>11:00 AM - 11:00 PM</td></tr>
                         </table>
+
+                        <div class="additional-info">
+                            <h2>추가 정보</h2>
+                            <ul>
+                                <li>주차 가능</li>
+                                <li>무료 Wi-Fi</li>
+                                <li>예약 권장</li>
+                                <li>테이크아웃 가능</li>
+                            </ul>
+                        </div>
+                        
                     </div>
                     
                     <div id="reviews" class="tab-content">
@@ -178,81 +208,83 @@
     </div>
 
     <script>
-        // 문서가 로드되면 실행되는 이벤트 리스너
         document.addEventListener('DOMContentLoaded', function() {
-            // 탭 요소들과 탭 내용 요소들을 선택
+            // 탭과 탭 컨텐츠 요소들을 선택합니다.
             const tabs = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
-
-            // 정보 탭과 내용 요소 선택
             const infoTab = document.querySelector('.tab[data-tab="info"]');
             const infoContent = document.getElementById('info');
         
-            // 정보 탭이 존재하면 기본적으로 활성화
+            // 기본적으로 'info' 탭을 활성화합니다.
             if (infoTab && infoContent) {
                 infoTab.classList.add('active');
                 infoContent.classList.add('active');
             }
-
-            // 각 탭에 대해 클릭 이벤트 리스너 추가
+    
+            // 각 탭에 클릭 이벤트 리스너를 추가합니다.
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
-                    // 클릭된 탭의 data-tab 속성 값을 가져옴
                     const tabId = tab.getAttribute('data-tab');
-                    
-                    // 모든 탭과 탭 내용에서 'active' 클래스 제거
+                    // 모든 탭과 컨텐츠의 'active' 클래스를 제거합니다.
                     tabs.forEach(t => t.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
-        
-                    // 클릭된 탭에 'active' 클래스 추가
+                    // 클릭된 탭과 해당 컨텐츠를 활성화합니다.
                     tab.classList.add('active');
-                    // 해당 탭 내용을 찾아 'active' 클래스 추가
                     const activeContent = document.getElementById(tabId);
                     if (activeContent) {
                         activeContent.classList.add('active');
                     }
                 });
             });
-        });
-
-        // 리뷰 모달 관련 기능
-        document.addEventListener('DOMContentLoaded', function() {
-            var modal = document.getElementById("reviewModal");
-            var span = document.getElementsByClassName("close")[0];
-
-            // 이미지 클릭 시 모달 열기
-            var reviewImages = document.querySelectorAll('.image-placeholder');
-            reviewImages.forEach(function(img, index) {
-                img.onclick = function() {
-                    modal.style.display = "block";
-                    // 여기에 실제 리뷰 데이터를 채워넣어야 합니다.
-                    document.getElementById("modalReviewTitle").innerText = "리뷰 제목 " + (index + 1);
-                    document.getElementById("modalReviewContent").innerText = "이곳에 상세 리뷰 내용이 들어갑니다.";
-                    document.getElementById("modalReviewInfo").innerText = "작성자: 사용자" + (index + 1) + " | 날짜: 2023-05-0" + (index + 1);
+    
+            // 리뷰 모달 관련 요소들을 선택합니다.
+            const reviewTab = document.getElementById('reviews');
+            const reviewModal = document.getElementById('reviewModal');
+            const modalReviewTitle = document.getElementById('modalReviewTitle');
+            const modalReviewContent = document.getElementById('modalReviewContent');
+            const modalReviewInfo = document.getElementById('modalReviewInfo');
+            const closeModal = document.querySelector('.close');
+    
+            // 리뷰 탭에 클릭 이벤트 리스너를 추가합니다.
+            reviewTab.addEventListener('click', function(e) {
+                if (e.target.classList.contains('image-placeholder')) {
+                    const reviewItem = e.target.closest('.review-item');
+                    if (reviewItem) {
+                        // 클릭된 리뷰의 정보를 모달에 표시합니다.
+                        const title = reviewItem.querySelector('.review-title').textContent;
+                        const content = reviewItem.querySelector('.review-text').textContent;
+                        const info = reviewItem.querySelector('.review-info').innerHTML;
+    
+                        modalReviewTitle.textContent = title;
+                        modalReviewContent.textContent = content;
+                        modalReviewInfo.innerHTML = info;
+    
+                        // 모달을 표시합니다.
+                        reviewModal.style.display = 'block';
+                    }
                 }
             });
-
-            // 닫기 버튼 클릭 시 모달 닫기
-            span.onclick = function() {
-                modal.style.display = "none";
+    
+            // 모달 닫기 버튼에 이벤트 리스너를 추가합니다.
+            closeModal.onclick = function() {
+                reviewModal.style.display = 'none';
             }
-
-            // 모달 외부 클릭 시 모달 닫기
+    
+            // 모달 외부 클릭 시 모달을 닫습니다.
             window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+                if (event.target == reviewModal) {
+                    reviewModal.style.display = 'none';
                 }
             }
-        });
-
-        // 댓글 버튼 클릭 시 댓글 표시 토글
-        document.querySelectorAll('.comment-button').forEach(button => {
-            button.addEventListener('click', function() {
-                // 해당 리뷰의 댓글 섹션을 찾아 표시 상태를 전환
-                const commentsSection = this.closest('.review-item').querySelector('.comments-section');
-                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+    
+            // 댓글 버튼에 이벤트 리스너를 추가합니다.
+            document.querySelectorAll('.comment-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const commentsSection = this.closest('.review-item').querySelector('.comments-section');
+                    // 댓글 섹션을 토글합니다.
+                    commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+                });
             });
         });
-    </script>
-</body>
+    </script></body>
 </html>

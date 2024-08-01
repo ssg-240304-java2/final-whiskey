@@ -108,3 +108,10 @@ nav a {
 nav a:hover {
     color: #c41200;
 }
+
+/* 헤더 래퍼 스타일 */
+.header-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
