@@ -154,3 +154,33 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
+
+.result-card {
+    display: flex;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.restaurant-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.restaurant-info {
+    padding: 15px;
+    flex: 1;
+}
+
+.restaurant-info h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.rating {
+    color: #f15c4f;
+    margin-bottom: 5px;
+}
