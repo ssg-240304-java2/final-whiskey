@@ -85,6 +85,34 @@
             font-size: 14px;
         }
 
+        /* 위치 정보 스타일 */  
+        .location-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* 리프레시 버튼 스타일 */
+        .refresh-btn {
+            background-color: #c41200;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .refresh-btn i {
+            margin-right: 5px;
+        }
+
+        .refresh-btn:hover {
+            background-color: #a30f00;
+        }
+
         /* 반응형 디자인 */
         @media (max-width: 768px) {
             .restaurant-grid {
@@ -106,8 +134,13 @@
     <div class="container">
         <div class="banner">
             <h2>주변 맛집</h2>
-            <p>현재 위치: 인천시, ...</p>
-        </div>
+            <div class="location-info">
+                <p>현재 위치: 인천시, ...</p>
+                <button id="refresh-button" class="refresh-btn">
+                    <i class="fas fa-sync-alt"></i> 새로고침
+                </button>
+            </div>
+        </div>        
         
         <div class="restaurant-grid">
             <div class="restaurant-card">
