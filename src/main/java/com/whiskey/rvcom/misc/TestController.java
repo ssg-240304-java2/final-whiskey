@@ -43,4 +43,9 @@ public class TestController {
         return "writeReview";
     }
     
+    @GetMapping("/search-results")
+        public String searchResults() {
+            return "searchResults";
+    }
+
 }

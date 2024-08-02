@@ -1,0 +1,156 @@
+/* 검색 배너 스타일 */
+.search-banner {
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 30px 0; /* 60px에서 30px로 줄였습니다 */
+    position: relative;
+}
+
+.search-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.search-info {
+    position: relative;
+    z-index: 1;
+}
+
+.search-title {
+    font-size: 36px; /* 48px에서 36px로 줄였습니다 */
+    margin-bottom: 5px; /* 10px에서 5px로 줄였습니다 */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.search-meta {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px; /* 10px에서 5px로 줄였습니다 */
+}
+
+.result-count {
+    font-size: 16px; /* 18px에서 16px로 줄였습니다 */
+    margin-right: 10px; /* 15px에서 10px로 줄였습니다 */
+}
+
+.location-category {
+    font-size: 14px; /* 16px에서 14px로 줄였습니다 */
+}
+
+.search-filters {
+    font-size: 12px; /* 14px에서 12px로 줄였습니다 */
+}
+
+.filter {
+    margin-right: 10px;
+}
+
+/* 검색 레이아웃 */
+.search-layout {
+    display: flex;
+    width: 100%;
+}
+
+/* 지도 컨테이너 스타일 */
+.map-container {
+    width: 30%;
+    height: calc(100vh - 100px);
+    position: sticky;
+    top: 100px;
+}
+
+.map-placeholder {
+    background-color: #e0e0e0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    width: 70%;
+    padding: 0 20px;
+}
+
+/* 검색 콘텐츠 레이아웃 */
+.search-content {
+    display: flex;
+    margin-top: 20px;
+}
+
+/* 검색 결과 컨테이너 스타일 */
+.results-container {
+    flex: 1;
+    margin-right: 20px;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+    width: 200px;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+}
+
+/* 카테고리 목록 스타일 */
+.category-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.category-list li {
+    margin-bottom: 10px;
+}
+
+/* '모두 보기' 버튼 스타일 */
+.show-all-btn {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #c41200;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* 모달 창 스타일 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
