@@ -48,6 +48,13 @@ header {
     padding: 15px 0;
 }
 
+/* 헤더 래퍼 스타일 */
+.header-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
 /* 컨테이너 스타일 */
 .container {
     max-width: 1000px;
@@ -109,19 +116,13 @@ nav a:hover {
     color: #c41200;
 }
 
-/* 헤더 래퍼 스타일 */
-.header-wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
+/*  구분선 스타일 */
 .tab-divider {
     border-bottom: 1px solid #e0e0e0;
     margin: 20px 0;
     width: 100%;
 }
-
+/* 탭 스타일 */
 .tab-content {
     padding-bottom: 20px;
 }
