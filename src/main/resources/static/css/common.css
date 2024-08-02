@@ -45,7 +45,7 @@ body {
 header {
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 15px 0;
+    padding: 20px 0; /* Increased padding to make the header larger */
 }
 
 /* 헤더 래퍼 스타일 */
@@ -86,10 +86,10 @@ header {
 /* 검색 입력 필드 스타일 */
 .search-bar input {
     padding: 10px;
-    width: 100%;
     border: 1px solid #ddd;
     border-radius: 4px 0 0 4px;
     font-size: 14px;
+    flex: 1;
 }
 
 /* 검색 버튼 스타일 */
