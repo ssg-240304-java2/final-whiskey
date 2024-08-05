@@ -23,7 +23,11 @@
                 </div>
             </div>
         </div>
-        
+        <!-- TODO: 사용자 프로필 정보를 가져오는 API 구현 -->
+        <!-- TODO: 프로필 이미지 업로드 및 변경 기능 구현 -->
+        <!-- TODO: 사용자 통계 정보(리뷰 수, 사진 수, 팔로워 수)를 가져오는 API 구현 -->
+        <!-- TODO: 사용자 위치 정보 업데이트 기능 구현 -->
+        <!-- TODO: 가입일 포맷팅 로직 구현 -->        
         <div class="content-wrapper">
             <div class="sidebar">
                 <nav class="profile-nav">
@@ -122,6 +126,35 @@
             </div>
         </div>
     </div>
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2>프로필 수정</h2>
+            <form id="editProfileForm">
+                <label for="editName">이름:</label>
+                <input type="text" id="editName" name="name" value="사용자 이름">
+                
+                <label for="editLocation">위치:</label>
+                <input type="text" id="editLocation" name="location" value="인천시 남동구">
+                
+                <label for="editInterests">관심사:</label>
+                <input type="text" id="editInterests" name="interests" value="이탈리안, 한식, 카페">
+                
+                <label for="editBio">자기소개:</label>
+                <textarea id="editBio" name="bio">맛집 탐방을 좋아하는 평범한 직장인입니다. 주말마다 새로운 맛집을 찾아다니는 것이 취미예요.</textarea>
+                
+                <button type="submit">저장</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- TODO: 프로필 수정을 위한 API 엔드포인트 구현 (/api/profile/update) -->
+    <!-- TODO: 사용자 인증 및 권한 확인 로직 구현 -->
+    <!-- TODO: 입력된 데이터의 유효성 검사 로직 구현 -->
+    <!-- TODO: 프로필 이미지 업로드 및 처리 기능 구현 -->
+    <!-- TODO: 데이터베이스 업데이트 로직 구현 -->
+    <!-- TODO: 프로필 수정 성공/실패에 따른 응답 처리 로직 구현 -->
+    <!-- TODO: 프로필 수정 히스토리 로깅 기능 구현 (선택사항) -->    
 
     <!-- <div th:replace="fragments/footer :: footer"></div> -->
 </body>
@@ -150,9 +183,47 @@
                         section.classList.add('active');
                     }
                 });
+
+                // TODO: 선택된 탭에 따라 적절한 데이터를 서버에서 가져오는 API 엔드포인트 구현
+                // TODO: 가져온 데이터를 화면에 표시하는 로직 구현
+                // TODO: 페이지네이션이 필요한 경우, 페이지네이션 처리 로직 구현
+                // TODO: 데이터 로딩 중 로딩 인디케이터 표시 기능 구현
+                // TODO: 오류 발생 시 사용자에게 적절한 에러 메시지 표시 기능 구현
             });
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('editProfileModal');
+        const btn = document.querySelector('.edit-profile-btn');
+        const span = document.getElementsByClassName('close')[0];
+        const form = document.getElementById('editProfileForm');
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            // TODO: 프로필 업데이트 API 엔드포인트 구현
+            // TODO: 폼 데이터 유효성 검사 로직 구현
+            // TODO: AJAX를 사용하여 서버에 프로필 업데이트 요청 보내기
+            // TODO: 성공적으로 업데이트된 경우 모달 닫기 및 페이지 새로고침 또는 DOM 업데이트
+            // TODO: 오류 발생 시 사용자에게 적절한 피드백 제공
+            modal.style.display = "none";
+        }
+    });
+
 </script>
     
 </html>
