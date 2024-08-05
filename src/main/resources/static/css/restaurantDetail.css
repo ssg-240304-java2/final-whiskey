@@ -433,3 +433,148 @@
       border-radius: 4px;
       cursor: pointer;
   }
+
+/* 문의 스타일 */
+.inquiry-form {
+    margin-bottom: 20px;
+}
+
+.inquiry-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.submit-inquiry {
+    background-color: #c41200;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.inquiry-item {
+    border-bottom: 1px solid #e6e6e6;
+    padding: 20px 0;
+}
+
+.inquiry-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.inquiry-user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.inquiry-user {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.inquiry-location {
+    color: #666;
+    font-size: 14px;
+}
+
+.user-stats {
+    font-size: 12px;
+    color: #999;
+}
+
+.inquiry-content {
+    margin-bottom: 15px;
+}
+
+.inquiry-question {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.inquiry-date {
+    font-size: 14px;
+    color: #999;
+}
+
+.inquiry-answer {
+    background-color: #f5f5f5;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.answer-text {
+    margin-bottom: 10px;
+}
+
+.answer-meta {
+    font-size: 14px;
+    color: #666;
+}
+
+.inquiry-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.like-inquiry, .reply-inquiry {
+    padding: 8px 16px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #666;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.like-inquiry:hover, .reply-inquiry:hover {
+    background-color: #f5f5f5;
+}
+
+.inquiry-pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.prev-page, .next-page {
+    padding: 5px 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.current-page {
+    margin: 0 10px;
+}
+
+  /* 문의에 대한 답변 모달 스타일 */
+  .reply-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.submit-reply {
+    background-color: #c41200;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
