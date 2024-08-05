@@ -98,6 +98,10 @@
     position: sticky;
     top: 20px;
     align-self: flex-start;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 /* 카테고리 목록 스타일 */
@@ -108,6 +112,21 @@
 
 .category-list li {
     margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.category-list input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.category-list label {
+    cursor: pointer;
+}
+
+.category-list input[type="checkbox"]:checked + label {
+    font-weight: bold;
+    color: #c41200;
 }
 
 /* '모두 보기' 버튼 스타일 */
