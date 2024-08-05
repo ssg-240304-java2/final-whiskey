@@ -1,0 +1,120 @@
+/* 전체 페이지 스타일 */
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+/* 컨테이너 스타일 */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 배너 스타일 */
+.banner {
+    background-color: #fff;
+    text-align: left;
+    padding: 20px;
+    margin: 20px 0;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+/* 레스토랑 그리드 스타일 */
+.restaurant-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* 레스토랑 카드 스타일 */
+.restaurant-card {
+    display: flex;
+    justify-content: space-between;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s ease;
+}
+
+.restaurant-card:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.restaurant-info {
+    flex: 1;
+}
+
+.restaurant-image-placeholder {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 15px;
+}
+
+/* 평점 스타일 */
+.rating {
+    color: #f15c4f;
+}
+
+/* 버튼 스타일 */
+.find-order {
+    background-color: #c41200;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* 위치 정보 스타일 */  
+.location-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 리프레시 버튼 스타일 */
+.refresh-btn {
+    background-color: #c41200;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.refresh-btn i {
+    margin-right: 5px;
+}
+
+.refresh-btn:hover {
+    background-color: #a30f00;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .restaurant-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .restaurant-grid {
+        grid-template-columns: 1fr;
+    }
+}
