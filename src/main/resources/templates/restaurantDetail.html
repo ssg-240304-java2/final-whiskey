@@ -12,6 +12,12 @@
 <body>
     <div th:replace="fragments/header :: header"></div>
     
+    <!-- TODO: 백엔드 개발
+    1. 레스토랑 정보를 데이터베이스에서 가져오는 API 엔드포인트 구현
+    2. 레스토랑 이름, 평점, 리뷰 수, 가격 범위, 카테고리 정보를 동적으로 표시하도록 Thymeleaf 템플릿 수정
+    3. 현재 영업 상태 및 영업 시간을 실시간으로 계산하여 표시하는 로직 구현
+    4. 레스토랑 배너 이미지 URL을 데이터베이스에서 가져와 동적으로 설정하는 기능 추가
+    -->
     <div class="restaurant-banner" style="background-image: url('https://via.placeholder.com/1200x400');">
         <div class="container">
             <div class="restaurant-info">
@@ -47,6 +53,7 @@
                     <div id="info" class="tab-content">
                         <div class="menu-section">
                             <h2>인기 메뉴</h2>
+                            <!-- TODO: 백엔드 - 인기 메뉴 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
                             <div class="menu-items-container">
                                 <div class="menu-items">
                                     <div class="menu-item">
@@ -62,15 +69,18 @@
                                     <!-- 추가 메뉴 아이템 -->
                                 </div>
                             </div>
+                            <!-- TODO: 백엔드 - '전체 메뉴 보기' 버튼 클릭 시 전체 메뉴 모달?로 이동하는 로직 구현 -->
                             <button class="view-full-menu">전체 메뉴 보기</button>
                         </div>      
 
                         <div class="tab-divider"></div>
 
                         <h2>위치 및 영업시간</h2>
+                        <!-- TODO: 백엔드 - 네이버 또는 카카오 지도 API 연동 및 레스토랑 위치 표시 -->
                         <div class="map-placeholder">
                             네이버 지도 API가 여기에 표시
                         </div>
+                        <!-- TODO: 백엔드 - 영업시간 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
                         <table class="hours-table">
                             <tr><td>월요일</td><td>11:00 AM - 11:00 PM</td></tr>
                             <tr><td>화요일</td><td>11:00 AM - 11:00 PM</td></tr>
@@ -84,6 +94,7 @@
                         <div class="tab-divider"></div>
                         <div class="additional-info">
                             <h2>추가 정보</h2>
+                            <!-- TODO: 백엔드 - 추가 정보를 데이터베이스에서 가져와 동적으로 표시 -->
                             <ul>
                                 <li>주차 가능</li>
                                 <li>무료 Wi-Fi</li>
@@ -98,6 +109,7 @@
                         <h2>리뷰</h2>
                         <div class="review-summary">
                             <div class="review-cards">
+                                <!-- TODO: 백엔드 - 전체 평점 및 리뷰 수를 계산하여 동적으로 표시 -->
                                 <div class="review-card">
                                     <h3>전체 평점</h3>
                                     <div class="rating">★★★★☆ 4.5</div>
@@ -108,6 +120,7 @@
                         <div class="review-list">
                             <div class="popular-reviews">
                                 <h3>인기 리뷰</h3>
+                                <!-- TODO: 백엔드 - 인기 리뷰를 좋아요 수 기준으로 정렬하여 가져와 동적으로 표시 -->
                                 <div class="popular-review-cards">
                                     <div class="popular-review-card">
                                         <div class="review-content">
@@ -135,6 +148,7 @@
                             </div>
                             <div class="recent-reviews">
                                 <h3>최근 리뷰</h3>
+                                <!-- TODO: 백엔드 - 최근 리뷰를 날짜순으로 정렬하여 가져와 동적으로 표시 -->
                                 <div class="review-items">
                                     <div class="review-item">
                                         <h4 class="review-title">맛있는 파스타와 분위기 좋은 레스토랑</h4>
@@ -158,17 +172,20 @@
                                             <span class="menu-price">18,000원</span>
                                         </div>
                                         <div class="review-actions">
+                                            <!-- TODO: 백엔드 - 좋아요, 싫어요, 댓글 기능 구현 -->
                                             <button class="like-button">👍 좋아요 (15)</button>
                                             <button class="dislike-button">👎 싫어요 (2)</button>
                                             <button class="comment-button">💬 댓글 (3)</button>
                                         </div>
                                         <div class="comments-section" style="display: none;">
+                                            <!-- TODO: 백엔드 - 댓글 목록을 가져와 동적으로 표시 -->
                                             <div class="comment">
                                                 <p><strong>홍길동:</strong> 정말 맛있어 보이네요! 저도 꼭 가보고 싶어요.</p>
                                             </div>
                                             <div class="comment">
                                                 <p><strong>김철수:</strong> 파스타가 특히 맛있다고 하던데 사실인가요?</p>
                                             </div>
+                                            <!-- TODO: 백엔드 - 댓글 작성 기능 구현 -->
                                             <form class="comment-form">
                                                 <textarea placeholder="댓글을 입력하세요..." required></textarea>
                                                 <button type="submit">댓글 작성</button>
@@ -178,6 +195,7 @@
                                 </div>
                             </div>
                             <div class="write-review">
+                                <!-- TODO: 백엔드 - 리뷰 작성 페이지로 이동하는 로직 구현 -->
                                 <a href="/receipt-verification" class="write-review-button">리뷰 작성하기</a>
                             </div>
                         </div>
@@ -185,6 +203,7 @@
                     
                     <div id="community" class="tab-content">
                         <h2>커뮤니티</h2>
+                        <!-- TODO: 백엔드 - 커뮤니티 게시글 목록을 가져와 동적으로 표시 -->
                         <div class="community-posts">
                             <!-- 커뮤니티 게시글 목록 -->
                         </div>
@@ -195,6 +214,7 @@
         <div class="sidebar-content">
             <div class="sidebar-info">
                 <h3>식당 정보</h3>
+                <!-- TODO: 백엔드 - 식당 정보를 데이터베이스에서 가져와 동적으로 표시 -->
                 <p><strong>홈페이지:</strong> <a href="http://www.example.com">www.example.com</a></p>
                 <p><strong>전화번호:</strong> 02-1234-5678</p>
                 <p><strong>주소:</strong> 서울시 강남구 테헤란로 123</p>
@@ -213,6 +233,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // TODO: 백엔드 - 페이지 로드 시 필요한 초기 데이터(레스토랑 정보, 리뷰 목록 등)를 API로 제공해야 합니다.
+
             // 탭과 탭 컨텐츠 요소들을 선택합니다.
             const tabs = document.querySelectorAll('.tab');
             const tabContents = document.querySelectorAll('.tab-content');
@@ -238,6 +260,8 @@
                     if (activeContent) {
                         activeContent.classList.add('active');
                     }
+
+                    // TODO: 백엔드 - 탭 변경 시 필요한 데이터를 동적으로 로드하는 API 엔드포인트 구현 (예: 리뷰 탭 클릭 시 리뷰 데이터 로드)
                 });
             });
     
@@ -265,6 +289,8 @@
     
                         // 모달을 표시합니다.
                         reviewModal.style.display = 'block';
+
+                        // TODO: 백엔드 - 특정 리뷰의 상세 정보를 가져오는 API 엔드포인트 구현
                     }
                 }
             });
@@ -287,8 +313,15 @@
                     const commentsSection = this.closest('.review-item').querySelector('.comments-section');
                     // 댓글 섹션을 토글합니다.
                     commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+
+                    // TODO: 백엔드 - 특정 리뷰의 댓글 목록을 가져오는 API 엔드포인트 구현
+                    // TODO: 백엔드 - 새 댓글을 추가하는 API 엔드포인트 구현
                 });
             });
+
+            // TODO: 백엔드 - 새 리뷰를 작성하는 API 엔드포인트 구현
+            // TODO: 백엔드 - 리뷰 수정/삭제 기능을 위한 API 엔드포인트 구현
+            // TODO: 백엔드 - 리뷰 평점 집계 및 업데이트를 위한 로직 구현
         });
     </script>
     </body>
