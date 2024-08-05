@@ -168,12 +168,14 @@
     cursor: pointer;
 }
 
+/* 카테고리 그리드 스타일 */
 .category-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
 
+/* 결과 카드 스타일 */
 .result-card {
     display: flex;
     margin-bottom: 20px;
@@ -183,12 +185,26 @@
     overflow: hidden;
 }
 
+/* 결과 카드 링크 스타일 */
+.result-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.result-card-link:hover {
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+/* 레스토랑 이미지 스타일 */
 .restaurant-image {
     width: 150px;
     height: 150px;
     object-fit: cover;
 }
 
+/* 레스토랑 정보 스타일 */
 .restaurant-info {
     padding: 15px;
     flex: 1;
@@ -199,6 +215,7 @@
     margin-bottom: 10px;
 }
 
+/* 평점 스타일 */
 .rating {
     color: #f15c4f;
     margin-bottom: 5px;
