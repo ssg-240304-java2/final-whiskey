@@ -28,6 +28,11 @@ public class TestController {
         return "register";
     }
 
+    @GetMapping("/mypage")
+    public String getMypage() {
+        return "mypage";
+    }
+
     @GetMapping("/restaurant")
     public String getRestaurantDetail() {
         return "restaurantDetail";

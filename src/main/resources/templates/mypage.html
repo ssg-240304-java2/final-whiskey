@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodPolio - 마이페이지</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/mypage.css">
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+    
+    <div class="container">
+        <div class="profile-header">
+            <img src="https://via.placeholder.com/150" alt="프로필 이미지" class="profile-image">
+            <div class="profile-info">
+                <h1>나추형진인데</h1>
+                <p>인천시 • 가입일: 2024년 8월</p>
+                <div class="profile-stats">
+                    <span><i class="fas fa-star"></i> 1512 리뷰</span>
+                    <span><i class="fas fa-camera"></i> 30123 사진</span>
+                    <span><i class="fas fa-users"></i> 198172401978 팔로워</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-wrapper">
+            <div class="sidebar">
+                <nav class="profile-nav">
+                    <ul>
+                        <li class="active" data-tab="profile"><a href="#profile">프로필</a></li>
+                        <li data-tab="reviews"><a href="#reviews">리뷰</a></li>
+                        <li data-tab="photos"><a href="#photos">사진</a></li>
+                        <li data-tab="bookmarks"><a href="#bookmarks">북마크</a></li>
+                        <li data-tab="following"><a href="#following">팔로잉</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="main-content">
+                <section id="profile" class="content-section active">
+                    <h2>About 나추형진인데</h2>
+                    <div class="profile-details">
+                        <p><strong>위치:</strong> 인천시 부평구</p>
+                        <p><strong>가입일:</strong> 2023년 1월</p>
+                        <p><strong>관심사:</strong> 이탈리안, 한식, 카페</p>
+                    </div>
+                    <div class="user-bio">
+                        <h3>자기소개</h3>
+                        <p>맛집 탐방을 좋아하는 추형진입니다. 살이 뒤지게 쪗어요 지금</p>
+                    </div>
+                    <button class="edit-profile-btn">프로필 수정</button>
+                    <!-- TODO: 프로필 수정 기능 구현 - 사용자 정보 업데이트 API 연동 -->
+                </section>
+            
+                <section id="reviews" class="content-section">
+                    <h2>내가 작성한 리뷰</h2>
+                    <div class="review-list">
+                        <div class="review-item">
+                            <img src="https://via.placeholder.com/100" alt="레스토랑 이미지" class="restaurant-image">
+                            <div class="review-content">
+                                <h3>맛있는 파스타</h3>
+                                <div class="rating">★★★★☆ 4.5</div>
+                                <p class="review-text">파스타가 정말 맛있었어요. 특히 까르보나라가 일품이었습니다.</p>
+                                <span class="review-date">2023년 5월 20일</span>
+                            </div>
+                        </div>
+                        <!-- 더 많은 리뷰 아이템 -->
+                    </div>
+                    <!-- TODO: 사용자의 리뷰 목록을 가져오는 API 구현 및 연동 -->
+                    <!-- TODO: 리뷰 페이지네이션 구현 -->
+                </section>
+
+                
+                <section id="photos" class="content-section">
+                    <h2>내가 올린 사진</h2>
+                    <div class="photo-grid">
+                        <div class="photo-item">
+                            <img src="https://via.placeholder.com/200" alt="음식 사진">
+                            <p>맛있는 파스타 - 2023.05.20</p>
+                        </div>
+                        <!-- 더 많은 사진 아이템 -->
+                    </div>
+                    <!-- TODO: 사용자가 업로드한 사진 목록을 가져오는 API 구현 및 연동 -->
+                    <!-- TODO: 사진 업로드 기능 구현 -->
+                </section>
+                
+                <section id="bookmarks" class="content-section">
+                    <h2>북마크한 레스토랑</h2>
+                    <div class="bookmark-list">
+                        <div class="bookmark-item">
+                            <img src="https://via.placeholder.com/100" alt="레스토랑 이미지" class="restaurant-image">
+                            <div class="bookmark-content">
+                                <h3>정통 이탈리안</h3>
+                                <p>인천시 연수구 송도동</p>
+                                <div class="rating">★★★★★ 5.0</div>
+                            </div>
+                        </div>
+                        <!-- 더 많은 북마크 아이템 -->
+                    </div>
+                    <!-- TODO: 사용자의 북마크 목록을 가져오는 API 구현 및 연동 -->
+                    <!-- TODO: 북마크 추가/제거 기능 구현 -->
+                </section>
+                
+                <section id="following" class="content-section">
+                    <h2>팔로잉</h2>
+                    <div class="following-list">
+                        <div class="following-item">
+                            <img src="https://via.placeholder.com/50" alt="사용자 프로필" class="user-image">
+                            <div class="following-content">
+                                <h3>홍길동</h3>
+                                <p>리뷰 20개 • 팔로워 15명</p>
+                            </div>
+                            <button class="unfollow-btn">언팔로우</button>
+                        </div>
+                        <!-- 더 많은 팔로잉 아이템 -->
+                    </div>
+                    <!-- TODO: 사용자의 팔로잉 목록을 가져오는 API 구현 및 연동 -->
+                    <!-- TODO: 팔로우/언팔로우 기능 구현 -->
+                </section>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- <div th:replace="fragments/footer :: footer"></div> -->
+</body>
+
+<script>
+    // 페이지 로드 완료 후 실행
+    document.addEventListener('DOMContentLoaded', function() {
+        // 네비게이션 아이템과 컨텐츠 섹션 선택
+        const navItems = document.querySelectorAll('.profile-nav li');
+        const contentSections = document.querySelectorAll('.content-section');
+    
+        // 각 네비게이션 아이템에 클릭 이벤트 리스너 추가
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const tab = this.getAttribute('data-tab');
+                
+                // 활성 탭 스타일 변경
+                navItems.forEach(navItem => navItem.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 해당 컨텐츠 섹션 표시
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === tab) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+    });
+</script>
+    
+</html>
