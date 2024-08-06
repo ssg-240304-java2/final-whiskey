@@ -156,6 +156,36 @@ nav a:hover {
     display: block;
 }
 
+/* 북마크 버튼 스타일 */
+.bookmark-btn {
+    background-color: #c41200;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.bookmark-btn:hover {
+    background-color: #a30f00;
+}
+
+.bookmark-btn i {
+    margin-right: 5px;
+}
+
+.bookmark-btn.active {
+    background-color: #4CAF50;
+}
+
+.bookmark-btn.active:hover {
+    background-color: #45a049;
+}
+
 /* 지도 및 영업시간 스타일 */
 .map-placeholder {
     width: 100%;
