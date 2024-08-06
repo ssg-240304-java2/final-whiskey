@@ -18,14 +18,12 @@
                 <p>인천시 • 가입일: 2024년 8월</p>
                 <div class="profile-stats">
                     <span><i class="fas fa-star"></i> 1512 리뷰</span>
-                    <span><i class="fas fa-camera"></i> 30123 사진</span>
-                    <span><i class="fas fa-users"></i> 198172401978 팔로워</span>
                 </div>
             </div>
         </div>
         <!-- TODO: 사용자 프로필 정보를 가져오는 API 구현 -->
         <!-- TODO: 프로필 이미지 업로드 및 변경 기능 구현 -->
-        <!-- TODO: 사용자 통계 정보(리뷰 수, 사진 수, 팔로워 수)를 가져오는 API 구현 -->
+        <!-- TODO: 사용자 통계 정보(리뷰 수)를 가져오는 API 구현 -->
         <!-- TODO: 사용자 위치 정보 업데이트 기능 구현 -->
         <!-- TODO: 가입일 포맷팅 로직 구현 -->        
         <div class="content-wrapper">
@@ -35,7 +33,6 @@
                         <li class="active" data-tab="profile"><a href="#profile">프로필</a></li>
                         <li data-tab="reviews"><a href="#reviews">리뷰</a></li>
                         <li data-tab="bookmarks"><a href="#bookmarks">북마크</a></li>
-                        <li data-tab="following"><a href="#following">팔로잉</a></li>
                     </ul>
                 </nav>
             </div>
@@ -90,24 +87,6 @@
                     <!-- TODO: 사용자의 북마크 목록을 가져오는 API 구현 및 연동 -->
                     <!-- TODO: 북마크 추가/제거 기능 구현 -->
                 </section>
-                
-                <section id="following" class="content-section">
-                    <h2>팔로잉</h2>
-                    <div class="following-list">
-                        <div class="following-item">
-                            <img src="https://via.placeholder.com/50" alt="사용자 프로필" class="user-image">
-                            <div class="following-content">
-                                <h3>홍길동</h3>
-                                <p>리뷰 20개 • 팔로워 15명</p>
-                            </div>
-                            <button class="unfollow-btn">언팔로우</button>
-                        </div>
-                        <!-- 더 많은 팔로잉 아이템 -->
-                    </div>
-                    <!-- TODO: 사용자의 팔로잉 목록을 가져오는 API 구현 및 연동 -->
-                    <!-- TODO: 팔로우/언팔로우 기능 구현 -->
-                </section>
-                
             </div>
         </div>
     </div>
