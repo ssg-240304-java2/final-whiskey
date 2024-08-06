@@ -26,14 +26,16 @@ body {
 .content-area {
     overflow-x: auto;
     background-color: white;
-    padding: 20px;
+    /* padding: 20px; */
     border-radius: 8px;
 }
 
 .flex-container {
     display: flex;
     gap: 20px;
-    padding: 20px;
+    /* padding: 20px; */
+    flex-wrap: nowrap;
+    flex-direction: column;
 }
 
 /* 사이드바 스타일 */
@@ -114,25 +116,53 @@ body {
 /* 탭 스타일 */
 .tabs {
     display: flex;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
+    border-bottom: 2px solid #e0e0e0;
 }
 
 .tab {
     padding: 10px 20px;
-    background-color: #f0f0f0;
     cursor: pointer;
+    position: relative;
+    background-color: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    margin-right: 5px;
+    border-radius: 5px 5px 0 0;
+    transition: all 0.3s ease;
+}
+
+.tab span {
+    position: relative;
+    z-index: 2;
+}
+
+.tab::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #f8f8f8;
 }
 
 .tab.active {
-    background-color: #c41200;
-    color: white;
+    background-color: #fff;
+    border-color: #c41200;
+    color: #c41200;
+}
+
+.tab.active::after {
+    background-color: #fff;
 }
 
 .tab-content {
     display: none;
-    flex: 0 0 auto;
-    width: 100%;
-    max-width: 600px;
+    padding: 0 20px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: none;
 }
 
 .tab-content.active {
