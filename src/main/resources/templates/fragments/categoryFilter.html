@@ -1,0 +1,43 @@
+<!-- src/main/resources/templates/fragments/categoryFilter.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="categoryFilter">
+        <div class="sidebar">
+            <h3>카테고리</h3>
+            <ul class="category-list">
+
+                <!-- TODO: 백엔드 개발자는 여기에 카테고리 목록을 동적으로 생성하는 로직을 구현해야 합니다.
+                     categories 변수에 카테고리 목록을 설정하고, 각 카테고리는 id, value, name 속성을 가져야 합니다.(아마도) -->
+                <li th:each="category : ${categories}">
+                    <input type="checkbox" th:id="${category.id}" name="category" th:value="${category.value}">
+                    <label th:for="${category.id}" th:text="${category.name}">카테고리 이름</label>
+                </li>
+                
+                    <!-- 예시 카테고리 목록 -->
+                <li>
+                    <input type="checkbox" id="korean" name="category" value="korean">
+                    <label for="korean">한식</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="japanese" name="category" value="japanese">
+                    <label for="japanese">일식</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="chinese" name="category" value="chinese">
+                    <label for="chinese">중식</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="western" name="category" value="western">
+                    <label for="western">양식</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="cafe" name="category" value="cafe">
+                    <label for="cafe">카페</label>
+                </li>
+            </ul>
+            <button id="showAllCategories" class="show-all-btn">모든 카테고리 보기</button>
+        </div>
+    </div>
+</body>
+</html>

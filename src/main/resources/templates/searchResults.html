@@ -46,102 +46,26 @@
                 
                 <!-- TODO: 검색 결과를 동적으로 생성하고 페이징 처리 -->
                 <div class="results-container">
-                    <a href="/restaurant" class="result-card-link">
-                        <div class="result-card">
-                            <img src="https://via.placeholder.com/150x150" alt="맛있는 파스타" class="restaurant-image">
-                            <div class="restaurant-info">
-                                <h3>1. 맛있는 파스타</h3>
-                                <div class="rating">★★★★☆ 4.5 (302 리뷰)</div>
-                                <p>₩₩ • 이탈리안, 파스타 • 인천시 남동구 구월동</p>
-                                <p>"파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요."</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="/restaurant" class="result-card-link">
-                        <div class="result-card">
-                            <img src="https://via.placeholder.com/150x150" alt="정통 이탈리안" class="restaurant-image">
-                            <div class="restaurant-info">
-                                <h3>2. 정통 이탈리안</h3>
-                                <div class="rating">★★★★★ 5.0 (156 리뷰)</div>
-                                <p>₩₩₩ • 이탈리안, 피자 • 인천시 연수구 송도동</p>
-                                <p>"정통 이탈리안 요리를 맛볼 수 있는 곳. 피자가 특히 맛있어요!"</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="/restaurant" class="result-card-link">
-                        <div class="result-card">
-                            <img src="https://via.placeholder.com/150x150" alt="파스타 천국" class="restaurant-image">
-                            <div class="restaurant-info">
-                                <h3>3. 파스타 천국</h3>
-                                <div class="rating">★★★★☆ 4.0 (89 리뷰)</div>
-                                <p>₩₩ • 이탈리안, 파스타 • 인천시 부평구 부평동</p>
-                                <p>"다양한 종류의 파스타를 맛볼 수 있어요. 가격도 합리적이에요."</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="/restaurant" class="result-card-link">
-                        <div class="result-card">
-                            <img src="https://via.placeholder.com/150x150" alt="로마의 맛" class="restaurant-image">
-                            <div class="restaurant-info">
-                                <h3>4. 로마의 맛</h3>
-                                <div class="rating">★★★★☆ 4.2 (178 리뷰)</div>
-                                <p>₩₩₩ • 이탈리안, 와인 • 인천시 중구 운서동</p>
-                                <p>"로마 현지에 온 것 같은 맛과 분위기. 와인 페어링이 훌륭해요."</p>
-                            </div>
-                        </div>
-                    </a>
-                    <a href="/restaurant" class="result-card-link">
-                        <div class="result-card">
-                            <img src="https://via.placeholder.com/150x150" alt="파스타 & 피자" class="restaurant-image">
-                            <div class="restaurant-info">
-                                <h3>5. 파스타 & 피자</h3>
-                                <div class="rating">★★★☆☆ 3.8 (65 리뷰)</div>
-                                <p>₩ • 이탈리안, 패스트푸드 • 인천시 서구 검암동</p>
-                                <p>"가성비 좋은 파스타와 피자를 즐길 수 있어요. 캐주얼한 분위기."</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>            
+
+                    <!-- 검색 결과 카드 사용 예시 -->
+                    <div th:replace="fragments/resultCard :: resultCard(1, '맛있는 파스타', '★★★★☆ 4', 302, '₩₩', '이탈리안, 파스타', '인천시 남동구 구월동', '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>
+                    <!-- 추가 결과 카드들... -->
+                    <div th:replace="fragments/resultCard :: resultCard(2, '로마의 맛', '★★★★★ 5', 456, '₩₩₩', '이탈리안, 피자', '인천시 연수구 송도동', '정통 이탈리안 요리를 맛볼 수 있는 곳. 피자가 특히 맛있어요.')"></div>
+                    <div th:replace="fragments/resultCard :: resultCard(3, '파스타 천국', '★★★☆☆ 3', 178, '₩', '파스타, 샐러드', '인천시 부평구 부평동', '저렴한 가격에 즐길 수 있는 다양한 파스타 메뉴.')"></div>
+                    <div th:replace="fragments/resultCard :: resultCard(4, '미켈란젤로', '★★★★☆ 4', 289, '₩₩₩', '이탈리안, 와인', '인천시 중구 운서동', '고급스러운 분위기에서 즐기는 이탈리안 요리와 와인.')"></div>
+                    <div th:replace="fragments/resultCard :: resultCard(5, '나폴리 오븐', '★★★★☆ 4', 201, '₩₩', '피자, 파스타', '인천시 서구 청라동', '화덕에서 구운 정통 나폴리 피자를 맛볼 수 있는 곳.')"></div>
+                    <div th:replace="fragments/resultCard :: resultCard(6, '트라토리아', '★★★☆☆ 3', 132, '₩₩', '이탈리안, 리조또', '인천시 미추홀구 주안동', '가족 단위로 즐기기 좋은 캐주얼한 이탈리안 레스토랑.')"></div>                </div>            
                     
                 <!-- TODO: 카테고리 필터링 기능 구현 및 동적 카테고리 목록 생성 -->
-                <div class="sidebar">
-                    <h3>카테고리</h3>
-                    <!-- JavaScript를 사용하여 체크박스의 상태 변화를 감지하고,
-                        그에 따라 검색 결과를 필터링하는 로직을 추가 필수 -->
-                    <ul class="category-list">
-                        <li>
-                            <input type="checkbox" id="italian" name="category" value="italian">
-                            <label for="italian">이탈리안</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="korean" name="category" value="korean">
-                            <label for="korean">한식</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="japanese" name="category" value="japanese">
-                            <label for="japanese">일식</label>
-                        </li>
-                        <li>
-                            <input type="checkbox" id="chinese" name="category" value="chinese">
-                            <label for="chinese">중식</label>
-                        </li>
-                    </ul>
-                    <button id="showAllCategories" class="show-all-btn">모든 카테고리 보기</button>
-                </div>                
+                <!-- 카테고리 필터 사용 -->
+                <div th:replace="fragments/categoryFilter :: categoryFilter"></div>           
             </div>
         </div>
     </div>
 
     <!-- TODO: 모달 내용을 동적으로 생성하고 카테고리 데이터 연동 -->
-    <div id="categoryModal" class="modal">
-        <div class="modal-content">
-            <span class="close">×</span>
-            <h2>모든 카테고리</h2>
-            <div class="category-grid">
-                <!-- 여기에 더 많은 카테고리가 들어갑니다 -->
-            </div>
-        </div>
-    </div>
+    <!-- 카테고리 모달 사용 -->
+    <div th:replace="fragments/categoryModal :: categoryModal"></div>
 
     <!-- TODO: 검색 결과 페이지 관련 JavaScript 로직 구현 (필터링, 정렬, 페이징 등) -->
     <script src="/js/searchResults.js"></script>
