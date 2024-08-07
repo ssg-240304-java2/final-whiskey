@@ -1,11 +1,18 @@
 /* 전역 스타일 */
 body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Noto Sans KR', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f7f7f7;
     color: #333;
 }
+
+:root {
+    --main-color: #d32323;
+    --secondary-color: #ff6b6b;
+    --background-color: #f7f7f7;
+    --text-color: #333;
+}
+
 /* 푸터 스타일 */
 .test-footer {
     background-color: #333;
@@ -59,7 +66,7 @@ header {
 .container {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 0 0px;
 }
 
 /* 헤더 내용 레이아웃 */

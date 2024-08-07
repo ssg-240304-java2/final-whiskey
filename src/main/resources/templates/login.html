@@ -4,114 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Foodfolio 로그인</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/common.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            display: flex;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            width: 80%;
-            max-width: 1200px;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .image-section {
-            width: 50%;
-            background-color: #e9ecef;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .image-section img {
-            width: 80%;
-            height: auto;
-        }
-        .form-section {
-            width: 50%;
-            padding: 40px;
-            box-sizing: border-box;
-        }
-        .form-section h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        .form-section .social-login {
-            margin-bottom: 20px;
-        }
-        .form-section .social-login button {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .form-section .social-login .kakao {
-            background-color: #fee500;
-            color: #3c1e1e;
-        }
-        .form-section .social-login .naver {
-            background-color: #03c75a;
-            color: white;
-        }
-        .form-section .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .form-section .divider::before,
-        .form-section .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #ddd;
-        }
-        .form-section .divider::before {
-            margin-right: 10px;
-        }
-        .form-section .divider::after {
-            margin-left: 10px;
-        }
-        .form-section form {
-            display: flex;
-            flex-direction: column;
-        }
-        .form-section form input[type="email"],
-        .form-section form input[type="password"] {
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        .form-section form button {
-            padding: 10px;
-            margin: 10px 0;
-            background-color: #5e72e4;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .form-section .options {
-            display: flex;
-            justify-content: space-between;
-            margin: 10px 0;
-        }
-        .form-section .options a {
-            text-decoration: none;
-            color: #5e72e4;
-        }
+        
     </style>
 </head>
 <body>
@@ -123,8 +19,8 @@
         <div class="form-section">
             <h1>Foodfolio에 오신 것을 환영합니다</h1>
             <div class="social-login">
-                <!-- TODO: 카카오 로그인 기능 구현 필요 -->
-                <button class="kakao">카카오 로그인</button>
+                <!-- TODO: 구글 로그인 기능 구현 필요 -->
+                <button class="google">구글 로그인</button>
                 <!-- TODO: 네이버 로그인 기능 구현 필요 -->
                 <button class="naver">네이버 로그인</button>
             </div>
