@@ -1,6 +1,7 @@
 /* mainPage.css */
 
 :root {
+    /* 주요 색상 변수 정의 */
     --primary-color: #d32323;
     --primary-hover-color: #af1d1d;
     --background-color: #f7f7f7;
@@ -11,6 +12,7 @@
 }
 
 body {
+    /* 기본 폰트 및 전체 페이지 스타일 설정 */
     font-family: 'Noto Sans KR', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
@@ -20,12 +22,14 @@ body {
 }
 
 .container {
+    /* 컨텐츠 영역의 최대 너비 및 중앙 정렬 설정 */
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 15px;
 }
 
 .banner {
+    /* 배너 섹션 스타일 */
     background-color: var(--card-background);
     text-align: left;
     padding: 30px;
@@ -36,6 +40,7 @@ body {
 }
 
 .banner h2 {
+    /* 배너 제목 스타일 */
     margin-top: 0;
     font-size: 28px;
     font-weight: 700;
@@ -43,12 +48,14 @@ body {
 }
 
 .filter-section {
+    /* 필터 섹션 레이아웃 */
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
 }
 
 .filter-dropdown {
+    /* 필터 드롭다운 스타일 */
     margin-left: 10px;
     padding: 8px;
     border: 1px solid var(--border-color);
@@ -57,12 +64,14 @@ body {
 }
 
 .restaurant-grid {
+    /* 레스토랑 카드 그리드 레이아웃 */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
 .restaurant-card {
+    /* 레스토랑 카드 기본 스타일 */
     display: flex;
     flex-direction: column;
     background-color: var(--card-background);
@@ -73,15 +82,18 @@ body {
 }
 
 .restaurant-card:hover {
+    /* 레스토랑 카드 호버 효과 */
     transform: translateY(-5px);
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
 .restaurant-info {
+    /* 레스토랑 정보 영역 패딩 */
     padding: 20px;
 }
 
 .restaurant-info h3 {
+    /* 레스토랑 이름 스타일 */
     margin-top: 0;
     font-size: 22px;
     font-weight: 700;
@@ -89,6 +101,7 @@ body {
 }
 
 .restaurant-image-placeholder {
+    /* 레스토랑 이미지 플레이스홀더 스타일 */
     width: 100%;
     height: 200px;
     background-color: #f0f0f0;
@@ -100,22 +113,26 @@ body {
 }
 
 .restaurant-details {
+    /* 레스토랑 상세 정보 스타일 */
     font-size: 14px;
     color: #666;
     margin-bottom: 10px;
 }
 
 .distance::after {
+    /* 거리 정보 뒤에 구분자 추가 */
     content: " • ";
 }
 
 .hours {
+    /* 영업 시간 스타일 */
     font-size: 14px;
     color: #666;
     margin-bottom: 10px;
 }
 
 .rating {
+    /* 평점 스타일 */
     color: var(--rating-color);
     font-size: 18px;
     margin: 10px 0;
@@ -123,6 +140,7 @@ body {
 
 /* 버튼 스타일 */
 .find-order, .refresh-btn {
+    /* 공통 버튼 스타일 */
     background-color: var(--primary-color);
     color: white;
     border: none;
@@ -134,35 +152,41 @@ body {
 }
 
 .find-order {
+    /* '주문 찾기' 버튼 너비 설정 */
     width: 100%;
 }
 
 .refresh-btn {
-    width: auto; /* 100%에서 auto로 변경 */
-    min-width: 100px; /* 최소 너비 설정 */
-    max-width: 200px; /* 최대 너비 설정 */
+    /* '새로고침' 버튼 너비 설정 */
+    width: auto;
+    min-width: 100px;
+    max-width: 200px;
 }
 
 .find-order:hover, .refresh-btn:hover {
+    /* 버튼 호버 효과 */
     background-color: var(--primary-hover-color);
 }
 
 /* 위치 정보 섹션 */
 .location-info {
+    /* 위치 정보 레이아웃 */
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 15px;
-    flex-wrap: wrap; /* 필요시 줄 바꿈 허용 */
+    flex-wrap: wrap;
 }
 
 .location-info p {
+    /* 위치 정보 텍스트 스타일 */
     margin: 0;
     font-size: 16px;
-    margin-right: 10px; /* 버튼과의 간격 추가 */
+    margin-right: 10px;
 }
 
 @media (max-width: 768px) {
+    /* 태블릿 크기 화면에 대한 반응형 스타일 */
     .restaurant-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -177,6 +201,7 @@ body {
 }
 
 @media (max-width: 480px) {
+    /* 모바일 크기 화면에 대한 반응형 스타일 */
     .restaurant-grid {
         grid-template-columns: 1fr;
     }
