@@ -2,6 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="headerfiles">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
@@ -11,8 +14,8 @@
             <div class="header-content">
                 <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">FoodFolio</a></div>
                 <div class="search-bar">
-                    <input type="text" placeholder="맛집을 검색해보세요">
-                    <button>검색</button>
+                    <input type="text" placeholder="맛집 또는 음식을 검색해보세요">
+                    <button><i class="fas fa-search"></i> 검색</button>
                 </div>
                 <nav>
                     <a href="/login">로그인</a>
