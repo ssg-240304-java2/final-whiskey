@@ -7,13 +7,7 @@
     --text-color-light: #666;
 }
 
-body {
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-color);
-}
-
-.login-page {
+.register-page {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,7 +15,7 @@ body {
     background: linear-gradient(135deg, #f7f7f7 0%, #e9ecef 100%);
 }
 
-.login-container {
+.register-container {
     max-width: 1000px;
     margin: 20px auto;
     display: flex;
@@ -33,7 +27,7 @@ body {
     transition: all 0.3s ease;
 }
 
-.login-container:hover {
+.register-container:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
@@ -84,68 +78,12 @@ body {
     text-align: center;
 }
 
-.social-login {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-}
-
-.social-login button {
-    width: 48%;
-    padding: 12px;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.social-login .google {
-    background-color: #4285F4;
-    color: white;
-}
-
-.social-login .naver {
-    background-color: #03c75a;
-    color: white;
-}
-
-.social-login button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-.divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 30px 0;
-    color: var(--text-color-light);
-}
-
-.divider::before,
-.divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px solid #ddd;
-}
-
-.divider::before {
-    margin-right: 15px;
-}
-
-.divider::after {
-    margin-left: 15px;
-}
-
 form {
     display: flex;
     flex-direction: column;
 }
 
-form input[type="email"],
-form input[type="password"] {
+form input {
     padding: 12px;
     margin: 10px 0;
     border: 1px solid #ddd;
@@ -154,8 +92,7 @@ form input[type="password"] {
     transition: all 0.3s ease;
 }
 
-form input[type="email"]:focus,
-form input[type="password"]:focus {
+form input:focus {
     border-color: var(--main-color);
     box-shadow: 0 0 0 2px rgba(211, 35, 35, 0.1);
 }
@@ -180,10 +117,8 @@ form button:hover {
 }
 
 .options {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 15px 0;
+    text-align: center;
+    margin-top: 20px;
     font-size: 14px;
 }
 
@@ -198,7 +133,7 @@ form button:hover {
 }
 
 @media (max-width: 768px) {
-    .login-container {
+    .register-container {
         flex-direction: column;
         width: 90%;
     }
@@ -210,14 +145,5 @@ form button:hover {
 
     .image-section {
         height: 200px;
-    }
-
-    .social-login {
-        flex-direction: column;
-    }
-
-    .social-login button {
-        width: 100%;
-        margin-bottom: 10px;
     }
 }
