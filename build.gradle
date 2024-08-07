@@ -21,6 +21,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    flatDir(dirs: "libs")
 }
 
 dependencies {
@@ -31,6 +32,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Storage Object 업로드 api
+    implementation name: "RestFileUploadLib-0.2.1-SNAPSHOT"
 }
 
 tasks.named('test') {
