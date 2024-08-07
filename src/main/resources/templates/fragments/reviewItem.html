@@ -13,7 +13,10 @@
             </div>
         </div>
         <div class="review-images">
-            <!-- 이미지 표시 로직 -->
+            <!-- TODO: 이미지 표시 로직 구현 
+                 - 이미지 목록을 순회하며 표시
+                 - 이미지 크기 조정 및 레이아웃 최적화
+                 - 이미지 클릭 시 확대 기능 추가 -->
         </div>
         <div class="menu-info">
             <span class="menu-name" th:text="${menuName}">메뉴 이름</span>
@@ -23,6 +26,35 @@
             <button class="like-button">👍 좋아요 (15)</button>
             <button class="dislike-button">👎 싫어요 (2)</button>
             <button class="comment-button">💬 댓글 (3)</button>
+        </div>
+        <div class="comments-section" style="display: none;">
+            <div class="comments-list">
+                <!-- TODO: 댓글 목록 표시 로직 구현
+                     - 댓글 데이터를 서버에서 가져와 동적으로 표시
+                     - 페이지네이션 구현
+                     - 댓글 정렬 기능 추가 (최신순, 추천순 등) -->
+                <!-- 예시 댓글 -->
+                <div class="comment">
+                    <p>정말 맛있어 보이네요! 꼭 가보고 싶습니다.</p>
+                    <span>김철수 - 2024-05-20</span>
+                </div>
+                <div class="comment">
+                    <p>트러플 크림 파스타 저도 먹어봤는데 정말 맛있었어요!</p>
+                    <span>이영희 - 2024-05-21</span>
+                </div>
+                <div class="comment">
+                    <p>가격대비 양은 어떤가요?</p>
+                    <span>박지성 - 2024-05-22</span>
+                </div>
+            </div>
+            <div class="comment-form">
+                <textarea class="comment-input" placeholder="댓글을 입력하세요"></textarea>
+                <button class="submit-comment">댓글 작성</button>
+                <!-- TODO: 댓글 작성 기능 구현
+                     - 댓글 내용 유효성 검사
+                     - 댓글 작성 API 연동
+                     - 작성 완료 후 댓글 목록 갱신 -->
+            </div>
         </div>
     </div>
 </div>

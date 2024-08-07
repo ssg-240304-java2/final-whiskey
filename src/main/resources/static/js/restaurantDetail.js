@@ -80,14 +80,23 @@ document.addEventListener("DOMContentLoaded", function () {
     // 댓글 버튼에 이벤트 리스너를 추가합니다.
     document.querySelectorAll(".comment-button").forEach((button) => {
         button.addEventListener("click", function () {
-            const commentsSection =
-                this.closest(".review-item").querySelector(".comments-section");
-            // 댓글 섹션을 토글합니다.
-            commentsSection.style.display =
-                commentsSection.style.display === "none" ? "block" : "none";
+            const commentsSection = this.closest(".review-item").querySelector(".comments-section");
+            if (commentsSection.style.display === "none") {
+                commentsSection.style.display = "block";
+                loadComments(this.closest(".review-item").dataset.reviewId);
+            } else {
+                commentsSection.style.display = "none";
+            }
+        });
+    });
 
-            // TODO: 백엔드 - 특정 리뷰의 댓글 목록을 가져오는 API 엔드포인트 구현
-            // TODO: 백엔드 - 새 댓글을 추가하는 API 엔드포인트 구현
+    // 댓글 작성 버튼에 이벤트 리스너를 추가합니다.
+    document.querySelectorAll(".submit-comment").forEach((button) => {
+        button.addEventListener("click", function () {
+            const reviewItem = this.closest(".review-item");
+            const commentInput = reviewItem.querySelector(".comment-input");
+            const reviewId = reviewItem.dataset.reviewId;
+            submitComment(reviewId, commentInput.value);
         });
     });
 
@@ -121,3 +130,46 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 });
+
+function loadComments(reviewId) {
+    // TODO: 백엔드 API를 호출하여 댓글 목록을 가져옵니다.
+    // 예시 코드:
+    fetch(`/api/reviews/${reviewId}/comments`)
+        .then(response => response.json())
+        .then(comments => {
+            const commentsList = document.querySelector(`[data-review-id="${reviewId}"] .comments-list`);
+            commentsList.innerHTML = comments.map(comment => `
+                <div class="comment">
+                    <p>${comment.content}</p>
+                    <span>${comment.author} - ${comment.date}</span>
+                </div>
+            `).join('');
+        });
+    // 백엔드 개발자: 리뷰 ID에 해당하는 댓글 목록을 반환하는 API 엔드포인트를 구현해야 합니다.
+    // 반환된 댓글 데이터는 content, author, date 필드를 포함해야 합니다.
+}
+
+function submitComment(reviewId, content) {
+    // TODO: 백엔드 API를 호출하여 새 댓글을 추가합니다.
+    // 예시 코드:
+    fetch(`/api/reviews/${reviewId}/comments`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: content }),
+    })
+    .then(response => response.json())
+    .then(newComment => {
+        const commentsList = document.querySelector(`[data-review-id="${reviewId}"] .comments-list`);
+        const newCommentElement = document.createElement('div');
+        newCommentElement.className = 'comment';
+        newCommentElement.innerHTML = `
+            <p>${newComment.content}</p>
+            <span>${newComment.author} - ${newComment.date}</span>
+        `;
+        commentsList.appendChild(newCommentElement);
+    });
+    // 백엔드 개발자: 새 댓글을 저장하는 API 엔드포인트를 구현해야 합니다.
+    // 요청 본문에서 content를 받아 새 댓글을 생성하고, 생성된 댓글 정보를 응답으로 반환해야 합니다.
+}
