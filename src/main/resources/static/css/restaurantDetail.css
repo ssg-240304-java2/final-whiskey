@@ -244,14 +244,6 @@ body {
     gap: 20px;
 }
 
-.review-cards {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-}
-
-.popular-review-cards {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-}
-
 .review-card,
 .popular-review-card,
 .review-item {
