@@ -79,7 +79,7 @@
                         <h2>위치 및 영업시간</h2>
                         <!-- TODO: 백엔드 - 네이버 또는 카카오 지도 API 연동 및 레스토랑 위치 표시 -->
                         <div class="map-placeholder">
-                            네이버 지도 API가 여기에 표시
+                            카카오 지도 API가 여기에 표시(승인햄~)
                         </div>
                         <!-- TODO: 백엔드 - 영업시간 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
                         <table class="hours-table">
@@ -187,34 +187,18 @@
                         <div class="recent-inquiries">
                             <!-- TODO: 백엔드 - 문의 목록을 데이터베이스에서 가져와 동적으로 표시 -->
                             <!-- TODO: 백엔드 - 각 문의에 대한 답변 데이터도 함께 가져와 표시 -->
-                            <div class="inquiry-item">
-                                <div class="inquiry-header">
-                                    <img src="https://via.placeholder.com/40" alt="사용자 프로필" class="user-avatar">
-                                    <div class="inquiry-user-info">
-                                        <span class="inquiry-user">김철수</span>
-                                        <span class="inquiry-location">서울시</span>
-                                        <div class="user-stats">
-                                            <span class="review-count">리뷰 10</span>
-                                            <span class="photo-count">사진 5</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="inquiry-content">
-                                    <p class="inquiry-question">주차 시설이 있나요?</p>
-                                    <p class="inquiry-date">2023년 5월 15일 14:30 질문</p>
-                                </div>
-                                <div class="inquiry-answer">
-                                    <p class="answer-text">네, 건물 뒤편에 무료 주차장이 마련되어 있습니다.</p>
-                                    <p class="answer-meta">
-                                        <span class="answer-user">음식점 관리자</span>
-                                        <span class="answer-date">2023년 5월 15일 15:45 답변</span>
-                                    </p>
-                                </div>
-                                <div class="inquiry-footer">
-                                    <button class="like-inquiry">👍 유용해요 5</button>
-                                    <button class="reply-inquiry" data-inquiry-id="1">💬 답변하기</button>
-                                </div>
-                            </div>
+                            <!-- 문의 아이템 fragment 사용 -->
+                            <div th:replace="fragments/inquiryItem :: inquiryItem(
+                                user='김철수',
+                                location='서울시',
+                                reviewCount=10,
+                                photoCount=5,
+                                question='주차 시설이 있나요?',
+                                questionDate='2023년 5월 15일 14:30',
+                                answer='네, 건물 뒤편에 무료 주차장이 마련되어 있습니다.',
+                                answerUser='음식점 관리자',
+                                answerDate='2023년 5월 15일 15:45'
+                            )"></div>
                         </div>
                         <div class="inquiry-pagination">
                             <!-- TODO: 백엔드 - 페이지네이션 구현 (전체 문의 수에 따라 페이지 수 계산) -->
@@ -243,29 +227,22 @@
         </div>
     </div>
 
-    <div id="reviewModal" class="modal">
-        <div class="modal-content">
-            <span class="close">×</span>
-            <h2 id="modalReviewTitle"></h2>
+    <!-- 리뷰 모달 -->
+    <div th:replace="~{fragments/modal :: modal('reviewModal', '리뷰 상세')}">
+        <div th:fragment="content">
             <p id="modalReviewContent"></p>
             <div id="modalReviewInfo"></div>
         </div>
     </div>
 
-    <!-- 답변 모달 추가 -->
-    <div id="replyModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>답변 작성</h2>
+    <!-- 답변 모달 -->
+    <div th:replace="~{fragments/modal :: modal('replyModal', '답변 작성')}">
+        <div th:fragment="content">
             <div class="reply-form">
                 <textarea id="replyText" placeholder="답변을 작성해주세요." rows="4"></textarea>
                 <button id="submitReply" class="submit-reply">답변 등록</button>
             </div>
         </div>
     </div>
-
-    <script>
-        
-    </script>
-    </body>
+</body>
 </html>

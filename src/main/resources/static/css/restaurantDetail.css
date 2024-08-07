@@ -134,7 +134,7 @@ body {
 
 .tab span {
     position: relative;
-    z-index: 2;
+    /* z-index: 2; */
 }
 
 .tab::after {
@@ -639,7 +639,7 @@ body {
 /* 문의에 대한 답변 모달 스타일 */
 .reply-form textarea {
     width: 100%;
-    padding: 10px;
+    /* padding: 10px; */
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
