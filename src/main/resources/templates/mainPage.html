@@ -6,17 +6,31 @@
     <title>FoodPolio - 메인 페이지</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/mainPage.css}">
-    <style>
-        
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 아이콘 추가 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
-    <!-- <div th:replace="fragments/footer :: footer"></div> -->
     <div class="container">
         <div th:replace="fragments/banner :: banner('주변 맛집', '인천시, ...')"></div>
         
-        <!-- TODO: 실제 데이터베이스에서 가져온 레스토랑 정보로 동적으로 카드를 생성하는 로직 구현 -->
+        <div class="filter-section">
+            <!-- 필터 옵션 추가 -->
+            <select class="filter-dropdown">
+                <option value="">정렬 기준</option>
+                <option value="rating">평점순</option>
+                <option value="distance">거리순</option>
+            </select>
+            <select class="filter-dropdown">
+                <option value="">음식 종류</option>
+                <option value="korean">한식</option>
+                <option value="japanese">일식</option>
+                <option value="chinese">중식</option>
+                <option value="western">양식</option>
+            </select>
+        </div>
+
         <div class="restaurant-grid">
             <div th:replace="fragments/restaurantCard :: restaurantCard('대장님의 손맛 가득 파스타', '50m', '이탈리안 • 파스타 • 피자', '11:00 - 21:00', '★★★★★')"></div>
             <div th:replace="fragments/restaurantCard :: restaurantCard('정통 일식', '100m', '일식 • 스시 • 사케', '12:00 - 22:00', '★★★★☆')"></div>
@@ -27,24 +41,8 @@
             <!-- TODO: 레스토랑 데이터는 이름, 거리, 음식 종류, 영업 시간, 평점을 포함해야 함 -->
             <!-- TODO: Thymeleaf를 사용하여 서버에서 전달받은 레스토랑 목록을 반복하여 카드 생성 -->
             <!-- TODO: 예시: <div th:each="restaurant : ${restaurants}" th:replace="fragments/restaurantCard :: restaurantCard(${restaurant.name}, ${restaurant.distance}, ${restaurant.cuisine}, ${restaurant.hours}, ${restaurant.rating})"></div> -->
-
-            <!-- 템플릿화 하기전 음식점 카드 코드 -->
-            <div class="restaurant-card">
-                <div class="restaurant-info">
-                    <h3>명품 갈비찜</h3>
-                    <p>300m • 한식 • 갈비찜 • 불고기</p>
-                    <p>영업시간 11:30 - 21:30</p>
-                    <div class="rating">★★★★★</div>
-                    <!-- TODO: 상세 정보 페이지로 이동하는 링크 구현 -->
-                    <button class="find-order">상세 정보 / 주문</button>
-                </div>
-                <!-- TODO: 실제 레스토랑 이미지 표시 기능 구현 -->
-                <div class="restaurant-image-placeholder">
-                    음식점 사진
-                </div>
-            </div>
-
         </div>        
     </div>
+    <!-- <div th:replace="fragments/footer :: footer"></div> -->
 </body>
 </html>

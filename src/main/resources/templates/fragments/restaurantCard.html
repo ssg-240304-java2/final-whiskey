@@ -3,17 +3,19 @@
 <body>
     <div th:fragment="restaurantCard(name, distance, category, hours, rating)">
         <div class="restaurant-card">
-            <div class="restaurant-info">
-                <h3 th:text="${name}">레스토랑 이름</h3>
-                <p><span th:text="${distance}"></span> • <span th:text="${category}"></span></p>
-                <p th:text="'영업시간 ' + ${hours}">영업시간</p>
-                <div class="rating" th:text="${rating}">★★★★★</div>
-                <!-- TODO: 상세 정보 페이지로 이동하는 링크 구현 -->
-                <button class="find-order">상세 정보 / 주문</button>
-            </div>
-            <!-- TODO: 실제 레스토랑 이미지 표시 기능 구현 -->
             <div class="restaurant-image-placeholder">
                 음식점 사진
+            </div>
+            <div class="restaurant-info">
+                <h3 th:text="${name}">레스토랑 이름</h3>
+                <p class="restaurant-details">
+                    <span class="distance" th:text="${distance}"></span>
+                    <span class="category" th:text="${category}"></span>
+                </p>
+                <p class="hours"><i class="far fa-clock"></i> <span th:text="${hours}">영업시간</span></p>
+                <div class="rating" th:text="${rating}">★★★★★</div>
+                <!-- TODO: 상세 정보 페이지로 이동하는 링크 구현 -->
+                <button class="find-order"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
             </div>
         </div>
     </div>
