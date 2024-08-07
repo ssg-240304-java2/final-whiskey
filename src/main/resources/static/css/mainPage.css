@@ -121,6 +121,7 @@ body {
     margin: 10px 0;
 }
 
+/* 버튼 스타일 */
 .find-order, .refresh-btn {
     background-color: var(--primary-color);
     color: white;
@@ -130,23 +131,35 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+}
+
+.find-order {
     width: 100%;
+}
+
+.refresh-btn {
+    width: auto; /* 100%에서 auto로 변경 */
+    min-width: 100px; /* 최소 너비 설정 */
+    max-width: 200px; /* 최대 너비 설정 */
 }
 
 .find-order:hover, .refresh-btn:hover {
     background-color: var(--primary-hover-color);
 }
 
+/* 위치 정보 섹션 */
 .location-info {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 15px;
+    flex-wrap: wrap; /* 필요시 줄 바꿈 허용 */
 }
 
 .location-info p {
     margin: 0;
     font-size: 16px;
+    margin-right: 10px; /* 버튼과의 간격 추가 */
 }
 
 @media (max-width: 768px) {
