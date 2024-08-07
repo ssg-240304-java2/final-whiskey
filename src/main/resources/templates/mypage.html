@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,16 +11,7 @@
     <div th:replace="fragments/header :: header"></div>
     
     <div class="container">
-        <div class="profile-header">
-            <img src="https://via.placeholder.com/150" alt="프로필 이미지" class="profile-image">
-            <div class="profile-info">
-                <h1>나추형진인데</h1>
-                <p>인천시 • 가입일: 2024년 8월</p>
-                <div class="profile-stats">
-                    <span><i class="fas fa-star"></i> 1512 리뷰</span>
-                </div>
-            </div>
-        </div>
+        <div th:replace="fragments/mypage_profileHeader :: profileHeader('나추형진인데', '인천시', '2023년 1월', '1512')"></div>
         <!-- TODO: 사용자 프로필 정보를 가져오는 API 구현 -->
         <!-- TODO: 프로필 이미지 업로드 및 변경 기능 구현 -->
         <!-- TODO: 사용자 통계 정보(리뷰 수)를 가져오는 API 구현 -->
@@ -28,30 +19,11 @@
         <!-- TODO: 가입일 포맷팅 로직 구현 -->        
         <div class="content-wrapper">
             <div class="sidebar">
-                <nav class="profile-nav">
-                    <ul>
-                        <li class="active" data-tab="profile"><a href="#profile">프로필</a></li>
-                        <li data-tab="reviews"><a href="#reviews">리뷰</a></li>
-                        <li data-tab="bookmarks"><a href="#bookmarks">북마크</a></li>
-                    </ul>
-                </nav>
+                <div th:replace="fragments/mypage_sidebar :: sidebar"></div>
             </div>
             
             <div class="main-content">
-                <section id="profile" class="content-section active">
-                    <h2>About 나추형진인데</h2>
-                    <div class="profile-details">
-                        <p><strong>위치:</strong> 인천시 부평구</p>
-                        <p><strong>가입일:</strong> 2023년 1월</p>
-                        <p><strong>관심사:</strong> 이탈리안, 한식, 카페</p>
-                    </div>
-                    <div class="user-bio">
-                        <h3>자기소개</h3>
-                        <p>맛집 탐방을 좋아하는 추형진입니다. 살이 뒤지게 쪗어요 지금</p>
-                    </div>
-                    <button class="edit-profile-btn">프로필 수정</button>
-                    <!-- TODO: 프로필 수정 기능 구현 - 사용자 정보 업데이트 API 연동 -->
-                </section>
+                <div th:replace="fragments/mypage_contentSection :: contentSection('profile')"></div>
             
                 <section id="reviews" class="content-section">
                     <h2>내가 작성한 리뷰</h2>
@@ -60,7 +32,7 @@
                             <img src="https://via.placeholder.com/100" alt="레스토랑 이미지" class="restaurant-image">
                             <div class="review-content">
                                 <h3>맛있는 파스타</h3>
-                                <div class="rating">★★★★☆ 4.5</div>
+                                <div class="rating">★★★★☆ 4</div>
                                 <p class="review-text">파스타가 정말 맛있었어요. 특히 까르보나라가 일품이었습니다.</p>
                                 <span class="review-date">2023년 5월 20일</span>
                             </div>
@@ -90,27 +62,7 @@
             </div>
         </div>
     </div>
-    <div id="editProfileModal" class="modal">
-        <div class="modal-content">
-            <span class="close">×</span>
-            <h2>프로필 수정</h2>
-            <form id="editProfileForm">
-                <label for="editName">이름:</label>
-                <input type="text" id="editName" name="name" value="사용자 이름">
-                
-                <label for="editLocation">위치:</label>
-                <input type="text" id="editLocation" name="location" value="인천시 남동구">
-                
-                <label for="editInterests">관심사:</label>
-                <input type="text" id="editInterests" name="interests" value="이탈리안, 한식, 카페">
-                
-                <label for="editBio">자기소개:</label>
-                <textarea id="editBio" name="bio">맛집 탐방을 좋아하는 평범한 직장인입니다. 주말마다 새로운 맛집을 찾아다니는 것이 취미예요.</textarea>
-                
-                <button type="submit">저장</button>
-            </form>
-        </div>
-    </div>
+    <div th:replace="fragments/mypage_editProfileModal :: editProfileModal"></div>
     
     <!-- TODO: 프로필 수정을 위한 API 엔드포인트 구현 (/api/profile/update) -->
     <!-- TODO: 사용자 인증 및 권한 확인 로직 구현 -->
@@ -121,73 +73,71 @@
     <!-- TODO: 프로필 수정 히스토리 로깅 기능 구현 (선택사항) -->    
 
     <!-- <div th:replace="fragments/footer :: footer"></div> -->
-</body>
 
-<script>
-    // 페이지 로드 완료 후 실행
-    document.addEventListener('DOMContentLoaded', function() {
-        // 네비게이션 아이템과 컨텐츠 섹션 선택
-        const navItems = document.querySelectorAll('.profile-nav li');
-        const contentSections = document.querySelectorAll('.content-section');
-    
-        // 각 네비게이션 아이템에 클릭 이벤트 리스너 추가
-        navItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const tab = this.getAttribute('data-tab');
-                
-                // 활성 탭 스타일 변경
-                navItems.forEach(navItem => navItem.classList.remove('active'));
-                this.classList.add('active');
-                
-                // 해당 컨텐츠 섹션 표시
-                contentSections.forEach(section => {
-                    section.classList.remove('active');
-                    if (section.id === tab) {
-                        section.classList.add('active');
-                    }
+    <script>
+        // 페이지 로드 완료 후 실행
+        document.addEventListener('DOMContentLoaded', function() {
+            // 네비게이션 아이템과 컨텐츠 섹션 선택
+            const navItems = document.querySelectorAll('.profile-nav li');
+            const contentSections = document.querySelectorAll('.content-section');
+        
+            // 각 네비게이션 아이템에 클릭 이벤트 리스너 추가
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tab = this.getAttribute('data-tab');
+                    
+                    // 활성 탭 스타일 변경
+                    navItems.forEach(navItem => navItem.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 해당 컨텐츠 섹션 표시
+                    contentSections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === tab) {
+                            section.classList.add('active');
+                        }
+                    });
+
+                    // TODO: 선택된 탭에 따라 적절한 데이터를 서버에서 가져오는 API 엔드포인트 구현
+                    // TODO: 가져온 데이터를 화면에 표시하는 로직 구현
+                    // TODO: 페이지네이션이 필요한 경우, 페이지네이션 처리 로직 구현
+                    // TODO: 데이터 로딩 중 로딩 인디케이터 표시 기능 구현
+                    // TODO: 오류 발생 시 사용자에게 적절한 에러 메시지 표시 기능 구현
                 });
-
-                // TODO: 선택된 탭에 따라 적절한 데이터를 서버에서 가져오는 API 엔드포인트 구현
-                // TODO: 가져온 데이터를 화면에 표시하는 로직 구현
-                // TODO: 페이지네이션이 필요한 경우, 페이지네이션 처리 로직 구현
-                // TODO: 데이터 로딩 중 로딩 인디케이터 표시 기능 구현
-                // TODO: 오류 발생 시 사용자에게 적절한 에러 메시지 표시 기능 구현
             });
         });
-    });
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const modal = document.getElementById('editProfileModal');
-        const btn = document.querySelector('.edit-profile-btn');
-        const span = document.getElementsByClassName('close')[0];
-        const form = document.getElementById('editProfileForm');
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('editProfileModal');
+            const btn = document.querySelector('.edit-profile-btn');
+            const span = document.getElementsByClassName('close')[0];
+            const form = document.getElementById('editProfileForm');
 
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
 
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
+            span.onclick = function() {
                 modal.style.display = "none";
             }
-        }
 
-        form.onsubmit = function(e) {
-            e.preventDefault();
-            // TODO: 프로필 업데이트 API 엔드포인트 구현
-            // TODO: 폼 데이터 유효성 검사 로직 구현
-            // TODO: AJAX를 사용하여 서버에 프로필 업데이트 요청 보내기
-            // TODO: 성공적으로 업데이트된 경우 모달 닫기 및 페이지 새로고침 또는 DOM 업데이트
-            // TODO: 오류 발생 시 사용자에게 적절한 피드백 제공
-            modal.style.display = "none";
-        }
-    });
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
 
-</script>
-    
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                // TODO: 프로필 업데이트 API 엔드포인트 구현
+                // TODO: 폼 데이터 유효성 검사 로직 구현
+                // TODO: AJAX를 사용하여 서버에 프로필 업데이트 요청 보내기
+                // TODO: 성공적으로 업데이트된 경우 모달 닫기 및 페이지 새로고침 또는 DOM 업데이트
+                // TODO: 오류 발생 시 사용자에게 적절한 피드백 제공
+                modal.style.display = "none";
+            }
+        });
+    </script>
+</body>
 </html>

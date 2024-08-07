@@ -1,0 +1,22 @@
+<!-- src/main/resources/templates/fragments/mypage_contentSection.html -->
+<section th:fragment="contentSection(type)" th:id="${type}" class="content-section">
+    <div th:if="${type == 'profile'}">
+        <!-- <h2>About <span th:text="${name}">사용자</span></h2> -->
+        <h2>About <span th:text="${name ?: '김철수'}">김철수</span></h2>
+        <div class="profile-details">
+            <!-- <p><strong>위치:</strong> <span th:text="${location}">위치</span></p> -->
+            <p><strong>위치:</strong> <span th:text="${location ?: '서울시 강남구'}">서울시 강남구</span></p>
+            <!-- <p><strong>가입일:</strong> <span th:text="${joinDate}">가입일</span></p> -->
+            <p><strong>가입일:</strong> <span th:text="${joinDate ?: '2023년 6월 1일'}">2023년 6월 1일</span></p>
+            <!-- <p><strong>관심사:</strong> <span th:text="${interests}">관심사</span></p> -->
+            <p><strong>관심사:</strong> <span th:text="${interests ?: '맛집 탐방, 요리'}">맛집 탐방, 요리</span></p>
+        </div>
+        <div class="user-bio">
+            <h3>자기소개</h3>
+            <!-- <p th:text="${bio}">자기소개 내용</p> -->
+            <p th:text="${bio ?: '안녕하세요. 맛집을 좋아하는 평범한 직장인입니다. 주말마다 새로운 맛집을 찾아다니는 것이 취미입니다.'}">안녕하세요. 맛집을 좋아하는 평범한 직장인입니다. 주말마다 새로운 맛집을 찾아다니는 것이 취미입니다.</p>
+        </div>
+        <button class="edit-profile-btn">프로필 수정</button>
+    </div>
+    <!-- 리뷰와 북마크 섹션도 비슷한 방식으로 구현 -->
+</section>

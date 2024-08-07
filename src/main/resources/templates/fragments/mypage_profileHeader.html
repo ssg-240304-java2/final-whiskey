@@ -1,0 +1,13 @@
+<!-- src/main/resources/templates/fragments/mypage_profileHeader.html -->
+<div th:fragment="profileHeader(name, location, joinDate, reviewCount)">
+    <div class="profile-header">
+        <img src="https://via.placeholder.com/150" alt="프로필 이미지" class="profile-image">
+        <div class="profile-info">
+            <h1 th:text="${name}">사용자 이름</h1>
+            <p th:text="${location + ' • 가입일: ' + joinDate}">위치 • 가입일</p>
+            <div class="profile-stats">
+                <span><i class="fas fa-star"></i> <span th:text="${reviewCount}">0</span> 리뷰</span>
+            </div>
+        </div>
+    </div>
+</div>
