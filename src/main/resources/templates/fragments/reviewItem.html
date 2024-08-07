@@ -1,0 +1,28 @@
+<!-- src/main/resources/templates/fragments/reviewItem.html -->
+<div th:fragment="reviewItem(title, content, author, date, rating, images, menuName, menuPrice)">
+    <div class="review-item">
+        <h4 class="review-title" th:text="${title}">리뷰 제목</h4>
+        <div class="review-header">
+            <div class="review-text">
+                <p th:text="${content}">리뷰 내용</p>
+            </div>
+            <div class="review-info">
+                <span class="reviewer-name" th:text="${author}">작성자</span>
+                <span class="review-date" th:text="${date}">작성일</span>
+                <div class="rating" th:text="${rating}">평점</div>
+            </div>
+        </div>
+        <div class="review-images">
+            <!-- 이미지 표시 로직 -->
+        </div>
+        <div class="menu-info">
+            <span class="menu-name" th:text="${menuName}">메뉴 이름</span>
+            <span class="menu-price" th:text="${menuPrice + '원'}">메뉴 가격</span>
+        </div>
+        <div class="review-actions">
+            <button class="like-button">👍 좋아요 (15)</button>
+            <button class="dislike-button">👎 싫어요 (2)</button>
+            <button class="comment-button">💬 댓글 (3)</button>
+        </div>
+    </div>
+</div>

@@ -9,6 +9,19 @@
     <title>FoodPolio - 음식점 상세 정보</title>
     <style>
     </style>
+    <!-- <script>
+        window.onload() = function () { 
+            let src = [];
+            src.push('/js/restaurantDetail.js');
+
+                for (let i = 0; i < src.length; i++) {
+                    let script = document.createElement('script');
+                    script.src = src[i];
+                    document.head.appendChild(script);
+
+                }
+         }
+    </script> -->
     <script src="/js/restaurantDetail.js" defer></script>
 </head>
 <body>
@@ -20,30 +33,15 @@
     3. 현재 영업 상태 및 영업 시간을 실시간으로 계산하여 표시하는 로직 구현
     4. 레스토랑 배너 이미지 URL을 데이터베이스에서 가져와 동적으로 설정하는 기능 추가
     -->
-    <div class="restaurant-banner" style="background-image: url('https://via.placeholder.com/1200x400');">
-        <div class="container">
-            <div class="restaurant-info">
-                <h1 class="restaurant-name">추형진의 양식집</h1>
-                <button id="bookmarkButton" class="bookmark-btn">
-                    <i class="far fa-bookmark"></i> 즐겨찾기
-                </button>
-                <div class="restaurant-meta">
-                    <div class="rating">
-                        <span class="stars">★★★★☆</span>
-                        <span class="review-count">1,234 리뷰</span>
-                    </div>
-                    <div class="price-category">
-                        <span class="price">₩₩</span>
-                        <span class="category">• 이탈리안 • 파스타 • 피자</span>
-                    </div>
-                </div>
-                <div class="restaurant-status">
-                    <span class="open-now">영업중</span>
-                    <span class="hours">11:00 - 21:00</span>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div th:replace="fragments/restaurantBanner :: restaurantBanner(
+        name='추형진의 양식집',
+        rating='★★★★☆',
+        reviewCount='1,234',
+        price='₩₩',
+        category='이탈리안 • 파스타 • 피자',
+        status='영업중',
+        hours='11:00 - 21:00'
+    )"></div>
     
     <div class="container">
         <div class="main-content">
@@ -67,16 +65,8 @@
                             <!-- TODO: 백엔드 - 인기 메뉴 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
                             <div class="menu-items-container">
                                 <div class="menu-items">
-                                    <div class="menu-item">
-                                        <div class="image-placeholder" alt="트러플 크림 파스타"></div>
-                                        <h3>트러플 크림 파스타</h3>
-                                        <p>18,000원</p>
-                                    </div>
-                                    <div class="menu-item">
-                                        <div class="image-placeholder" alt="마르게리타 피자"></div>
-                                        <h3>마르게리타 피자</h3>
-                                        <p>22,000원</p>
-                                    </div>
+                                    <div th:replace="fragments/menuItem :: menuItem('트러플 크림 파스타', '18,000')"></div>
+                                    <div th:replace="fragments/menuItem :: menuItem('마르게리타 피자', '22,000')"></div>
                                     <!-- 추가 메뉴 아이템 -->
                                 </div>
                             </div>
@@ -123,7 +113,7 @@
                                 <!-- TODO: 백엔드 - 전체 평점 및 리뷰 수를 계산하여 동적으로 표시 -->
                                 <div class="review-card">
                                     <h3>전체 평점</h3>
-                                    <div class="rating">★★★★☆ 4.5</div>
+                                    <div class="rating">★★★★☆ 4</div>
                                     <p>1,234 리뷰</p>
                                 </div>
                             </div>
@@ -161,48 +151,19 @@
                                 <h3>최근 리뷰</h3>
                                 <!-- TODO: 백엔드 - 최근 리뷰를 날짜순으로 정렬하여 가져와 동적으로 표시 -->
                                 <div class="review-items">
-                                    <div class="review-item">
-                                        <h4 class="review-title">맛있는 파스타와 분위기 좋은 레스토랑</h4>
-                                        <div class="review-header">
-                                            <div class="review-text">
-                                                <p>파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!</p>
-                                            </div>
-                                            <div class="review-info">
-                                                <span class="reviewer-name">홍길동</span>
-                                                <span class="review-date">2023-05-01</span>
-                                                <div class="rating">★★★★☆ 4.5</div>
-                                            </div>
-                                        </div>
-                                        <div class="review-images">
-                                            <div class="image-placeholder">사진 1</div>
-                                            <div class="image-placeholder">사진 2</div>
-                                            <div class="more-images">+2</div>
-                                        </div>
-                                        <div class="menu-info">
-                                            <span class="menu-name">트러플 크림 파스타</span>
-                                            <span class="menu-price">18,000원</span>
-                                        </div>
-                                        <div class="review-actions">
-                                            <!-- TODO: 백엔드 - 좋아요, 싫어요, 댓글 기능 구현 -->
-                                            <button class="like-button">👍 좋아요 (15)</button>
-                                            <button class="dislike-button">👎 싫어요 (2)</button>
-                                            <button class="comment-button">💬 댓글 (3)</button>
-                                        </div>
-                                        <div class="comments-section" style="display: none;">
-                                            <!-- TODO: 백엔드 - 댓글 목록을 가져와 동적으로 표시 -->
-                                            <div class="comment">
-                                                <p><strong>홍길동:</strong> 정말 맛있어 보이네요! 저도 꼭 가보고 싶어요.</p>
-                                            </div>
-                                            <div class="comment">
-                                                <p><strong>김철수:</strong> 파스타가 특히 맛있다고 하던데 사실인가요?</p>
-                                            </div>
-                                            <!-- TODO: 백엔드 - 댓글 작성 기능 구현 -->
-                                            <form class="comment-form">
-                                                <textarea placeholder="댓글을 입력하세요..." required></textarea>
-                                                <button type="submit">댓글 작성</button>
-                                            </form>
-                                        </div>
-                                    </div>
+                                    <!-- 리뷰 카드 fragment 사용 -->
+                                    <div th:replace="fragments/reviewItem :: reviewItem(
+                                        title='맛있는 파스타와 분위기 좋은 레스토랑',
+                                        content='파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!',
+                                        author='홍길동',
+                                        date='2024-05-01',
+                                        rating='★★★★☆ 4',
+                                        images='',
+                                        menuName='트러플 크림 파스타',
+                                        menuPrice='18,000'
+                                    )"></div>
+                                    
+                                    <!-- 추가 리뷰 카드들... -->
                                 </div>
                             </div>
                             <div class="write-review">

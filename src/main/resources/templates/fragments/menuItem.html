@@ -1,0 +1,8 @@
+<!-- src/main/resources/templates/fragments/menuItem.html -->
+<div th:fragment="menuItem(name, price)">
+    <div class="menu-item">
+        <div class="image-placeholder" th:alt="${name}"></div>
+        <h3 th:text="${name}">메뉴 이름</h3>
+        <p th:text="${price + '원'}">가격</p>
+    </div>
+</div>
