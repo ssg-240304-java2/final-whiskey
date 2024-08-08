@@ -21,77 +21,68 @@ jobs:
     if: github.repository == 'ssg-240304-java2/final-whiskey'
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        ref: ${{ github.ref }}
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-    - name: Set YML
-      run: |
-        mkdir -p src/main/resources
-        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
-        find src
-    - name: Grant permission for gradlew
-      run: chmod +x ./gradlew
-    - name: Build with Gradle
-      run: ./gradlew clean build -x test
-    - name: Docker build and publish
-      run: |
-        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-${{ github.ref_name }} .
-        docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-${{ github.ref_name }}
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Set YML
+        run: |
+          mkdir -p src/main/resources
+          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+          find src
+      - name: Grant permission for gradlew
+        run: chmod +x ./gradlew
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
+      - name: Docker build and publish
+        run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:${{ github.ref_name }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:${{ github.ref_name }}
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
-    - name: NCP SSH Login and Docker Image pull and run
-      if: github.ref == 'refs/heads/main'  # main 브랜치에 대한 조건
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.NCP_HOST }}
-        username: ${{ secrets.NCP_USERNAME }}
-        password: ${{ secrets.NCP_PASSWORD }}
-        key: ${{ secrets.NCP_KEY }}
-        port: ${{ secrets.NCP_PORT }}
-        script: |
-          sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          sudo docker stop ${{ vars.APP_NAME }}
-          sudo docker rm -f ${{ vars.APP_NAME }}
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-main
-          sudo docker run -d --name ${{ vars.APP_NAME }} -p 8081:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-main
-          sudo docker image prune -f
+      - name: NCP SSH Login and Docker Image pull and run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.NCP_HOST }}
+          username: ${{ secrets.NCP_USERNAME }}
+          password: ${{ secrets.NCP_PASSWORD }}
+          key: ${{ secrets.NCP_KEY }}
+          port: ${{ secrets.NCP_PORT }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker stop ${{ vars.APP_NAME }}
+            sudo docker rm -f ${{ vars.APP_NAME }}
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:main
+            sudo docker run -d --name ${{ vars.APP_NAME }} -p 8081:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:main
+            sudo docker image prune -f
 
   deploy_devel:
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/devel'
     steps:
-    - name: NCP SSH Login and Docker Image pull and run
-      if: github.ref == 'refs/heads/devel'  # devel 브랜치에 대한 조건
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.DEV_NCP_HOST }}
-        username: ${{ secrets.DEV_NCP_USERNAME }}
-        password: ${{ secrets.DEV_NCP_PASSWORD }}
-        key: ${{ secrets.DEV_NCP_KEY }}
-        port: ${{ secrets.DEV_NCP_PORT }}
-        script:
-          # Docker 로그인
-          sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          
-          # 기존 컨테이너 중지 및 삭제 (특정 APP_NAME만 해당)
-          sudo docker stop ${{ vars.APP_NAME }}
-          sudo docker rm -f ${{ vars.APP_NAME }}
-          
-          # 새로운 이미지 가져오기
-          sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-devel
-          
-          # 새로운 컨테이너 실행
-          sudo docker run -d --name ${{ vars.APP_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-devel
-          
-          # 사용하지 않는 이미지 정리
-          sudo docker image prune -f
+      - name: NCP SSH Login and Docker Image pull and run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEV_NCP_HOST }}
+          username: ${{ secrets.DEV_NCP_USERNAME }}
+          password: ${{ secrets.DEV_NCP_PASSWORD }}
+          key: ${{ secrets.DEV_NCP_KEY }}
+          port: ${{ secrets.DEV_NCP_PORT }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker stop ${{ vars.APP_NAME }}
+            sudo docker rm -f ${{ vars.APP_NAME }}
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:devel
+            sudo docker run -d --name ${{ vars.APP_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:devel
+            sudo docker image prune -f
