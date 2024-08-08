@@ -1,0 +1,101 @@
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+h1 {
+    color: #d32323;
+    margin-bottom: 20px;
+}
+.rating-input {
+    margin-bottom: 20px;
+}
+.star {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+}
+.star.active {
+    color: #f15c4f;
+}
+textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+.photo-upload {
+    margin: 20px 0;
+}
+.submit-btn {
+    background-color: #d32323;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.submit-btn:hover {
+    background-color: #e03131;
+}
+/* 레스토랑 정보를 표시하는 컨테이너의 스타일 */
+.restaurant-info {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+/* 별점 설명 텍스트의 스타일 */
+.rating-description {
+    font-size: 14px;
+    color: #666;
+}
+/* 리뷰 길이 표시 텍스트의 스타일 */
+.review-length {
+    font-size: 14px;
+    color: #666;
+    text-align: right;
+}
+/* 사진 미리보기 컨테이너의 스타일 */
+.photo-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+/* 사진 미리보기 이미지의 스타일 */
+.photo-preview img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.cancel-btn {
+    background-color: #ccc;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+.cancel-btn:hover {
+    background-color: #bbb;
+}

@@ -1,0 +1,13 @@
+<!-- src/main/resources/templates/fragments/photoUpload.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="photoUpload">
+        <div class="photo-upload">
+            <p>사진 추가 (최대 5장):</p>
+            <input type="file" id="photoUpload" accept="image/*" multiple>
+            <div class="photo-preview" id="photoPreview"></div>
+        </div>
+    </div>
+</body>
+</html>

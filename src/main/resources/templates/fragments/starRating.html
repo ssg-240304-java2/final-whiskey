@@ -1,0 +1,19 @@
+<!-- src/main/resources/templates/fragments/starRating.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="starRating">
+        <div class="rating-input">
+            <p>별점을 선택하세요:</p>
+            <div id="starRating">
+                <span class="star" data-rating="1">★</span>
+                <span class="star" data-rating="2">★</span>
+                <span class="star" data-rating="3">★</span>
+                <span class="star" data-rating="4">★</span>
+                <span class="star" data-rating="5">★</span>
+            </div>
+            <p class="rating-description">1: 별로에요, 2: 그저 그래요, 3: 괜찮아요, 4: 좋아요, 5: 최고에요!</p>
+        </div>
+    </div>
+</body>
+</html>

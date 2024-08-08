@@ -63,7 +63,7 @@ jobs:
           sudo docker stop ${{ vars.APP_NAME }}
           sudo docker rm -f ${{ vars.APP_NAME }}
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-main
-          sudo docker run -d --name ${{ vars.APP_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-main
+          sudo docker run -d --name ${{ vars.APP_NAME }} -p 8081:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-main
           sudo docker image prune -f
 
   deploy_devel:
@@ -79,7 +79,7 @@ jobs:
         password: ${{ secrets.DEV_NCP_PASSWORD }}
         key: ${{ secrets.DEV_NCP_KEY }}
         port: ${{ secrets.DEV_NCP_PORT }}
-        script: |
+        script:
           # Docker 로그인
           sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           

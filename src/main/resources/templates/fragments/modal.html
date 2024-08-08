@@ -1,0 +1,12 @@
+<!-- src/main/resources/templates/fragments/modal.html -->
+<div th:fragment="modal(id, title)">
+    <div th:id="${id}" class="modal">
+        <div class="modal-content">
+            <span class="close">×</span>
+            <h2 th:text="${title}">모달 제목</h2>
+            <div th:replace="~{::content}">
+                <!-- 모달 내용이 여기에 들어갑니다 -->
+            </div>
+        </div>
+    </div>
+</div>

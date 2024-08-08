@@ -1,0 +1,124 @@
+/* 전체 폰트 설정 */
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 15px 0;
+}
+
+/* 헤더 래퍼 스타일 */
+.header-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 헤더 내용 레이아웃 */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* 로고 스타일 */
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #d32323;
+    transition: color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.logo:hover {
+    color: #ff1a1a;
+}
+
+/* 검색바 레이아웃 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    width: 40%;
+    margin: 0 20px;
+}
+
+/* 검색 입력 필드 스타일 */
+.search-bar input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+    flex: 1;
+}
+
+/* 검색 버튼 스타일 */
+.search-bar button {
+    padding: 12px 20px;
+    background-color: #d32323;
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.search-bar button:hover {
+    background-color: #ff1a1a;
+}
+
+/* 내비게이션 링크 스타일 */
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    color: #333;
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 14px;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+/* 내비게이션 링크 호버 효과 */
+nav a:hover {
+    color: #0073bb;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1024px) {
+    .search-bar {
+        width: 30%;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .logo {
+        margin-bottom: 15px;
+        text-align: center;
+    }
+
+    .search-bar {
+        width: 100%;
+        margin: 0 0 15px 0;
+    }
+
+    nav {
+        justify-content: center;
+    }
+
+    nav a {
+        margin: 0 10px;
+    }
+}

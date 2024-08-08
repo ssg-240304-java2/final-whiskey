@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영수증 인증 - Foodfolio</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/receiptVerification.css}">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>영수증 인증</h1>
+        <div class="verification-grid">
+            <div class="upload-section">
+                <h2>파일 업로드</h2>
+                <div class="upload-area" id="dropArea">
+                    <p>영수증 이미지를 드래그하여 업로드하거나 아래 버튼을 클릭하세요.</p>
+                    <input type="file" id="fileInput" accept="image/*">
+                    <button class="upload-btn" onclick="document.getElementById('fileInput').click()">파일 선택</button>
+                </div>
+                <img id="preview" src="" alt="영수증 미리보기" style="display: none;">
+            </div>
+            <div class="webcam-section">
+                <h2>웹캠 촬영</h2>
+                <video id="webcam" autoplay playsinline width="100%" height="auto"></video>
+                <button id="captureBtn" class="capture-btn">촬영하기</button>
+                <button id="retakeBtn" class="retake-btn" style="display: none;">다시 찍기</button>
+                <canvas id="canvas" style="display:none;"></canvas>
+            </div>
+        </div>
+        <div id="receiptInfo" class="receipt-info" style="display: none;">
+            <h3>영수증 정보</h3>
+            <p><strong>상호명:</strong> <span id="storeName">맛있는 레스토랑</span></p>
+            <p><strong>날짜:</strong> <span id="receiptDate">2023-05-15</span></p>
+            <p><strong>총 금액:</strong> <span id="totalAmount">50,000원</span></p>
+            <p><strong>메뉴:</strong> <span id="menuItems">파스타, 피자, 샐러드</span></p>
+        </div>
+        <button class="verify-btn" id="verifyBtn">영수증 인증하기</button>
+        <button class="next-step-btn" id="nextStepBtn" style="display: none;">다음 단계</button>
+    </div>    
+
+    <script>
+        // 드래그 앤 드롭 영역과 관련 요소들을 선택합니다.
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const verifyBtn = document.getElementById('verifyBtn');
+
+        // 드래그 앤 드롭 이벤트를 처리합니다.
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        // 기본 이벤트 동작을 방지합니다.
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // 드래그 오버 시 하이라이트 효과를 추가합니다.
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        // 드래그 종료 시 하이라이트 효과를 제거합니다.
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        // 하이라이트 효과를 추가하는 함수입니다.
+        function highlight(e) {
+            dropArea.classList.add('dragover');
+        }
+
+        // 하이라이트 효과를 제거하는 함수입니다.
+        function unhighlight(e) {
+            dropArea.classList.remove('dragover');
+        }
+
+        // 파일 드롭 이벤트를 처리합니다.
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        // 드롭된 파일을 처리하는 함수입니다.
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        // 파일 입력 변경 이벤트를 처리합니다.
+        fileInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        // 파일을 처리하고 미리보기를 표시하는 함수입니다.
+        function handleFiles(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                        verifyBtn.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('이미지 파일만 업로드 가능합니다.');
+                }
+            }
+        }
+
+        // 인증 버튼 클릭 이벤트를 처리합니다.
+        verifyBtn.addEventListener('click', function() {
+        // TODO: 네이버 클로바 OCR API를 호출하여 영수증 이미지를 분석하고 결과를 처리하는 로직을 구현해야 합니다.
+        // TODO: API 호출 결과를 바탕으로 영수증 정보를 추출하고 화면에 표시해야 합니다.
+        // TODO: 영수증 인증 성공 여부에 따라 적절한 피드백을 사용자에게 제공해야 합니다.
+        alert('영수증 인증이 완료되었습니다.');
+            nextStepBtn.style.display = 'block';
+        });
+
+        nextStepBtn.addEventListener('click', function() {
+            // TODO: 리뷰 작성 페이지로 이동하는 로직을 구현해야 합니다.
+            // TODO: 필요한 경우, 영수증 정보를 세션 스토리지나 로컬 스토리지에 저장하여 다음 페이지로 전달해야 합니다.
+            window.location.href = '/write-review';
+        });
+
+        // 웹캠 관련 요소들을 선택합니다.
+        const video = document.getElementById('webcam');
+        const canvas = document.getElementById('canvas');
+        const captureBtn = document.getElementById('captureBtn');
+        const retakeBtn = document.getElementById('retakeBtn');
+        const receiptInfo = document.getElementById('receiptInfo');
+
+        // 웹캠 스트림을 가져와 비디오 요소에 연결합니다.
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(error => {
+                console.error('웹캠 접근 오류:', error);
+            });
+
+        // 캡처 버튼 클릭 이벤트를 처리합니다.
+        captureBtn.addEventListener('click', () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            const imageDataUrl = canvas.toDataURL('image/jpeg');
+            preview.src = imageDataUrl;
+            preview.style.display = 'block';
+            verifyBtn.style.display = 'block';
+            retakeBtn.style.display = 'inline-block';
+            receiptInfo.style.display = 'block';
+            // TODO: 캡처된 이미지를 서버로 전송하여 OCR 처리를 수행하는 API를 호출해야 합니다.
+            // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
+        });
+
+        // 재촬영 버튼 클릭 이벤트를 처리합니다.
+        retakeBtn.addEventListener('click', () => {
+            preview.style.display = 'none';
+            retakeBtn.style.display = 'none';
+            receiptInfo.style.display = 'none';
+            verifyBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>

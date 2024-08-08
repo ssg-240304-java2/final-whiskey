@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodPolio - 검색 결과</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/searchResults.css">
+    <th:block th:replace="fragments/header :: headerfiles"></th:block>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- TODO: 헤더 프래그먼트를 동적으로 삽입 -->
+    <div th:replace="fragments/header :: header"></div>
+        <!-- 헤더는 여기에 들어갑니다 -->
+    
+    <!-- TODO: 검색 배너 정보를 동적으로 생성 (검색어, 결과 수, 위치, 카테고리 등) -->
+    <div class="search-banner" style="background-image: url('https://placehold.co/1200x200');">        <div class="container">
+            <div class="search-info">
+                <h1 class="search-title">검색 결과: "파스타"</h1>
+                <div class="search-meta">
+                    <div class="result-count">
+                        <span class="count">300개의 결과</span>
+                    </div>
+                    <div class="location-category">
+                        <span class="location">인천시</span>
+                        <span class="category">• 이탈리안 • 파스타 • 피자</span>
+                    </div>
+                </div>
+                <div class="search-filters">
+                    <span class="filter">가격대: ₩₩</span>
+                    <span class="filter">평점: ★★★★☆ 이상</span>
+                </div>
+            </div>
+        </div>
+    </div>        
+
+    <div class="search-layout">
+        <!-- TODO: 지도 API 연동 및 검색 결과에 따른 마커 표시 -->
+        <div class="map-container">
+            <div class="map-placeholder">
+                여기에 지도가 표시됩니다
+            </div>
+        </div>
+        <div class="container">
+            <div class="search-content">
+                
+                <!-- TODO: 검색 결과를 동적으로 생성하고 페이징 처리 -->
+                <div class="results-container">
+
+                    <!-- 검색 결과 카드 사용 예시 -->
+                    <div th:replace="fragments/resultCard :: resultCard(1, '맛있는 파스타', '★★★★☆ 4', 302, '₩₩', '이탈리안, 파스타', '인천시 남동구 구월동', '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>
+                    <!-- 추가 결과 카드들... -->
+                    <div th:replace="fragments/resultCard :: resultCard(2, '로마의 맛', '★★★★★ 5', 456, '₩₩₩', '이탈리안, 피자', '인천시 연수구 송도동', '정통 이탈리안 요리를 맛볼 수 있는 곳. 피자가 특히 맛있어요.')"></div>
+                    <div th:replace="fragments/resultCard :: resultCard(3, '파스타 천국', '★★★☆☆ 3', 178, '₩', '파스타, 샐러드', '인천시 부평구 부평동', '저렴한 가격에 즐길 수 있는 다양한 파스타 메뉴.')"></div>
+                    <div th:replace="fragments/resultCard :: resultCard(4, '미켈란젤로', '★★★★☆ 4', 289, '₩₩₩', '이탈리안, 와인', '인천시 중구 운서동', '고급스러운 분위기에서 즐기는 이탈리안 요리와 와인.')"></div>
+                    <div th:replace="fragments/resultCard :: resultCard(5, '나폴리 오븐', '★★★★☆ 4', 201, '₩₩', '피자, 파스타', '인천시 서구 청라동', '화덕에서 구운 정통 나폴리 피자를 맛볼 수 있는 곳.')"></div>
+                    <div th:replace="fragments/resultCard :: resultCard(6, '트라토리아', '★★★☆☆ 3', 132, '₩₩', '이탈리안, 리조또', '인천시 미추홀구 주안동', '가족 단위로 즐기기 좋은 캐주얼한 이탈리안 레스토랑.')"></div>                </div>            
+                    
+                <!-- TODO: 카테고리 필터링 기능 구현 및 동적 카테고리 목록 생성 -->
+                <!-- 카테고리 필터 사용 -->
+                <div th:replace="fragments/categoryFilter :: categoryFilter"></div>           
+            </div>
+        </div>
+    </div>
+
+    <!-- TODO: 모달 내용을 동적으로 생성하고 카테고리 데이터 연동 -->
+    <!-- 카테고리 모달 사용 -->
+    <div th:replace="fragments/categoryModal :: categoryModal"></div>
+
+    <!-- TODO: 검색 결과 페이지 관련 JavaScript 로직 구현 (필터링, 정렬, 페이징 등) -->
+    <script src="/js/searchResults.js"></script>
+</body>
+</html>

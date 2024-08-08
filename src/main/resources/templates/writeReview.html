@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 작성 - Foodfolio</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/writeReview.css}">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="restaurant-info">
+            <h2>레스토랑 이름</h2>
+            <p>주소: 서울시 강남구 테헤란로 123</p>
+        </div>
+
+        <h1>리뷰 작성</h1>
+
+        <form id="reviewForm">
+            <div th:replace="fragments/starRating :: starRating"></div>
+            <div th:replace="fragments/reviewTextarea :: reviewTextarea"></div>
+            <div th:replace="fragments/photoUpload :: photoUpload"></div>
+            <div th:replace="fragments/reviewSubmitButtons :: reviewSubmitButtons"></div>
+        </form>
+    </div>
+
+    <script>
+        // TODO: 백엔드 개발자는 레스토랑 정보를 동적으로 불러오는 API를 구현해야 합니다.
+        // 레스토랑 ID를 기반으로 이름과 주소를 가져와 페이지에 표시하는 기능이 필요합니다.
+
+        // 별점을 나타내는 요소들을 선택합니다.
+        const stars = document.querySelectorAll('.star');
+        // 현재 선택된 별점을 저장하는 변수입니다.
+        let rating = 0;
+
+        // 각 별점 요소에 클릭 이벤트를 추가합니다.
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                // 클릭된 별의 data-rating 속성 값을 가져와 rating 변수에 저장합니다.
+                rating = star.getAttribute('data-rating');
+                // 별점 표시를 업데이트합니다.
+                updateStars();
+            });
+        });
+
+        // 선택된 별점에 따라 별들의 표시 상태를 업데이트하는 함수입니다.
+        function updateStars() {
+            stars.forEach(star => {
+                // 현재 별의 rating이 선택된 rating 이하인 경우 active 클래스를 추가합니다.
+                if (star.getAttribute('data-rating') <= rating) {
+                    star.classList.add('active');
+                } else {
+                    // 그렇지 않은 경우 active 클래스를 제거합니다.
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // 리뷰 폼 제출 이벤트를 처리합니다.
+        document.getElementById('reviewForm').addEventListener('submit', (e) => {
+            // 폼의 기본 제출 동작을 막습니다.
+            e.preventDefault();
+            // 리뷰 텍스트와 업로드된 사진들을 가져옵니다.
+            const reviewText = document.getElementById('reviewText').value;
+            const photos = document.getElementById('photoUpload').files;
+
+            // TODO: 백엔드 개발자는 리뷰 제출을 처리하는 API를 구현해야 합니다.
+            // 별점(rating), 리뷰 텍스트(reviewText), 사진(photos)을 서버로 전송하고 저장하는 기능이 필요합니다.
+            // 또한 리뷰 제출 후 성공/실패 여부를 클라이언트에 알려주는 응답 처리도 구현해야 합니다.
+
+            console.log('Rating:', rating);
+            console.log('Review:', reviewText);
+            console.log('Photos:', photos);
+
+            // 리뷰 등록 완료 메시지를 표시합니다.
+            alert('리뷰가 성공적으로 등록되었습니다!');
+        });
+
+        // 취소 버튼 기능
+        document.getElementById('cancelBtn').addEventListener('click', function() {
+            if (confirm('리뷰 작성을 취소하시겠습니까? 작성 중인 내용은 저장되지 않습니다.')) {
+                window.history.back();
+            }
+        });
+
+        // TODO: 백엔드 개발자는 사용자가 이전에 작성 중이던 리뷰 내용을 임시 저장하고 불러오는 기능을 구현해야 합니다.
+        // 페이지를 벗어났다가 다시 돌아왔을 때 작성 중이던 내용을 복원하는 기능이 필요합니다.
+
+        // 리뷰 길이 표시
+        const reviewText = document.getElementById('reviewText');
+        const charCount = document.getElementById('charCount');
+
+        reviewText.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
+
+        // TODO: 백엔드 개발자는 리뷰 텍스트의 최대 길이를 서버 측에서도 검증하는 로직을 구현해야 합니다.
+        // 클라이언트 측 검증과 함께 서버 측에서도 텍스트 길이를 확인하여 500자를 초과하지 않도록 해야 합니다.
+
+        // 사진 미리보기
+        const photoUpload = document.getElementById('photoUpload');
+        const photoPreview = document.getElementById('photoPreview');
+
+        photoUpload.addEventListener('change', function() {
+            photoPreview.innerHTML = '';
+            for (let i = 0; i < this.files.length && i < 5; i++) {
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(this.files[i]);
+                photoPreview.appendChild(img);
+            }
+        });
+
+        // TODO: 백엔드 개발자는 업로드된 사진의 용량, 형식, 개수를 서버 측에서 검증하는 로직을 구현해야 합니다.
+        // 허용된 이미지 형식만 업로드 가능하도록 하고, 최대 5장까지만 저장되도록 제한해야 합니다.
+        // 또한 각 이미지의 최대 용량도 서버 측에서 체크해야 합니다.
+    </script>
+</body>
+</html>
