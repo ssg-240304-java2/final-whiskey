@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public abstract class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 신고 식별자
+    private Long id;    // 신고 식별자
 
     @Column(nullable = false)
     private String title; // 신고 제목

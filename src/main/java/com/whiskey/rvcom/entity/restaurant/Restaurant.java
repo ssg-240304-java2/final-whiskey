@@ -14,7 +14,7 @@ import java.util.List;
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id; // 음식점 식별자
+    private Long id; // 음식점 식별자
 
     @Column(nullable = false)
     private String name;  // 음식점명

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 메뉴 식별자
+    private Long id;    // 메뉴 식별자
 
     @Column(nullable = false)
     private String name;    // 메뉴 이름

@@ -15,7 +15,7 @@ import java.util.List;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 리뷰 식별자
+    private Long id;    // 리뷰 식별자
 
     // TODO 데이터베이스에 Value 값이 저장되게 Converter 어노테이션과 클래스 생성해야함
     @Enumerated(EnumType.STRING)
@@ -42,7 +42,6 @@ public class Review {
     @JoinColumn(name = "reviewer_id", nullable = false)
     private Member reviewer;    // 리뷰 작성자
 
-    // TODO: 리뷰 좋아요
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "review_id")
     private List<ReviewLike> likes; // 좋아요 리스트

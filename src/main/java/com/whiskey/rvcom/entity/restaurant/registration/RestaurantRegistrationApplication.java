@@ -15,7 +15,7 @@ public class RestaurantRegistrationApplication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;    // 신청서 식별자
+    private Long id;    // 신청서 식별자
 
     @Column(name = "restaurant_name", nullable = false)
     private String restaurantName;  // 음식점명
