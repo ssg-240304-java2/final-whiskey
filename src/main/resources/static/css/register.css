@@ -150,6 +150,38 @@ form button:hover {
     color: var(--main-color-dark);
 }
 
+/* 이메일 컨테이너 스타일 */
+.email-container {
+    display: flex;
+    gap: 10px;
+}
+
+.email-container input[type="email"] {
+    flex-grow: 1;
+}
+
+/* 이메일 인증 버튼 스타일 */
+#emailVerifyBtn {
+    padding: 12px 20px;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#emailVerifyBtn:hover {
+    background-color: var(--main-color-dark);
+}
+
+#emailVerifyBtn.verified {
+    background-color: #28a745;
+    cursor: not-allowed;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .register-container {
@@ -164,5 +196,14 @@ form button:hover {
 
     .image-section {
         height: 200px;
+    }
+
+    .email-container {
+        flex-direction: column;
+    }
+
+    #emailVerifyBtn {
+        width: 100%;
+        margin-top: 10px;
     }
 }
