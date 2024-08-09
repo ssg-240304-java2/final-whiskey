@@ -1,22 +1,63 @@
 <!-- src/main/resources/templates/fragments/mypage_contentSection.html -->
 <section th:fragment="contentSection(type)" th:id="${type}" class="content-section">
-    <div th:if="${type == 'profile'}">
-        <!-- <h2>About <span th:text="${name}">사용자</span></h2> -->
+    <div th:if="${type == 'profile'}" class="profile-content">
         <h2>About <span th:text="${name ?: '김철수'}">김철수</span></h2>
         <div class="profile-details">
-            <!-- <p><strong>위치:</strong> <span th:text="${location}">위치</span></p> -->
-            <p><strong>위치:</strong> <span th:text="${location ?: '서울시 강남구'}">서울시 강남구</span></p>
-            <!-- <p><strong>가입일:</strong> <span th:text="${joinDate}">가입일</span></p> -->
-            <p><strong>가입일:</strong> <span th:text="${joinDate ?: '2023년 6월 1일'}">2023년 6월 1일</span></p>
-            <!-- <p><strong>관심사:</strong> <span th:text="${interests}">관심사</span></p> -->
-            <p><strong>관심사:</strong> <span th:text="${interests ?: '맛집 탐방, 요리'}">맛집 탐방, 요리</span></p>
+            <p><i class="fas fa-map-marker-alt"></i> <span th:text="${location ?: '서울시 강남구'}">서울시 강남구</span></p>
+            <p><i class="fas fa-calendar-alt"></i> <span th:text="${joinDate ?: '2023년 6월 1일'}">2023년 6월 1일</span>에 가입</p>
+            <p><i class="fas fa-heart"></i> 관심사: <span th:text="${interests ?: '맛집 탐방, 요리'}">맛집 탐방, 요리</span></p>
         </div>
         <div class="user-bio">
             <h3>자기소개</h3>
-            <!-- <p th:text="${bio}">자기소개 내용</p> -->
             <p th:text="${bio ?: '안녕하세요. 맛집을 좋아하는 평범한 직장인입니다. 주말마다 새로운 맛집을 찾아다니는 것이 취미입니다.'}">안녕하세요. 맛집을 좋아하는 평범한 직장인입니다. 주말마다 새로운 맛집을 찾아다니는 것이 취미입니다.</p>
         </div>
         <button class="edit-profile-btn">프로필 수정</button>
     </div>
-    <!-- 리뷰와 북마크 섹션도 비슷한 방식으로 구현 -->
+
+    <div th:if="${type == 'reviews'}" class="reviews-content">
+        <h2>내가 작성한 리뷰</h2>
+        <div class="review-list">
+            <!-- 리뷰 아이템 예시 -->
+            <div class="review-item">
+                <img src="https://via.placeholder.com/150" alt="레스토랑 이미지" class="restaurant-image">
+                <div class="review-details">
+                    <h3 class="restaurant-name">맛있는 파스타</h3>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <span>4.0</span>
+                    </div>
+                    <p class="review-text">파스타가 정말 맛있었어요. 특히 까르보나라가 일품이었습니다.</p>
+                    <p class="review-date">2023년 5월 20일</p>
+                </div>
+            </div>
+            <!-- 추가 리뷰 아이템들... -->
+        </div>
+    </div>
+
+    <div th:if="${type == 'bookmarks'}" class="bookmarks-content">
+        <h2>북마크한 레스토랑</h2>
+        <div class="bookmark-list">
+            <!-- 북마크 아이템 예시 -->
+            <div class="bookmark-item">
+                <img src="https://via.placeholder.com/150" alt="레스토랑 이미지" class="restaurant-image">
+                <div class="bookmark-details">
+                    <h3 class="restaurant-name">정통 이탈리안</h3>
+                    <p class="restaurant-location"><i class="fas fa-map-marker-alt"></i> 인천시 연수구 송도동</p>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span>5.0</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 추가 북마크 아이템들... -->
+        </div>
+    </div>
 </section>
