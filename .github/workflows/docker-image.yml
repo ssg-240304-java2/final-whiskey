@@ -91,6 +91,6 @@ jobs:
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker stop ${{ vars.APP_NAME }}
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker rm -f ${{ vars.APP_NAME }}
-            echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}-devel
+            echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker run -d --name ${{ vars.APP_NAME }} -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker image prune -f
