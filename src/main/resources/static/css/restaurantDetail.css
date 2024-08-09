@@ -29,7 +29,7 @@ body {
 
 .content-area {
     overflow-x: auto;
-    padding: 20px;
+    /* padding: 20px; */
 }
 
 .flex-container {
