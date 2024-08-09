@@ -1,8 +1,9 @@
 /* 전체 스타일 */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Noto Sans KR', Arial, sans-serif;
     line-height: 1.6;
     color: #333;
+    background-color: #f4f4f4;
 }
 
 /* 레이아웃 스타일 */
@@ -16,6 +17,9 @@ body {
 
 .main-content {
     width: 70%;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-content {
@@ -25,15 +29,12 @@ body {
 
 .content-area {
     overflow-x: auto;
-    background-color: white;
     /* padding: 20px; */
-    border-radius: 8px;
 }
 
 .flex-container {
     display: flex;
     gap: 20px;
-    /* padding: 20px; */
     flex-wrap: nowrap;
     flex-direction: column;
 }
@@ -42,9 +43,9 @@ body {
 .sidebar-info {
     position: sticky;
     top: 80px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 4px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -70,6 +71,10 @@ body {
 .restaurant-info {
     position: relative;
     z-index: 1;
+    max-width: 1200px;
+    margin: 0;
+    padding: 0 20px;
+    text-align: left;
 }
 
 .restaurant-name {
@@ -108,7 +113,7 @@ body {
 }
 
 .open-now {
-    color: #00ff00;
+    color: #4CAF50;
     font-weight: bold;
     margin-right: 10px;
 }
@@ -116,53 +121,48 @@ body {
 /* 탭 스타일 */
 .tabs {
     display: flex;
-    /* margin-bottom: 20px; */
     border-bottom: 2px solid #e0e0e0;
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .tab {
-    padding: 10px 20px;
+    padding: 15px 20px;
     cursor: pointer;
-    position: relative;
-    background-color: #f8f8f8;
-    border: 1px solid #e0e0e0;
-    border-bottom: none;
-    margin-right: 5px;
-    border-radius: 5px 5px 0 0;
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #666;
     transition: all 0.3s ease;
 }
 
-.tab span {
-    position: relative;
-    /* z-index: 2; */
-}
-
-.tab::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #f8f8f8;
+.tab:hover {
+    background-color: #f5f5f5;
 }
 
 .tab.active {
-    background-color: #fff;
-    border-color: #c41200;
     color: #c41200;
-}
-
-.tab.active::after {
-    background-color: #fff;
+    border-bottom: 2px solid #c41200;
 }
 
 .tab-content {
     display: none;
-    padding: 0 20px;
+    padding: 20px;
     background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-top: none;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .tab-content.active {
@@ -209,6 +209,7 @@ body {
     align-items: center;
     font-size: 18px;
     margin-bottom: 20px;
+    border-radius: 8px;
 }
 
 .hours-table {
@@ -217,8 +218,13 @@ body {
 }
 
 .hours-table td {
-    padding: 8px;
+    padding: 10px;
     border-bottom: 1px solid #e0e0e0;
+}
+
+.hours-table td:first-child {
+    font-weight: bold;
+    width: 30%;
 }
 
 /* 리뷰 스타일 */
@@ -251,6 +257,13 @@ body {
     border-radius: 8px;
     padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.review-card:hover,
+.popular-review-card:hover,
+.review-item:hover {
+    transform: translateY(-5px);
 }
 
 .popular-review-card {
@@ -287,6 +300,7 @@ body {
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .write-review-button:hover {
@@ -329,6 +343,8 @@ body {
     display: flex;
     gap: 10px;
     margin: 15px 0;
+    overflow-x: auto;
+    padding-bottom: 10px;
 }
 
 .review-images img,
@@ -344,6 +360,9 @@ body {
     color: white;
     font-weight: bold;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* 메뉴 정보 스타일 */
@@ -377,13 +396,21 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.menu-item:hover {
+    transform: translateY(-5px);
 }
 
 .menu-item img {
     width: 100%;
     height: 150px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 8px 8px 0 0;
 }
 
 /* 리뷰 액션 스타일 */
@@ -400,19 +427,25 @@ body {
     border-radius: 4px;
     cursor: pointer;
     margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.review-actions button:hover {
+    background-color: #f5f5f5;
 }
 
 /* 모달 스타일 */
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.3s ease;
 }
 
 .modal-content {
@@ -423,6 +456,20 @@ body {
     width: 80%;
     max-width: 600px;
     border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .close {
@@ -431,13 +478,13 @@ body {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: #000;
     text-decoration: none;
-    cursor: pointer;
 }
 
 /* 댓글 스타일 */
@@ -466,7 +513,12 @@ body {
     background-color: #fff;
     border: 1px solid #e6e6e6;
     border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.comment:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .comment p {
@@ -490,6 +542,12 @@ body {
     border-radius: 4px;
     font-size: 14px;
     resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.comment-form textarea:focus {
+    border-color: #d32323;
+    outline: none;
 }
 
 .comment-form button {
@@ -518,6 +576,12 @@ body {
     border: 1px solid #ddd;
     border-radius: 4px;
     resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.inquiry-form textarea:focus {
+    border-color: #c41200;
+    outline: none;
 }
 
 .submit-inquiry {
@@ -528,11 +592,21 @@ body {
     border-radius: 4px;
     cursor: pointer;
     margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.submit-inquiry:hover {
+    background-color: #a30f00;
 }
 
 .inquiry-item {
     border-bottom: 1px solid #e6e6e6;
     padding: 20px 0;
+    transition: background-color 0.3s ease;
+}
+
+.inquiry-item:hover {
+    background-color: #f9f9f9;
 }
 
 .inquiry-header {
@@ -546,6 +620,7 @@ body {
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
+    object-fit: cover;
 }
 
 .inquiry-user-info {
@@ -588,6 +663,11 @@ body {
     padding: 15px;
     border-radius: 4px;
     margin-bottom: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.inquiry-answer:hover {
+    background-color: #e9e9e9;
 }
 
 .answer-text {
@@ -612,11 +692,13 @@ body {
     color: #666;
     border-radius: 3px;
     cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .like-inquiry:hover,
 .reply-inquiry:hover {
     background-color: #f5f5f5;
+    border-color: #999;
 }
 
 .inquiry-pagination {
@@ -630,20 +712,32 @@ body {
     background-color: #f5f5f5;
     border: 1px solid #ddd;
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.prev-page:hover,
+.next-page:hover {
+    background-color: #e0e0e0;
 }
 
 .current-page {
     margin: 0 10px;
+    font-weight: bold;
 }
 
 /* 문의에 대한 답변 모달 스타일 */
 .reply-form textarea {
     width: 100%;
-    /* padding: 10px; */
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+.reply-form textarea:focus {
+    border-color: #c41200;
+    outline: none;
 }
 
 .submit-reply {
@@ -653,4 +747,187 @@ body {
     padding: 10px 20px;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-reply:hover {
+    background-color: #a30f00;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .main-content,
+    .sidebar-content {
+        width: 100%;
+    }
+
+    .sidebar-content {
+        margin-top: 20px;
+    }
+
+    .restaurant-name {
+        font-size: 36px;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+    }
+
+    .tab {
+        flex: 1 0 33.33%;
+    }
+
+    .popular-review-card {
+        flex-direction: column;
+    }
+
+    .image-placeholder {
+        width: 100%;
+        height: 200px;
+        margin-top: 10px;
+    }
+}
+
+/* 접근성 개선 */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* 스켈레톤 로딩 */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* 무한 스크롤 로딩 인디케이터 */
+.loading-indicator {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: #666;
+}
+
+/* 아이콘 스타일 */
+.fas,
+.far {
+    margin-right: 5px;
+}
+
+/* 추가된 "더 보기" 버튼 스타일 */
+.load-more {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+.load-more:hover {
+    background-color: #e0e0e0;
+}
+
+/* 공지사항 컨테이너 스타일 */
+.notices-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+
+/* 공지사항 스크롤 영역 스타일 */
+.notices-scroll {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+
+/* 개별 공지사항 카드 스타일 */
+.notice-card {
+    flex: 0 0 auto;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* 공지사항 카드 호버 효과 */
+.notice-card:hover {
+    transform: translateY(-5px);
+}
+
+/* 공지사항 제목 스타일 */
+.notice-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* 공지사항 내용 스타일 */
+.notice-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* 공지사항 날짜 스타일 */
+.notice-date {
+    font-size: 12px;
+    color: #999;
+}
+/* 공지사항 헤더 스타일 */
+.notices-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+/* 공지사항 헤더 텍스트 스타일 */
+.notices-header h2 {
+    margin: 0;
+}
+/* 공지사항 헤더 버튼 스타일 */
+.write-notice-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+/* 공지사항 헤더 버튼 호버 효과 */
+.write-notice-button:hover {
+    background-color: #45a049;
 }

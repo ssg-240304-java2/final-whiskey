@@ -1,3 +1,7 @@
 spring:
   application:
     name: rvcom
+  datasource:
+    url: ${{ secrets.DB_URL }}
+    username: ${{ secrets.DB_USERNAME }}
+    password: ${{ secrets.DB_PASSWORD }}
