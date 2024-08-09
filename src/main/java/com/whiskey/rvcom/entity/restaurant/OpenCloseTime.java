@@ -11,10 +11,8 @@ public class OpenCloseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String openTime;
 
-    @Column(nullable = false)
     private String closeTime;
 
 //    영업중 여부
