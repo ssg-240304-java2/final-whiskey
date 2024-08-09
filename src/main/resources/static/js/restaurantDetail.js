@@ -104,8 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // TODO: 백엔드 - 리뷰 수정/삭제 기능을 위한 API 엔드포인트 구현
     // TODO: 백엔드 - 리뷰 평점 집계 및 업데이트를 위한 로직 구현
 
-    // 기존 코드...
-
     // 공지사항 탭 클릭 이벤트
     const noticesTab = document.querySelector('.tab[data-tab="notices"]');
     const noticesContent = document.getElementById("notices");
@@ -128,6 +126,24 @@ document.addEventListener("DOMContentLoaded", function () {
             </div>
         `).join('');
     }
+
+    const writeNoticeBtn = document.getElementById('writeNoticeBtn');
+
+    // TODO: 백엔드에서 현재 사용자의 권한을 확인하는 API 호출
+    function checkOwnerPermission() {
+        // 임시로 true를 반환. 실제로는 백엔드 API를 통해 권한을 확인해야 함
+        return true;
+    }
+
+    if (checkOwnerPermission()) {
+        writeNoticeBtn.style.display = 'block';
+    }
+
+    writeNoticeBtn.addEventListener('click', function() {
+        // TODO: 공지사항 작성 모달 또는 페이지로 이동하는 로직 구현
+        console.log('공지사항 작성 버튼 클릭');
+    });
+
 });
 
 // 백엔드 개발자를 위한 구현할 기능에 대한 설명:
