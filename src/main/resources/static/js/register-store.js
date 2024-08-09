@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('입점 신청이 완료되었습니다. 관리자 승인을 기다려주세요.');
             form.reset();
             deactivateAdditionalInfo();
-        }
+        } 
     });
 
     // 폼 유효성 검사 함수
