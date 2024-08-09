@@ -103,6 +103,31 @@ document.addEventListener("DOMContentLoaded", function () {
     // TODO: 백엔드 - 새 리뷰를 작성하는 API 엔드포인트 구현
     // TODO: 백엔드 - 리뷰 수정/삭제 기능을 위한 API 엔드포인트 구현
     // TODO: 백엔드 - 리뷰 평점 집계 및 업데이트를 위한 로직 구현
+
+    // 기존 코드...
+
+    // 공지사항 탭 클릭 이벤트
+    const noticesTab = document.querySelector('.tab[data-tab="notices"]');
+    const noticesContent = document.getElementById("notices");
+
+    noticesTab.addEventListener("click", function() {
+        // TODO: 백엔드 API를 통해 공지사항 데이터를 가져오는 로직 구현
+        // 예시:
+        // fetchNotices().then(notices => {
+        //     renderNotices(notices);
+        // });
+    });
+
+    function renderNotices(notices) {
+        const noticesScroll = document.querySelector('.notices-scroll');
+        noticesScroll.innerHTML = notices.map(notice => `
+            <div class="notice-card">
+                <h3>${notice.title}</h3>
+                <p>${notice.content}</p>
+                <span class="notice-date">${notice.date}</span>
+            </div>
+        `).join('');
+    }
 });
 
 // 백엔드 개발자를 위한 구현할 기능에 대한 설명:

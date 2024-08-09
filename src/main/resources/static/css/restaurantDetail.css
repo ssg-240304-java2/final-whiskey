@@ -156,8 +156,13 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .tab-content.active {
@@ -456,8 +461,15 @@ body {
 }
 
 @keyframes slideIn {
-    from { transform: translateY(-50px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .close {
@@ -501,12 +513,12 @@ body {
     background-color: #fff;
     border: 1px solid #e6e6e6;
     border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
 }
 
 .comment:hover {
-    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .comment p {
@@ -804,6 +816,7 @@ body {
     0% {
         background-position: 200% 0;
     }
+
     100% {
         background-position: -200% 0;
     }
@@ -818,7 +831,8 @@ body {
 }
 
 /* 아이콘 스타일 */
-.fas, .far {
+.fas,
+.far {
     margin-right: 5px;
 }
 
@@ -839,4 +853,55 @@ body {
 
 .load-more:hover {
     background-color: #e0e0e0;
+}
+
+/* 공지사항 컨테이너 스타일 */
+.notices-container {
+    width: 100%;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+
+/* 공지사항 스크롤 영역 스타일 */
+.notices-scroll {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 10px;
+}
+
+/* 개별 공지사항 카드 스타일 */
+.notice-card {
+    flex: 0 0 auto;
+    width: 300px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+/* 공지사항 카드 호버 효과 */
+.notice-card:hover {
+    transform: translateY(-5px);
+}
+
+/* 공지사항 제목 스타일 */
+.notice-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* 공지사항 내용 스타일 */
+.notice-card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* 공지사항 날짜 스타일 */
+.notice-date {
+    font-size: 12px;
+    color: #999;
 }

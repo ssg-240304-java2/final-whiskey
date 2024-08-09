@@ -41,6 +41,9 @@
                 <button class="tab" data-tab="inquiries" role="tab" aria-selected="false" aria-controls="inquiries">
                     <i class="fas fa-question-circle"></i> <span>문의하기</span>
                 </button>
+                <button class="tab" data-tab="notices" role="tab" aria-selected="false" aria-controls="notices">
+                    <i class="fas fa-bullhorn"></i> <span>공지사항</span>
+                </button>
             </nav>
             
             <div class="content-area">
@@ -194,6 +197,30 @@
                         </div>
                     </div>
 
+                    <div id="notices" class="tab-content" role="tabpanel" aria-labelledby="notices-tab">
+                        <h2><i class="fas fa-bullhorn"></i> 공지사항</h2>
+                        <div class="notices-container">
+                            <div class="notices-scroll">
+                                <div class="notice-card">
+                                    <h3>신메뉴 출시</h3>
+                                    <p>트러플 리조또가 새롭게 출시되었습니다.</p>
+                                    <span class="notice-date">2024-05-01</span>
+                                </div>
+                                <div class="notice-card">
+                                    <h3>영업시간 변경</h3>
+                                    <p>5월부터 영업시간이 변경됩니다. 자세한 내용은 본문을 확인해주세요.</p>
+                                    <span class="notice-date">2024-04-25</span>
+                                </div>
+                                <div class="notice-card">
+                                    <h3>임시 휴업 안내</h3>
+                                    <p>내부 공사로 인해 5월 10일부터 5월 15일까지 휴업합니다.</p>
+                                    <span class="notice-date">2024-04-20</span>
+                                </div>
+                                <!-- 추가 공지사항 카드들... -->
+                            </div>
+                        </div>
+                    </div>                    
+                    
                     <!-- TODO: 백엔드 - 문의 등록 API 구현 (POST /api/inquiries) -->
                     <!-- TODO: 백엔드 - 문의 목록 조회 API 구현 (GET /api/inquiries?restaurantId=:id&page=:page&sort=:sort) -->
                     <!-- TODO: 백엔드 - 문의 답변 등록 API 구현 (POST /api/inquiries/:id/replies) -->
