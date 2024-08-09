@@ -30,11 +30,19 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Set YML
-        run: |
-          mkdir -p src/main/resources
-          echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
-          find src
+      # - name: Set YML
+      #   run: |
+      #     mkdir -p src/main/resources
+      #     echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+      #     find src
+      - name: Set Yaml
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: src/main/resources/application.yml
+        env:
+          spring.datasource.url: ${{ secrets.DB_URL }}
+          spring.datasource.username: ${{ secrets.DB_USERNAME }}
+          spring.datasource.password: ${{ secrets.DB_PASSWORD }}
       - name: Grant permission for gradlew
         run: chmod +x ./gradlew
       - name: Build with Gradle
