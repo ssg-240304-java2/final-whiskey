@@ -17,50 +17,49 @@
             <div class="form-group">
                 <label for="businessNumber">사업자 등록번호</label>
                 <input type="text" id="businessNumber" name="businessNumber" required>
-                <button type="button" id="verifyBusinessNumber">번호 확인</button>
-                <!-- TODO: 사업자 등록번호 유효성 검사 API 연동 -->
             </div>
             <div class="form-group">
-                <label>사업자 등록번호 입력 방식</label>
-                <select id="inputMethod">
-                    <option value="manual">수동 입력</option>
-                    <option value="ocr">OCR 인식</option>
-                </select>
-                <!-- TODO: OCR 인식 기능 구현 및 연동 -->
+                <label for="openingDate">개업일</label>
+                <input type="text" id="openingDate" name="openingDate" placeholder="YYYYMMDD" required>
             </div>
             <div class="form-group">
-                <label for="storeName">업소명</label>
-                <input type="text" id="storeName" name="storeName" required>
+                <label for="businessOwner">사업자명</label>
+                <input type="text" id="businessOwner" name="businessOwner" required>
             </div>
-            <div class="form-group">
-                <label for="storeAddress">업소 주소</label>
-                <input type="text" id="storeAddress" name="storeAddress" required>
-                <!-- TODO: 주소 검색 API 연동 -->
+            <button type="button" id="verifyBusiness">사업자 정보 검증</button>
+
+            <div id="additionalInfo" class="disabled">
+                <div class="form-group">
+                    <label for="storeName">상호명</label>
+                    <input type="text" id="storeName" name="storeName" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">전화번호</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" required disabled>
+                </div>
+                <div class="form-group">
+                    <label for="storeCategory">음식점 카테고리</label>
+                    <select id="storeCategory" name="storeCategory" required disabled>
+                        <option value="">선택해주세요</option>
+                        <option value="korean">한식</option>
+                        <option value="chinese">중식</option>
+                        <option value="japanese">일식</option>
+                        <option value="western">양식</option>
+                        <option value="fastfood">패스트푸드</option>
+                        <option value="cafe">카페/디저트</option>
+                        <option value="bbq">바베큐/치킨</option>
+                        <option value="seafood">해산물</option>
+                        <option value="vegetarian">채식</option>
+                        <option value="fusion">퓨전</option>
+                        <option value="noodle">면요리</option>
+                        <option value="meat">육류</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="storeCategory">업종 카테고리</label>
-                <select id="storeCategory" name="storeCategory" required>
-                    <option value="">선택해주세요</option>
-                    <option value="korean">한식</option>
-                    <option value="japanese">일식</option>
-                    <option value="chinese">중식</option>
-                    <option value="western">양식</option>
-                    <option value="cafe">카페</option>
-                </select>
-                <!-- TODO: 카테고리 목록을 데이터베이스에서 동적으로 불러오기 -->
-            </div>
-            <div class="form-group">
-                <label for="businessLicense">사업자 등록증 사본</label>
-                <input type="file" id="businessLicense" name="businessLicense" accept="image/*" required>
-                <!-- TODO: 파일 업로드 처리 및 저장 로직 구현 -->
-            </div>
-            <button type="submit" id="submitApplication">신청하기</button>
+            <button type="submit" id="submitApplication" disabled>신청하기</button>
         </form>
     </div>
 
-    <!-- <div th:replace="fragments/footer :: footer"></div> -->
-
     <script src="/js/register-store.js"></script>
-    <!-- TODO: 폼 제출 처리 및 서버로 데이터 전송 로직 구현 -->
 </body>
 </html>
