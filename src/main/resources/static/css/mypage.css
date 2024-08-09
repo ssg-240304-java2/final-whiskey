@@ -1,29 +1,38 @@
 :root {
-    --primary-color: #c41200;
-    --secondary-color: #f0f0f0;
+    --primary-color: #d32323;
+    --secondary-color: #0073bb;
+    --background-color: #f5f5f5;
     --text-color: #333;
     --border-color: #e6e6e6;
+    --hover-color: #f15c00;
 }
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
     color: var(--text-color);
     line-height: 1.6;
+    background-color: var(--background-color);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
 .profile-header {
     display: flex;
     align-items: center;
     margin-bottom: 30px;
-    border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 20px;
+    padding: 30px;
     background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     transition: box-shadow 0.3s ease;
 }
 
 .profile-header:hover {
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
 }
 
 .profile-image {
@@ -32,23 +41,26 @@ body {
     border-radius: 50%;
     margin-right: 30px;
     object-fit: cover;
+    border: 3px solid var(--primary-color);
 }
 
 .profile-info h1 {
     margin: 0 0 10px 0;
-    font-size: 2em;
+    font-size: 2.5em;
+    color: var(--primary-color);
 }
 
 .profile-stats {
-    margin-top: 10px;
-    font-size: 0.9em;
+    margin-top: 15px;
+    font-size: 1em;
 }
 
 .content-wrapper {
     display: flex;
-    border: 1px solid var(--border-color);
+    background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .content-section {
@@ -66,10 +78,9 @@ body {
 }
 
 .sidebar {
-    width: 200px;
-    margin-right: 30px;
-    border-right: 1px solid var(--border-color);
-    padding: 20px;
+    width: 250px;
+    padding: 30px;
+    background-color: #f9f9f9;
 }
 
 .profile-nav ul {
@@ -78,49 +89,56 @@ body {
 }
 
 .profile-nav li {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 .profile-nav a {
     text-decoration: none;
     color: var(--text-color);
+    font-size: 1.1em;
     transition: color 0.3s ease;
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .profile-nav .active a, .profile-nav a:hover {
     color: var(--primary-color);
-    font-weight: bold;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .main-content {
     flex: 1;
-    padding: 20px;
+    padding: 30px;
 }
 
 .edit-profile-btn {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 24px;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    font-size: 1em;
+    font-weight: 500;
 }
 
 .edit-profile-btn:hover {
-    background-color: darken(var(--primary-color), 10%);
+    background-color: var(--hover-color);
 }
 
 .activity-feed {
-    margin-top: 20px;
+    margin-top: 30px;
 }
 
 .activity-item {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
+    padding-bottom: 25px;
 }
 
 .activity-item:last-child {
@@ -129,10 +147,11 @@ body {
 }
 
 .activity-item img {
-    width: 50px;
-    height: 50px;
-    border-radius: 4px;
-    margin-right: 15px;
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    margin-right: 20px;
+    object-fit: cover;
 }
 
 .activity-date {
@@ -141,73 +160,71 @@ body {
 }
 
 .profile-section, #recent-activity {
-    border: 1px solid var(--border-color);
     border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 25px;
+    margin-bottom: 30px;
     background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .profile-details, .user-bio {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-.review-item {
+.review-item, .bookmark-item {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
+    padding-bottom: 25px;
+    transition: transform 0.3s ease;
 }
 
-.review-item .restaurant-image {
-    width: 100px;
-    height: 100px;
+.review-item:hover, .bookmark-item:hover {
+    transform: translateY(-5px);
+}
+
+.review-item .restaurant-image, .bookmark-item .restaurant-image {
+    width: 120px;
+    height: 120px;
     object-fit: cover;
-    margin-right: 20px;
-}
-
-.bookmark-item {
-    display: flex;
-    margin-bottom: 20px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
-}
-
-.bookmark-item .restaurant-image {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    margin-right: 20px;
+    margin-right: 25px;
+    border-radius: 8px;
 }
 
 .following-item {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
+    padding-bottom: 25px;
 }
 
 .following-item .user-image {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    margin-right: 20px;
+    margin-right: 25px;
 }
 
 .unfollow-btn {
     margin-left: auto;
-    padding: 5px 10px;
+    padding: 8px 16px;
     background-color: var(--secondary-color);
+    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.unfollow-btn:hover {
+    background-color: #005f9e;
 }
 
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
@@ -224,11 +241,12 @@ body {
 
 .modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
+    margin: 10% auto;
+    padding: 30px;
     border: 1px solid #888;
-    width: 80%;
-    max-width: 500px;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 8px;
     transform: scale(0.7);
     transition: transform 0.3s ease;
 }
@@ -243,34 +261,45 @@ body {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
 }
 
 .close:hover,
 .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+    color: var(--primary-color);
 }
 
 #editProfileForm label {
     display: block;
-    margin-top: 10px;
+    margin-top: 15px;
+    font-weight: 500;
 }
 
 #editProfileForm input,
 #editProfileForm textarea {
     width: 100%;
-    padding: 5px;
+    padding: 10px;
     margin-top: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1em;
 }
 
 #editProfileForm button {
-    margin-top: 20px;
-    padding: 10px 20px;
+    margin-top: 25px;
+    padding: 12px 24px;
     background-color: var(--primary-color);
     color: white;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+#editProfileForm button:hover {
+    background-color: var(--hover-color);
 }
 
 @media (max-width: 768px) {
@@ -293,4 +322,16 @@ body {
         margin-right: 0;
         margin-bottom: 20px;
     }
+
+    .review-item, .bookmark-item {
+        flex-direction: column;
+    }
+
+    .review-item .restaurant-image, .bookmark-item .restaurant-image {
+        width: 100%;
+        height: 200px;
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
 }
+
