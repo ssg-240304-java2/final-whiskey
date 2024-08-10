@@ -1,4 +1,4 @@
-package com.whiskey.rvcom.entity.repository;
+package com.whiskey.rvcom.repository;
 
 import com.whiskey.rvcom.entity.report.ReviewCommentReport;
 import org.springframework.data.jpa.repository.JpaRepository;
