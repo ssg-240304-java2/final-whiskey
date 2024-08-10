@@ -1,7 +1,7 @@
 package com.whiskey.rvcom.entity.restaurant;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "tbl_restaurant_notice")
 @Entity
+@Getter
+@Setter
 public class RestaurantNotice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

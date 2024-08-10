@@ -2,7 +2,7 @@ package com.whiskey.rvcom.entity.review;
 
 import com.whiskey.rvcom.entity.member.Member;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "tbl_review_comment")
 @Entity
+@Getter
+@Setter
 public class ReviewComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

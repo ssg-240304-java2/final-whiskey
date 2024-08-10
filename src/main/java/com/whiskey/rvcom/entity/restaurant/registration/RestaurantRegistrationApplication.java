@@ -4,12 +4,15 @@ import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Address;
 import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Table(name = "tbl_restaurant_registration_application")
 @Entity
+@Getter
+@Setter
 public class RestaurantRegistrationApplication {
     // TODO: 입점 신청서
     @Id

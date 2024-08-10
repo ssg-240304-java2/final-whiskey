@@ -2,11 +2,13 @@ package com.whiskey.rvcom.entity.review;
 
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @Table(name = "review_image")
 @Entity
+@Getter
+@Setter
 public class ReviewImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

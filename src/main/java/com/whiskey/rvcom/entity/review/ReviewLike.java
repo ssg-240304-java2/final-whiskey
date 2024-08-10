@@ -2,11 +2,13 @@ package com.whiskey.rvcom.entity.review;
 
 import com.whiskey.rvcom.entity.member.Member;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @Table(name = "tbl_review_like")
 @Entity
+@Getter
+@Setter
 public class ReviewLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
