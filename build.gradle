@@ -38,6 +38,10 @@ dependencies {
 
     // Storage Object 파일업로드 라이브러리
     implementation name: "RestFileUploadLib-0.2.1-SNAPSHOT"
+
+    // ModelMapper 사용을 위한 의존성 주입
+    implementation 'org.modelmapper:modelmapper:3.0.0'
+
 }
 
 tasks.named('test') {
