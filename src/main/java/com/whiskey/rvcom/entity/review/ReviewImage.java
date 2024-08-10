@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ReviewImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 리뷰 이미지 식별자
+    private Long id;    // 리뷰 이미지 식별자
 
     @ManyToOne
     @JoinColumn(name = "review_id", nullable = false)

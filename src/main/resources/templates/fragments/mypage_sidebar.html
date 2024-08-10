@@ -1,8 +1,23 @@
 <!-- src/main/resources/templates/fragments/mypage_sidebar.html -->
 <nav th:fragment="sidebar" class="profile-nav">
     <ul>
-        <li class="active" data-tab="profile"><a href="#profile">프로필</a></li>
-        <li data-tab="reviews"><a href="#reviews">리뷰</a></li>
-        <li data-tab="bookmarks"><a href="#bookmarks">북마크</a></li>
+        <li class="nav-item active" data-tab="profile">
+            <a href="#profile">
+                <i class="fas fa-user"></i>
+                <span>프로필</span>
+            </a>
+        </li>
+        <li class="nav-item" data-tab="reviews">
+            <a href="#reviews">
+                <i class="fas fa-star"></i>
+                <span>리뷰</span>
+            </a>
+        </li>
+        <li class="nav-item" data-tab="bookmarks">
+            <a href="#bookmarks">
+                <i class="fas fa-bookmark"></i>
+                <span>북마크</span>
+            </a>
+        </li>
     </ul>
 </nav>

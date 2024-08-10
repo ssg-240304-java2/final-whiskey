@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class ReviewComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 리뷰 댓글 식별자
+    private Long id;    // 리뷰 댓글 식별자
 
     @Column(nullable = false)
     private String content; // 리뷰 댓글 내용

@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 @Table(name = "tbl_restaurant_notice")
 @Entity
 public class RestaurantNotice {
-    // TODO 여러개가 있으면 문의하기 형태
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 음식점 공지사항 식별자
+    private Long id;    // 음식점 공지사항 식별자
 
     @Column(nullable = false)
     private String title;  // 음식점 공지사항 제목

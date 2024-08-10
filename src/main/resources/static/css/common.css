@@ -51,7 +51,7 @@ body {
 /* 컨테이너 스타일 */
 .container {
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 0 0px;
 }
 
