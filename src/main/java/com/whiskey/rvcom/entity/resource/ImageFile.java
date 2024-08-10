@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class ImageFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String originalFileName;    // 원본 파일명

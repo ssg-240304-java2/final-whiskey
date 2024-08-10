@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 즐겨찾기 식별자
+    private Long id;    // 즐겨찾기 식별자
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)

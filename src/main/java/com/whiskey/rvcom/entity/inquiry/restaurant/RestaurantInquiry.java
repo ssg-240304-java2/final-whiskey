@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class RestaurantInquiry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 문의 식별자
+    private Long id;    // 문의 식별자
 
     @Column(nullable = false)
     private String content; // 문의 내용

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class ReviewLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 리뷰 좋아요 식별자
+    private Long id;    // 리뷰 좋아요 식별자
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
