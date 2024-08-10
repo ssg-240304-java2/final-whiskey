@@ -4,13 +4,15 @@ import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @NoArgsConstructor
 @Table(name = "tbl_restaurant")
 @Entity
+@Getter
+@Setter
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

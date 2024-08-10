@@ -3,11 +3,13 @@ package com.whiskey.rvcom.entity.restaurant.menu;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @Table(name = "tbl_menu")
 @Entity
+@Getter
+@Setter
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

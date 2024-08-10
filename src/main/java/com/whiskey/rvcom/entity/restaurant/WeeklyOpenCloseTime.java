@@ -1,11 +1,13 @@
 package com.whiskey.rvcom.entity.restaurant;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @Table(name = "tbl_weekly_open_close_time")
 @Entity
+@Getter
+@Setter
 public class WeeklyOpenCloseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

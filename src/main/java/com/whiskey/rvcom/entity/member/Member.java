@@ -2,7 +2,7 @@ package com.whiskey.rvcom.entity.member;
 
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "tbl_member")
 @Entity
+@Getter
+@Setter
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
