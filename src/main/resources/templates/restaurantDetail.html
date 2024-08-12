@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/css/common.css"/>
     <th:block th:replace="fragments/header :: headerfiles"></th:block>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>FoodPolio - 음식점 상세 정보</title>
     <script src="/js/restaurantDetail.js" defer></script>
 </head>
@@ -28,7 +29,62 @@
         status='영업중',
         hours='11:00 - 21:00'
     )"></div>
-    
+
+
+    <!-- 신고 버튼 -->
+    <form>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reportModal">
+            신고
+        </button>
+    </form>
+
+    <!-- 신고 폼 -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportModalLabel">신고 폼</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">신고 제목</label>
+                            <input type="text" class="form-control" id="title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">신고 내용</label>
+                            <textarea class="form-control" id="content" rows="3" required></textarea>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">신고하기</button>
+                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">취소하기</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('reportForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 기본 폼 제출 방지
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            // const restaurant = 레스토랑 정보 담기
+
+            $.ajax({
+                // url: "report/restaurant",
+                url: "findAll",
+                type: "POST"
+                // 이하 로직 추후 구현
+            })
+
+        });
+    </script>
+
+
     <div class="container">
         <div class="main-content">
             <nav class="tabs" role="tablist">
@@ -262,5 +318,11 @@
             </div>
         </div>
     </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"></script>
+</body>
 </body>
 </html>
