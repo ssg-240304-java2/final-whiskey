@@ -6,6 +6,8 @@ import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.report.model.dto.RestaurantDTO;
 import com.whiskey.rvcom.report.model.dto.RestaurantReportDTO;
 import com.whiskey.rvcom.repository.RestaurantReportRepository;
+import com.whiskey.rvcom.repository.RestaurantRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class RestaurantReportService {
     private RestaurantReportRepository restaurantReportRepository;
 
     @Autowired
+    private RestaurantRepository restaurantRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     public RestaurantReportService(RestaurantReportRepository restaurantReportRepository, ModelMapper modelMapper) {
@@ -29,16 +34,34 @@ public class RestaurantReportService {
     }
 
     @Transactional
-    public void createRestaurantReport(RestaurantReportDTO tempRestaurantReport) {
+    public void saveRestaurantReport(RestaurantReportDTO report) {
 
-        RestaurantReport restaurantReport = modelMapper.map(tempRestaurantReport, RestaurantReport.class);
+        // RestaurantReportDTO -> RestaurantReport로 변환
+        RestaurantReport restaurantReport = modelMapper.map(report, RestaurantReport.class);
+        // RestaurantReportDTO 안에는 RestaurantDTO가 있음 따라서
+        // RestaurantReportDTO -> RestaurantReport로 변환할 때 RestaurantDTO도 변환해줘야함
+        RestaurantDTO restaurantDTO = report.getRestaurantDTO();
 
-        RestaurantDTO restaurantDTO = tempRestaurantReport.getRestaurantDTO();
-        Restaurant restaurant = modelMapper.map(restaurantDTO, Restaurant.class);
+        // RestaurantDTO에서 ID를 가져옴
+        Long restaurantId = restaurantDTO.getId();
+        System.out.println("restaurantId = " + restaurantId);
 
+        // 데이터베이스에서 해당 ID를 가진 Restaurant를 조회
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with ID: " + restaurantId));
+        System.out.println("restaurantId = " + restaurantId);
+
+        // 조회한 Restaurant 엔티티를 설정
         restaurantReport.setRestaurant(restaurant);
 
+        restaurant = modelMapper.map(restaurantDTO, Restaurant.class);
+        restaurantReport.setRestaurant(restaurant);
+
+
+
         restaurantReportRepository.save(restaurantReport);
+
+
 
     }
 
@@ -47,24 +70,16 @@ public class RestaurantReportService {
     public List<RestaurantReportDTO> getAllRestaurantReports() {
         List<RestaurantReport> reports = restaurantReportRepository.findAll();
 
-//        for (RestaurantReport report : reports) {
-//            System.out.println("!@#!@#!@#!@#!@# : "+ report.getId());
-//        }
-//        return reports.stream()
-//                .map(report -> modelMapper.map(report, RestaurantReportDTO.class))
-//                .collect(Collectors.toList());
-
         // 리스트로 반환해야 하므로 빈 리스트 추가
         List<RestaurantReportDTO> restaurantReportDTOList = new ArrayList<>();
 
         for (RestaurantReport report : reports) {
+
             // RestaurantReport -> RestaurantReportDTO로 변환
-            // RestaurantReportDto 안에는 RestaurantDTO가 있음 따라서
-            // RestaurantReport -> RestaurantReportDTO로 변환할 때 RestaurantDTO도 변환해줘야함
-
             RestaurantDTO restaurantDTO = modelMapper.map(report.getRestaurant(), RestaurantDTO.class);
+            // RestaurantReportDto 안에는 RestaurantDTO가 있음 따라서
             RestaurantReportDTO restaurantReportDTO = modelMapper.map(report, RestaurantReportDTO.class);
-
+            // RestaurantReport -> RestaurantReportDTO로 변환할 때 RestaurantDTO도 변환해줘야함
             restaurantReportDTO.setRestaurantDTO(restaurantDTO);
 
             restaurantReportDTOList.add(restaurantReportDTO);
@@ -72,4 +87,6 @@ public class RestaurantReportService {
 
         return restaurantReportDTOList;
     }
+
+
 }
