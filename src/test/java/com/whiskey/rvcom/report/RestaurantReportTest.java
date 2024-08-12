@@ -3,7 +3,6 @@ package com.whiskey.rvcom.report;
 
 import com.whiskey.rvcom.report.model.dto.RestaurantReportDTO;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
-import com.whiskey.rvcom.repository.RestaurantReportRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,11 @@ import java.util.List;
 public class RestaurantReportTest {
 
 
-    private final RestaurantReportRepository restaurantReportRepository;
 
     private final RestaurantReportService restaurantReportService;
 
     @Autowired
-    public RestaurantReportTest(RestaurantReportRepository restaurantReportRepository, RestaurantReportService restaurantReportService) {
-        this.restaurantReportRepository = restaurantReportRepository;
+    public RestaurantReportTest(RestaurantReportService restaurantReportService) {
         this.restaurantReportService = restaurantReportService;
     }
 
