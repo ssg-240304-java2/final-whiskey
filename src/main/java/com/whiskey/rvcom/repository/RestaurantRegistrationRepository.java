@@ -1,8 +1,7 @@
 package com.whiskey.rvcom.repository;
 
-import com.whiskey.rvcom.entity.restaurant.Restaurant;
-import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistrationApplication;
+import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RestaurantRegistrationRepository extends JpaRepository<RestaurantRegistrationApplication, Long> {
+public interface RestaurantRegistrationRepository extends JpaRepository<RestaurantRegistration, Long> {
 }

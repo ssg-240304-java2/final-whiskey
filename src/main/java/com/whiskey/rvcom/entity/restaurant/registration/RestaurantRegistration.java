@@ -9,11 +9,11 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Table(name = "tbl_restaurant_registration_application")
+@Table(name = "tbl_restaurant_registration")
 @Entity
 @Getter
 @Setter
-public class RestaurantRegistrationApplication {
+public class RestaurantRegistration {
     // TODO: 입점 신청서
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
