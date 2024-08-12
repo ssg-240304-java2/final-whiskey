@@ -13,10 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
-public class ReportService {
+public class RestaurantReportService {
 
     @Autowired
     private RestaurantReportRepository restaurantReportRepository;
@@ -24,7 +23,7 @@ public class ReportService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public ReportService(RestaurantReportRepository restaurantReportRepository, ModelMapper modelMapper) {
+    public RestaurantReportService(RestaurantReportRepository restaurantReportRepository, ModelMapper modelMapper) {
         this.restaurantReportRepository = restaurantReportRepository;
         this.modelMapper = modelMapper;
     }
