@@ -102,6 +102,37 @@ form input {
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s ease;
+    height: auto; /* 입력 필드 높이를 자동으로 설정하여 컨텐츠에 따라 조정 */
+}
+
+/* 이메일 컨테이너 스타일 */
+.email-container {
+    display: flex;
+    gap: 10px;
+    align-items: center; /* 중복 확인 버튼을 입력 필드와 정렬 */
+}
+
+.email-container input[type="text"],
+#loginId {
+    flex-grow: 2; /* 로그인 ID 입력 창을 더 줄임 */
+    height: auto; /* 다른 입력 필드와 같은 높이로 설정 */
+    width: 100%; /* 입력 필드가 컨테이너의 전체 너비를 차지하도록 설정 */
+}
+
+/* 중복 체크 버튼 스타일 */
+.email-container button {
+    flex-grow: 1;
+    padding: 10px 16px; /* 버튼 크기 조정 */
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px; /* 글꼴 크기 조정 */
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: auto; /* 다른 입력 필드와 동일한 높이로 설정 */
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
 }
 
 /* 입력 필드 포커스 효과 */
@@ -110,7 +141,7 @@ form input:focus {
     box-shadow: 0 0 0 2px rgba(211, 35, 35, 0.1);
 }
 
-/* 버튼 스타일 */
+/* 회원가입 버튼 스타일 */
 form button {
     padding: 12px;
     margin: 20px 0;
@@ -124,8 +155,15 @@ form button {
     transition: all 0.3s ease;
 }
 
+/* 회원가입 버튼이 비활성화된 경우 */
+form button:disabled {
+    background-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+}
+
 /* 버튼 호버 효과 */
-form button:hover {
+form button:hover:not(:disabled) {
     background-color: var(--main-color-dark);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(211, 35, 35, 0.2);
@@ -150,38 +188,6 @@ form button:hover {
     color: var(--main-color-dark);
 }
 
-/* 이메일 컨테이너 스타일 */
-.email-container {
-    display: flex;
-    gap: 10px;
-}
-
-.email-container input[type="email"] {
-    flex-grow: 1;
-}
-
-/* 이메일 인증 버튼 스타일 */
-#emailVerifyBtn {
-    padding: 12px 20px;
-    background-color: var(--main-color);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-#emailVerifyBtn:hover {
-    background-color: var(--main-color-dark);
-}
-
-#emailVerifyBtn.verified {
-    background-color: #28a745;
-    cursor: not-allowed;
-}
-
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .register-container {
@@ -199,11 +205,21 @@ form button:hover {
     }
 
     .email-container {
-        flex-direction: column;
+        flex-direction: column; /* 버튼이 입력 필드 아래로 이동 */
+        align-items: stretch; /* 버튼과 필드가 너비를 맞추도록 설정 */
     }
 
-    #emailVerifyBtn {
-        width: 100%;
+    .email-container button {
+        width: 100%; /* 버튼이 전체 너비를 차지하도록 설정 */
         margin-top: 10px;
+        padding: 12px 16px; /* 버튼 크기 조정 */
+        font-size: 16px; /* 글꼴 크기 조정 */
+    }
+
+    /* 로그인 ID 입력 필드가 화면 크기에 따라 커지고 작아지도록 설정 */
+    #loginId {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 14px;
     }
 }

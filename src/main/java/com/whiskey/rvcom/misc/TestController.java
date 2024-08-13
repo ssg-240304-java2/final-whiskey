@@ -49,13 +49,13 @@ public class TestController {
     public String getReceiptVerification() {
         return "receiptVerification";
     }
-    
+
     @GetMapping("/write-review")
     // 리뷰 작성 페이지로 이동
     public String getWriteReview() {
         return "writeReview";
     }
-    
+
     @GetMapping("/search-results")
     // 검색 결과 페이지로 이동
     public String searchResults() {
