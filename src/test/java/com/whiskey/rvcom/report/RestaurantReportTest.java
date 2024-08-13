@@ -4,7 +4,6 @@ package com.whiskey.rvcom.report;
 import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import com.whiskey.rvcom.report.model.dto.RestaurantDTO;
 import com.whiskey.rvcom.report.model.dto.RestaurantReportDTO;
-import com.whiskey.rvcom.report.model.dto.ReviewReportDTO;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -66,7 +65,27 @@ public class RestaurantReportTest {
     }
 
 
+    @Test
+    @DisplayName("식당신고 상태값 변경")
+    public void restaurantReportPunish() {
 
+        // given
+        Long id = 1L;
+
+        boolean isPunished = true; // 신고처리 결정 여부, web에서 누른 버튼에 따라 결정할 예정
+
+        // when
+        restaurantReportService.restaurantReportPunish(id, isPunished);
+
+
+        // then 상태값 변경 후 확인
+        RestaurantReportDTO result = restaurantReportService.getRestaurantReport(id);
+        System.out.println("isPunished = " + isPunished);
+        System.out.println("result.isVisible() = " + result.isVisible());
+        System.out.println("result.isChecked() = " + result.isChecked());
+
+        Assertions.assertTrue(result.isChecked());
+    }
 
 
     @Test
@@ -74,7 +93,7 @@ public class RestaurantReportTest {
     public void save() {
 
         // given
-        RestaurantDTO restaurantDTO = new RestaurantDTO(2L, "아약스커리", RestaurantCategory.KOREAN, "000-000-0000", true);
+        RestaurantDTO restaurantDTO = new RestaurantDTO(2L, "아약스커리", RestaurantCategory.INDIAN, "000-000-0000", true);
         RestaurantReportDTO report = new RestaurantReportDTO(null, "신고 제목4", "신고 내용4", LocalDateTime.now(), false, true, restaurantDTO);
 
         // where

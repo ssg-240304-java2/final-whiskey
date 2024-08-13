@@ -64,6 +64,29 @@ public class RestaurantReportService {
     }
 
 
+    // 식당 신고 상태값 변경
+    @Transactional
+    public void restaurantReportPunish(Long id, boolean isPunished) {
+
+        // 가져온 id 값으로 데이터베이스에서 조회
+        RestaurantReport restaurantReport = restaurantReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant Report not found with ID: " + id));
+
+        // 상태값 (확인여부) 변경
+        restaurantReport.setChecked(true);
+
+        if (isPunished) {
+            restaurantReport.setVisible(false);
+        }
+
+        // 변경된 상태값 저장
+        restaurantReportRepository.save(restaurantReport);
+
+        // 메일 발송 API 추후 추가 예정
+
+    }
+
+
     // 식당 신고 등록
     @Transactional
     public void saveRestaurantReport(RestaurantReportDTO report) {
