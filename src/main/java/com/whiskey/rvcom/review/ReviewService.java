@@ -1,7 +1,7 @@
 package com.whiskey.rvcom.review;
 
 import com.whiskey.rvcom.entity.member.Member;
-import com.whiskey.rvcom.entity.review.Review;
+import com.whiskey.rvcom.entity.review.*;
 import com.whiskey.rvcom.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,5 +42,15 @@ public class ReviewService {
     @Transactional
     public void saveReview(Review review) {
         reviewRepository.save(review);
+    }
+
+    /**
+     * 리뷰에 좋아요 추가
+     * @param review 리뷰 객체
+     * @param reviewLike 리뷰 좋아요 객체
+     */
+    @Transactional
+    public void addLikeToReview(Review review, ReviewLike reviewLike) {
+        review.getLikes().add(reviewLike);
     }
 }
