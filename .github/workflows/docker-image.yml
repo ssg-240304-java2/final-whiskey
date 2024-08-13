@@ -44,6 +44,7 @@ jobs:
           spring.datasource.username: ${{ secrets.DB_USERNAME }}
           spring.datasource.password: ${{ secrets.DB_PASSWORD }}
           kakao.apikey: ${{ secrets.KAKAOMAP_API }}
+          kakao.restApiKey: ${{ secrets.KAKAOMAP_RESTAPI }}
       - name: Grant permission for gradlew
         run: chmod +x ./gradlew
       - name: Build with Gradle
