@@ -15,14 +15,25 @@ public class AppConfig {
         return new ModelMapper();
     }
 
+    // 네이버 client ID
+    @Value("${{NAVER_CLIENT_ID}}")
+    private String naverClientId;
+
+    // 네이버 client secret
+    @Value("${{NAVER_CLIENT_SECRET}}")
+    private String naverClientSecret;
+
+    // 구글 client ID
+    @Value("${{GOOGLE_CLIENT_ID}}")
+    private String googleClientId;
 
     /**
      * 커스텀 로그아웃 성공 핸들러 빈을 생성
      *
      * @return CustomLogoutSuccessHandler 인스턴스
      */
-//    @Bean
-//    public CustomLogoutSuccessHandler customLogoutSuccessHandler() {
-//        return new CustomLogoutSuccessHandler(naverClientId, naverClientSecret, googleClientId);
-//    }
+    @Bean
+    public CustomLogoutSuccessHandler customLogoutSuccessHandler() {
+        return new CustomLogoutSuccessHandler(naverClientId, naverClientSecret, googleClientId);
+    }
 }

@@ -170,7 +170,6 @@ public class MemberController {
         }
     }
 
-
     @GetMapping("/register_basic")
     public String showBasicRegisterForm(Model model) {
         model.addAttribute("isSocialLogin", false);

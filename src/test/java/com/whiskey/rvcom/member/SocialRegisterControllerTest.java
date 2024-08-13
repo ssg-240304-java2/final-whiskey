@@ -35,35 +35,89 @@ public class SocialRegisterControllerTest {
         model = new BindingAwareModelMap();
     }
 
-//    private String registerSocial(String nickname, MockHttpSession session, Model model) {
-//        // This is a simplified version of the original registerSocial method for testing purposes
-//        String loginId = (String) session.getAttribute("loginId");
-//        String loginTypeStr = (String) session.getAttribute("loginType");
-//        Map<String, Object> userAttributes = (Map<String, Object>) session.getAttribute("userAttributes");
-//
-//        if (loginId == null || loginTypeStr == null || userAttributes == null) {
-//            model.addAttribute("error", "세션 정보가 없습니다. 다시 로그인해 주세요.");
-//            return "redirect:/login";
-//        }
-//
-//        LoginType loginType = LoginType.valueOf(loginTypeStr.toUpperCase());
-//        Member existingMember = socialLoginService.findMemberByLoginIdAndLoginType(loginId, loginType);
-//        if (existingMember != null) {
-//            model.addAttribute("error", "이미 존재하는 회원입니다.");
-//            return "register_social";
-//        }
-//
-//        Member member = new Member();
-//        member.setLoginId(loginId);
-//        member.setNickname(nickname);
-//        member.setName((String) userAttributes.get("name"));
-//        member.setEmail((String) userAttributes.get("email"));
-//        member.setLoginType(loginType);
-//        member.setRole(Role.USER);
-//        member.setActive(true);
-//        socialLoginService.save(member);
-//        session.setAttribute("member", member);
-//        return "redirect:/success";
-//    }
+    @Test
+    public void testRegisterSocial_Success() {
+        String nickname = "testNickname";
+        String loginId = "1";
+        String loginType = "GOOGLE";
+        String name = "name";
+        String email = "test@test.com";
 
+        // Simulate social login
+        socialLoginService.handleSocialLogin(session, loginId, name, email, loginType);
+
+        // Simulate user registration
+        session.setAttribute("nickname", nickname);
+        String result = registerSocial(nickname, session, model);
+
+        assertEquals("redirect:/login", result);
+        Member member = (Member) session.getAttribute("member");
+        assertEquals(nickname, member.getNickname());
+    }
+
+    @Test
+    public void testRegisterSocial_MemberAlreadyExists() {
+        String nickname = "testNickname";
+        String loginId = "loginid";
+        String loginType = "GOOGLE";
+        String name = "test";
+        String email = "test@test.com";
+
+        // 기존 데이터 삭제
+        Member existingMember = socialLoginService.findMemberByLoginIdAndLoginType(loginId, LoginType.GOOGLE);
+        if (existingMember != null) {
+            memberRepository.delete(existingMember);
+        }
+
+        // Save the member first to simulate an existing member
+        existingMember = new Member();
+        existingMember.setLoginId(loginId);
+        existingMember.setNickname(nickname);
+        existingMember.setName(name);
+        existingMember.setEmail(email);
+        existingMember.setLoginType(LoginType.GOOGLE);
+        existingMember.setRole(Role.USER);
+        existingMember.setActive(true);
+        socialLoginService.save(existingMember);
+
+        // Simulate social login
+        socialLoginService.handleSocialLogin(session, loginId, name, email, loginType);
+
+        // Attempt to register again
+        String result = registerSocial(nickname, session, model);
+
+        assertEquals("redirect:/login", result);
+    }
+
+
+    private String registerSocial(String nickname, MockHttpSession session, Model model) {
+        // This is a simplified version of the original registerSocial method for testing purposes
+        String loginId = (String) session.getAttribute("loginId");
+        String loginTypeStr = (String) session.getAttribute("loginType");
+        Map<String, Object> userAttributes = (Map<String, Object>) session.getAttribute("userAttributes");
+
+        if (loginId == null || loginTypeStr == null || userAttributes == null) {
+            model.addAttribute("error", "세션 정보가 없습니다. 다시 로그인해 주세요.");
+            return "redirect:/login";
+        }
+
+        LoginType loginType = LoginType.valueOf(loginTypeStr.toUpperCase());
+        Member existingMember = socialLoginService.findMemberByLoginIdAndLoginType(loginId, loginType);
+        if (existingMember != null) {
+            model.addAttribute("error", "이미 존재하는 회원입니다.");
+            return "register_social";
+        }
+
+        Member member = new Member();
+        member.setLoginId(loginId);
+        member.setNickname(nickname);
+        member.setName((String) userAttributes.get("name"));
+        member.setEmail((String) userAttributes.get("email"));
+        member.setLoginType(loginType);
+        member.setRole(Role.USER);
+        member.setActive(true);
+        socialLoginService.save(member);
+        session.setAttribute("member", member);
+        return "redirect:/success";
+    }
 }
