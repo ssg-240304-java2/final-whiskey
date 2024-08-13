@@ -26,7 +26,6 @@ public class ReviewReportService {
     private final ReviewRepository reviewRepository;
 
 
-
     // 리뷰 신고 전체 조회
     public List<ReviewReportDTO> getAllReviewReports() {
 
@@ -42,6 +41,19 @@ public class ReviewReportService {
             reviewReportDTOList.add(reviewReportDTO);
         }
         return reviewReportDTOList;
+    }
+
+
+    // 식당 신고 세부 조회
+    public ReviewReportDTO getReviewReport(Long id) {
+
+        ReviewReport reviewReport = reviewReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewReport not found with ID: " + id));
+
+        ReviewReportDTO result = modelMapper.map(reviewReport, ReviewReportDTO.class);
+        result.setReviewDTO(modelMapper.map(reviewReport.getReview(), ReviewDTO.class));
+
+        return result;
     }
 
 
@@ -64,9 +76,5 @@ public class ReviewReportService {
         reviewReport.setReview(review);
 
         reviewReportRepository.save(reviewReport);
-
-
     }
-
-
 }

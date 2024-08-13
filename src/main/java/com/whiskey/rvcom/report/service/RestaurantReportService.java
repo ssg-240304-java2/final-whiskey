@@ -83,7 +83,6 @@ public class RestaurantReportService {
         restaurantReportRepository.save(restaurantReport);
 
         // 메일 발송 API 추후 추가 예정
-
     }
 
 
@@ -112,5 +111,4 @@ public class RestaurantReportService {
 
         restaurantReportRepository.save(restaurantReport);
     }
-
 }

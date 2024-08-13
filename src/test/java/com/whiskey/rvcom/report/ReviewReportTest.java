@@ -43,13 +43,32 @@ public class ReviewReportTest {
 
 
     @Test
+    @DisplayName("리뷰 신고 세부조회")
+    public void findById() {
+
+        // given
+        Long id = 2L;
+
+        // when
+        ReviewReportDTO result = reviewReportService.getReviewReport(id);
+
+        System.out.println("id = " + id);
+        System.out.println("result.getId() = " + result.getId());
+        System.out.println("result = " + result);
+
+        // then 조회한 신고의 id와 입력한 id가 같은지 확인
+        Assertions.assertEquals(result.getId(), id);
+    }
+
+
+    @Test
     @DisplayName("리뷰신고등록")
     public void save() {
 
         // given
-        ReviewDTO reviewDTO = new ReviewDTO(3L, false, LocalDateTime.now(), 4, 2, "가지마세요...", Rating.ONE_STAR);
+        ReviewDTO reviewDTO = new ReviewDTO(4L, false, LocalDateTime.now(), 4, 2, "가지마세요...", Rating.ONE_STAR);
         ReviewReportDTO reviewReportDTO =
-                new ReviewReportDTO(null, false, true, LocalDateTime.now(), reviewDTO, "야발이라는 단어가 있어서 신고드립니다.", "욕설신고 입니다.");
+                new ReviewReportDTO(null, false, true, LocalDateTime.now(), reviewDTO, "test2", "test2");
 
         // when
         reviewReportService.saveReviewReport(reviewReportDTO);
