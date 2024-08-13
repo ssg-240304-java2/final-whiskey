@@ -21,16 +21,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestaurantReportService {
 
-    @Autowired
     private final RestaurantReportRepository restaurantReportRepository;
 
-    @Autowired
     private final RestaurantRepository restaurantRepository;
 
-    @Autowired
     private final ModelMapper modelMapper;
 
 
+    // 식당 신고 전체 조회
     public List<RestaurantReportDTO> getAllRestaurantReports() {
         List<RestaurantReport> reports = restaurantReportRepository.findAll();
 
@@ -52,6 +50,7 @@ public class RestaurantReportService {
     }
 
 
+    // 식당 신고 등록
     @Transactional
     public void saveRestaurantReport(RestaurantReportDTO report) {
 

@@ -1,9 +1,10 @@
 package com.whiskey.rvcom.report;
 
 import com.whiskey.rvcom.entity.review.Rating;
-import com.whiskey.rvcom.report.model.dto.ReviewDTO;
+import com.whiskey.rvcom.review.dto.ReviewDTO;
 import com.whiskey.rvcom.report.model.dto.ReviewReportDTO;
 import com.whiskey.rvcom.report.service.ReviewReportService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,9 @@ public class ReviewReportTest {
         for (ReviewReportDTO report : reports) {
             System.out.println(report);
         }
+
+        // 조회한 신고목록이 null이 아닌지 확인
+        Assertions.assertNotNull(reports);
     }
 
 
@@ -44,5 +48,10 @@ public class ReviewReportTest {
 
         reviewReportService.saveReviewReport(reviewReportDTO);
 
+        // 조회 성공 후 목록 가져오기
+        List<ReviewReportDTO> reports = reviewReportService.getAllReviewReports();
+
+        //      현재 테스트 코드로 등록한 신고와 DB에 등록된 신고의 내용이 같은지 비교
+        Assertions.assertEquals(reports.get(reports.size()-1).getContent(), reviewReportDTO.getContent());
     }
 }

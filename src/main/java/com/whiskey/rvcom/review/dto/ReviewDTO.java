@@ -1,4 +1,4 @@
-package com.whiskey.rvcom.report.model.dto;
+package com.whiskey.rvcom.review.dto;
 
 import com.whiskey.rvcom.entity.review.Rating;
 import lombok.AllArgsConstructor;

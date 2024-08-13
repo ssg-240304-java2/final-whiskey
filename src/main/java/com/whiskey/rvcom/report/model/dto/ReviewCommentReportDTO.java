@@ -1,6 +1,7 @@
 package com.whiskey.rvcom.report.model.dto;
 
 
+import com.whiskey.rvcom.review.dto.ReviewCommentDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

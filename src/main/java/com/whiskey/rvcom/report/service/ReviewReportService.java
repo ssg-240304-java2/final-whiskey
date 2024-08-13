@@ -2,14 +2,13 @@ package com.whiskey.rvcom.report.service;
 
 import com.whiskey.rvcom.entity.report.ReviewReport;
 import com.whiskey.rvcom.entity.review.Review;
-import com.whiskey.rvcom.report.model.dto.ReviewDTO;
+import com.whiskey.rvcom.review.dto.ReviewDTO;
 import com.whiskey.rvcom.report.model.dto.ReviewReportDTO;
 import com.whiskey.rvcom.repository.ReviewReportRepository;
 import com.whiskey.rvcom.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,17 +19,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewReportService {
 
-    @Autowired
     private final ModelMapper modelMapper;
 
-    @Autowired
     private final ReviewReportRepository reviewReportRepository;
 
-    @Autowired
     private final ReviewRepository reviewRepository;
 
 
 
+    // 리뷰 신고 전체 조회
     public List<ReviewReportDTO> getAllReviewReports() {
 
         List<ReviewReportDTO> reviewReportDTOList = new ArrayList<>();
@@ -48,6 +45,7 @@ public class ReviewReportService {
     }
 
 
+    // 리뷰 신고 등록
     @Transactional
     public void saveReviewReport(ReviewReportDTO report) {
 
