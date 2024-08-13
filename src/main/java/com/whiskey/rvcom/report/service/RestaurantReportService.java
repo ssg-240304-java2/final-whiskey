@@ -50,6 +50,23 @@ public class RestaurantReportService {
     }
 
 
+    // 식당 신고 세부 조회
+    public RestaurantReportDTO getRestaurantReport(RestaurantReportDTO restaurantReportDTO) {
+
+        // RestaurantReportDTO에서 ID를 가져옴
+        Long id = restaurantReportDTO.getId();
+        // 가져온 id 값으로 데이터베이스에서 조회
+        RestaurantReport restaurantReport = restaurantReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant Report not found with ID: " + id));
+
+        // 결과 값 DTO로 변환 후 리턴
+        RestaurantReportDTO result = modelMapper.map(restaurantReport, RestaurantReportDTO.class);
+        result.setRestaurantDTO(modelMapper.map(restaurantReport.getRestaurant(), RestaurantDTO.class));
+
+        return result;
+    }
+
+
     // 식당 신고 등록
     @Transactional
     public void saveRestaurantReport(RestaurantReportDTO report) {
