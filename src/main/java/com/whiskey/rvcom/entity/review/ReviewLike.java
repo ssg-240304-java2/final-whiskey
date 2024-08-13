@@ -15,6 +15,10 @@ public class ReviewLike {
     private Long id;    // 리뷰 좋아요 식별자
 
     @ManyToOne
+    @JoinColumn(name = "review_id", nullable = false)
+    private Review review;  // 리뷰 좋아요 선택한 리뷰
+
+    @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;  // 리뷰 좋아요 선택한 회원
 }
