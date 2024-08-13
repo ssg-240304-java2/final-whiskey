@@ -227,6 +227,18 @@ body {
     width: 30%;
 }
 
+/* 리뷰 헤더 스타일 추가 */
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.review-header h2 {
+    margin: 0;
+}
+
 /* 리뷰 스타일 */
 .reviews-container {
     display: grid;
@@ -287,11 +299,6 @@ body {
 }
 
 /* 리뷰 작성 버튼 스타일 */
-.write-review {
-    text-align: center;
-    margin-top: 20px;
-}
-
 .write-review-button {
     padding: 10px 20px;
     background-color: #c41200;
@@ -301,10 +308,17 @@ body {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 .write-review-button:hover {
     background-color: #a30f00;
+}
+
+.write-review-button i {
+    margin-right: 5px;
 }
 
 /* 리뷰 상세 스타일 */
