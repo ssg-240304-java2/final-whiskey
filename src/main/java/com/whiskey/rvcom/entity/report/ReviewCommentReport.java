@@ -10,6 +10,6 @@ import lombok.*;
 @Setter
 public class ReviewCommentReport extends Report {
     @ManyToOne
-    @JoinColumn(name = "review_comment_id")
+    @JoinColumn(name = "review_comment_id", nullable = false)
     private ReviewComment reviewComment;
 }
