@@ -44,7 +44,6 @@ public class Review {
     @JoinColumn(name = "reviewer_id", nullable = false)
     private Member reviewer;    // 리뷰 작성자
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "review_id")
+    @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
     private List<ReviewLike> likes; // 좋아요 리스트
 }

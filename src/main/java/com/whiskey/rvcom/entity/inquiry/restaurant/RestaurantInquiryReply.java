@@ -7,11 +7,11 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-@Table(name = "tbl_restaurant_inquiry_response")
+@Table(name = "tbl_restaurant_inquiry_reply")
 @Entity
 @Getter
 @Setter
-public class RestaurantInquiryResponse {
+public class RestaurantInquiryReply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;    // 문의 답변 식별자
