@@ -6,3 +6,6 @@ spring:
     url: ${{ secrets.DB_URL }}
     username: ${{ secrets.DB_USERNAME }}
     password: ${{ secrets.DB_PASSWORD }}
+
+kakao:
+  apikey: ${{ secrets.KAKAOMAP_API }}
