@@ -35,8 +35,6 @@ public class SocialRegisterControllerTest {
         model = new BindingAwareModelMap();
     }
 
-
-
 //    private String registerSocial(String nickname, MockHttpSession session, Model model) {
 //        // This is a simplified version of the original registerSocial method for testing purposes
 //        String loginId = (String) session.getAttribute("loginId");
@@ -67,4 +65,5 @@ public class SocialRegisterControllerTest {
 //        session.setAttribute("member", member);
 //        return "redirect:/success";
 //    }
+
 }
