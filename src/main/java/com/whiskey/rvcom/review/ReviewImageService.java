@@ -14,6 +14,11 @@ public class ReviewImageService {
     private final ReviewRepository reviewRepository;
     private final ReviewImageRepository reviewImageRepository;
 
+    /**
+     * 리뷰 이미지 객체로 리뷰 이미지 조회
+     * @param reviewImageId 리뷰 이미지 아이디
+     * @return 리뷰 이미지 객체
+     */
     public ReviewImage getReviewImageById(Long reviewImageId) {
         return reviewImageRepository.findById(reviewImageId).orElseThrow(IllegalArgumentException::new);
     }
