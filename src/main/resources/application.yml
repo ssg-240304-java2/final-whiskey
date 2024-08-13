@@ -8,4 +8,4 @@ spring:
     password: ${{ secrets.DB_PASSWORD }}
 
 kakao:
-  apikey: { { secrets.KAKAOMAP_API }
+  apikey: ${{ secrets.KAKAOMAP_API }}
