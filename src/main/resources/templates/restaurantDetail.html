@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="/css/common.css"/>
     <th:block th:replace="fragments/header :: headerfiles"></th:block>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--  카카오 api key 를 받아오는 js  -->
+    <script src="/js/kakaoMapApiSource.js"></script>
     <title>FoodPolio - 음식점 상세 정보</title>
     <script src="/js/restaurantDetail.js" defer></script>
 </head>
@@ -72,13 +75,34 @@
                     </div>
                     <!-- TODO: 백엔드 - 영업시간 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
                     <table class="hours-table">
-                        <tr><td><i class="far fa-clock"></i> 월요일</td><td>11:00 AM - 11:00 PM</td></tr>
-                        <tr><td><i class="far fa-clock"></i> 화요일</td><td>11:00 AM - 11:00 PM</td></tr>
-                        <tr><td><i class="far fa-clock"></i> 수요일</td><td>11:00 AM - 11:00 PM</td></tr>
-                        <tr><td><i class="far fa-clock"></i> 목요일</td><td>11:00 AM - 11:00 PM</td></tr>
-                        <tr><td><i class="far fa-clock"></i> 금요일</td><td>11:00 AM - 12:00 AM (다음날)</td></tr>
-                        <tr><td><i class="far fa-clock"></i> 토요일</td><td>11:00 AM - 12:00 AM (다음날)</td></tr>
-                        <tr><td><i class="far fa-clock"></i> 일요일</td><td>11:00 AM - 11:00 PM</td></tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> 월요일</td>
+                            <td>11:00 AM - 11:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> 화요일</td>
+                            <td>11:00 AM - 11:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> 수요일</td>
+                            <td>11:00 AM - 11:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> 목요일</td>
+                            <td>11:00 AM - 11:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> 금요일</td>
+                            <td>11:00 AM - 12:00 AM (다음날)</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> 토요일</td>
+                            <td>11:00 AM - 12:00 AM (다음날)</td>
+                        </tr>
+                        <tr>
+                            <td><i class="far fa-clock"></i> 일요일</td>
+                            <td>11:00 AM - 11:00 PM</td>
+                        </tr>
                     </table>
 
                     <div class="tab-divider"></div>
@@ -158,7 +182,8 @@
                         </div>
                         <div class="write-review">
                             <!-- TODO: 백엔드 - 리뷰 작성 페이지로 이동하는 로직 구현 -->
-                            <a href="/receipt-verification" class="write-review-button"><i class="fas fa-pen"></i> 리뷰 작성하기</a>
+                            <a href="/receipt-verification" class="write-review-button"><i class="fas fa-pen"></i> 리뷰
+                                작성하기</a>
                         </div>
                         <button id="loadMoreReviews" class="load-more">더 보기</button>
                     </div>
@@ -168,7 +193,8 @@
                     <h2><i class="fas fa-question-circle"></i> 문의하기</h2>
                     <div class="inquiry-form">
                         <textarea id="inquiryText" placeholder="이 음식점에 대해 궁금한 점을 물어보세요." rows="4"></textarea>
-                        <button id="submitInquiry" class="submit-inquiry"><i class="fas fa-paper-plane"></i> 문의 등록</button>
+                        <button id="submitInquiry" class="submit-inquiry"><i class="fas fa-paper-plane"></i> 문의 등록
+                        </button>
                     </div>
                     <div class="inquiry-filter">
                         <select id="inquirySort">
@@ -241,7 +267,8 @@
         <div class="sidebar-info">
             <h3><i class="fas fa-info-circle"></i> 식당 정보</h3>
             <!-- TODO: 백엔드 - 식당 정보를 데이터베이스에서 가져와 동적으로 표시 -->
-            <p><strong><i class="fas fa-globe"></i> 홈페이지:</strong> <a href="http://www.example.com">www.example.com</a></p>
+            <p><strong><i class="fas fa-globe"></i> 홈페이지:</strong> <a href="http://www.example.com">www.example.com</a>
+            </p>
             <p><strong><i class="fas fa-phone"></i> 전화번호:</strong> 02-1234-5678</p>
             <p><strong><i class="fas fa-map-marker-alt"></i> 주소:</strong> 서울시 강남구 테헤란로 123</p>
         </div>
@@ -265,5 +292,20 @@
         </div>
     </div>
 </div>
+<script>
+    window.onload = function () {
+        kakao.maps.load(function () {
+            let src = [];
+            // 카카오맵 지도 렌더링을 위한 js파일 추가 - 음식점의 위치를 중앙으로
+            src.push("/js/kakaoMapDetailView.js");
+
+            for (let i = 0; i < src.length; i++) {
+                let script = document.createElement("script");
+                script.src = src[i];
+                document.head.appendChild(script);
+            }
+        });
+    }
+</script>
 </body>
 </html>
