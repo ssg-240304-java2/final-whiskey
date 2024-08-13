@@ -46,7 +46,7 @@ public class ReviewImageService {
      * @param reviewImage 리뷰 이미지 객체
      */
     @Transactional
-    public void deleteReviewImage(ReviewImage reviewImage) {
+    public void removeReviewImage(ReviewImage reviewImage) {
         reviewImageRepository.delete(reviewImage);
     }
 }

@@ -45,6 +45,15 @@ public class ReviewService {
     }
 
     /**
+     * 리뷰 삭제
+     * @param review 리뷰 객체(반드시 영속성 상태의 객체가 전달되어야 함)
+     */
+    @Transactional
+    public void removeReview(Review review) {
+        reviewRepository.delete(review);
+    }
+
+    /**
      * 리뷰에 좋아요 추가
      * @param review 리뷰 객체
      * @param reviewLike 리뷰 좋아요 객체
