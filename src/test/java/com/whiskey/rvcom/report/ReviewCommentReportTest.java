@@ -1,7 +1,7 @@
 package com.whiskey.rvcom.report;
 
 import com.whiskey.rvcom.entity.review.Rating;
-import com.whiskey.rvcom.report.model.dto.ReviewCommentDTO;
+import com.whiskey.rvcom.review.dto.ReviewCommentDTO;
 import com.whiskey.rvcom.report.model.dto.ReviewCommentReportDTO;
 import com.whiskey.rvcom.report.service.ReviewCommentReportService;
 import org.junit.jupiter.api.Assertions;

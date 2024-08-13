@@ -6,7 +6,6 @@ import com.whiskey.rvcom.repository.RestaurantRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import repository.MemberRepository;
 
 @SpringBootTest
 class ReviewServiceTest {

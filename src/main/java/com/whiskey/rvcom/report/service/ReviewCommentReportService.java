@@ -2,7 +2,7 @@ package com.whiskey.rvcom.report.service;
 
 import com.whiskey.rvcom.entity.report.ReviewCommentReport;
 import com.whiskey.rvcom.entity.review.ReviewComment;
-import com.whiskey.rvcom.report.model.dto.ReviewCommentDTO;
+import com.whiskey.rvcom.review.dto.ReviewCommentDTO;
 import com.whiskey.rvcom.report.model.dto.ReviewCommentReportDTO;
 import com.whiskey.rvcom.repository.ReviewCommentReportRepository;
 import com.whiskey.rvcom.repository.ReviewCommentRepository;
