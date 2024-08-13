@@ -22,8 +22,6 @@ public class ReviewCommentService {
         return reviewCommentRepository.findByReview(review);
     }
 
-    // 리뷰댓글의 id로 리뷰댓글 객체 조회
-
     /**
      * 리뷰댓글의 id로 리뷰댓글 객체 조회
      * @param commentId 리뷰댓글 id
@@ -31,5 +29,21 @@ public class ReviewCommentService {
      */
     public ReviewComment getCommentById(Long commentId) {
         return reviewCommentRepository.findById(commentId).orElseThrow(IllegalArgumentException::new);
+    }
+
+    /**
+     * 리뷰댓글 저장
+     * @param reviewComment 리뷰댓글 객체
+     */
+    public void saveComment(ReviewComment reviewComment) {
+        reviewCommentRepository.save(reviewComment);
+    }
+
+    /**
+     * 리뷰댓글 삭제
+     * @param reviewComment 리뷰댓글 객체
+     */
+    public void deleteComment(ReviewComment reviewComment) {
+        reviewCommentRepository.delete(reviewComment);
     }
 }
