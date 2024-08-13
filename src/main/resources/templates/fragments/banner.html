@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="banner(title, location)">
-        <div class="banner">
-            <h2 th:text="${title}">주변 맛집</h2>
-            <div class="location-info">
-                <!-- TODO: 현재 위치 정보를 동적으로 가져와 표시하는 기능 구현 -->
-                <p><i class="fas fa-map-marker-alt"></i> 현재 위치: <span th:text="${location}">인천시, ...</span></p>
-                <!-- TODO: 새로고침 버튼 클릭 시 위치 정보 및 주변 맛집 목록을 갱신하는 기능 구현 -->
-                <button id="refresh-button" class="refresh-btn">
-                    <i class="fas fa-sync-alt"></i> 새로고침
-                </button>
-            </div>
+<div th:fragment="banner(title, location)">
+    <div class="banner">
+        <h2 th:text="${title}">주변 맛집</h2>
+        <div class="location-info">
+            <!-- TODO: 현재 위치 정보를 동적으로 가져와 표시하는 기능 구현 -->
+            <p><i class="fas fa-map-marker-alt"></i> 현재 위치: <span id="location"></span></p>
+            <!-- TODO: 새로고침 버튼 클릭 시 위치 정보 및 주변 맛집 목록을 갱신하는 기능 구현 -->
+            <button id="refresh-button" class="refresh-btn">
+                <i class="fas fa-sync-alt"></i> 새로고침
+            </button>
         </div>
     </div>
+</div>
 </body>
 </html>
