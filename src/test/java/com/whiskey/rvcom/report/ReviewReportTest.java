@@ -56,8 +56,13 @@ public class ReviewReportTest {
         System.out.println("result.getId() = " + result.getId());
         System.out.println("result = " + result);
 
-        // then 조회한 신고의 id와 입력한 id가 같은지 확인
-        Assertions.assertEquals(result.getId(), id);
+        // then Null 값 인지 확인 후 조회한 신고와 DB에 있는 신고의 ID가 같은지 확인
+        Assertions.assertNotNull(result);
+
+        System.out.println("result.getId() = " + result.getId());
+        System.out.println("id = " + id);
+
+        Assertions.assertEquals(id, result.getId());
     }
 
 

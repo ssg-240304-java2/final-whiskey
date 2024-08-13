@@ -66,7 +66,7 @@ public class RestaurantReportService {
 
     // 식당 신고 상태값 변경
     @Transactional
-    public void restaurantReportPunish(Long id, boolean isPunished) {
+    public void restaurantReportPunish(Long id, boolean isPunish) {
 
         // 가져온 id 값으로 데이터베이스에서 조회
         RestaurantReport restaurantReport = restaurantReportRepository.findById(id)
@@ -75,7 +75,7 @@ public class RestaurantReportService {
         // 상태값 (확인여부) 변경
         restaurantReport.setChecked(true);
 
-        if (isPunished) {
+        if (isPunish) {
             restaurantReport.setVisible(false);
         }
 

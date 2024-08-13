@@ -14,11 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @SpringBootTest
 public class RestaurantReportTest {
-
-
 
     private final RestaurantReportService restaurantReportService;
 
@@ -47,7 +44,7 @@ public class RestaurantReportTest {
 
 
     @Test
-    @DisplayName("식당신고 세부조회")
+    @DisplayName("식당 신고 세부조회")
     public void findById() {
 
         // given
@@ -56,11 +53,16 @@ public class RestaurantReportTest {
         // when
         RestaurantReportDTO result = restaurantReportService.getRestaurantReport(id);
 
+        System.out.println("id = " + id);
+        System.out.println("result.getId() = " + result.getId());
         System.out.println("result = " + result);
 
-        // then (조회한 신고와 DB에 있는 신고의 ID가 같은지 확인)
+        // then Null 값 인지 확인 후 조회한 신고와 DB에 있는 신고의 ID가 같은지 확인
+        Assertions.assertNotNull(result);
+
         System.out.println("result.getId() = " + result.getId());
         System.out.println("id = " + id);
+
         Assertions.assertEquals(id, result.getId());
     }
 
