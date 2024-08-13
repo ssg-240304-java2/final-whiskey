@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RestaurantInquiryRepository extends JpaRepository<RestaurantInquiry, Long> {
 
@@ -14,4 +15,5 @@ public interface RestaurantInquiryRepository extends JpaRepository<RestaurantInq
         """)
     List<RestaurantInquiry> findInquiryByRestaurantId(Long restaurantId);
 
+    Optional<RestaurantInquiry> findByContent(String content);
 }

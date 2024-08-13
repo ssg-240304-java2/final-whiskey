@@ -37,5 +37,11 @@ public class RestaurantInquiry {
 
     @OneToOne
     @JoinColumn(name = "response_id")
-    private RestaurantInquiryResponse response; // 문의 답변
+    private RestaurantInquiryReply response; // 문의 답변
+
+    public RestaurantInquiry(Member writer, Restaurant restaurant, String content) {
+        this.writer = writer;
+        this.restaurant = restaurant;
+        this.content = content;
+    }
 }
