@@ -13,8 +13,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
-    private final ReviewImageRepository reviewImageRepository;
-    private final ImageFileRepository imageFileRepository;
 
     /**
      * 리뷰 아이디로 리뷰 객체 조회
@@ -45,36 +43,4 @@ public class ReviewService {
     public void saveReview(Review review) {
         reviewRepository.save(review);
     }
-
-//    /**
-//     * 리뷰 이미지 저장
-//     * @param review 리뷰
-//     * @param imageFile 이미지 파일
-//     */
-//    @Transactional
-//    public void saveReviewImages(Review review, ImageFile imageFile) {
-//        ReviewImage reviewImage = new ReviewImage();
-//        reviewImage.setReview(review);
-//        reviewImage.setImageFile(imageFile);
-//
-//        reviewImageRepository.save(reviewImage);
-//    }
-
-//    /**
-//     * 이미지 파일 여부 확인
-//     * @param filePath 파일 경로
-//     * @return 이미지 파일 여부
-//     */
-//    private boolean isImageFile(String filePath) {
-//        String[] imageExtensions = {"jpg", "jpeg", "png"};
-//        String fileExtension = filePath.substring(filePath.lastIndexOf(".") + 1);
-//
-//        for(String extension : imageExtensions) {
-//            if(fileExtension.equals(extension)) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
 }
