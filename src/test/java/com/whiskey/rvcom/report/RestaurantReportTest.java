@@ -52,19 +52,21 @@ public class RestaurantReportTest {
     public void findById() {
 
         // given
-        RestaurantDTO restaurantDTO = new RestaurantDTO(2L, "아약스커리", RestaurantCategory.KOREAN, "000-000-0000", true);
-        RestaurantReportDTO report = new RestaurantReportDTO(1L, "ID로 찾아서", "중요하지 않음", LocalDateTime.now(), false, true, restaurantDTO);
+        Long id = 1L;
 
         // when
-        RestaurantReportDTO result = restaurantReportService.getRestaurantReport(report);
+        RestaurantReportDTO result = restaurantReportService.getRestaurantReport(id);
 
         System.out.println("result = " + result);
 
         // then (조회한 신고와 DB에 있는 신고의 ID가 같은지 확인)
         System.out.println("result.getId() = " + result.getId());
-        System.out.println("report.getId() = " + report.getId());
-        Assertions.assertEquals(report.getId(), result.getId());
+        System.out.println("id = " + id);
+        Assertions.assertEquals(id, result.getId());
     }
+
+
+
 
 
     @Test

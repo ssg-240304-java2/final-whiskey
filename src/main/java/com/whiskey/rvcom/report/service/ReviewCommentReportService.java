@@ -48,6 +48,7 @@ public class ReviewCommentReportService {
 
         ReviewCommentDTO reviewCommentDTO = report.getReviewCommentDTO();
 
+        // 목록 조회 시 존재하지 않을 경우 예외를 던지고, 존재하면 영속성 주입시키기 위한 id
         Long reviewCommentId = reviewCommentDTO.getId();
 
         ReviewComment reviewComment = reviewCommentRepository.findById(reviewCommentId)
