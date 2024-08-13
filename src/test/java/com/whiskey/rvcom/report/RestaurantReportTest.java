@@ -66,25 +66,25 @@ public class RestaurantReportTest {
 
 
     @Test
-    @DisplayName("식당신고 상태값 변경")
+    @DisplayName("식당신고 결정 및 상태값 변경")
     public void restaurantReportPunish() {
 
         // given
         Long id = 1L;
 
-        boolean isPunished = true; // 신고처리 결정 여부, web에서 누른 버튼에 따라 결정할 예정
+        boolean isPunish = true; // 신고처리 결정 여부, web에서 누른 버튼에 따라 결정할 예정
 
         // when
-        restaurantReportService.restaurantReportPunish(id, isPunished);
-
+        restaurantReportService.restaurantReportPunish(id, isPunish);
 
         // then 상태값 변경 후 확인
         RestaurantReportDTO result = restaurantReportService.getRestaurantReport(id);
-        System.out.println("isPunished = " + isPunished);
+        System.out.println("isPunish = " + isPunish);
         System.out.println("result.isVisible() = " + result.isVisible());
         System.out.println("result.isChecked() = " + result.isChecked());
 
         Assertions.assertTrue(result.isChecked());
+        Assertions.assertFalse(result.isVisible());
     }
 
 
@@ -105,5 +105,4 @@ public class RestaurantReportTest {
         // then 현재 테스트 코드로 등록한 신고와 DB에 등록된 신고의 내용이 같은지 비교
         Assertions.assertEquals(reports.get(reports.size()-1).getContent(), report.getContent());
     }
-
 }

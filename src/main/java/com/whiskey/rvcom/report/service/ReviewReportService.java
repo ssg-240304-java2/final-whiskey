@@ -56,6 +56,23 @@ public class ReviewReportService {
         return result;
     }
 
+    // 리뷰 신고 상태값 변경
+    public void reviewReportPunish(Long id, boolean isPunish) {
+
+        ReviewReport reviewReport = reviewReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewReport not found with ID: " + id));
+
+        reviewReport.setChecked(true);
+
+        if (isPunish) {
+            reviewReport.setVisible(false);
+        }
+
+        reviewReportRepository.save(reviewReport);
+
+        // 메일 발송 API 추후 추가 예정
+    }
+
 
     // 리뷰 신고 등록
     @Transactional
@@ -77,4 +94,6 @@ public class ReviewReportService {
 
         reviewReportRepository.save(reviewReport);
     }
+
+
 }

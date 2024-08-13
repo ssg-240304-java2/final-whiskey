@@ -62,6 +62,29 @@ public class ReviewReportTest {
 
 
     @Test
+    @DisplayName("리뷰신고 결정 및 상태값 변경")
+    public void reviewReportPunish(){
+
+        // given
+        Long id = 1L;
+
+        boolean isPunish = true;
+
+        // when
+        reviewReportService.reviewReportPunish(id, isPunish);
+
+        // then
+        ReviewReportDTO result = reviewReportService.getReviewReport(id);
+        System.out.println("isPunish = " + isPunish);
+        System.out.println("result.isVisible() = " + result.isVisible());
+        System.out.println("result.isChecked() = " + result.isChecked());
+
+        Assertions.assertTrue(result.isChecked());
+        Assertions.assertFalse(result.isVisible());
+    }
+
+
+    @Test
     @DisplayName("리뷰신고등록")
     public void save() {
 
