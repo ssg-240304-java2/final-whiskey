@@ -29,17 +29,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                // CSRF 비활성화
+                .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 ) // 세션 관리 설정
-//                .authorizeRequests()
-//                .anyRequest().permitAll();
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/mainPage", "/login", "/register_basic", "/register_social", "/checkLoginId", "/css/**", "/js/**", "/images/**", "/static/**")
+//                        .permitAll() // 특정 경로에 대한 접근 허용
+//                        .requestMatchers("/user/**").hasRole("USER") // 유저만 접근 가능
+//                        .requestMatchers("/owner/**").hasRole("OWNER") // 점주만 접근 가능
+//                        .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
+//                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
+//              )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/mainPage", "/login", "/register_basic", "/register_social", "/checkLoginId", "/css/**", "/js/**", "/images/**", "/static/**")
-                        .permitAll() // 특정 경로에 대한 접근 허용
-                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
+                        .anyRequest().permitAll() // 모든 요청에 대한 접근 허용
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // 사용자 정의 로그인 페이지
