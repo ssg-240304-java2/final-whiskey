@@ -43,7 +43,7 @@ public class ReviewCommentService {
      * 리뷰댓글 삭제
      * @param reviewComment 리뷰댓글 객체
      */
-    public void deleteComment(ReviewComment reviewComment) {
+    public void removeComment(ReviewComment reviewComment) {
         reviewCommentRepository.delete(reviewComment);
     }
 }
