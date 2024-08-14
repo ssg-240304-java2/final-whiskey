@@ -1,6 +1,7 @@
 package com.whiskey.rvcom.entity.review;
 
 import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.entity.receipt.ReceiptData;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.*;
@@ -46,4 +47,8 @@ public class Review {
 
     @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
     private List<ReviewLike> likes; // 좋아요 리스트
+
+    @OneToOne
+    @JoinColumn(name = "receipt_data_id", nullable = false)
+    private ReceiptData receiptData;    // 영수증 정보
 }
