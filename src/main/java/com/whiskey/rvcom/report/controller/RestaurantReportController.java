@@ -1,7 +1,6 @@
 package com.whiskey.rvcom.report.controller;
 
 import com.whiskey.rvcom.report.model.dto.ReportData;
-import com.whiskey.rvcom.report.model.dto.RestaurantDTO;
 import com.whiskey.rvcom.report.model.dto.RestaurantReportDTO;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 
 
 @RestController
-@RequestMapping("/restreport")
+@RequestMapping("/restaurantreport")
 @RequiredArgsConstructor
 public class RestaurantReportController {
 
@@ -35,9 +34,7 @@ public class RestaurantReportController {
         restaurantReportDTO.setVisible(true);
         restaurantReportDTO.setId(null);
 
-        RestaurantDTO restaurantDTO = restaurantReportService.returnRestaurantDTO(report.getId());
-
-        restaurantReportDTO.setRestaurantDTO(restaurantDTO);
+        restaurantReportDTO.setRestaurantDTO(restaurantReportService.returnRestaurantDTO(report.getId()));
 
         restaurantReportService.saveRestaurantReport(restaurantReportDTO);
 

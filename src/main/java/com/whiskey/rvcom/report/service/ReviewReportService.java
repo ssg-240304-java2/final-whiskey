@@ -96,4 +96,11 @@ public class ReviewReportService {
     }
 
 
+    public ReviewDTO returnReviewDTO(Long id) {
+
+        Review review = reviewRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Review not found with ID: " + id));
+
+        return modelMapper.map(review, ReviewDTO.class);
+    }
 }

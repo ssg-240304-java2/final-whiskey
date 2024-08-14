@@ -23,10 +23,11 @@ public class ReviewCommentReportService {
     private final ReviewCommentReportRepository reviewCommentReportRepository;
     private final ReviewCommentRepository reviewCommentRepository;
 
-    public List<ReviewCommentReportDTO> reviewCommentReportDTOList = new ArrayList<>();
 
     // 댓글 신고 전체 조회
     public List<ReviewCommentReportDTO> getAllReviewCommentReports() {
+        List<ReviewCommentReportDTO> reviewCommentReportDTOList = new ArrayList<>();
+
         List<ReviewCommentReport> reports = reviewCommentReportRepository.findAll();
 
         for (ReviewCommentReport report : reports) {
@@ -89,5 +90,13 @@ public class ReviewCommentReportService {
         reviewCommentReport.setReviewComment(reviewComment);
 
         reviewCommentReportRepository.save(reviewCommentReport);
+    }
+
+    public ReviewCommentDTO returnReviewCommentDTO(Long id) {
+
+        ReviewComment reviewComment = reviewCommentRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewComment not found with ID: " + id));
+
+        return modelMapper.map(reviewComment, ReviewCommentDTO.class);
     }
 }
