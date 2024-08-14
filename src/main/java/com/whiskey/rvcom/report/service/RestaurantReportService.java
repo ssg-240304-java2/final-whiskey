@@ -10,7 +10,6 @@ import com.whiskey.rvcom.repository.RestaurantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,11 +36,11 @@ public class RestaurantReportService {
 
         for (RestaurantReport report : reports) {
 
-            // RestaurantReport -> RestaurantReportDTO로 변환
+            // RestaurantReport -> RestaurantReportDTO
             RestaurantDTO restaurantDTO = modelMapper.map(report.getRestaurant(), RestaurantDTO.class);
-            // RestaurantReportDto 안에는 RestaurantDTO가 있음 따라서
-            RestaurantReportDTO restaurantReportDTO = modelMapper.map(report, RestaurantReportDTO.class);
+
             // RestaurantReport -> RestaurantReportDTO로 변환할 때 RestaurantDTO도 변환해줘야함
+            RestaurantReportDTO restaurantReportDTO = modelMapper.map(report, RestaurantReportDTO.class);
             restaurantReportDTO.setRestaurantDTO(restaurantDTO);
 
             restaurantReportDTOList.add(restaurantReportDTO);
@@ -51,10 +50,8 @@ public class RestaurantReportService {
 
 
     // 식당 신고 세부 조회
-    public RestaurantReportDTO getRestaurantReport(RestaurantReportDTO restaurantReportDTO) {
+    public RestaurantReportDTO getRestaurantReport(Long id) {
 
-        // RestaurantReportDTO에서 ID를 가져옴
-        Long id = restaurantReportDTO.getId();
         // 가져온 id 값으로 데이터베이스에서 조회
         RestaurantReport restaurantReport = restaurantReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant Report not found with ID: " + id));
@@ -64,6 +61,28 @@ public class RestaurantReportService {
         result.setRestaurantDTO(modelMapper.map(restaurantReport.getRestaurant(), RestaurantDTO.class));
 
         return result;
+    }
+
+
+    // 식당 신고 상태값 변경
+    @Transactional
+    public void restaurantReportPunish(Long id, boolean isPunish) {
+
+        // 가져온 id 값으로 데이터베이스에서 조회
+        RestaurantReport restaurantReport = restaurantReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant Report not found with ID: " + id));
+
+        // 상태값 (확인여부) 변경
+        restaurantReport.setChecked(true);
+
+        if (isPunish) {
+            restaurantReport.setVisible(false);
+        }
+
+        // 변경된 상태값 저장
+        restaurantReportRepository.save(restaurantReport);
+
+        // 메일 발송 API 추후 추가 예정
     }
 
 
@@ -92,5 +111,4 @@ public class RestaurantReportService {
 
         restaurantReportRepository.save(restaurantReport);
     }
-
 }

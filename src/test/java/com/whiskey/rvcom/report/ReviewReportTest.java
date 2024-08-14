@@ -43,13 +43,60 @@ public class ReviewReportTest {
 
 
     @Test
+    @DisplayName("리뷰 신고 세부조회")
+    public void findById() {
+
+        // given
+        Long id = 2L;
+
+        // when
+        ReviewReportDTO result = reviewReportService.getReviewReport(id);
+
+        System.out.println("id = " + id);
+        System.out.println("result.getId() = " + result.getId());
+        System.out.println("result = " + result);
+
+        // then Null 값 인지 확인 후 조회한 신고와 DB에 있는 신고의 ID가 같은지 확인
+        Assertions.assertNotNull(result);
+
+        System.out.println("result.getId() = " + result.getId());
+        System.out.println("id = " + id);
+
+        Assertions.assertEquals(id, result.getId());
+    }
+
+
+    @Test
+    @DisplayName("리뷰신고 결정 및 상태값 변경")
+    public void reviewReportPunish(){
+
+        // given
+        Long id = 1L;
+
+        boolean isPunish = true;
+
+        // when
+        reviewReportService.reviewReportPunish(id, isPunish);
+
+        // then
+        ReviewReportDTO result = reviewReportService.getReviewReport(id);
+        System.out.println("isPunish = " + isPunish);
+        System.out.println("result.isVisible() = " + result.isVisible());
+        System.out.println("result.isChecked() = " + result.isChecked());
+
+        Assertions.assertTrue(result.isChecked());
+        Assertions.assertFalse(result.isVisible());
+    }
+
+
+    @Test
     @DisplayName("리뷰신고등록")
     public void save() {
 
         // given
-        ReviewDTO reviewDTO = new ReviewDTO(3L, false, LocalDateTime.now(), 4, 2, "가지마세요...", Rating.ONE_STAR);
+        ReviewDTO reviewDTO = new ReviewDTO(4L, false, LocalDateTime.now(), 4, 2, "가지마세요...", Rating.ONE_STAR);
         ReviewReportDTO reviewReportDTO =
-                new ReviewReportDTO(null, false, true, LocalDateTime.now(), reviewDTO, "야발이라는 단어가 있어서 신고드립니다.", "욕설신고 입니다.");
+                new ReviewReportDTO(null, false, true, LocalDateTime.now(), reviewDTO, "test2", "test2");
 
         // when
         reviewReportService.saveReviewReport(reviewReportDTO);

@@ -40,6 +40,35 @@ public class ReviewCommentReportService {
     }
 
 
+    // 댓글 신고 세부 조회
+    public ReviewCommentReportDTO getReviewCommentReport(Long id) {
+
+        ReviewCommentReport reviewCommentReport = reviewCommentReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewCommentReport not found with ID: " + id));
+
+        ReviewCommentReportDTO result = modelMapper.map(reviewCommentReport, ReviewCommentReportDTO.class);
+        result.setReviewCommentDTO(modelMapper.map(reviewCommentReport.getReviewComment(), ReviewCommentDTO.class));
+
+        return result;
+    }
+
+    // 댓글 신고 상태값 변경
+    @Transactional
+    public void reviewCommentReportPunish(Long id, boolean isPunish) {
+
+        ReviewCommentReport reviewCommentReport = reviewCommentReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewCommentReport not found with ID: " + id));
+
+        reviewCommentReport.setChecked(true);
+
+        if(isPunish) {
+            reviewCommentReport.setVisible(false);
+        }
+
+        reviewCommentReportRepository.save(reviewCommentReport);
+    }
+
+
     // 댓글 신고 등록
     @Transactional
     public void saveReviewCommentReport(ReviewCommentReportDTO report) {
@@ -48,6 +77,7 @@ public class ReviewCommentReportService {
 
         ReviewCommentDTO reviewCommentDTO = report.getReviewCommentDTO();
 
+        // 목록 조회 시 존재하지 않을 경우 예외를 던지고, 존재하면 영속성 주입시키기 위한 id
         Long reviewCommentId = reviewCommentDTO.getId();
 
         ReviewComment reviewComment = reviewCommentRepository.findById(reviewCommentId)
@@ -60,5 +90,4 @@ public class ReviewCommentReportService {
 
         reviewCommentReportRepository.save(reviewCommentReport);
     }
-
 }

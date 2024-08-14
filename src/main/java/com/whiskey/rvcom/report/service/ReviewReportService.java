@@ -26,7 +26,6 @@ public class ReviewReportService {
     private final ReviewRepository reviewRepository;
 
 
-
     // 리뷰 신고 전체 조회
     public List<ReviewReportDTO> getAllReviewReports() {
 
@@ -42,6 +41,36 @@ public class ReviewReportService {
             reviewReportDTOList.add(reviewReportDTO);
         }
         return reviewReportDTOList;
+    }
+
+
+    // 식당 신고 세부 조회
+    public ReviewReportDTO getReviewReport(Long id) {
+
+        ReviewReport reviewReport = reviewReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewReport not found with ID: " + id));
+
+        ReviewReportDTO result = modelMapper.map(reviewReport, ReviewReportDTO.class);
+        result.setReviewDTO(modelMapper.map(reviewReport.getReview(), ReviewDTO.class));
+
+        return result;
+    }
+
+    // 리뷰 신고 상태값 변경
+    public void reviewReportPunish(Long id, boolean isPunish) {
+
+        ReviewReport reviewReport = reviewReportRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("ReviewReport not found with ID: " + id));
+
+        reviewReport.setChecked(true);
+
+        if (isPunish) {
+            reviewReport.setVisible(false);
+        }
+
+        reviewReportRepository.save(reviewReport);
+
+        // 메일 발송 API 추후 추가 예정
     }
 
 
@@ -64,8 +93,6 @@ public class ReviewReportService {
         reviewReport.setReview(review);
 
         reviewReportRepository.save(reviewReport);
-
-
     }
 
 
