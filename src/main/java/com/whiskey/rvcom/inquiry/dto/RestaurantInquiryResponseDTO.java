@@ -1,4 +1,4 @@
-package com.whiskey.rvcom.report.model.dto;
+package com.whiskey.rvcom.inquiry.dto;
 
 import java.time.LocalDateTime;
 

@@ -1,8 +1,8 @@
 package com.whiskey.rvcom.inquiry;
 
 import com.whiskey.rvcom.entity.member.Member;
-import com.whiskey.rvcom.report.model.dto.RestaurantInquiryRequestDTO;
-import com.whiskey.rvcom.report.model.dto.RestaurantInquiryResponseDTO;
+import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryRequestDTO;
+import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryResponseDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 package com.whiskey.rvcom.inquiry;
 
 import com.whiskey.rvcom.entity.inquiry.restaurant.RestaurantInquiry;
-import com.whiskey.rvcom.report.model.dto.RestaurantInquiryRequestDTO;
+import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryRequestDTO;
 import com.whiskey.rvcom.repository.RestaurantInquiryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
