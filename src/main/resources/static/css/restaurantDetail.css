@@ -474,6 +474,17 @@ body {
     animation: slideIn 0.3s ease;
 }
 
+.modal-header, .modal-footer {
+    margin-bottom: 10px;
+}
+
+.close-btn {
+    cursor: pointer;
+}
+#reportForm {
+    margin-left: auto;
+}
+
 @keyframes slideIn {
     from {
         transform: translateY(-50px);

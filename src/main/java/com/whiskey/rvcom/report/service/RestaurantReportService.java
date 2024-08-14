@@ -111,4 +111,12 @@ public class RestaurantReportService {
 
         restaurantReportRepository.save(restaurantReport);
     }
+
+    public RestaurantDTO returnRestaurantDTO(Long id) {
+
+        Restaurant restaurant = restaurantRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with ID: " + id));
+
+        return modelMapper.map(restaurant, RestaurantDTO.class);
+    }
 }
