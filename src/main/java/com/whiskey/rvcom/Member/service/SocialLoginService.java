@@ -23,6 +23,10 @@ public class SocialLoginService {
         return memberRepository.findByLoginIdAndLoginType(loginId, type);
     }
 
+    public Member getMemberId(long memberId) {
+        return memberRepository.getMemberById(memberId);
+    }
+
     public void handleSocialLogin(HttpSession session, String loginId, String name, String email, String loginType) {
         if (loginType == null) {
             throw new IllegalArgumentException("Login type cannot be null");

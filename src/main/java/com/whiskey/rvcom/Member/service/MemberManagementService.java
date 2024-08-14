@@ -26,6 +26,10 @@ public class MemberManagementService {
         return memberRepository.findByLoginId(loginId);
     }
 
+    public Member getMemberId(long memberId) {
+        return memberRepository.getMemberById(memberId);
+    }
+
 
     public boolean existsByLoginId(String loginId) {
         return memberRepository.existsByLoginId(loginId);
