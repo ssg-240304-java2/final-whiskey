@@ -1,5 +1,6 @@
 package com.whiskey.rvcom.ImageFile;
 
+import com.whiskey.libs.file.FileNameGroup;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.repository.ImageFileRepository;
 import com.whiskey.libs.file.FileUploader;
@@ -55,7 +56,7 @@ public class ImageFileServiceTest {
         logger.info("실제 NCP 서버 파일 업로드 테스트 시작: {}", filePath);
 
         FileUploader realFileUploader = new FileUploader(filePath, host);
-        com.whiskey.libs.file.FileNameGroup result = realFileUploader.upload();
+        FileNameGroup result = realFileUploader.upload();
 
         assertNotNull(result);
         assertNotNull(result.getOriginalFileName());

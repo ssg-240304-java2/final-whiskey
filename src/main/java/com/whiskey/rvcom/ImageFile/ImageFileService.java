@@ -44,30 +44,14 @@ public class ImageFileService {
             throw new IllegalArgumentException("유효하지 않은 이미지 파일 형식입니다.");
         }
 
-        FileNameGroup uploadedFileName = uploadImageFile(filePath);
+        FileUploader fileUploader = new FileUploader(filePath);
+        FileNameGroup uploadedFileName = fileUploader.upload();
 
         ImageFile imageFile = new ImageFile();
         imageFile.setOriginalFileName(uploadedFileName.getOriginalFileName());
         imageFile.setUuidFileName(uploadedFileName.getUuidFileName());
 
-        imageFile = imageFileRepository.save(imageFile);
-        logger.info("이미지 파일 엔티티가 성공적으로 생성되었습니다: {}", imageFile.getId());
-
-        return imageFile;
-    }
-
-    /**
-     * 실제 파일 업로드를 수행합니다.
-     * 
-     * @param filePath 업로드할 파일의 경로
-     * @return 업로드된 파일의 이름 정보를 담은 FileNameGroup 객체
-     * @throws Exception 파일 업로드 실패 시 발생
-     */
-    private FileNameGroup uploadImageFile(String filePath) throws Exception {
-        logger.info("이미지 파일 업로드 중: {}", filePath);
-
-        FileUploader fileUploader = new FileUploader(filePath);
-        return fileUploader.upload();
+        return imageFileRepository.save(imageFile);
     }
 
     /**
