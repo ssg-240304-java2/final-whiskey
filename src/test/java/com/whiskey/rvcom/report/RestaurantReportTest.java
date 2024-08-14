@@ -96,10 +96,10 @@ public class RestaurantReportTest {
 
         // given
         Long id = 20L;
+        RestaurantDTO restaurantDTO = restaurantReportService.returnRestaurantDTO(id);
         RestaurantReportDTO report = new RestaurantReportDTO(null, "신고 제목4", "신고 내용4", LocalDateTime.now(), false, true, restaurantDTO);
 
         // where
-        RestaurantDTO restaurantDTO = restaurantReportService.returnRestaurantDTO(id);
         report.setRestaurantDTO(restaurantDTO);
         restaurantReportService.saveRestaurantReport(report);
 
