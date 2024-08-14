@@ -16,15 +16,15 @@ public class AppConfig {
     }
 
     // 네이버 client ID
-    @Value("${{NAVER_CLIENT_ID}}")
+    @Value("${{secrets.NAVER_CLIENT_ID}}")
     private String naverClientId;
 
     // 네이버 client secret
-    @Value("${{NAVER_CLIENT_SECRET}}")
+    @Value("${{secrets.NAVER_CLIENT_SECRET}}")
     private String naverClientSecret;
 
     // 구글 client ID
-    @Value("${{GOOGLE_CLIENT_ID}}")
+    @Value("${{secrets.GOOGLE_CLIENT_ID}}")
     private String googleClientId;
 
     /**

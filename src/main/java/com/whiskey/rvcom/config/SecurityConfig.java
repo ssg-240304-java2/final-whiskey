@@ -2,6 +2,7 @@ package com.whiskey.rvcom.config;
 
 import com.whiskey.rvcom.Member.service.CustomOAuth2AuthService;
 import com.whiskey.rvcom.Member.service.CustomOidcUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -24,8 +26,6 @@ public class SecurityConfig {
         this.customOidcUserService = customOidcUserService;
     }
 
-    //일단 permitall로 설정후 나중에
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -33,22 +33,21 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 ) // 세션 관리 설정
-//                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/mainPage", "/login", "/register_basic", "/register_social", "/checkLoginId", "/css/**", "/js/**", "/images/**", "/static/**")
-//                        .permitAll() // 특정 경로에 대한 접근 허용
-//                        .requestMatchers("/user/**").hasRole("USER") // 유저만 접근 가능
-//                        .requestMatchers("/owner/**").hasRole("OWNER") // 점주만 접근 가능
-//                        .requestMatchers("/admin/**").hasRole("ADMIN") // 관리자만 접근 가능
-//                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
-//              )
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // 모든 요청에 대한 접근 허용
+                        .requestMatchers("/mainPage", "/login", "/register_basic", "/register_social", "/checkLoginId", "/css/**", "/js/**", "/images/**", "/static/**")
+                        .permitAll() // 특정 경로에 대한 접근 허용
+                        .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // 사용자 정의 로그인 페이지
                         .loginProcessingUrl("/perform_login") // 로그인 처리 URL
                         .defaultSuccessUrl("/mainPage", true) // 로그인 성공 후 이동할 기본 페이지
                         .failureUrl("/login?error=true") // 로그인 실패 시 이동할 페이지
+                        .successHandler((request, response, authentication) -> {
+                            // 인증 성공 후 추가 작업 (로그를 남기거나 추가적인 세션 설정 등)
+                            log.info("Authentication successful for user: {}", authentication.getName());
+                            response.sendRedirect("/mainPage");
+                        })
                         .permitAll() // 로그인 관련 요청은 모두 허용
                 )
                 .oauth2Login(oauth2 -> oauth2

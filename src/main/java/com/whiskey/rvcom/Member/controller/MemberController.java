@@ -51,31 +51,29 @@ public class MemberController {
                         Model model) {
         log.info("로그인 시도 - Login ID: {}", loginId);
 
-        try {
-            Member member = memberManagementService.findByLoginId(loginId);
-            log.info("회원 정보 조회 성공 - Login ID: {}, Login Type: {}", loginId, member.getLoginType());
-
-            log.debug("Raw password during login: {}", password);
-            log.debug("Encoded password from DB during login: {}", member.getPassword());
-
-            boolean passwordMatches = passwordEncoder.matches(password, member.getPassword());
-            log.debug("Password matches: {}", passwordMatches);
-
-            if (passwordMatches) {
-                log.info("비밀번호 일치 - Login ID: {}", loginId);
-                session.setAttribute("member", member);
-                return "redirect:/mainpage";
-            } else {
-                log.warn("비밀번호 불일치 - Login ID: {}", loginId);
-                model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-            }
-        } catch (Exception e) {
-            log.error("로그인 중 오류 발생 - Login ID: {}", loginId, e);
+        Member member = memberManagementService.findByLoginId(loginId);
+        if (member == null) {
+            log.warn("회원 정보 없음 - Login ID: {}", loginId);
             model.addAttribute("error", "존재하지 않는 회원입니다.");
+            return "login";
         }
 
-        return "login";
+        log.info("회원 정보 조회 성공 - Login ID: {}, Login Type: {}", loginId, member.getLoginType());
+
+        log.debug("Encoded password from database: {}", member.getPassword());
+
+        if (passwordEncoder.matches(password, member.getPassword())) {
+            log.info("비밀번호 일치 - Login ID: {}", loginId);
+            session.setAttribute("member", member);
+            session.setAttribute("isAuthenticated", true); // 추가: 인증 상태 플래그 설정
+            return "redirect:/mainPage";
+        } else {
+            log.warn("비밀번호 불일치 - Login ID: {}", loginId);
+            model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
+            return "login";
+        }
     }
+
 
     @GetMapping("/mainPage")
     public String mainPage() {

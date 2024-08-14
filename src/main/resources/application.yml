@@ -7,21 +7,22 @@ spring:
     username: ${{ secrets.DB_USERNAME }}
     password: ${{ secrets.DB_PASSWORD }}
 
+
   security:
     oauth2:
       client:
         registration:
           naver:
-            client-id: ${{NAVER_CLIENT_ID}}
-            client-secret: ${{NAVER_CLIENT_SECRET}}
+            client-id: ${{secrets.NAVER_CLIENT_ID}}
+            client-secret: ${{secrets.NAVER_CLIENT_SECRET}}
             redirect-uri: "{baseUrl}/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
             scope: name, email, profile_image
             client-name: Naver
 
           google:
-            client-id: ${{GOOGLE_CLIENT_ID}}
-            client-secret: ${{GOOGLE_CLIENT_SECRET}}
+            client-id: ${{secrets.GOOGLE_CLIENT_ID}}
+            client-secret: ${{secrets.GOOGLE_CLIENT_SECRET}}
             scope: profile, email
 
         provider:
@@ -33,3 +34,4 @@ spring:
 
 kakao:
   apikey: ${{ secrets.KAKAOMAP_API }}
+
