@@ -1,10 +1,22 @@
+/* 색상 팔레트 정의 */
+:root {
+    --primary-color: #c41200;
+    --secondary-color: #f15c4f;
+    --background-color: #f8f8f8;
+    --text-color: #333;
+    --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
 /* 검색 배너 스타일 */
 .search-banner {
     background-size: cover;
     background-position: center;
     color: white;
-    padding: 30px 0; /* 60px에서 30px로 줄였습니다 */
+    padding: 30px 0;
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .search-banner::before {
@@ -17,9 +29,16 @@
     background: rgba(0, 0, 0, 0.5);
 }
 
+.search-banner .container {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
 .search-info {
     position: relative;
     z-index: 1;
+    text-align: center;
 }
 
 .search-title {
@@ -31,7 +50,8 @@
 .search-meta {
     display: flex;
     align-items: center;
-    margin-bottom: 5px; /* 10px에서 5px로 줄였습니다 */
+    justify-content: center;
+    margin-bottom: 5px;
 }
 
 .result-count {
@@ -59,11 +79,12 @@
 
 /* 지도 컨테이너 스타일 */
 .map-container {
-    width: 30%;
-    height: calc(100vh - 100px);
-    position: sticky;
-    top: 100px;
+    width: 25%;
+    height: calc(100vh - 200px);
+    position: relative;
+    top: 50px;
 }
+
 
 .map-placeholder {
     background-color: #e0e0e0;
@@ -75,8 +96,9 @@
 }
 
 /* 컨테이너 스타일 */
-.container {
+.search-results-page .container {
     width: 70%;
+    margin: 20px 20px;
     padding: 0 20px;
 }
 
@@ -98,10 +120,10 @@
     position: sticky;
     top: 20px;
     align-self: flex-start;
-    background-color: #f8f8f8;
+    background-color: var(--background-color);
     border-radius: 10px;
     padding: 15px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: var(--card-shadow);
 }
 
 /* 카테고리 목록 스타일 */
@@ -126,14 +148,14 @@
 
 .category-list input[type="checkbox"]:checked + label {
     font-weight: bold;
-    color: #c41200;
+    color: var(--primary-color);
 }
 
 /* '모두 보기' 버튼 스타일 */
 .show-all-btn {
     margin-top: 20px;
     padding: 10px;
-    background-color: #c41200;
+    background-color: var(--primary-color);
     color: white;
     border: none;
     cursor: pointer;
@@ -180,9 +202,16 @@
     display: flex;
     margin-bottom: 20px;
     background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px var(--card-shadow);
     border-radius: 4px;
     overflow: hidden;
+    border: 1px solid #e0e0e0;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.result-card:hover {
+    border-color: var(--secondary-color);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
 /* 결과 카드 링크 스타일 */
@@ -217,6 +246,44 @@
 
 /* 평점 스타일 */
 .rating {
-    color: #f15c4f;
+    color: var(--secondary-color);
     margin-bottom: 5px;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 추가 */
+@media (max-width: 768px) {
+    .search-layout {
+        flex-direction: column;
+    }
+
+    .map-container {
+        width: 100%;
+        height: 300px;
+        position: static;
+    }
+
+    .search-results-page .container {
+        width: 100%;
+        margin: 20px 0;
+        padding: 0 10px;
+    }
+
+    .search-content {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: static;
+        margin-bottom: 20px;
+    }
+
+    .result-card {
+        flex-direction: column;
+    }
+
+    .restaurant-image {
+        width: 100%;
+        height: 200px;
+    }
 }
