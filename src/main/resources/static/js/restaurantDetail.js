@@ -1,3 +1,61 @@
+/* 식당 신고 버튼 클릭 시 신고 창 모달과 값 넘겨주는 js */
+document.addEventListener('DOMContentLoaded', function() {
+    // 모달 열기
+    document.getElementById('restReportForm').addEventListener('click', function() {
+        document.getElementById('modal').style.display = 'block';
+    });
+
+    // 모달 닫기
+    document.getElementById('closeModalBtn').addEventListener('click', function() {
+        document.getElementById('modal').style.display = 'none';
+    });
+
+    // 모달 외부 클릭 시 닫기
+    window.addEventListener('click', function(event) {
+        if (event.target == document.getElementById('modal')) {
+            document.getElementById('modal').style.display = 'none';
+        }
+    });
+
+    // 폼 전송 이벤트
+    document.getElementById('modalForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 폼 기본 전송 방지
+
+        const formData = new FormData(this);
+        const data = {
+            title: formData.get('reportTitle'),
+            content: formData.get('reportContent'),
+            id: 20
+        };
+
+        // 데이터를 서버로 전송
+        fetch('/restreport/regist', {  // 요청을 보낼 URL로 변경
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
+        })
+            .then(response => response.json())  // 응답을 JSON으로 변환
+            .then(data => {
+                console.log('Success:', data);
+                // 서버로부터의 응답 처리
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // 에러 처리
+            });
+
+        // 폼 전송 후 모달 닫기
+        document.getElementById('modal').style.display = 'none';
+
+        // 폼 초기화
+        this.reset();
+    });
+});
+/* 식당 신고 버튼 클릭 시 신고 창 모달과 값 넘겨주는 js */
+
+
 document.addEventListener("DOMContentLoaded", function () {
     // TODO: 백엔드 - 페이지 로드 시 필요한 초기 데이터(레스토랑 정보, 리뷰 목록 등)를 API로 제공해야 합니다.
 
@@ -198,19 +256,20 @@ function submitComment(reviewId, content) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: content }),
+        body: JSON.stringify({content: content}),
     })
-    .then(response => response.json())
-    .then(newComment => {
-        const commentsList = document.querySelector(`[data-review-id="${reviewId}"] .comments-list`);
-        const newCommentElement = document.createElement('div');
-        newCommentElement.className = 'comment';
-        newCommentElement.innerHTML = `
+        .then(response => response.json())
+        .then(newComment => {
+            const commentsList = document.querySelector(`[data-review-id="${reviewId}"] .comments-list`);
+            const newCommentElement = document.createElement('div');
+            newCommentElement.className = 'comment';
+            newCommentElement.innerHTML = `
             <p>${newComment.content}</p>
             <span>${newComment.author} - ${newComment.date}</span>
         `;
-        commentsList.appendChild(newCommentElement);
-    });
+            commentsList.appendChild(newCommentElement);
+        });
     // 백엔드 개발자: 새 댓글을 저장하는 API 엔드포인트를 구현해야 합니다.
     // 요청 본문에서 content를 받아 새 댓글을 생성하고, 생성된 댓글 정보를 응답으로 반환해야 합니다.
+
 }

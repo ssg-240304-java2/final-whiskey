@@ -47,15 +47,15 @@
             <button class="tab" data-tab="notices" role="tab" aria-selected="false" aria-controls="notices">
                 <i class="fas fa-bullhorn"></i> <span>공지사항</span>
             </button>
-        <button id="reportForm">신고하기</button>
         </nav>
 
         <!-- 신고 폼 -->
-        <div id="modal" class="modal">
+        <div class="report-modal-form">
+            <div id="modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <span id="closeModalBtn" class="close-btn">X</span>
-                    <h2>식당 신고하기</h2>
+                    <h2>식당 신고</h2>
                 </div>
                 <div class="modal-body">
                     <form id="modalForm">
@@ -74,63 +74,9 @@
                 </div>
             </div>
         </div>
+        </div>
         <!-- 신고 폼 끝 -->
-        <script>
-            // 모달 열기
-            document.getElementById('reportForm').addEventListener('click', function() {
-                document.getElementById('modal').style.display = 'block';
-            });
 
-            // 모달 닫기
-            document.getElementById('closeModalBtn').addEventListener('click', function() {
-                document.getElementById('modal').style.display = 'none';
-            });
-
-            // 모달 외부 클릭 시 닫기
-            window.addEventListener('click', function(event) {
-                if (event.target == document.getElementById('modal')) {
-                    document.getElementById('modal').style.display = 'none';
-                }
-            });
-
-            // 폼 전송 이벤트
-            document.getElementById('modalForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // 폼 기본 전송 방지
-
-                const formData = new FormData(this);
-                const data = {
-                    title: formData.get('reportTitle'),
-                    content: formData.get('reportContent'),
-                    id: 20
-                };
-
-                // 데이터를 서버로 전송
-                fetch('/restreport/regist', {  // 요청을 보낼 URL로 변경
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
-                })
-                    .then(response => response.json())  // 응답을 JSON으로 변환
-                    .then(data => {
-                        console.log('Success:', data);
-                        // 서버로부터의 응답 처리
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                        // 에러 처리
-                    });
-
-                // 폼 전송 후 모달 닫기
-                document.getElementById('modal').style.display = 'none';
-
-                // 폼 초기화
-                this.reset();
-            });
-
-
-        </script>
 
 
 
@@ -138,6 +84,7 @@
             <div class="flex-container">
                 <div id="info" class="tab-content" role="tabpanel" aria-labelledby="info-tab">
                     <div class="menu-section">
+                        <button style="float: right;" id="restReportForm">신고하기</button>
                         <h2><i class="fas fa-utensils"></i> 인기 메뉴</h2>
                         <!-- TODO: 백엔드 - 인기 메뉴 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
                         <div class="menu-items-container">
