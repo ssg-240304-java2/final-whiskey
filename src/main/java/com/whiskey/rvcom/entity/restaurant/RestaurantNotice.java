@@ -29,4 +29,10 @@ public class RestaurantNotice {
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;  // 음식점 객체의 정보
+
+    public RestaurantNotice(String title, String content, Restaurant restaurant) {
+        this.title = title;
+        this.content = content;
+        this.restaurant = restaurant;
+    }
 }
