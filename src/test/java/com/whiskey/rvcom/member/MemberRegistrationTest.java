@@ -1,20 +1,25 @@
 package com.whiskey.rvcom.member;
 
+import com.whiskey.rvcom.Member.service.MemberManagementService;
 import com.whiskey.rvcom.entity.member.LoginType;
 import com.whiskey.rvcom.entity.member.Member;
-import com.whiskey.rvcom. Member.service.MemberManagementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.ui.Model;
 import org.springframework.validation.support.BindingAwareModelMap;
 
+import java.util.NoSuchElementException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MemberRegistrationTest {
 
     @Autowired
@@ -23,6 +28,8 @@ public class MemberRegistrationTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TestRestTemplate restTemplate;
 
     private MockHttpSession session;
     private Model model;
@@ -69,6 +76,9 @@ public class MemberRegistrationTest {
         // 비밀번호를 인코딩한 후 회원가입 호출
         String encodedPassword = passwordEncoder.encode(rawPassword);
 
+        // 첫 번째 회원가입은 성공해야 함
+        memberManagementService.registerMember(name, nickname, loginId, email, encodedPassword, loginType);
+
         // 중복된 아이디로 회원가입 시도
         assertThrows(IllegalArgumentException.class, () -> {
             memberManagementService.registerMember(name, nickname, loginId, email, encodedPassword, loginType);
@@ -77,15 +87,19 @@ public class MemberRegistrationTest {
 
     @Test
     public void 로그인_성공_테스트() {
+        // 회원가입 먼저 수행
+        회원가입_성공_테스트();
+
         String loginId = "testUser@example.com";
         String rawPassword = "testPassword";
 
-        // 로그인 호출
-        String result = login(loginId, rawPassword, session, model);
+        // 로그인 요청을 위한 데이터 설정
+        ResponseEntity<Void> response = restTemplate.postForEntity("/login?loginId=" + loginId + "&password=" + rawPassword, null, Void.class);
 
-        // 로그인 검증
-        assertEquals("redirect:/success", result, "로그인이 성공적으로 이루어져야 합니다.");
-        assertNotNull(session.getAttribute("member"), "로그인 후 세션에 멤버가 저장되어야 합니다.");
+        // 로그인 후 리다이렉션 상태와 URL 확인
+        assertEquals(HttpStatus.FOUND, response.getStatusCode(), "로그인이 성공적으로 이루어져야 합니다.");
+        assertNotNull(response.getHeaders().getLocation(), "리다이렉션 URL이 존재해야 합니다.");
+        assertTrue(response.getHeaders().getLocation().toString().contains("/mainPage"), "로그인 성공 후 '/mainPage'로 리다이렉션되어야 합니다.");
     }
 
     @Test
@@ -93,38 +107,13 @@ public class MemberRegistrationTest {
         // 로그인 먼저 수행
         로그인_성공_테스트();
 
-        // 로그아웃 호출
-        String result = logout(session);
+        // 로그아웃 요청
+        ResponseEntity<Void> response = restTemplate.postForEntity("/logout", null, Void.class);
 
-        // 로그아웃 검증
-        assertEquals("redirect:/login", result, "로그아웃 후 로그인 페이지로 리다이렉트되어야 합니다.");
-
-        // 세션이 무효화되었는지 확인
-        assertThrows(IllegalStateException.class, () -> {
-            session.getAttribute("member");
-        }, "세션이 무효화된 후에는 세션의 속성에 접근할 수 없습니다.");
+        // 로그아웃 후 리다이렉션 상태와 URL 확인
+        assertEquals(HttpStatus.FOUND, response.getStatusCode(), "로그아웃이 성공적으로 이루어져야 합니다.");
+        assertNotNull(response.getHeaders().getLocation(), "리다이렉션 URL이 존재해야 합니다.");
+        assertTrue(response.getHeaders().getLocation().toString().contains("/login"), "로그아웃 후 '/login'으로 리다이렉션되어야 합니다.");
     }
 
-    private String login(String loginId, String password, MockHttpSession session, Model model) {
-        try {
-            Member member = memberManagementService.findByLoginId(loginId);
-            boolean passwordMatches = passwordEncoder.matches(password, member.getPassword());
-
-            if (passwordMatches) {
-                session.setAttribute("member", member);
-                return "redirect:/success";
-            } else {
-                model.addAttribute("error", "비밀번호가 일치하지 않습니다.");
-            }
-        } catch (Exception e) {
-            model.addAttribute("error", "존재하지 않는 회원입니다.");
-        }
-
-        return "login";
-    }
-
-    private String logout(MockHttpSession session) {
-        session.invalidate();
-        return "redirect:/login";
-    }
 }
