@@ -95,10 +95,12 @@ public class RestaurantReportTest {
     public void save() {
 
         // given
-        RestaurantDTO restaurantDTO = new RestaurantDTO(2L, "아약스커리", RestaurantCategory.INDIAN, "000-000-0000", true);
+        Long id = 20L;
         RestaurantReportDTO report = new RestaurantReportDTO(null, "신고 제목4", "신고 내용4", LocalDateTime.now(), false, true, restaurantDTO);
 
         // where
+        RestaurantDTO restaurantDTO = restaurantReportService.returnRestaurantDTO(id);
+        report.setRestaurantDTO(restaurantDTO);
         restaurantReportService.saveRestaurantReport(report);
 
         // 조회 성공 후 목록 가져오기
