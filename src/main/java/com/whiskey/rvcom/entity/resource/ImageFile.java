@@ -1,7 +1,7 @@
 package com.whiskey.rvcom.entity.resource;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -9,10 +9,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "tbl_image_file")
 @Entity
+@Getter
+@Setter
 public class ImageFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String originalFileName;    // 원본 파일명

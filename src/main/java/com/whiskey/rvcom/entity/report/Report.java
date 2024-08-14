@@ -1,15 +1,18 @@
 package com.whiskey.rvcom.entity.report;
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @MappedSuperclass
+@Getter
+@Setter
 public abstract class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 신고 식별자
+    private Long id;    // 신고 식별자
 
     @Column(nullable = false)
     private String title; // 신고 제목

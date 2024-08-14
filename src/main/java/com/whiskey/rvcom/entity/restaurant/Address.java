@@ -1,7 +1,7 @@
 package com.whiskey.rvcom.entity.restaurant;
 
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Reference
@@ -10,10 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "tbl_address")
 @Entity
+@Getter
+@Setter
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;  // 주소 식별자
+    private Long id;  // 주소 식별자
 
     @Column(nullable = false)
     private String name;    // 주소

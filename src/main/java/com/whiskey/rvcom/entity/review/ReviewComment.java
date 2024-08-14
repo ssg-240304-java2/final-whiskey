@@ -2,7 +2,7 @@ package com.whiskey.rvcom.entity.review;
 
 import com.whiskey.rvcom.entity.member.Member;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -10,10 +10,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "tbl_review_comment")
 @Entity
+@Getter
+@Setter
 public class ReviewComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 리뷰 댓글 식별자
+    private Long id;    // 리뷰 댓글 식별자
 
     @Column(nullable = false)
     private String content; // 리뷰 댓글 내용

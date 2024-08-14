@@ -28,6 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.modelmapper:modelmapper:3.1.1'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
@@ -37,6 +38,10 @@ dependencies {
 
     // Storage Object 파일업로드 라이브러리
     implementation name: "RestFileUploadLib-0.2.1-SNAPSHOT"
+
+    // ModelMapper 사용을 위한 의존성 주입
+    implementation 'org.modelmapper:modelmapper:3.0.0'
+
 }
 
 tasks.named('test') {

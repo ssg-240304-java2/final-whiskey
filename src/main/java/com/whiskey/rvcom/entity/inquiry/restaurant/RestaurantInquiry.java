@@ -3,7 +3,7 @@ package com.whiskey.rvcom.entity.inquiry.restaurant;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -11,10 +11,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "tbl_restaurant_inquiry")
 @Entity
+@Getter
+@Setter
 public class RestaurantInquiry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;    // 문의 식별자
+    private Long id;    // 문의 식별자
 
     @Column(nullable = false)
     private String content; // 문의 내용
@@ -35,5 +37,11 @@ public class RestaurantInquiry {
 
     @OneToOne
     @JoinColumn(name = "response_id")
-    private RestaurantInquiryResponse response; // 문의 답변
+    private RestaurantInquiryReply response; // 문의 답변
+
+    public RestaurantInquiry(Member writer, Restaurant restaurant, String content) {
+        this.writer = writer;
+        this.restaurant = restaurant;
+        this.content = content;
+    }
 }
