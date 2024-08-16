@@ -4,14 +4,12 @@ import com.whiskey.rvcom.entity.member.LoginType;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.member.Role;
 import com.whiskey.rvcom.repository.MemberRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-
 
 @Service
 public class MemberManagementService {
@@ -33,7 +31,6 @@ public class MemberManagementService {
         return memberRepository.getMemberById(memberId);
     }
 
-
     public boolean existsByLoginId(String loginId) {
         return memberRepository.existsByLoginId(loginId);
     }
@@ -53,11 +50,8 @@ public class MemberManagementService {
         member.setRole(Role.USER);
         member.setActive(true);
 
-        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-
         return memberRepository.save(member);
     }
-
 
     public Member save(Member member) {
         return memberRepository.save(member);

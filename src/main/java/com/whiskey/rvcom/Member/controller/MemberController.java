@@ -2,6 +2,7 @@ package com.whiskey.rvcom.Member.controller;
 
 import com.whiskey.rvcom.Member.service.MemberManagementService;
 import com.whiskey.rvcom.Member.service.SocialLoginService;
+import com.whiskey.rvcom.Member.service.VerificationService;
 import com.whiskey.rvcom.entity.member.LoginType;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.member.Role;
@@ -25,12 +26,14 @@ public class MemberController {
     private final SocialLoginService socialLoginService;
     private final MemberManagementService memberManagementService;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationService verificationService;
 
     @Autowired
-    public MemberController(SocialLoginService socialLoginService, MemberManagementService memberManagementService, PasswordEncoder passwordEncoder) {
+    public MemberController(SocialLoginService socialLoginService, MemberManagementService memberManagementService, PasswordEncoder passwordEncoder, VerificationService verificationService) {
         this.socialLoginService = socialLoginService;
         this.memberManagementService = memberManagementService;
         this.passwordEncoder = passwordEncoder;
+        this.verificationService = verificationService;
     }
 
     @GetMapping("/")
@@ -90,6 +93,31 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
+//    @PostMapping("/register_basic")
+//    public String registerBasic(@RequestParam Map<String, String> allParams, Model model) {
+//        String loginId = allParams.get("loginId");
+//        String password = allParams.get("password");
+//        String name = allParams.get("name");
+//        String email = allParams.get("email");
+//        String nickname = allParams.get("nickname");
+//
+//        if (memberManagementService.existsByLoginId(loginId)) {
+//            model.addAttribute("error", "이미 존재하는 이메일입니다. 다른 이메일을 사용해주세요.");
+//            return "register_basic"; // 회원가입 페이지로 다시 돌아감
+//        }
+//
+//        String encodedPassword = passwordEncoder.encode(password); // 한 번만 인코딩
+//
+//        try {
+//            memberManagementService.registerMember(name, nickname, loginId, email, encodedPassword, LoginType.BASIC);
+//        } catch (Exception e) {
+//            model.addAttribute("error", "이미 존재하는 로그인 ID입니다. 다른 ID를 사용해주세요.");
+//            return "register_basic";
+//        }
+//
+//        return "redirect:/login";
+//    }
+
     @PostMapping("/register_basic")
     public String registerBasic(@RequestParam Map<String, String> allParams, Model model) {
         String loginId = allParams.get("loginId");
@@ -99,21 +127,50 @@ public class MemberController {
         String nickname = allParams.get("nickname");
 
         if (memberManagementService.existsByLoginId(loginId)) {
-            model.addAttribute("error", "이미 존재하는 이메일입니다. 다른 이메일을 사용해주세요.");
+            model.addAttribute("error", "이미 존재하는 로그인 ID입니다. 다른 ID를 사용해주세요.");
             return "register_basic"; // 회원가입 페이지로 다시 돌아감
         }
 
-        String encodedPassword = passwordEncoder.encode(password); // 한 번만 인코딩
+        String encodedPassword = passwordEncoder.encode(password); // 비밀번호 인코딩
 
         try {
+            // 회원 등록
             memberManagementService.registerMember(name, nickname, loginId, email, encodedPassword, LoginType.BASIC);
+
+            // 인증 코드 생성 및 저장
+            String verificationCode = verificationService.generateAndSaveVerificationCode(email);
+
+            // 사용자에게 인증 코드를 전달하기 위해 model에 추가
+            model.addAttribute("message", "회원가입이 완료되었습니다. 이메일을 확인하고 인증 코드를 입력해주세요.");
+            model.addAttribute("verificationCode", verificationCode); // 테스트 또는 디버그용으로 추가
+
+            // 만약 인증 코드를 API 응답으로 전달하고 싶다면, 이를 클라이언트에 전달하는 로직을 추가할 수 있음
+            // 예: model.addAttribute("verificationCode", verificationCode);
+
         } catch (Exception e) {
-            model.addAttribute("error", "이미 존재하는 로그인 ID입니다. 다른 ID를 사용해주세요.");
+            model.addAttribute("error", "회원가입 중 오류가 발생했습니다.");
             return "register_basic";
         }
 
-        return "redirect:/login";
+        return "redirect:/verify"; // 인증 코드를 입력하는 페이지로 리다이렉션
     }
+
+
+
+    // 이메일 인증 코드 검증
+    @PostMapping("/verify_code")
+    public String verifyCode(@RequestParam String email, @RequestParam String code, Model model) {
+        boolean isVerified = verificationService.verifyCode(email, code);
+
+        if (isVerified) {
+            model.addAttribute("message", "인증이 성공적으로 완료되었습니다.");
+            return "redirect:/login";
+        } else {
+            model.addAttribute("error", "인증 코드가 올바르지 않습니다.");
+            return "verify_code";
+        }
+    }
+
 
     @PostMapping("/register_social")
     public String registerSocial(@RequestParam String nickname, HttpSession session, Model model) {
