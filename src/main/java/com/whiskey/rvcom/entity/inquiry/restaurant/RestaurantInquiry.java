@@ -23,9 +23,9 @@ public class RestaurantInquiry {
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime createdAt;    // 문의 작성일
+    private LocalDateTime createdAt;    // 문의 작성시간
 
-    private LocalDateTime deletedAt;    // 문의 삭제일
+    private LocalDateTime deletedAt;    // 문의 삭제시간
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)

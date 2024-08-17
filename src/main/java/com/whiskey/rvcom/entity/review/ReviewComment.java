@@ -22,9 +22,9 @@ public class ReviewComment {
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime createdAt;    // 리뷰 댓글 작성일
+    private LocalDateTime createdAt;    // 리뷰 댓글 작성시간
 
-    private LocalDateTime deletedAt;    // 리뷰 댓글 삭제일
+    private LocalDateTime deletedAt;    // 리뷰 댓글 삭제시간
 
     @Column(nullable = false)
     private boolean isSuspended;    // 노출 여부

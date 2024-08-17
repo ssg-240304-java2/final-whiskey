@@ -34,4 +34,8 @@ public class RestaurantNoticeService {
     }
 
     // TODO: 해당 음식점의 점주가 공지사항 삭제
+    public void delete(Long noticeId) {
+        RestaurantNotice restaurantNotice = noticeRepository.findById(noticeId).orElseThrow();
+        restaurantNotice.delete();
+    }
 }
