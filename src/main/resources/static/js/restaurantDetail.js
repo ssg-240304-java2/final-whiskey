@@ -48,10 +48,8 @@ document.addEventListener('DOMContentLoaded', function() {
             id: idx
         };
 
-        reportType = reportType + 'report';
-
         // 데이터를 서버로 전송
-        fetch(`/${reportType}/regist`, {  // 요청을 보낼 URL로 변경
+        fetch(`/${reportType}report/regist`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

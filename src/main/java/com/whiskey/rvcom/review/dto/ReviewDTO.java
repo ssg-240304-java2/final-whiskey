@@ -19,4 +19,5 @@ public class ReviewDTO {
     private long reviewerId;
     private String content;
     private Rating rating;
+    private long receiptDataId;
 }

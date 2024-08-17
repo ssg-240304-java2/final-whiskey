@@ -32,7 +32,6 @@ public class RestaurantReportController {
         restaurantReportDTO.setReportedAt(LocalDateTime.now());
         restaurantReportDTO.setChecked(false);
         restaurantReportDTO.setVisible(true);
-        restaurantReportDTO.setId(null);
 
         restaurantReportDTO.setRestaurantDTO(restaurantReportService.returnRestaurantDTO(report.getId()));
 

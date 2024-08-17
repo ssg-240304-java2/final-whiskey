@@ -4,14 +4,14 @@ import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.model.dto.ReviewReportDTO;
 import com.whiskey.rvcom.report.service.ReviewReportService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 
-@Controller
+@RestController
 @RequestMapping("/reviewreport")
 @RequiredArgsConstructor
 public class ReviewReportController {
@@ -32,7 +32,6 @@ public class ReviewReportController {
             reviewReportDTO.setReportedAt(LocalDateTime.now());
             reviewReportDTO.setChecked(false);
             reviewReportDTO.setVisible(true);
-            reviewReportDTO.setId(null);
 
             reviewReportDTO.setReviewDTO(reviewReportService.returnReviewDTO(report.getId()));
 
