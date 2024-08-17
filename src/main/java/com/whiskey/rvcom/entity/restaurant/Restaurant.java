@@ -35,11 +35,11 @@ public class Restaurant {
     @JoinColumn(name = "owner_id", nullable = false)
     private Member owner;   // 점주
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "restaurant_address_id", nullable = false)
     private Address address;    // 음식점 주소
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "weekly_open_close_time_id")
     private WeeklyOpenCloseTime weeklyOpenCloseTime;    // 요일별 영업시간
 
