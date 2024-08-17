@@ -1,6 +1,7 @@
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f8f9fa;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
 }
 
 .sidebar {
@@ -10,7 +11,8 @@ body {
     left: 0;
     z-index: 100;
     padding: 48px 0 0;
-    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    background-color: #252526;
+    box-shadow: inset -1px 0 0 rgba(255,255,255,.1);
 }
 
 .sidebar-sticky {
@@ -24,15 +26,15 @@ body {
 
 .sidebar .nav-link {
     font-weight: 500;
-    color: #333;
+    color: #e0e0e0;
 }
 
 .sidebar .nav-link.active {
-    color: #d32323;
+    color: #ff6b6b;
 }
 
 .sidebar .nav-link:hover {
-    color: #ff6b6b;
+    color: #ffffff;
 }
 
 .sidebar-heading {
@@ -42,13 +44,15 @@ body {
 
 main {
     padding-top: 48px;
+    background-color: #1e1e1e;
 }
 
 .card {
-    border: none;
+    border: 1px solid #333;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
+    background-color: #252526;
 }
 
 .card:hover {
@@ -57,21 +61,21 @@ main {
 }
 
 .card-title {
-    color: #333;
+    color: #e0e0e0;
     font-weight: bold;
 }
 
 .card-text {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #d32323;
+    color: #ff6b6b;
 }
 
-/* Yelp 스타일 색상 */
+/* Yelp 스타일 색상 (어두운 테마용) */
 :root {
-    --yelp-red: #d32323;
-    --yelp-red-dark: #af1d1d;
-    --yelp-blue: #0073bb;
+    --yelp-red: #ff6b6b;
+    --yelp-red-dark: #ff4f4f;
+    --yelp-blue: #4fc3f7;
 }
 
 /* 반응형 디자인을 위한 미디어 쿼리 */
@@ -93,4 +97,39 @@ main {
 .sidebar-header {
     padding: 0.875rem 1.25rem;
     font-size: 1.2rem;
+}
+
+/* 추가적인 스타일 */
+.btn-primary {
+    background-color: var(--yelp-red);
+    border-color: var(--yelp-red);
+}
+
+.btn-primary:hover {
+    background-color: var(--yelp-red-dark);
+    border-color: var(--yelp-red-dark);
+}
+
+.table {
+    color: #e0e0e0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #333;
+}
+
+.foodfolio-logo {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 2rem;
+    color: #ff1a1a;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+}
+
+.foodfolio-logo:hover {
+    color: #ff4d4d;
+    text-shadow: 2px 2px 6px rgba(255,26,26,0.4);
+    transition: all 0.3s ease;
 }
