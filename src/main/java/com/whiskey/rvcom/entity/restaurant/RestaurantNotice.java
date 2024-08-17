@@ -40,4 +40,9 @@ public class RestaurantNotice {
         this.content = content;
         this.restaurant = restaurant;
     }
+
+    public void delete() {
+        this.isDeleted = true;
+        this.deletedAt = LocalDateTime.now();
+    }
 }
