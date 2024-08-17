@@ -35,8 +35,9 @@ public class ReviewCommentService {
      * 리뷰댓글 저장
      * @param reviewComment 리뷰댓글 객체
      */
-    public void saveComment(ReviewComment reviewComment) {
+    public ReviewComment saveComment(ReviewComment reviewComment) {
         reviewCommentRepository.save(reviewComment);
+        return reviewComment;
     }
 
     /**
