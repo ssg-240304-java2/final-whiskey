@@ -23,27 +23,27 @@
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link" href="#" data-bs-target="#dashboard">
                                 <i class="fas fa-home"></i> 대시보드
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" data-bs-target="#restaurant-info">
                                 <i class="fas fa-utensils"></i> 음식점 정보
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" data-bs-target="#inquiries">
                                 <i class="fas fa-question-circle"></i> 문의 내역
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" data-bs-target="#notices">
                                 <i class="fas fa-bullhorn"></i> 공지사항
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="#" data-bs-target="#menu-management">
                                 <i class="fas fa-list"></i> 메뉴 관리
                             </a>
                         </li>
@@ -53,10 +53,10 @@
 
             <!-- 메인 콘텐츠 -->
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <!-- 상단 바 추가 -->
+                <!-- 상단 바 -->
                 <div class="navbar navbar-dark bg-dark p-3 border-bottom">
                     <div class="d-flex justify-content-between w-100">
-                        <h1 class="h2">대시보드</h1>
+                        <h1 class="h2" id="page-title">대시보드</h1>
                         <div class="d-flex align-items-center">
                             <div class="me-3">
                                 <i class="fas fa-bell"></i>
@@ -76,57 +76,22 @@
                     </div>
                 </div>
 
-                <!-- 대시보드 내용 -->
-                <div class="row mt-4">
-                    <div class="col-md-4 mb-4">
-                        <div class="card bg-dark text-white">
-                            <div class="card-body">
-                                <h5 class="card-title">새로운 리뷰</h5>
-                                <p class="card-text">5개</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card bg-dark text-white">
-                            <div class="card-body">
-                                <h5 class="card-title">미답변 문의</h5>
-                                <p class="card-text">3건</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card bg-dark text-white">
-                            <div class="card-body">
-                                <h5 class="card-title">평균 평점</h5>
-                                <p class="card-text">4.5 / 5</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- 콘텐츠 영역 -->
+                <div id="content-area">
+                    <!-- 대시보드 콘텐츠 -->
+                    <div id="dashboard" class="content-section" th:replace="fragments/owner/dashboard :: dashboard"></div>
 
-                <!-- 추가적인 대시보드 위젯 -->
-                <div class="row mt-4">
-                    <div class="col-md-6 mb-4">
-                        <div class="card bg-dark text-white">
-                            <div class="card-body">
-                                <h5 class="card-title">최근 리뷰</h5>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center">
-                                        맛있어요!
-                                        <span class="badge bg-primary rounded-pill">5점</span>
-                                    </li>
-                                    <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center">
-                                        서비스가 좋아요
-                                        <span class="badge bg-primary rounded-pill">4점</span>
-                                    </li>
-                                    <li class="list-group-item bg-dark text-white d-flex justify-content-between align-items-center">
-                                        분위기가 좋습니다
-                                        <span class="badge bg-primary rounded-pill">4점</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- 음식점 정보 콘텐츠 -->
+                    <div id="restaurant-info" class="content-section" th:replace="fragments/owner/restaurant-info :: restaurant-info"></div>
+
+                    <!-- 문의 내역 콘텐츠 -->
+                    <div id="inquiries" class="content-section" th:replace="fragments/owner/inquiries :: inquiries"></div>
+
+                    <!-- 공지사항 콘텐츠 -->
+                    <div id="notices" class="content-section" th:replace="fragments/owner/notices :: notices"></div>
+
+                    <!-- 메뉴 관리 콘텐츠 -->
+                    <div id="menu-management" class="content-section" th:replace="fragments/owner/menu-management :: menu-management"></div>
                 </div>
             </main>
         </div>
