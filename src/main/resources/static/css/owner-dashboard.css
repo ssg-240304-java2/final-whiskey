@@ -81,8 +81,7 @@ main {
     }
 }
 
-/* 기존 스타일... */
-
+/* 네비게이션 바 스타일 */
 .navbar {
     box-shadow: 0 2px 4px rgba(0,0,0,.08);
 }
@@ -95,5 +94,3 @@ main {
     padding: 0.875rem 1.25rem;
     font-size: 1.2rem;
 }
-
-/* 나머지 기존 스타일... */
