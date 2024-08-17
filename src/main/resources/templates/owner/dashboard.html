@@ -11,7 +11,14 @@
     <link rel="stylesheet" th:href="@{/css/owner-dashboard.css}">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-</head>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- 부트스트랩 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- 커스텀 JS -->
+    <script th:src="@{/js/owner-dashboard.js}"></script>
+    <script th:src="@{/js/restaurant-info.js}"></script>
+    <!-- restaurant-info.js는 동적으로 로드될 것이므로 여기서 제거 --></head>
 <body class="bg-dark">
     <div class="container-fluid">
         <div class="row">
@@ -99,7 +106,5 @@
 
     <!-- 부트스트랩 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- 커스텀 JS -->
-    <script th:src="@{/js/owner-dashboard.js}"></script>
 </body>
 </html>

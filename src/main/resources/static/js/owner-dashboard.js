@@ -22,11 +22,22 @@ document.addEventListener('DOMContentLoaded', function() {
             fetch(`/fragments/owner/${targetId}.html`)
                 .then(response => response.text())
                 .then(html => {
-                    // 로드된 HTML을 콘텐츠 영역에 삽입
                     contentArea.innerHTML = html;
+                    // 동적으로 로드된 스크립트 실행
+                    const scripts = contentArea.getElementsByTagName('script');
+                    Array.from(scripts).forEach(script => {
+                        const newScript = document.createElement('script');
+                        newScript.src = script.src;
+                        document.body.appendChild(newScript);
+                    });
+                    // 모달 초기화 함수 호출
+                    initializeModals();
+                    // 페이지별 초기화 함수 호출
+                    if (targetId === 'restaurant-info') {
+                        initRestaurantInfo();
+                    }
                 })
                 .catch(error => {
-                    // 오류 발생 시 콘솔에 로그 출력 및 오류 메시지 표시
                     console.error('Error loading content:', error);
                     contentArea.innerHTML = '<p>콘텐츠를 불러오는 중 오류가 발생했습니다.</p>';
                 });
@@ -36,3 +47,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // 초기 로드 시 첫 번째 사이드바 링크(대시보드) 클릭
     sidebarLinks[0].click();
 });
+
+function initializeModals() {
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        new bootstrap.Modal(modal);
+    });
+}
+// 페이지별 초기화 함수 예시 (필요에 따라 추가)
+function initDashboard() {
+    console.log('Dashboard initialized');
+    // 대시보드 특정 초기화 로직
+}
+
+function initRestaurantInfo() {
+    console.log('Restaurant Info initialized');
+    // 음식점 정보 페이지 특정 초기화 로직
+}
+
+// 다른 페이지들의 초기화 함수도 필요에 따라 추가
