@@ -5,32 +5,36 @@
     <title>Title</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            $.ajax({
-                url: '/restaurantreport/list',
-                type: 'GET',
-                dataType: 'json',
-                success(data) {
-                    console.log(data);
+        function renderTable(data) {
+            const tableBody = document.querySelector('tbody');
+            tableBody.innerHTML = '';
 
-                    const tableBody = document.querySelector('tbody');
-                    tableBody.innerHTML = ''; // 기존 테이블 내용 초기화
-
-                    data.forEach(report => {
-                        const formattedDate = new Date(report.reportedAt).toLocaleDateString();
-                        const row = `<tr>
+            data.forEach(report => {
+                const formattedDate = new Date(report.reportedAt).toLocaleDateString();
+                const row = `
+                    <tr data-id="${report.id}">
                         <td>${report.id}</td>
                         <td>${report.restaurantDTO.name}</td>
                         <td>${report.title}</td>
                         <td>${report.content}</td>
                         <td>${formattedDate}</td>
                         <td>${report.checked ? '처리됨' : '처리 안됨'}</td>
-                        </tr>`;
-                        tableBody.innerHTML += row;
-                    });
+                    </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            $.ajax({
+                url: '/restaurantreport/list',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    renderTable(data);
                 },
-                error(jqXHR, textStatus, errorThrown) {
+                error: function(jqXHR, textStatus, errorThrown) {
                     console.error("Error occurred: " + textStatus, errorThrown);
+                    alert("데이터를 불러오는 중 문제가 발생했습니다. 다시 시도해 주세요.");
                 }
             });
         });
@@ -93,13 +97,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="report : ${reports}">
-                <td th:text="${report.id}"></td>
-                <td th:text="${report.reporter}"></td>
-                <td th:text="${report.reported}"></td>
-                <td th:text="${report.reportContent}"></td>
-                <td th:text="${report.reportDate}"></td>
-            </tr>
+            <!-- 데이터가 동적으로 삽입됩니다. -->
             </tbody>
         </table>
     </div>

@@ -12,4 +12,9 @@ public class ReportController {
     public String getRestaurantReport() {
         return "report/restaurantReport";
     }
+
+    @GetMapping("/detail")
+    public String getReportDetail() {
+        return "report/restaurantDetail";
+    }
 }
