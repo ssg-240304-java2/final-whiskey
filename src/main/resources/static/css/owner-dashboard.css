@@ -158,3 +158,55 @@ main {
     border-top: 1px solid #444;
 }
 
+/* 메뉴 관리 페이지 스타일 */
+.card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
+#addNewMenuBtn {
+    margin-bottom: 20px;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.modal-content {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+.modal-header, .modal-footer {
+    border-color: #444;
+}
+
+.form-control {
+    background-color: #383838;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
+.form-control:focus {
+    background-color: #404040;
+    color: #ffffff;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+}
