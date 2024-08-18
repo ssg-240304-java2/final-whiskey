@@ -55,20 +55,20 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <span id="closeModalBtn" class="close-btn">X</span>
-                    <h2>식당 신고</h2>
+                    <h2>신고하기</h2>
                 </div>
                 <div class="modal-body">
-                    <form id="modalForm">
+                    <form id="reportModalForm">
                         <div>
                             <label for="reportTile">신고 제목</label>
-                            <input type="text" id="reportTile" name="reportTitle">
+                            <input type="text" id="reportTile" name="reportTitle" required>
                         </div>
                         <div>
                             <label for="reportContent">신고 내용</label>
                             <textarea id="reportContent" name="reportContent" rows="3" required></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit">Submit</button>
+                            <button type="submit">신고</button>
                         </div>
                     </form>
                 </div>
@@ -84,7 +84,7 @@
             <div class="flex-container">
                 <div id="info" class="tab-content" role="tabpanel" aria-labelledby="info-tab">
                     <div class="menu-section">
-                        <button style="float: right;" id="restReportForm">신고하기</button>
+                        <button style="float: right;" id="restaurantReport">신고하기</button>
                         <h2><i class="fas fa-utensils"></i> 인기 메뉴</h2>
                         <!-- TODO: 백엔드 - 인기 메뉴 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
                         <div class="menu-items-container">
@@ -332,6 +332,8 @@
                 document.head.appendChild(script);
             }
         });
+
+
     }
 </script>
 </body>

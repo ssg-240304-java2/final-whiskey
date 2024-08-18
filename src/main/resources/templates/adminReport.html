@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 - 신고 관리</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/mainPage.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <th:block th:replace="fragments/header :: headerfiles"></th:block>
+</head>
+<body>
+<div th:replace="fragments/adminHeader :: adminHeader"></div>
+<button id="restaurant" onclick="sendGetRequest(this.id)">Restaurant</button>
+<button id="review" onclick="sendGetRequest(this.id)">Review</button>
+<button id="comment" onclick="sendGetRequest(this.id)">Comment</button>
+<script>
+    // 서버로 GET 요청을 보내는 함수
+    function sendGetRequest(buttonId) {
+
+        location.href = `/report/${buttonId}`;
+    }
+</script>
+</body>
+</html>

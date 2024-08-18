@@ -1,6 +1,7 @@
 <!-- src/main/resources/templates/fragments/reviewItem.html -->
 <div th:fragment="reviewItem(title, content, author, date, rating, images, menuName, menuPrice)">
     <div class="review-item">
+        <button style="float: right;" id="reviewReport">신고하기</button>
         <h4 class="review-title" th:text="${title}">리뷰 제목</h4>
         <div class="review-header">
             <div class="review-text">
@@ -42,6 +43,7 @@
                 <!-- 예시 댓글 -->
                 <div class="comment">
                     <p>정말 맛있어 보이네요! 꼭 가보고 싶습니다.</p>
+                    <button style="float: right;" id="commentReport">신고하기</button> <!-- 이 버튼도 같이 부탁드릴게용 -->
                     <span>김철수 - 2024-05-20</span>
                 </div>
                 <div class="comment">
@@ -51,6 +53,7 @@
                 <div class="comment">
                     <p>가격대비 양은 어떤가요?</p>
                     <span>박지성 - 2024-05-22</span>
+
                 </div>
             </div>
             <div class="comment-form">
