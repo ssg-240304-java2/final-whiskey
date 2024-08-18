@@ -1,8 +1,20 @@
 /* 식당 신고 버튼 클릭 시 신고 창 모달과 값 넘겨주는 js */
 document.addEventListener('DOMContentLoaded', function() {
+
+    let reportType;
+    let idx;
     // 모달 열기
-    document.getElementById('restReportForm').addEventListener('click', function() {
+    document.getElementById('restaurantReport').addEventListener('click', function() {
         document.getElementById('modal').style.display = 'block';
+        reportType = "restaurant";
+    });
+    document.getElementById('reviewReport').addEventListener('click', function() {
+        document.getElementById('modal').style.display = 'block';
+        reportType = "review";
+    });
+    document.getElementById('commentReport').addEventListener('click', function() {
+        document.getElementById('modal').style.display = 'block';
+        reportType = "comment";
     });
 
     // 모달 닫기
@@ -18,33 +30,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // 폼 전송 이벤트
-    document.getElementById('modalForm').addEventListener('submit', function(event) {
+    document.getElementById('reportModalForm').addEventListener('submit', function(event) {
         event.preventDefault(); // 폼 기본 전송 방지
+
+        if(reportType === "restaurant") {
+            idx = 20; // 레스토랑의 id 가져올 예정
+        } else if(reportType === "review") {
+            idx = 3; // 리뷰의 id 가져올 예정
+        } else if(reportType === "comment") {
+            idx = 2; // 댓글의 id 가져올 예정
+        }
 
         const formData = new FormData(this);
         const data = {
             title: formData.get('reportTitle'),
             content: formData.get('reportContent'),
-            id: 20
+            id: idx
         };
 
         // 데이터를 서버로 전송
-        fetch('/restreport/regist', {  // 요청을 보낼 URL로 변경
+        fetch(`/${reportType}report/regist`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
-        })
-            .then(response => response.json())  // 응답을 JSON으로 변환
-            .then(data => {
-                console.log('Success:', data);
-                // 서버로부터의 응답 처리
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                // 에러 처리
-            });
+        }) .then(data => console.log(data))
+            .catch(error => console.error('There was a problem with the fetch operation:', error));;
 
         // 폼 전송 후 모달 닫기
         document.getElementById('modal').style.display = 'none';

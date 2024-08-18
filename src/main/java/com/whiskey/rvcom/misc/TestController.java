@@ -2,7 +2,6 @@ package com.whiskey.rvcom.misc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -74,6 +73,14 @@ public class TestController {
         return "owner/dashboard";
     }
     
+    @GetMapping("/adminMain")
+    // 관리자-신고 페이지로 이동
+    public String getAdminReport() {
+        return "adminMain";
+    }
 
 
+    @GetMapping("/adminReport")
+    public void adminReport() {
+    }
 }

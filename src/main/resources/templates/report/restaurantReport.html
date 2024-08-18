@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $.ajax({
+                url: '/restaurantreport/list',
+                type: 'GET',
+                dataType: 'json',
+                success(data) {
+                    console.log(data);
+
+                    const tableBody = document.querySelector('tbody');
+                    tableBody.innerHTML = ''; // 기존 테이블 내용 초기화
+
+                    data.forEach(report => {
+                        const formattedDate = new Date(report.reportedAt).toLocaleDateString();
+                        const row = `<tr>
+                        <td>${report.id}</td>
+                        <td>${report.restaurantDTO.name}</td>
+                        <td>${report.title}</td>
+                        <td>${report.content}</td>
+                        <td>${formattedDate}</td>
+                        <td>${report.checked ? '처리됨' : '처리 안됨'}</td>
+                        </tr>`;
+                        tableBody.innerHTML += row;
+                    });
+                },
+                error(jqXHR, textStatus, errorThrown) {
+                    console.error("Error occurred: " + textStatus, errorThrown);
+                }
+            });
+        });
+    </script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        thead tr {
+            background-color: #f2f2f2;
+            color: #333333;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            color: #555555;
+        }
+    </style>
+</head>
+<body>
+<div class="admin-content">
+    <div class="admin-content-title">
+        <h1>관리자 - 식당신고</h1>
+    </div>
+    <div class="admin-content-table">
+        <table>
+            <thead>
+            <tr>
+                <th>신고 번호</th>
+                <th>대상 식당</th>
+                <th>신고 제목</th>
+                <th>신고 내용</th>
+                <th>신고 날짜</th>
+                <th>처리 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="report : ${reports}">
+                <td th:text="${report.id}"></td>
+                <td th:text="${report.reporter}"></td>
+                <td th:text="${report.reported}"></td>
+                <td th:text="${report.reportContent}"></td>
+                <td th:text="${report.reportDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
