@@ -4,12 +4,10 @@ import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.model.dto.RestaurantReportDTO;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @RestController
@@ -36,7 +34,12 @@ public class RestaurantReportController {
         restaurantReportDTO.setRestaurantDTO(restaurantReportService.returnRestaurantDTO(report.getId()));
 
         restaurantReportService.saveRestaurantReport(restaurantReportDTO);
-
     }
+
+    @GetMapping("/list")
+    public List<RestaurantReportDTO> getReports() {
+        return restaurantReportService.getAllRestaurantReports();
+    }
+
 
 }

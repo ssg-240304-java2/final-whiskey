@@ -76,6 +76,4 @@ public class TestController {
     @GetMapping("/adminReport")
     public void adminReport() {
     }
-
-
 }
