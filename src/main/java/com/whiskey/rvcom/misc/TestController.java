@@ -67,11 +67,18 @@ public class TestController {
         return "register-store";
     }
 
+    @GetMapping("/owner-dashboard")
+    // 점주 관리자 대시보드 페이지로 이동
+    public String getOwnerDashboard() {
+        return "owner/dashboard";
+    }
+    
     @GetMapping("/adminMain")
     // 관리자-신고 페이지로 이동
     public String getAdminReport() {
         return "adminMain";
     }
+
 
     @GetMapping("/adminReport")
     public void adminReport() {
