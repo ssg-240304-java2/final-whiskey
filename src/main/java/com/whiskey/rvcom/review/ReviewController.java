@@ -3,47 +3,36 @@ package com.whiskey.rvcom.review;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.*;
+import com.whiskey.rvcom.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @Controller
-@RequestMapping("/review")
+@RequestMapping("/restaurant/review")
 @RequiredArgsConstructor
 public class ReviewController {
-//    private final RestaurantService restaurantService;
+//    private final RestaurantServic restaurantService;
+    private final RestaurantRepository restaurantRepository;    // need. 서비스 모듈로 교체 필요(업요전달)
+
     private final ReviewService reviewService;
     private final ReviewCommentService reviewCommentService;
     private final ReviewLikeService reviewLikeService;
 
-    /*
-        discuss.
-         restaurantDetail페이지가 음식점 정보 / 리뷰 / 문의 등을 한 페이지에서 모두 해결하기 때문에 요청을 분산하지 않는 현행 구조에서는
-         RestaurantController에서 핸들링 및 바인드해야 할 것으로 판단됨.
-         대장님이랑 승인님과 논의 후 업무요청 전달 필요해 보임.
-//     */
-//    /**
-//     * 리뷰 목록 조회 -> 리뷰 목록 뷰에 바인딩
-//     * @param restaurantNo 대상 음식점 번호
-//     * @return 리뷰 목록 페이지
-//     */
-//    @GetMapping("/list/{restaurantNo}")
-//    public String getReviewListByRestaurantId(@PathVariable int restaurantNo, Model model) {
-//        // todo. 음식점 번호로 리뷰 목록 조회
-////        Long restaurantId = 1L; // Test Data
-//        Restaurant restaurant = new Restaurant();   // block. id기반 엔티티 객체 검색 수행
-//                                                    // need. 담당자 업무요청 전달
-//
-//        List<Review> reviews = reviewService.getReviewsByRestaurant(restaurant);
-//        model.addAttribute("reviews", reviews);     // desc. 리뷰 목록 바인딩
-//                                                                             // bind. 리뷰 목록 바인딩
-//
-//        // cpres. dest 리소스는 확정(변동여지 없음)
-//        return "restaurantDetail";
-//    }
+    // use path variable
+    // 리뷰 목록 조회 요청
+    @GetMapping("/{restaurantNo}")
+    public String getReviewsByRestaurantId(@PathVariable Long restaurantNo, Model model) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantNo).orElseThrow();
+        List<Review> reviews = reviewService.getReviewsByRestaurant(restaurant);
+
+        model.addAttribute("reviews", reviews);     // desc. 리뷰 목록 바인딩
+
+        return "restaurantDetail";  // need. 뷰 분할 후 리뷰 페이지에 대한 뷰로 변경
+    }
 
 //    @PostMapping("/list/{restaurantNo}")
     public String getReviewCommentsByReviewId(@PathVariable Long reviewNo, Model model) {
@@ -56,7 +45,7 @@ public class ReviewController {
     }
 
     // 리뷰 댓글 작성 요청
-//    @PostMapping("/comment")
+    @PostMapping("/comment")
     public String saveReviewComment(Long reviewNo, String content) { // need. 리뷰 작성자 세션 정보 추가 필요
         ReviewComment reviewComment = new ReviewComment();
         reviewComment.setCommenter(null);   // block. 로그인한 사용자 정보로 대체
@@ -67,7 +56,7 @@ public class ReviewController {
     }
 
     // 리뷰 댓글 삭제 요청
-//    @PostMapping("/comment/remove")
+    @PostMapping("/comment/remove")
     public String removeReviewComment(Long commentNo) {
         ReviewComment dest = reviewCommentService.getCommentById(commentNo);
         reviewCommentService.removeComment(dest);
