@@ -21,8 +21,9 @@ public class RestaurantInquiryService {
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public List<RestaurantInquiryResponseDTO> findInquiryByRestaurantId(Long restaurantId) {
-        return inquiryRepository.findInquiryByRestaurantId(restaurantId).stream()
+    // TODO: 음식점의 문의글 조회하기
+    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(Long restaurantId) {
+        return inquiryRepository.findAllByRestaurantId(restaurantId).stream()
                 .map(it -> new RestaurantInquiryResponseDTO(
                         it.getContent(),
                         it.getWriter().getName(),

@@ -18,12 +18,6 @@ import java.util.List;
 public class RestaurantInquiryRestController {
     private final RestaurantInquiryService inquiryService;
 
-    // TODO: 음식점 정보
-    @GetMapping("/restaurants/inquiries")
-    public List<RestaurantInquiryResponseDTO> getInquiriesByRestaurantId() {
-        return inquiryService.findInquiryByRestaurantId(2L);
-    }
-
     // TODO: 문의 작성
     @PostMapping("/restaurants/inquiries")
     public void save(RestaurantInquiryRequestDTO request, HttpSession session) {
@@ -31,5 +25,11 @@ public class RestaurantInquiryRestController {
          Member memberId = (Member) session.getAttribute("memberId");
 //        inquiryService.save(request, memberId);
         inquiryService.save(request, 5L);
+    }
+
+    // TODO: 음식점의 문의글 조회하기(답변 포함)
+    @GetMapping("/restaurants/inquiries")
+    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(Long restaurantId) {
+        return inquiryService.findAllByRestaurantId(restaurantId);
     }
 }
