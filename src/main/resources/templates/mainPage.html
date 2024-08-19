@@ -43,16 +43,16 @@
         </select>
     </div>
 
-    <div class="restaurant-grid">
-        <div th:replace="fragments/restaurantCard :: restaurantCard('대장님의 손맛 가득 파스타', '50m', '이탈리안 • 파스타 • 피자', '11:00 - 21:00', '★★★★★')"></div>
-        <div th:replace="fragments/restaurantCard :: restaurantCard('정통 일식', '100m', '일식 • 스시 • 사케', '12:00 - 22:00', '★★★★☆')"></div>
-        <div th:replace="fragments/restaurantCard :: restaurantCard('맛있는 중국집', '150m', '중식 • 짜장면 • 탕수육', '11:30 - 21:30', '★★★★☆')"></div>
-        <div th:replace="fragments/restaurantCard :: restaurantCard('한식의 정석', '200m', '한식 • 비빔밥 • 불고기', '10:00 - 22:00', '★★★★★')"></div>
-        <div th:replace="fragments/restaurantCard :: restaurantCard('베트남 쌀국수', '250m', '베트남 • 쌀국수 • 반미', '11:00 - 21:00', '★★★★☆')"></div>
-        <!-- TODO: 백엔드에서 실제 레스토랑 데이터를 가져와 동적으로 카드를 생성하는 로직 구현 -->
+    <div class="restaurant-grid" id="restaurant-grid">
+        <!--        <div th:replace="fragments/restaurantCard :: restaurantCard('대장님의 손맛 가득 파스타', '50m', '이탈리안 • 파스타 • 피자', '11:00 - 21:00', '★★★★★')"></div>-->
+        <!--        <div th:replace="fragments/restaurantCard :: restaurantCard('정통 일식', '100m', '일식 • 스시 • 사케', '12:00 - 22:00', '★★★★☆')"></div>-->
+        <!--        <div th:replace="fragments/restaurantCard :: restaurantCard('맛있는 중국집', '150m', '중식 • 짜장면 • 탕수육', '11:30 - 21:30', '★★★★☆')"></div>-->
+        <!--        <div th:replace="fragments/restaurantCard :: restaurantCard('한식의 정석', '200m', '한식 • 비빔밥 • 불고기', '10:00 - 22:00', '★★★★★')"></div>-->
+        <!--        <div th:replace="fragments/restaurantCard :: restaurantCard('베트남 쌀국수', '250m', '베트남 • 쌀국수 • 반미', '11:00 - 21:00', '★★★★☆')"></div>-->
+        <!-- DONE: 백엔드에서 실제 레스토랑 데이터를 가져와 동적으로 카드를 생성하는 로직 구현 -->
         <!-- TODO: 레스토랑 데이터는 이름, 거리, 음식 종류, 영업 시간, 평점을 포함해야 함 -->
-        <!-- TODO: Thymeleaf를 사용하여 서버에서 전달받은 레스토랑 목록을 반복하여 카드 생성 -->
-        <!-- TODO: 예시: <div th:each="restaurant : ${restaurants}" th:replace="fragments/restaurantCard :: restaurantCard(${restaurant.name}, ${restaurant.distance}, ${restaurant.cuisine}, ${restaurant.hours}, ${restaurant.rating})"></div> -->
+        <!-- DONE: Thymeleaf를 사용하여 서버에서 전달받은 레스토랑 목록을 반복하여 카드 생성 -->
+        <!-- DONE: 예시: <div th:each="restaurant : ${restaurants}" th:replace="fragments/restaurantCard :: restaurantCard(${restaurant.name}, ${restaurant.distance}, ${restaurant.cuisine}, ${restaurant.hours}, ${restaurant.rating})"></div> -->
     </div>
 </div>
 <!-- <div th:replace="fragments/footer :: footer"></div> -->
@@ -61,7 +61,7 @@
         kakao.maps.load(function () {
             let src = [];
             // 카카오맵 api를 통해 현 위치의 주소를 받아오기 위한 js 불러오
-            src.push("/js/kakaoMapCurrentLocation.js");
+            src.push("/js/currentLocationMain.js");
 
             for (let i = 0; i < src.length; i++) {
                 let script = document.createElement("script");
