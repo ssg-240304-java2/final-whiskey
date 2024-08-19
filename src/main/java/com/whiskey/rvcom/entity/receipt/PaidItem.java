@@ -8,6 +8,7 @@ import lombok.*;
 @Setter
 @Table(name = "tbl_paid_item")
 @Entity
+@ToString
 public class PaidItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

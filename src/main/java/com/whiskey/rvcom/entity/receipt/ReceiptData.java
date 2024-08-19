@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Table(name = "tbl_receipt_data")
 @Entity
+@ToString
 public class ReceiptData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
