@@ -35,13 +35,17 @@ public class RestaurantInquiry {
     @JoinColumn(name = "writer_id", nullable = false)
     private Member writer;  // 문의 작성자
 
-    @OneToOne
-    @JoinColumn(name = "response_id")
-    private RestaurantInquiryReply response; // 문의 답변
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "reply_id")
+    private RestaurantInquiryReply reply; // 문의 답변
 
     public RestaurantInquiry(Member writer, Restaurant restaurant, String content) {
         this.writer = writer;
         this.restaurant = restaurant;
         this.content = content;
+    }
+
+    public void addReply(RestaurantInquiryReply reply) {
+        this.reply = reply;
     }
 }
