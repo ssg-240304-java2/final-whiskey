@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     // 페이지별 초기화 함수 호출
                     if (targetId === 'restaurant-info') {
                         initRestaurantInfo();
+                    } else if (targetId === 'menu-management') {
+                        initMenuManagement();
                     }
                 })
                 .catch(error => {
@@ -63,6 +65,15 @@ function initDashboard() {
 function initRestaurantInfo() {
     console.log('Restaurant Info initialized');
     // 음식점 정보 페이지 특정 초기화 로직
+}
+
+// 메뉴 관리 초기화 함수
+function initMenuManagement() {
+    console.log('Menu Management initialized');
+    // menu-management.js의 초기화 함수 호출
+    if (typeof initializeMenuManagement === 'function') {
+        initializeMenuManagement();
+    }
 }
 
 // 다른 페이지들의 초기화 함수도 필요에 따라 추가
