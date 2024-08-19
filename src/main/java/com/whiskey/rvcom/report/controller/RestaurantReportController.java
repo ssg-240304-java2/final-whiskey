@@ -1,7 +1,7 @@
 package com.whiskey.rvcom.report.controller;
 
+import com.whiskey.rvcom.entity.report.RestaurantReport;
 import com.whiskey.rvcom.report.model.dto.ReportData;
-import com.whiskey.rvcom.report.model.dto.RestaurantReportDTO;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,23 +22,24 @@ public class RestaurantReportController {
     private final RestaurantReportService restaurantReportService;
 
     @PostMapping("/regist")
-    public void registRestaurantReport(@RequestBody ReportData report) {
+    public ResponseEntity<Void> registRestaurantReport(@RequestBody ReportData report) {
 
-        RestaurantReportDTO restaurantReportDTO = new RestaurantReportDTO();
-        restaurantReportDTO.setTitle(report.getTitle());
-        restaurantReportDTO.setContent(report.getContent());
-        restaurantReportDTO.setReportedAt(LocalDateTime.now());
-        restaurantReportDTO.setChecked(false);
-        restaurantReportDTO.setVisible(true);
+        RestaurantReport restaurantReport = new RestaurantReport();
+        restaurantReport.setTitle(report.getTitle());
+        restaurantReport.setContent(report.getContent());
+        restaurantReport.setReportedAt(LocalDateTime.now());
+        restaurantReport.setChecked(false);
+        restaurantReport.setVisible(true);
 
-        restaurantReportDTO.setRestaurantDTO(restaurantReportService.returnRestaurantDTO(report.getId()));
+        restaurantReport.setRestaurant(restaurantReportService.returnRestaurant(report.getId()));
 
-        restaurantReportService.saveRestaurantReport(restaurantReportDTO);
+        restaurantReportService.saveRestaurantReport(restaurantReport);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<RestaurantReportDTO>> getReports() {
-        List<RestaurantReportDTO> reports = restaurantReportService.getAllRestaurantReports();
+    public ResponseEntity<List<RestaurantReport>> getReports() {
+        List<RestaurantReport> reports = restaurantReportService.getAllRestaurantReports();
         return ResponseEntity.ok(reports);
     }
 
@@ -47,7 +48,7 @@ public class RestaurantReportController {
 
         Map<String, Object> response = new HashMap<>();
 
-        RestaurantReportDTO report = restaurantReportService.getRestaurantReport(id);
+        RestaurantReport report = restaurantReportService.getRestaurantReport(id);
 
         if (report != null) {
             response.put("report", report);
@@ -58,11 +59,15 @@ public class RestaurantReportController {
     }
 
     @PutMapping("/update/{reportId}")
-    public void updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
-        System.out.println("btnId = " + btnId);
-        System.out.println("reportId = " + reportId);
+    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
+
         boolean isPunish = btnId.equals("punish");
 
         restaurantReportService.restaurantReportPunish(reportId, isPunish);
+
+        if (isPunish){
+            // 메일 발송 코드 예정
+        }
+        return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
     }
 }
