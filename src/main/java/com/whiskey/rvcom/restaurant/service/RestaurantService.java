@@ -14,8 +14,8 @@ public class RestaurantService {
         this.restaurantRepository = restaurantRepository;
     }
 
-    public List<Restaurant> getRestaurantByUserLocation(double lat, double lng) {
-        return restaurantRepository.findAllByDistance(lat, lng);
+    public List<Restaurant> getNearbyRestaurantByLocation(double latitude, double longitude) {
+        return restaurantRepository.findAllByDistance(latitude, longitude);
     }
 
     public Restaurant getRestaurantById(Long id) {

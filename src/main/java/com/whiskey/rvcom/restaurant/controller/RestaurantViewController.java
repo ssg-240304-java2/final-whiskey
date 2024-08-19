@@ -26,6 +26,6 @@ public class RestaurantViewController {
     @ResponseBody
     public List<Restaurant> userLocationMain(@RequestParam double lat, @RequestParam double lng) {
 
-        return restaurantService.getRestaurantByUserLocation(lat, lng);
+        return restaurantService.getNearbyRestaurantByLocation(lat, lng);
     }
 }
