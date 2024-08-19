@@ -14,14 +14,14 @@ import java.util.Map;
 @RequestMapping("/report")
 public class ReportController {
 
-    @GetMapping("/restaurantReport")
+    @GetMapping("/restaurantreport")
     public String getRestaurantReport() {
-        return "report/restaurantReport";
+        return "report/restaurantreport";
     }
 
-    @GetMapping("/restaurantDetail")
+    @GetMapping("/restaurantdetail")
     public String getRestaurantDetail() {
         // restaurantDetail.html 파일을 templates/report 폴더 내에서 찾음
-        return "report/restaurantDetail"; // view name
+        return "report/restaurantdetail"; // view name
     }
 }
