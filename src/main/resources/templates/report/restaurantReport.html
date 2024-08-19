@@ -41,7 +41,7 @@
     </script>
     <style>
         table {
-            width: 100%;
+            width: 70%;
             border-collapse: collapse;
             margin: 20px 0;
             font-size: 18px;
@@ -96,11 +96,22 @@
                 <th>처리 여부</th>
             </tr>
             </thead>
-            <tbody>
-            <!-- 데이터가 동적으로 삽입됩니다. -->
+            <tbody id="tbody">
             </tbody>
         </table>
     </div>
 </div>
+<script>
+        document.getElementById('tbody').addEventListener('click', function() {
+
+            const clickedElement = event.target.closest('tr');
+
+            if (clickedElement) {
+                const reportId = $(clickedElement).data('id');
+                console.log('Report ID:', reportId);
+                window.location.href = `/report/restaurantDetail?id=${reportId}`;
+            }
+        });
+</script>
 </body>
 </html>
