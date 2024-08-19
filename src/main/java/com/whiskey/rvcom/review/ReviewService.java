@@ -64,15 +64,15 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
-    /**
-     * 리뷰에 좋아요 추가
-     * @param review 리뷰 객체
-     * @param reviewLike 리뷰 좋아요 객체
-     */
-    @Transactional
-    public void addLikeToReview(Review review, ReviewLike reviewLike) {
-        review.getLikes().add(reviewLike);
-    }
+//    /**
+//     * 리뷰에 좋아요 추가
+//     * @param review 리뷰 객체
+//     * @param reviewLike 리뷰 좋아요 객체
+//     */
+//    @Transactional
+//    public void addLikeToReview(Review review, ReviewLike reviewLike) {
+//        review.getLikes().add(reviewLike);
+//    }
 
     /**
      * 음식점 당 총 Review-Rating 값의 평균치를 계산하여 반환

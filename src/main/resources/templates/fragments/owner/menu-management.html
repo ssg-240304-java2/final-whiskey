@@ -2,7 +2,60 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
     <div th:fragment="menu-management">
-        <!-- TODO: 메뉴 관리 내용 추가 -->
+        <div class="container mt-4">
+            <h2 class="mb-4">메뉴 관리</h2>
+            <button id="addNewMenuBtn" class="btn btn-primary mb-3">새 메뉴 추가</button>
+            
+            <div class="row" id="menuList">
+                <!-- 메뉴 항목들이 여기에 동적으로 추가됩니다 -->
+            </div>
+            
+            <nav aria-label="Menu pagination">
+                <ul class="pagination justify-content-center" id="menuPagination">
+                    <!-- 페이지네이션 버튼들이 여기에 동적으로 추가됩니다 -->
+                </ul>
+            </nav>
+        </div>
+
+        <!-- 메뉴 추가/수정 모달 -->
+        <div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="menuModalLabel">메뉴 추가/수정</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="menuForm">
+                            <input type="hidden" id="menuId">
+                            <div class="mb-3">
+                                <label for="menuName" class="form-label">메뉴 이름</label>
+                                <input type="text" class="form-control" id="menuName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="menuDescription" class="form-label">설명</label>
+                                <textarea class="form-control" id="menuDescription" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="menuPrice" class="form-label">가격</label>
+                                <input type="number" class="form-control" id="menuPrice" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="menuImage" class="form-label">이미지</label>
+                                <input type="file" class="form-control" id="menuImage" accept="image/*">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-primary" id="saveMenuBtn">저장</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- 메뉴 관리 관련 JavaScript -->
+    <script th:src="@{/js/menu-management.js}"></script>
 </body>
 </html>
