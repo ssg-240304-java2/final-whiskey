@@ -55,8 +55,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
-        }) .then(data => console.log(data))
-            .catch(error => console.error('There was a problem with the fetch operation:', error));;
+        }) .then(response => {
+            if (response.ok) {  // 응답 상태 코드가 200-299일 경우
+                alert('신고가 접수되었습니다.');
+            } else {
+                alert('신고 접수에 실패했습니다.');
+            }
+        }).catch(error => alert(error('There was a problem with the fetch operation:', error)));
 
         // 폼 전송 후 모달 닫기
         document.getElementById('modal').style.display = 'none';

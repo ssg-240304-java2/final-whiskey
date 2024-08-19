@@ -1,9 +1,8 @@
 package com.whiskey.rvcom.report;
 
 
-import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
-import com.whiskey.rvcom.report.model.dto.RestaurantDTO;
-import com.whiskey.rvcom.report.model.dto.RestaurantReportDTO;
+import com.whiskey.rvcom.entity.report.RestaurantReport;
+import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -32,9 +31,9 @@ public class RestaurantReportTest {
         // given
 
         // when
-        List<RestaurantReportDTO> reports = restaurantReportService.getAllRestaurantReports();
+        List<RestaurantReport> reports = restaurantReportService.getAllRestaurantReports();
 
-        for (RestaurantReportDTO report : reports) {
+        for (RestaurantReport report : reports) {
             System.out.println(report);
         }
 
@@ -51,7 +50,7 @@ public class RestaurantReportTest {
         Long id = 1L;
 
         // when
-        RestaurantReportDTO result = restaurantReportService.getRestaurantReport(id);
+        RestaurantReport result = restaurantReportService.getRestaurantReport(id);
 
         System.out.println("id = " + id);
         System.out.println("result.getId() = " + result.getId());
@@ -80,7 +79,7 @@ public class RestaurantReportTest {
         restaurantReportService.restaurantReportPunish(id, isPunish);
 
         // then 상태값 변경 후 확인
-        RestaurantReportDTO result = restaurantReportService.getRestaurantReport(id);
+        RestaurantReport result = restaurantReportService.getRestaurantReport(id);
         System.out.println("isPunish = " + isPunish);
         System.out.println("result.isVisible() = " + result.isVisible());
         System.out.println("result.isChecked() = " + result.isChecked());
@@ -96,15 +95,21 @@ public class RestaurantReportTest {
 
         // given
         Long id = 20L;
-        RestaurantDTO restaurantDTO = restaurantReportService.returnRestaurantDTO(id);
-        RestaurantReportDTO report = new RestaurantReportDTO(null, "신고 제목4", "신고 내용4", LocalDateTime.now(), false, true, restaurantDTO);
+        Restaurant restaurant = restaurantReportService.returnRestaurant(id);
+        RestaurantReport report = new RestaurantReport();
+        report.setTitle("신고등록 테스트코드");
+        report.setContent("테스트");
+        report.setReportedAt(LocalDateTime.now());
+        report.setChecked(false);
+        report.setVisible(true);
+        report.setRestaurant(restaurant);
 
         // where
-        report.setRestaurantDTO(restaurantDTO);
+        report.setRestaurant(restaurant);
         restaurantReportService.saveRestaurantReport(report);
 
         // 조회 성공 후 목록 가져오기
-        List<RestaurantReportDTO> reports = restaurantReportService.getAllRestaurantReports();
+        List<RestaurantReport> reports = restaurantReportService.getAllRestaurantReports();
 
         // then 현재 테스트 코드로 등록한 신고와 DB에 등록된 신고의 내용이 같은지 비교
         Assertions.assertEquals(reports.get(reports.size()-1).getContent(), report.getContent());

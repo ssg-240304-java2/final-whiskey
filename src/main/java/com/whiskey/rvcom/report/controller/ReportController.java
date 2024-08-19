@@ -21,7 +21,7 @@ public class ReportController {
 
     @GetMapping("/restaurantdetail")
     public String getRestaurantDetail() {
-        // restaurantDetail.html 파일을 templates/report 폴더 내에서 찾음
-        return "report/restaurantdetail"; // view name
+        // restaurantdetail.html 파일을 templates/report 폴더 내에서 찾음
+        return "report/restaurantdetail";
     }
 }
