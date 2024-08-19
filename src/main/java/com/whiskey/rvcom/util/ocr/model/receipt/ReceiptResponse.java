@@ -6,151 +6,107 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class ReceiptResponse {
-    private String version;
-    private String requestId;
-    private long timestamp;
-    private List<Image> images;
+    private StoreInfo storeInfo;
+    private PaymentInfo paymentInfo;
+    private List<SubResult> subResults;
+    private TotalPrice totalPrice;
+    private List<SubTotal> subTotal;
 
     @Getter
     @Setter
-    public class Image {
-        private Receipt receipt;
-        private String uid;
-        private String name;
-        private String inferResult;
-        private String message;
-        private ValidationResult validationResult;
-    }
-
-    @Getter
-    @Setter
-    public class Receipt {
-        private Meta meta;
-        private Result result;
-    }
-
-    @Getter
-    @Setter
-    public class Meta {
-        private String estimatedLanguage;
-    }
-
-    @Getter
-    @Setter
-    public class Result {
-        private StoreInfo storeInfo;
-        private PaymentInfo paymentInfo;
-        private List<SubResult> subResults;
-        private TotalPrice totalPrice;
-    }
-
-    @Getter
-    @Setter
+    @ToString
     public class StoreInfo {
         private Name name;
-        private Name subName;
-        private Name bizNum;
+        private BizNum bizNum;
         private List<Address> addresses;
         private List<Tel> tel;
     }
 
     @Getter
     @Setter
+    @ToString
     public class Name {
         private String text;
-        private Formatted formatted;
-        private List<BoundingPolys> boundingPolys;
     }
 
     @Getter
     @Setter
+    @ToString
+    public class BizNum {
+        private String text;
+    }
+
+    @Getter
+    @Setter
+    @ToString
     public class Address {
         private String text;
-        private Formatted formatted;
-        private List<BoundingPolys> boundingPolys;
     }
 
     @Getter
     @Setter
+    @ToString
     public class Tel {
         private String text;
-        private Formatted formatted;
-        private List<BoundingPolys> boundingPolys;
     }
 
     @Getter
     @Setter
-    public class Formatted {
-        private String value;
-        private String year;
-        private String month;
-        private String day;
-        private String hour;
-        private String minute;
-        private String second;
-    }
-
-    @Getter
-    @Setter
-    public class BoundingPolys {
-        private List<Vertex> vertices;
-    }
-
-    @Getter
-    @Setter
-    public class Vertex {
-        private double x;
-        private double y;
-    }
-
-    @Getter
-    @Setter
+    @ToString
     public class PaymentInfo {
         private Date date;
         private Time time;
         private CardInfo cardInfo;
-        private ConfirmNum confirmNum;
     }
 
     @Getter
     @Setter
+    @ToString
     public class Date {
         private String text;
-        private Formatted formatted;
-        private List<BoundingPolys> boundingPolys;
     }
 
     @Getter
     @Setter
+    @ToString
     public class Time {
         private String text;
-        private Formatted formatted;
-        private List<BoundingPolys> boundingPolys;
     }
 
     @Getter
     @Setter
+    @ToString
     public class CardInfo {
-        private Name company;
-        private Name number;
+        private Company company;
+        private Number number;
     }
 
     @Getter
     @Setter
-    public class ConfirmNum {
+    @ToString
+    public class Company {
         private String text;
-        private List<BoundingPolys> boundingPolys;
     }
 
     @Getter
     @Setter
+    @ToString
+    public class Number {
+        private String text;
+    }
+
+    @Getter
+    @Setter
+    @ToString
     public class SubResult {
         private List<Item> items;
     }
 
     @Getter
     @Setter
+    @ToString
     public class Item {
         private Name name;
         private Count count;
@@ -159,36 +115,51 @@ public class ReceiptResponse {
 
     @Getter
     @Setter
+    @ToString
     public class Count {
         private String text;
-        private Formatted formatted;
-        private List<BoundingPolys> boundingPolys;
     }
 
     @Getter
     @Setter
+    @ToString
     public class Price {
         private PriceDetail price;
-        private PriceDetail unitPrice;
+        private UnitPrice unitPrice;
     }
 
     @Getter
     @Setter
+    @ToString
     public class PriceDetail {
         private String text;
-        private Formatted formatted;
-        private List<BoundingPolys> boundingPolys;
     }
 
     @Getter
     @Setter
+    @ToString
+    public class UnitPrice {
+        private String text;
+    }
+
+    @Getter
+    @Setter
+    @ToString
     public class TotalPrice {
-        private PriceDetail price;
+        private String text;
     }
 
     @Getter
     @Setter
-    public class ValidationResult {
-        private String result;
+    @ToString
+    public class SubTotal {
+        private List<TaxPrice> taxPrice;
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    public class TaxPrice {
+        private String text;
     }
 }
