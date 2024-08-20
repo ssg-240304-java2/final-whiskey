@@ -7,6 +7,7 @@ import com.whiskey.rvcom.repository.RestaurantInquiryReplyRepository;
 import com.whiskey.rvcom.repository.RestaurantInquiryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -15,6 +16,7 @@ public class RestaurantInquiryReplyService {
     private final RestaurantInquiryReplyRepository inquiryReplyRepository;
 
     // TODO: 문의글에 답변 작성
+    @Transactional
     public void save(RestaurantInquiryReplyRequestDTO request) {
         RestaurantInquiry inquiry = inquiryRepository.findById(request.inquiryId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));
@@ -28,6 +30,7 @@ public class RestaurantInquiryReplyService {
     }
 
     // TODO: 문의글에 답변 삭제
+    @Transactional
     public void delete(Long replyId) {
         RestaurantInquiry inquiry = inquiryRepository.findByReplyId(replyId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));

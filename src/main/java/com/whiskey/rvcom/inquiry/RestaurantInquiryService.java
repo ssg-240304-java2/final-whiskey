@@ -11,6 +11,7 @@ import com.whiskey.rvcom.repository.RestaurantInquiryRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class RestaurantInquiryService {
     }
 
     // TODO: 문의 작성
+    @Transactional
     public void save(RestaurantInquiryRequestDTO request, Long memberId) {
         Member member = memberRepository.getReferenceById(memberId);
         Restaurant restaurant = restaurantRepository.getReferenceById(request.restaurantId());
