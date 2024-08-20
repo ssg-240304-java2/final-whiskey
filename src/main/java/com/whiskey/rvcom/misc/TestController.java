@@ -2,6 +2,7 @@ package com.whiskey.rvcom.misc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @Controller
@@ -82,5 +83,11 @@ public class TestController {
 
     @GetMapping("/adminReport")
     public void adminReport() {
+    }
+
+    @GetMapping("/restaurant/{tab}")
+    public String getRestaurantDetailWithTab(@PathVariable String tab) {
+        // TODO: 탭에 따른 데이터 로딩 로직 구현
+        return "restaurantDetail";
     }
 }
