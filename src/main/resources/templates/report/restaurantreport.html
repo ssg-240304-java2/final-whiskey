@@ -114,7 +114,7 @@
                 <th>대상 식당</th>
                 <th>신고 제목</th>
                 <th>신고 내용</th>
-                <th>신고 날짜</th>
+                <th id="reportDate">신고 날짜</th>
                 <th>처리 여부</th>
             </tr>
             </thead>
@@ -138,6 +138,24 @@
             window.location.href = `/report/restaurantdetail?id=${reportId}`;
         }
     });
+    
+ /* 정렬 처리 잠시 보류 */
+    // document.getElementById('reportDate').addEventListener('click', function() {
+    //     $.ajax({
+    //         url: '/restaurantreport/list',
+    //         type: 'GET',
+    //         success: function(data) {
+    //             renderTable(data);
+    //
+    //                 renderTable(data.content);
+    //                 updatePaginationControls(data.number, data.totalPages);
+    //
+    //         },
+    //         error: function(error) {
+    //             console.error('Error sorting restaurant reports:', error);
+    //         }
+    //     });
+    // });
 </script>
 </body>
 </html>

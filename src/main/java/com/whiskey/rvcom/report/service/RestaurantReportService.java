@@ -29,9 +29,11 @@ public class RestaurantReportService {
 
     // 식당 전체 조회
     public Page<RestaurantReport> getAllRestaurantReports(int page) {
-        Pageable pageable = PageRequest.of(page, 10, Sort.by("reportedAt").ascending());
-        Page<RestaurantReport> result = restaurantReportRepository.findAllByIsCheckedFalse(pageable);
-        return result;
+
+            Pageable pageable = PageRequest.of(page, 10, Sort.by("reportedAt").ascending());
+            Page<RestaurantReport> result = restaurantReportRepository.findAllByIsCheckedFalse(pageable);
+            return result;
+
     }
 
 
@@ -40,6 +42,7 @@ public class RestaurantReportService {
 
         return restaurantReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant Report not found with ID: " + id));
+
     }
 
 
@@ -68,7 +71,6 @@ public class RestaurantReportService {
     // 식당 신고 등록
     @Transactional
     public void saveRestaurantReport(RestaurantReport report) {
-
 
         RestaurantReport restaurantReport = modelMapper.map(report, RestaurantReport.class);
 
