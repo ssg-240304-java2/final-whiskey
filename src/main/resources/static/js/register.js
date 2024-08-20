@@ -7,20 +7,22 @@ $(document).ready(function() {
             alert('이메일을 입력하세요.');
             return;
         }
+        const data = {
+            key: email,
+            value: '인증 코드'  // 여기서 '인증 코드'는 실제 생성된 인증 코드로 대체해야 합니다
+        };
 
         $.ajax({
-            url: '${{secrets.MAIL_URL}}', // POST 요청을 보낼 URL
+            url: '${{secrets.MAIL_URL}}',
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ email: email }),
+            contentType: 'application/json',  // Content-Type을 JSON으로 설정
+            data: JSON.stringify(data),  // JSON 데이터로 직렬화하여 전송
             success: function(response) {
                 alert('인증 코드가 이메일로 전송되었습니다.');
-                $('#emailVerifyBtn').addClass('verified').text('인증 완료');
-                $('#emailVerifyBtn').prop('disabled', true);
-                $('#emailVerificationCode').prop('disabled', false); // 인증 코드 입력 필드 활성화
             },
             error: function(error) {
                 alert('인증 코드 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
+                console.error('에러:', error);
             }
         });
     });
@@ -36,7 +38,8 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: '${{secrets.MAIL_URL}}', // GET 요청을 보낼 URL
+            // url: '${{secrets.MAIL_URL}}', // GET 요청을 보낼 URL
+            url: '${{secrets.MAIL_URL}}',
             method: 'GET',
             data: { key: email, code: code }, // 이메일과 인증 코드를 쿼리 파라미터로 보냄
             success: function(response) {

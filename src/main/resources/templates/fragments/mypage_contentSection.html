@@ -9,7 +9,7 @@
         </div>
         <div class="user-bio">
             <h3>자기소개</h3>
-            <p th:text="${member.introduction != null && !member.introduction.isEmpty() ? member.introduction : '안녕하세요 ' + member.nickname + ' 만나서 반갑습니다.'}">
+            <p th:text="${member.introduction != null && !member.introduction.isEmpty() ? member.introduction : '안녕하세요 저는 ' + member.nickname + ' 입니다!  만나서 반갑습니다.'}">
                 <!-- 기본 자기소개 텍스트 -->
                 안녕하세요. 만나서 반갑습니다.
             </p>
