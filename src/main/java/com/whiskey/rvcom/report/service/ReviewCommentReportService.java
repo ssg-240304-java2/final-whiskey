@@ -45,15 +45,10 @@ public class ReviewCommentReportService {
 
 
     // 댓글 신고 세부 조회
-    public ReviewCommentReportDTO getReviewCommentReport(Long id) {
+    public ReviewCommentReport getReviewCommentReport(Long id) {
 
-        ReviewCommentReport reviewCommentReport = reviewCommentReportRepository.findById(id)
+        return reviewCommentReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewCommentReport not found with ID: " + id));
-
-        ReviewCommentReportDTO result = modelMapper.map(reviewCommentReport, ReviewCommentReportDTO.class);
-        result.setReviewCommentDTO(modelMapper.map(reviewCommentReport.getReviewComment(), ReviewCommentDTO.class));
-
-        return result;
     }
 
     // 댓글 신고 상태값 변경

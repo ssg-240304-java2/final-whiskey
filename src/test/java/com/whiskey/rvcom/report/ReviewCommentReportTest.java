@@ -56,7 +56,7 @@ public class ReviewCommentReportTest {
         Long id = 1L;
 
         // when
-        ReviewCommentReportDTO result = reviewCommentReportService.getReviewCommentReport(id);
+        ReviewCommentReport result = reviewCommentReportService.getReviewCommentReport(id);
 
         System.out.println("result = " + result);
 
@@ -83,7 +83,7 @@ public class ReviewCommentReportTest {
         reviewCommentReportService.reviewCommentReportPunish(id, isPunish);
 
         // then 상태값 변경 후 확인
-        ReviewCommentReportDTO result = reviewCommentReportService.getReviewCommentReport(id);
+        ReviewCommentReport result = reviewCommentReportService.getReviewCommentReport(id);
         System.out.println("isPunish = " + isPunish);
         System.out.println("result.isVisible() = " + result.isVisible());
         System.out.println("result.isChecked() = " + result.isChecked());

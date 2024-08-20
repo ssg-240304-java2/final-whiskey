@@ -84,7 +84,7 @@ function setupReports() {
     });
     document.getElementById('commentReport').addEventListener('click', function() {
         document.getElementById('modal').style.display = 'block';
-        reportType = "comment";
+        reportType = "reviewcomment";
     });
 
     // 모달 닫기
@@ -107,7 +107,7 @@ function setupReports() {
             idx = 20; // 레스토랑의 id 가져올 예정
         } else if(reportType === "review") {
             idx = 3; // 리뷰의 id 가져올 예정
-        } else if(reportType === "comment") {
+        } else if(reportType === "reviewcomment") {
             idx = 2; // 댓글의 id 가져올 예정
         }
 

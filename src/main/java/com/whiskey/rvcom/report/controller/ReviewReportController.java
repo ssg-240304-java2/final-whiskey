@@ -19,6 +19,11 @@ public class ReviewReportController {
 
     private final ReviewReportService reviewReportService;
 
+    /***
+     * 리뷰 신고 등록
+     * @param report
+     * @return
+     */
     @PostMapping("/regist")
     public ResponseEntity<Void> registReviewReport(@RequestBody ReportData report) {
 
@@ -35,6 +40,12 @@ public class ReviewReportController {
             return ResponseEntity.ok().build();
     }
 
+    /***
+     * 리뷰신고 전체 조회
+     * @param page
+     * @param sortOrder
+     * @return
+     */
     @GetMapping("/list")
     @ResponseBody
     public Page<ReviewReport> getReviewReports(@RequestParam(defaultValue = "0") int page,
@@ -42,6 +53,11 @@ public class ReviewReportController {
         return reviewReportService.getAllReviewReports(page, sortOrder);
     }
 
+    /***
+     * 리뷰신고 상세 조회
+     * @param id
+     * @return
+     */
     @GetMapping("/detail/{reportId}")
     public ResponseEntity<Map<String, Object>> getReportDetail(@PathVariable("reportId") Long id) {
 

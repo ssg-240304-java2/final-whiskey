@@ -32,4 +32,9 @@ public class ReportController {
     public String getReviewCommentReport() {
         return "report/reviewcommentreport";
     }
+
+    @GetMapping("/reviewcommentdetail")
+    public String getReviewCommentDetail() {
+        return "report/reviewcommentdetail";
+    }
 }
