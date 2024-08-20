@@ -1,52 +1,71 @@
 package com.whiskey.rvcom.Member.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import com.whiskey.rvcom.Member.emailauth.EmailService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 @Service
 public class VerificationService {
 
     private final RestTemplate restTemplate;
+    private final EmailService emailService;
 
-    @Value("${{secret_verification_api_url}}")
-    private String apiUrl;
-
-    public VerificationService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    @Autowired
+    public VerificationService(RestTemplateBuilder builder, EmailService emailService) {
+        this.restTemplate = builder.build();
+        this.emailService = emailService;
     }
 
-    // 인증 코드 생성 및 저장
     public String generateAndSaveVerificationCode(String email) {
-        String verificationCode = generateRandomCode(); // 난수 생성
-        String url = apiUrl + "?key=" + email + "&value=" + verificationCode;
+        String verificationCode = generateVerificationCode();
+        String apiUrl = "${{secrets.MAIL_URL}}";
 
-        // 3분간 유효한 코드 저장 요청
-        restTemplate.postForObject(url, null, Void.class);
+        Map<String, String> request = new HashMap<>();
+        request.put("email", email);
+        request.put("code", verificationCode);
 
-        return verificationCode;
-    }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-    // 인증 코드 검증
-    public boolean verifyCode(String email, String inputCode) {
-        String url = apiUrl + "?key=" + email;
-        String storedCode = restTemplate.getForObject(url, String.class);
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(request, headers);
 
-        return storedCode != null && storedCode.equals(inputCode);
-    }
-
-    // 난수 생성
-    private String generateRandomCode() {
-        int codeLength = 6; // 예: 6자리 코드
-        Random random = new Random();
-        StringBuilder code = new StringBuilder(codeLength);
-
-        for (int i = 0; i < codeLength; i++) {
-            code.append(random.nextInt(10)); // 0-9 사이의 숫자 난수 생성
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, entity, String.class);
+            if (response.getStatusCode().is2xxSuccessful()) {
+                emailService.sendVerificationCode(email, verificationCode);
+                return verificationCode;
+            } else {
+                throw new RuntimeException("Failed to save verification code. Response: " + response.getStatusCode());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Exception occurred while saving verification code: " + e.getMessage(), e);
         }
+    }
 
-        return code.toString();
+    public boolean verifyCode(String email, String code) {
+        String apiUrl = "${{secrets.MAIL_URL}}" + email;
+
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(apiUrl, String.class);
+            return code.equals(response.getBody());
+        } catch (Exception e) {
+            throw new RuntimeException("Exception occurred while verifying code: " + e.getMessage(), e);
+        }
+    }
+
+    private String generateVerificationCode() {
+        Random random = new Random();
+        return String.format("%06d", random.nextInt(1000000));
     }
 }
