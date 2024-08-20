@@ -4,13 +4,13 @@ import com.whiskey.rvcom.entity.report.RestaurantReport;
 import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -38,9 +38,10 @@ public class RestaurantReportController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<RestaurantReport>> getReports() {
-        List<RestaurantReport> reports = restaurantReportService.getAllRestaurantReports();
-        return ResponseEntity.ok(reports);
+    @ResponseBody
+    public Page<RestaurantReport> getReports(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "asc") String sortOrder) {
+        return restaurantReportService.getAllRestaurantReports(page, sortOrder);
     }
 
     @GetMapping("/detail/{reportId}")

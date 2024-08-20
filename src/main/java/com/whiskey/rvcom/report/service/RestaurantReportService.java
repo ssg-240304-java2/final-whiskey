@@ -8,10 +8,13 @@ import com.whiskey.rvcom.repository.RestaurantRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,19 +27,20 @@ public class RestaurantReportService {
     private final ModelMapper modelMapper;
 
 
-    // 식당 신고 전체 조회
-    public List<RestaurantReport> getAllRestaurantReports() {
-        List<RestaurantReport> reports = restaurantReportRepository.findAll();
+    // 식당 전체 조회
+    public Page<RestaurantReport> getAllRestaurantReports(int page, String sortOrder) {
 
-        for (RestaurantReport report : reports) {
+        Sort sort = Sort.by("reportedAt");
 
-            // RestaurantReport -> RestaurantReportDTO
-            Restaurant restaurant = returnRestaurant(report.getRestaurant().getId());
-
-            // RestaurantReport -> RestaurantReportDTO로 변환할 때 RestaurantDTO도 변환해줘야함
-            report.setRestaurant(restaurant);
+        if ("desc".equalsIgnoreCase(sortOrder)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
         }
-        return reports;
+
+        Pageable pageable = PageRequest.of(page, 10, sort);
+        return restaurantReportRepository.findAllByIsCheckedFalse(pageable);
+
     }
 
 
@@ -45,6 +49,7 @@ public class RestaurantReportService {
 
         return restaurantReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant Report not found with ID: " + id));
+
     }
 
 
@@ -73,7 +78,6 @@ public class RestaurantReportService {
     // 식당 신고 등록
     @Transactional
     public void saveRestaurantReport(RestaurantReport report) {
-
 
         RestaurantReport restaurantReport = modelMapper.map(report, RestaurantReport.class);
 
