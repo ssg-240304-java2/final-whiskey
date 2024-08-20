@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let currentSortOrder = 'asc';
+        async function fetchRestaurantReports(page, sortOrder = 'asc') {
+            try {
+                const response = await fetch(`/restaurantreport/list?page=${page}&sortOrder=${sortOrder}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                if (data && data.content) {
+                    renderTable(data.content);
+                    updatePaginationControls(data.number, data.totalPages);
+                } else {
+                    console.error('Unexpected response format:', data);
+                }
+            } catch (error) {
+                console.error('Error fetching restaurant reports:', error);
+            }
+        }
+
+        function renderTable(data) {
+            const tableBody = document.querySelector('tbody');
+            tableBody.innerHTML = '';
+
+            data.forEach(report => {
+                const formattedDate = new Date(report.reportedAt).toLocaleDateString();
+                const row = `
+            <tr data-id="${report.id}">
+                <td>${report.id}</td>
+                <td>${report.restaurant.name}</td>
+                <td>${report.title}</td>
+                <td>${report.content}</td>
+                <td>${formattedDate}</td>
+                <td>${report.checked ? '처리 완료' : '처리 전'}</td>
+            </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function updatePaginationControls(currentPage, totalPages) {
+            const pagination = document.querySelector('.pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 0; i < totalPages; i++) {
+                const button = document.createElement('button');
+                button.innerText = i + 1;
+                button.disabled = i === currentPage;
+                button.addEventListener('click', () => fetchRestaurantReports(i, currentSortOrder));
+                pagination.appendChild(button);
+            }
+        }
+
+        // 페이지 로드 후 초기 데이터 요청
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchRestaurantReports(0); // 기본 페이지 요청
+        });
+
+    </script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        thead tr {
+            background-color: #f2f2f2;
+            color: #333333;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            color: #555555;
+        }
+    </style>
+</head>
+<body>
+<div class="admin-content">
+    <div class="admin-content-title">
+        <h1>관리자 - 식당신고</h1>
+    </div>
+    <div class="admin-content-table">
+        <table>
+            <thead>
+            <tr>
+                <th>신고 번호</th>
+                <th>대상 식당</th>
+                <th>신고 제목</th>
+                <th>신고 내용</th>
+                <th id="reportDate">신고 날짜</th>
+                <th>처리 여부</th>
+            </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+        <div class="pagination">
+        <button class="pagebtn" id="pre">◀</button>
+        <button class="pagebtn" id="back">▶</button>
+        </div>
+    </div>
+</div>
+<script>
+    document.getElementById('tbody').addEventListener('click', function() {
+
+        const clickedElement = event.target.closest('tr');
+
+        if (clickedElement) {
+            const reportId = $(clickedElement).data('id');
+            console.log('Report ID:', reportId);
+            window.location.href = `/report/restaurantdetail?id=${reportId}`;
+        }
+    });
+    
+ /* 정렬 처리 잠시 보류 */
+    document.getElementById('reportDate').addEventListener('click', function() {
+        currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+        fetchRestaurantReports(0, currentSortOrder);
+    });
+</script>
+</body>
+</html>

@@ -8,7 +8,7 @@
         const urlParams = new URLSearchParams(window.location.search);
         const id = urlParams.get('id'); // 'id' 파라미터의 값을 가져옴
         var report;
-        console.log('ID:', id);
+
         // Ajax를 통해 서버로 GET 요청
         $.ajax({
             url: "/restaurantreport/detail/" + id,
@@ -17,7 +17,7 @@
             success(data){
                 report = data.report;
                 document.getElementById('reportId').innerText = report.id;
-                document.getElementById('restaurantTitle').innerText = report.restaurantDTO.name;
+                document.getElementById('restaurantTitle').innerText = report.restaurant.name;
                 document.getElementById('title').innerText = report.title;
                 document.getElementById('content').innerText = report.content;
                 document.getElementById('reportedAt').innerText = new Date(report.reportedAt).toLocaleDateString();
@@ -50,19 +50,23 @@
 
 <script>
     function updateReport(btnId) {
-        const id = report.id; // 적절한 id 값을 설정합니다.
-        $.ajax({
-            url: `/restaurantreport/update/` + id,
-            type: "PUT",
-            data: {btnId: btnId},
-            success() {
-                alert('처리되었습니다.');
-                window.location.href = '/report/restaurantreport';
-            },
-            error() {
-                alert('처리에 실패했습니다.');
-            }
-        });
+        if (confirm("이 작업을 진행하시겠습니까?")) {
+            const id = report.id; // 적절한 id 값을 설정합니다.
+            $.ajax({
+                url: `/restaurantreport/update/` + id,
+                type: "PUT",
+                data: {btnId: btnId},
+                success() {
+                    alert('신고처리 되었습니다.');
+                    window.location.href = '/report/restaurantreport';
+                },
+                error() {
+                    alert('신고처리에 실패했습니다.');
+                }
+            });
+            console.log("작업이 진행됩니다.");
+        } else {}
+
     }
 
     $('button').on('click', function() {
