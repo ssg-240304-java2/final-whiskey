@@ -1,6 +1,7 @@
 package com.whiskey.rvcom.misc;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -86,9 +87,11 @@ public class TestController {
     }
 
     @GetMapping("/restaurant/{restaurantId}/{tab}")
-    public String getRestaurantDetailWithTab(@PathVariable Long restaurantId, @PathVariable String tab) {
+    public String getRestaurantDetailWithTab(@PathVariable Long restaurantId, @PathVariable String tab, Model model) {
         // TODO: restaurantId와 tab에 따른 데이터 로딩 로직 구현
         // TODO: 모델에 restaurantId와 tab 정보 추가
+        model.addAttribute("restaurantId", restaurantId);
+        model.addAttribute("tab", tab);
         return "restaurantDetail";
     }
 }
