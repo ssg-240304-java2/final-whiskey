@@ -34,6 +34,9 @@ public class ImageFileService {
     public ImageFile uploadFile(String filePath) throws Exception {
         logger.info("파일 업로드 및 엔티티 생성 중: {}", filePath);
 
+         // todo. 웹서버 로컬에 사용자가 요청한 파일을 다운로드하는 로직 추가
+
+         // todo. 웹서버 로컬에 저장된 파일을 다시 ncp 파일서버로 전송하는 로직으로 변경
         if (!new File(filePath).exists()) {
             logger.error("파일이 존재하지 않습니다: {}", filePath);
             throw new IllegalArgumentException("파일이 존재하지 않습니다.");
@@ -50,6 +53,8 @@ public class ImageFileService {
         ImageFile imageFile = new ImageFile();
         imageFile.setOriginalFileName(uploadedFileName.getOriginalFileName());
         imageFile.setUuidFileName(uploadedFileName.getUuidFileName());
+
+          // todo. 웹서버 로컬에 저장된 파일 삭제
 
         return imageFileRepository.save(imageFile);
     }
