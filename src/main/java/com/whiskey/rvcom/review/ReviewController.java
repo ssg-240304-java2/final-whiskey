@@ -3,7 +3,7 @@ package com.whiskey.rvcom.review;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.*;
-import com.whiskey.rvcom.repository.RestaurantRepository;
+import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/restaurant/review")
+//@RequestMapping("/restaurant/review")
 @RequiredArgsConstructor
 public class ReviewController {
-//    private final RestaurantServic restaurantService;
-    private final RestaurantRepository restaurantRepository;    // need. 서비스 모듈로 교체 필요(업요전달)
+    private final RestaurantService restaurantService;
+//    private final RestaurantRepository restaurantRepository;    // need. 서비스 모듈로 교체 필요(업요전달)
 
     private final ReviewService reviewService;
     private final ReviewCommentService reviewCommentService;
@@ -24,14 +24,24 @@ public class ReviewController {
 
     // use path variable
     // 리뷰 목록 조회 요청
-    @GetMapping("/{restaurantNo}")
-    public String getReviewsByRestaurantId(@PathVariable Long restaurantNo, Model model) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantNo).orElseThrow();
-        List<Review> reviews = reviewService.getReviewsByRestaurant(restaurant);
+//    @GetMapping("/{restaurantNo}")
+//    public String getReviewsByRestaurantId(@PathVariable Long restaurantNo, Model model) {
+//        Restaurant restaurant = restaurantRepository.findById(restaurantNo).orElseThrow();
+//        List<Review> reviews = reviewService.getReviewsByRestaurant(restaurant);
+//
+//        model.addAttribute("reviews", reviews);     // desc. 리뷰 목록 바인딩
+//
+//        return "restaurantDetail";  // need. 뷰 분할 후 리뷰 페이지에 대한 뷰로 변경
+//    }
 
-        model.addAttribute("reviews", reviews);     // desc. 리뷰 목록 바인딩
+    @GetMapping("/restaurant/{restaurantId}/reviews")
+    public String getRestaurantDetailWithTab(@PathVariable Long restaurantId, Model model) {
+        Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
+        List<Review> reviewsByRestaurant = reviewService.getReviewsByRestaurant(restaurant);
 
-        return "restaurantDetail";  // need. 뷰 분할 후 리뷰 페이지에 대한 뷰로 변경
+        model.addAttribute("reviews", reviewsByRestaurant);
+
+        return "restaurantDetail";
     }
 
 //    @PostMapping("/list/{restaurantNo}")
