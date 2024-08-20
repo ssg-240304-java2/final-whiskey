@@ -37,8 +37,8 @@ public class ReviewReportController {
 
     @GetMapping("/list")
     @ResponseBody
-    public Page<ReviewReport> getReports(@RequestParam(defaultValue = "0") int page,
-                                             @RequestParam(defaultValue = "asc") String sortOrder) {
+    public Page<ReviewReport> getReviewReports(@RequestParam(defaultValue = "0") int page,
+                                               @RequestParam(defaultValue = "asc") String sortOrder) {
         return reviewReportService.getAllReviewReports(page, sortOrder);
     }
 

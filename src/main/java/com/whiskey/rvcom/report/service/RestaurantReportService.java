@@ -39,7 +39,7 @@ public class RestaurantReportService {
         }
 
         Pageable pageable = PageRequest.of(page, 10, sort);
-        return restaurantReportRepository.findAllByIsCheckedFalse(pageable);
+        return restaurantReportRepository.findAll(pageable);
     }
 
 

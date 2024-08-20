@@ -38,7 +38,7 @@ public class ReviewReportService {
         }
 
         Pageable pageable = PageRequest.of(page, 10, sort);
-        return reviewReportRepository.findAllByIsCheckedFalse(pageable);
+        return reviewReportRepository.findAll(pageable);
     }
 
 
