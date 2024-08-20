@@ -38,16 +38,16 @@
 <div class="container">
     <div class="main-content">
         <nav class="tabs" role="tablist">
-            <button class="tab active" data-tab="info" role="tab" aria-selected="true" aria-controls="info">
+            <button class="tab active" th:data-tab="info" role="tab" aria-selected="true" aria-controls="info">
                 <i class="fas fa-info-circle"></i> <span>정보</span>
             </button>
-            <button class="tab" data-tab="reviews" role="tab" aria-selected="false" aria-controls="reviews">
+            <button class="tab" th:data-tab="reviews" role="tab" aria-selected="false" aria-controls="reviews">
                 <i class="fas fa-star"></i> <span>리뷰</span>
             </button>
-            <button class="tab" data-tab="inquiries" role="tab" aria-selected="false" aria-controls="inquiries">
+            <button class="tab" th:data-tab="inquiries" role="tab" aria-selected="false" aria-controls="inquiries">
                 <i class="fas fa-question-circle"></i> <span>문의하기</span>
             </button>
-            <button class="tab" data-tab="notices" role="tab" aria-selected="false" aria-controls="notices">
+            <button class="tab" th:data-tab="notices" role="tab" aria-selected="false" aria-controls="notices">
                 <i class="fas fa-bullhorn"></i> <span>공지사항</span>
             </button>
         </nav>
@@ -80,18 +80,14 @@
         </div>
         <!-- 신고 폼 끝 -->
 
+        <!-- 각 탭 콘텐츠 영역 -->
         <div class="content-area">
-            <class="flex-container">
-                <!-- 음식점 정보 탭 -->
+            <div class="flex-container">
                 <div class="tab-content active" id="info" th:replace="fragments/restaurantDetail/info :: info"></div>
-            <div class="tab-content" id="reviews" th:replace="fragments/restaurantDetail/reviews :: reviews"></div>
-            <div class="tab-content" id="inquiries" th:replace="fragments/restaurantDetail/inquiries :: inquiries"></div>
-            <div class="tab-content" id="notices" th:replace="fragments/restaurantDetail/notices :: notices"></div>
-
-                <!-- TODO: 백엔드 - 문의 등록 API 구현 (POST /api/inquiries) -->
-                <!-- TODO: 백엔드 - 문의 목록 조회 API 구현 (GET /api/inquiries?restaurantId=:id&page=:page&sort=:sort) -->
-                <!-- TODO: 백엔드 - 문의 답변 등록 API 구현 (POST /api/inquiries/:id/replies) -->
-                <!-- TODO: 백엔드 - 문의 좋아요 API 구현 (POST /api/inquiries/:id/like) -->
+                <div class="tab-content" id="reviews" th:replace="fragments/restaurantDetail/reviews :: reviews"></div>
+                <div class="tab-content" id="inquiries" th:replace="fragments/restaurantDetail/inquiries :: inquiries"></div>
+                <div class="tab-content" id="notices" th:replace="fragments/restaurantDetail/notices :: notices"></div>
+            </div>
         </div>
     </div>
     <div class="sidebar-content">
@@ -163,6 +159,10 @@
 
     }
 </script>
+
+<!-- restaurantId를 JavaScript에서 사용할 수 있도록 hidden input 추가 -->
+<input type="hidden" id="restaurantId" th:value="${restaurantId}">
+
     <script th:src="@{/js/restaurantDetail.js}"></script>
     <script th:src="@{/js/restaurantDetail/reviews.js}"></script>
     <script th:src="@{/js/restaurantDetail/info.js}"></script>
