@@ -8,6 +8,7 @@ import com.whiskey.rvcom.repository.RestaurantNoticeRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,12 +29,14 @@ public class RestaurantNoticeService {
     }
 
     // TODO: 해당 음식점의 점주가 공지사항 작성
+    @Transactional
     public void save(RestaurantNoticeRequestDTO request, Long restaurantId) {
         Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
         noticeRepository.save(new RestaurantNotice(request.title(), request.content(), restaurant));
     }
 
     // TODO: 해당 음식점의 점주가 공지사항 삭제
+    @Transactional
     public void delete(Long noticeId) {
         RestaurantNotice restaurantNotice = noticeRepository.findById(noticeId).orElseThrow();
         restaurantNotice.delete();
