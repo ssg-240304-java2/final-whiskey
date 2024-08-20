@@ -42,4 +42,13 @@ public class RestaurantInquiryService {
         Restaurant restaurant = restaurantRepository.getReferenceById(request.restaurantId());
         inquiryRepository.save(new RestaurantInquiry(member, restaurant, request.content()));
     }
+
+    // TODO: 문의 삭제
+    @Transactional
+    public void delete(Long inquiryId) {
+        RestaurantInquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new IllegalArgumentException("문의가 존재하지 않습니다."));
+        inquiry.delete();
+        inquiryRepository.save(inquiry);
+    }
 }
