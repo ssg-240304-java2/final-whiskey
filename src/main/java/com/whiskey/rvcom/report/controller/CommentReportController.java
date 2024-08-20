@@ -74,4 +74,17 @@ public class CommentReportController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/update/{reportId}")
+    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
+
+        boolean isPunish = btnId.equals("punish");
+
+        reviewCommentReportService.reviewCommentReportPunish(reportId, isPunish);
+
+        if(isPunish) {
+            // 메일 발송 코드 예정
+        }
+        return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
+    }
 }
