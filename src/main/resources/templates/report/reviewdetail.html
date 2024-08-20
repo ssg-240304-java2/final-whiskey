@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰신고 세부정보</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id'); // 'id' 파라미터의 값을 가져옴
+        var report;
+
+        // Ajax를 통해 서버로 GET 요청
+        $.ajax({
+            url: "/reviewreport/detail/" + id,
+            type: "GET",
+            dataType: "json",
+            success(data){
+                report = data.report;
+                document.getElementById('reportId').innerText = report.id;
+                document.getElementById('reviewContent').innerText = report.review.content;
+                document.getElementById('title').innerText = report.title;
+                document.getElementById('content').innerText = report.content;
+                document.getElementById('reportedAt').innerText = new Date(report.reportedAt).toLocaleDateString();
+                document.getElementById('checked').innerText = report.checked ? '처리완료' : '처리 전';
+            }
+        });
+    </script>
+    <style>
+        h2, h3 {
+            display: inline;
+            margin: 0; /* 기본 마진 제거 */
+        }
+        #reportId {
+            margin-left: 10px; /* 태그 간 간격 조절 */
+        }
+    </style>
+</head>
+<body>
+<h1>관리자 - 신고 상세보기(처리하기)</h1>
+<form>
+    <h2>신고 번호 :</h2> <h3><span id="reportId"></span></h3><br>
+    <h2>신고 제목 :</h2> <h3><span id="title"></span></h3><br>
+    <h2>신고 내용 :</h2> <h3><span id="content"></span></h3><br>
+    <h2>리뷰 내용 :</h2> <h3><span id="reviewContent"></span></h3><br>
+    <h2>신고일 :</h2> <h3><span id="reportedAt"></span></h3><br>
+    <h2>처리여부 :</h2> <h3><span id="checked"></span></h3><br>
+    <button type="button" id="punish">처벌</button>
+    <button type="button" id="pass">보류</button>
+</form>
+
+<script>
+
+</script>
+</body>
+</html>
