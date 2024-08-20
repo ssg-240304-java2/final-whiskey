@@ -48,6 +48,7 @@
         const fileInput = document.getElementById('fileInput');
         const preview = document.getElementById('preview');
         const verifyBtn = document.getElementById('verifyBtn');
+        const nextStepBtn = document.getElementById('nextStepBtn');
 
         // 드래그 앤 드롭 이벤트를 처리합니다.
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -118,9 +119,42 @@
         // TODO: 네이버 클로바 OCR API를 호출하여 영수증 이미지를 분석하고 결과를 처리하는 로직을 구현해야 합니다.
         // TODO: API 호출 결과를 바탕으로 영수증 정보를 추출하고 화면에 표시해야 합니다.
         // TODO: 영수증 인증 성공 여부에 따라 적절한 피드백을 사용자에게 제공해야 합니다.
-        alert('영수증 인증이 완료되었습니다.');
-            nextStepBtn.style.display = 'block';
-        });
+            // ajax 비동기로
+            // receipt/verification - post요청 전달
+            // 이미지 경로를 전달해야 함
+            verifyReceipt();
+        })
+        // alert('영수증 인증이 완료되었습니다.');
+        //     nextStepBtn.style.display = 'block';
+        // });
+
+        function verifyReceipt() {
+            // $.ajax({
+            //     type: 'POST',
+            //     url: '/receipt/verification',
+            //     data: {
+            //         image: preview.src
+            //     }
+            // }).done(function(data) {
+            //     // 성공 시
+            //     // alert('영수증 인증이 완료되었습니다.');
+            //     nextStepBtn.style.display = 'block';
+            // }).fail(function() {
+            //     // 실패 시
+            //     alert('영수증 인증에 실패했습니다. 다시 시도해주세요.');
+            // }).success(function() {
+            //     // 성공 시
+            //     alert('영수증 인증이 완료되었습니다.');
+            //     nextStepBtn.style.display = 'block';
+            // });
+
+            alert('영수증 인증이 완료되었습니다.');
+
+            receiptInfo.style.display = 'block';    // 영수증 인식정보 페이지 노출
+            verifyBtn.style.display = 'none';       // 인증 버튼 숨김
+            nextStepBtn.style.display = 'block';    // 다음 단계 버튼 노출
+        }
+
 
         nextStepBtn.addEventListener('click', function() {
             // TODO: 리뷰 작성 페이지로 이동하는 로직을 구현해야 합니다.
@@ -152,9 +186,11 @@
             const imageDataUrl = canvas.toDataURL('image/jpeg');
             preview.src = imageDataUrl;
             preview.style.display = 'block';
-            verifyBtn.style.display = 'block';
             retakeBtn.style.display = 'inline-block';
-            receiptInfo.style.display = 'block';
+
+            // TODO: 
+            verifyBtn.style.display = 'block';
+            // receiptInfo.style.display = 'block'; // TODO: 이 버튼은 영수증 인증하기 버튼 클릭 시 노출되어야 함
             // TODO: 캡처된 이미지를 서버로 전송하여 OCR 처리를 수행하는 API를 호출해야 합니다.
             // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
         });
@@ -164,7 +200,8 @@
             preview.style.display = 'none';
             retakeBtn.style.display = 'none';
             receiptInfo.style.display = 'none';
-            verifyBtn.style.display = 'none';
+            verifyBtn.style.display = 'block';
+            nextStepBtn.style.display = 'none';
         });
     </script>
 </body>
