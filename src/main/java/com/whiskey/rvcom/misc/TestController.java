@@ -85,9 +85,10 @@ public class TestController {
     public void adminReport() {
     }
 
-    @GetMapping("/restaurant/{tab}")
-    public String getRestaurantDetailWithTab(@PathVariable String tab) {
-        // TODO: 탭에 따른 데이터 로딩 로직 구현
+    @GetMapping("/restaurant/{restaurantId}/{tab}")
+    public String getRestaurantDetailWithTab(@PathVariable Long restaurantId, @PathVariable String tab) {
+        // TODO: restaurantId와 tab에 따른 데이터 로딩 로직 구현
+        // TODO: 모델에 restaurantId와 tab 정보 추가
         return "restaurantDetail";
     }
 }
