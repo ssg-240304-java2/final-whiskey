@@ -1,0 +1,28 @@
+<!-- src/main/resources/templates/fragments/mypage_editProfileModal_basic.html -->
+<div th:fragment="editProfileModalBasic(member)" id="editProfileModalBasic" class="modal">
+    <div class="modal-content">
+        <span class="close">×</span>
+        <h2>회원정보 수정</h2>
+        <form id="editProfileFormBasic" class="basic-profile-form" action="/updateProfileBasic" method="post">
+            <label for="basicName">이름:</label>
+            <input type="text" id="basicName" name="name" th:value="${member.name}" required>
+
+            <label for="basicNickname">닉네임:</label>
+            <input type="text" id="basicNickname" name="nickname" th:value="${member.nickname}" required>
+
+            <label for="basicEmail">이메일:</label>
+            <input type="email" id="basicEmail" name="email" th:value="${member.email}" required>
+
+            <label for="basicPassword">비밀번호:</label>
+            <input type="password" id="basicPassword" name="password" placeholder="새 비밀번호">
+
+            <label for="basicConfirmPassword">비밀번호 확인:</label>
+            <input type="password" id="basicConfirmPassword" name="confirmPassword" placeholder="비밀번호 확인">
+
+            <label for="basicIntroduction">자기소개:</label>
+            <input type="text" id="basicIntroduction" name="introduction" th:value="${member.introduction != null ? member.introduction : ''}" placeholder="자기소개를 입력하세요">
+
+            <button type="submit">저장</button>
+        </form>
+    </div>
+</div>
