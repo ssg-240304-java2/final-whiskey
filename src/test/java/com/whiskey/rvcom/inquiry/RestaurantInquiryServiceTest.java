@@ -13,7 +13,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Rollback
+@Rollback(value = false)
 @Transactional
 @SpringBootTest
 class RestaurantInquiryServiceTest {
@@ -47,11 +47,43 @@ class RestaurantInquiryServiceTest {
 
         // when
         List<RestaurantInquiry> inquiries = inquiryRepository.findAllByRestaurantId(restaurantId);
-        inquiries.forEach(inquiry -> System.out.println("inquiry = " + inquiry));
+
+        inquiries.forEach(inquiry -> {
+            System.out.println("음식점 " + inquiry.getRestaurant().getName());
+            System.out.println("작성자 " + inquiry.getWriter().getName());
+            System.out.println("문의 내용 " + inquiry.getContent());
+            System.out.println("문의 작성일 " + inquiry.getCreatedAt());
+
+            if (inquiry.getReply() == null) {
+                System.out.println("답변이 없습니다.");
+            } else {
+                System.out.println("답변 내용 " + inquiry.getReply().getContent());
+                System.out.println("답변 작성일" + inquiry.getReply().getCreatedAt());
+            }
+            System.out.println("-------------------------------------");
+        });
 
         // then
+        assertThat(inquiryRepository.findAllByRestaurantId(restaurantId))
+                .isNotNull();
+        assertThat(inquiryRepository.findAllByRestaurantId(restaurantId)
+                .get(0)
+                .getReply())
+                .isNotNull();
+    }
 
-        assertThat(inquiryRepository.findAllByRestaurantId(restaurantId)).isNotNull();
-        assertThat(inquiryRepository.findAllByRestaurantId(restaurantId).get(0).getReply()).isNotNull();
+    @Test
+    void deleteInquiry() {
+        // given
+        Long inquiryId = 11L;
+
+        // when
+        inquiryService.delete(inquiryId);
+
+        // then
+        assertThat(inquiryRepository.findById(inquiryId)
+                .orElseThrow()
+                .getDeletedAt())
+                .isNotNull();
     }
 }
