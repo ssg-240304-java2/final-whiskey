@@ -12,8 +12,10 @@ public interface RestaurantInquiryRepository extends JpaRepository<RestaurantInq
     @Query("""
             select i
             from RestaurantInquiry i
+            left join i.reply r
             where i.restaurant.id = :restaurantId
-            and i.reply.deletedAt is null
+            and i.deletedAt is null
+            and (r is null or r.deletedAt is null)
             """)
     List<RestaurantInquiry> findAllByRestaurantId(Long restaurantId);
 
