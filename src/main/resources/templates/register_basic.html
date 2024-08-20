@@ -17,10 +17,14 @@
         <h1>Foodfolio 회원가입</h1>
         <form action="/register_basic" method="post">
             <div class="email-container">
-                <input type="text" id="loginId" name="loginId" placeholder="로그인 ID (이메일)" required>
-                <button type="button" onclick="checkLoginId()">중복 체크</button>
+                <input type="email" id="email" name="email" placeholder="이메일" required>
+                <button type="button" id="emailVerifyBtn">인증 코드 받기</button>
             </div>
-            <input type="text" name="email" placeholder="이메일" required>
+            <div class="verification-container">
+                <input type="text" id="emailVerificationCode" name="emailVerificationCode" placeholder="인증 코드" required disabled>
+                <button type="button" id="verifyCodeBtn">확인</button>
+            </div>
+            <input type="text" name="loginId" placeholder="로그인 ID" required>
             <input type="text" name="name" placeholder="이름" required>
             <input type="text" name="nickname" placeholder="닉네임" required>
             <input type="password" id="password" name="password" placeholder="비밀번호" required>

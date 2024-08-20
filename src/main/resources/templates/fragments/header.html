@@ -9,26 +9,27 @@
     <link rel="stylesheet" th:href="@{/css/header.css}">
 </head>
 <body>
-    <header th:fragment="header">
-        <div class="header-wrapper">
-            <div class="header-content">
-                <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">FoodFolio</a></div>
-                <div class="search-bar">
-                    <input type="text" placeholder="맛집 또는 음식을 검색해보세요">
-                    <button><i class="fas fa-search"></i> 검색</button>
-                </div>
-                <nav>
-                    <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/login">로그인</a>
-                    <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/register">회원가입</a>
-
-                    <a th:if="${isAuthenticated}" href="/logout">로그아웃</a>
-                    <a th:if="${isAuthenticated}" href="/myPage">마이페이지</a>
-
-                    <a th:if="${isAuthenticated} and ${userRole == 'USER'}" href="/register-store">입점 신청</a>
-                    <a th:if="${isAuthenticated} and ${userRole == 'ADMIN'}" href="/admin-dashboard">관리자</a>
-                </nav>
+<header th:fragment="header">
+    <div class="header-wrapper">
+        <div class="header-content">
+            <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">FoodFolio</a></div>
+            <div class="search-bar">
+                <input type="text" placeholder="맛집 또는 음식을 검색해보세요">
+                <button><i class="fas fa-search"></i> 검색</button>
             </div>
+            <nav>
+                <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/login">로그인</a>
+                <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/register_basic">회원가입</a>
+
+                <a th:if="${isAuthenticated}" href="/logout">로그아웃</a>
+                <a th:if="${isAuthenticated}" href="/mypage">마이페이지</a>
+
+                <a th:if="${isAuthenticated} and ${userRole == 'USER'}" href="/register-store">입점 신청</a>
+                <a th:if="${isAuthenticated} and ${userRole == 'OWNER'}" href="/dashboard">점주 페이지</a>
+                <a th:if="${isAuthenticated} and ${userRole == 'ADMIN'}" href="/admin-dashboard">관리자</a>
+            </nav>
         </div>
-    </header>
+    </div>
+</header>
 </body>
 </html>
