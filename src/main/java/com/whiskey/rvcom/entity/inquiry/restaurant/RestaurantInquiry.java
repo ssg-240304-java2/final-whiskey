@@ -48,4 +48,8 @@ public class RestaurantInquiry {
     public void addReply(RestaurantInquiryReply reply) {
         this.reply = reply;
     }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }
