@@ -28,11 +28,18 @@ public class RestaurantReportService {
 
 
     // 식당 전체 조회
-    public Page<RestaurantReport> getAllRestaurantReports(int page) {
+    public Page<RestaurantReport> getAllRestaurantReports(int page, String sortOrder) {
 
-            Pageable pageable = PageRequest.of(page, 10, Sort.by("reportedAt").ascending());
-            Page<RestaurantReport> result = restaurantReportRepository.findAllByIsCheckedFalse(pageable);
-            return result;
+        Sort sort = Sort.by("reportedAt");
+
+        if ("desc".equalsIgnoreCase(sortOrder)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Pageable pageable = PageRequest.of(page, 10, sort);
+        return restaurantReportRepository.findAllByIsCheckedFalse(pageable);
 
     }
 

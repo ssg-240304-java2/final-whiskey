@@ -31,7 +31,7 @@ public class RestaurantReportTest {
         // given
 
         // when
-        Page<RestaurantReport> reports = restaurantReportService.getAllRestaurantReports(10);
+        Page<RestaurantReport> reports = restaurantReportService.getAllRestaurantReports(10, "asc");
 
         for (RestaurantReport restaurantReport : reports.getContent()) {
             System.out.println("restaurantReport = " + restaurantReport);
@@ -109,7 +109,7 @@ public class RestaurantReportTest {
         restaurantReportService.saveRestaurantReport(report);
 
         // 조회 성공 후 목록 가져오기
-        Page<RestaurantReport> reports = restaurantReportService.getAllRestaurantReports(10);
+        Page<RestaurantReport> reports = restaurantReportService.getAllRestaurantReports(10, "asc");
 
         // then 현재 테스트 코드로 등록한 신고와 DB에 등록된 신고의 내용이 같은지 비교
 //        Assertions.assertEquals(reports.get(reports.size()-1).getContent(), report.getContent());

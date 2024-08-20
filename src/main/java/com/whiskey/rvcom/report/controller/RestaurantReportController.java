@@ -39,8 +39,9 @@ public class RestaurantReportController {
 
     @GetMapping("/list")
     @ResponseBody
-    public Page<RestaurantReport> getReports(@RequestParam(defaultValue = "0") int page) {
-        return restaurantReportService.getAllRestaurantReports(page);
+    public Page<RestaurantReport> getReports(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "asc") String sortOrder) {
+        return restaurantReportService.getAllRestaurantReports(page, sortOrder);
     }
 
     @GetMapping("/detail/{reportId}")
