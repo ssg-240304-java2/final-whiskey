@@ -4,6 +4,7 @@ import com.whiskey.rvcom.entity.review.Review;
 import jakarta.persistence.*;
 import lombok.*;
 
+@NoArgsConstructor
 @Table(name = "tbl_review_report")
 @Entity
 @Getter

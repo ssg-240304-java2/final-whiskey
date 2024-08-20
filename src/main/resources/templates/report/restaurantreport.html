@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>관리자 - 식당신고</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         let currentSortOrder = 'asc';
@@ -140,7 +140,7 @@
         }
     });
     
- /* 정렬 처리 잠시 보류 */
+
     document.getElementById('reportDate').addEventListener('click', function() {
         currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
         fetchRestaurantReports(0, currentSortOrder);

@@ -1,17 +1,21 @@
 package com.whiskey.rvcom.report;
 
+import com.whiskey.rvcom.entity.report.RestaurantReport;
+import com.whiskey.rvcom.entity.report.ReviewReport;
+import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.Rating;
-import com.whiskey.rvcom.review.dto.ReviewDTO;
-import com.whiskey.rvcom.report.model.dto.ReviewReportDTO;
+import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.report.service.ReviewReportService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 @SpringBootTest
 public class ReviewReportTest {
@@ -31,9 +35,9 @@ public class ReviewReportTest {
         // given
 
         // when
-        List<ReviewReportDTO> reports = reviewReportService.getAllReviewReports();
+        Page<ReviewReport> reports = reviewReportService.getAllReviewReports(10, "asc");
 
-        for (ReviewReportDTO report : reports) {
+        for (ReviewReport report : reports) {
             System.out.println(report);
         }
 
@@ -50,7 +54,7 @@ public class ReviewReportTest {
         Long id = 2L;
 
         // when
-        ReviewReportDTO result = reviewReportService.getReviewReport(id);
+        ReviewReport result = reviewReportService.getReviewReport(id);
 
         System.out.println("id = " + id);
         System.out.println("result.getId() = " + result.getId());
@@ -79,7 +83,7 @@ public class ReviewReportTest {
         reviewReportService.reviewReportPunish(id, isPunish);
 
         // then
-        ReviewReportDTO result = reviewReportService.getReviewReport(id);
+        ReviewReport result = reviewReportService.getReviewReport(id);
         System.out.println("isPunish = " + isPunish);
         System.out.println("result.isVisible() = " + result.isVisible());
         System.out.println("result.isChecked() = " + result.isChecked());
@@ -93,18 +97,25 @@ public class ReviewReportTest {
     @DisplayName("리뷰신고등록")
     public void save() {
 
-//        // given
-//        ReviewDTO reviewDTO = new ReviewDTO(4L, false, LocalDateTime.now(), 4, 2, "가지마세요...", Rating.ONE_STAR);
-//        ReviewReportDTO reviewReportDTO =
-//                new ReviewReportDTO(null, false, true, LocalDateTime.now(), reviewDTO, "test2", "test2");
-//
-//        // when
-//        reviewReportService.saveReviewReport(reviewReportDTO);
-//
-//        // 조회 성공 후 목록 가져오기
-//        List<ReviewReportDTO> reports = reviewReportService.getAllReviewReports();
-//
-//        // then 현재 테스트 코드로 등록한 신고와 DB에 등록된 신고의 내용이 같은지 비교
+        // given
+        Long id = 20L;
+        Review review = reviewReportService.returnReview(id);
+        ReviewReport report = new ReviewReport();
+        report.setTitle("신고등록 테스트코드");
+        report.setContent("테스트");
+        report.setReportedAt(LocalDateTime.now());
+        report.setChecked(false);
+        report.setVisible(true);
+        report.setReview(review);
+
+        // when
+        report.setReview(review);
+        reviewReportService.saveReviewReport(report);
+
+        // 조회 성공 후 목록 가져오기
+        Page<ReviewReport> reports = reviewReportService.getAllReviewReports(10, "asc");
+
+        // then 현재 테스트 코드로 등록한 신고와 DB에 등록된 신고의 내용이 같은지 비교
 //        Assertions.assertEquals(reports.get(reports.size()-1).getContent(), reviewReportDTO.getContent());
     }
 }

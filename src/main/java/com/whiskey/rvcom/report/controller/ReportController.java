@@ -15,7 +15,16 @@ public class ReportController {
 
     @GetMapping("/restaurantdetail")
     public String getRestaurantDetail() {
-
         return "report/restaurantdetail";
+    }
+
+    @GetMapping("/reviewreport")
+    public String getReviewReport() {
+        return "report/reviewreport";
+    }
+
+    @GetMapping("/reviewdetail")
+    public String getReviewDetail() {
+        return "report/reviewdetail";
     }
 }

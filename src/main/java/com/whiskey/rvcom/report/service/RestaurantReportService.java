@@ -27,7 +27,7 @@ public class RestaurantReportService {
     private final ModelMapper modelMapper;
 
 
-    // 식당 전체 조회
+    // 식당 신고 전체 조회
     public Page<RestaurantReport> getAllRestaurantReports(int page, String sortOrder) {
 
         Sort sort = Sort.by("reportedAt");
@@ -40,7 +40,6 @@ public class RestaurantReportService {
 
         Pageable pageable = PageRequest.of(page, 10, sort);
         return restaurantReportRepository.findAllByIsCheckedFalse(pageable);
-
     }
 
 
