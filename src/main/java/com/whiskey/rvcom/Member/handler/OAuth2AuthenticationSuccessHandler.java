@@ -6,6 +6,7 @@ import com.whiskey.rvcom.entity.member.Member;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -15,9 +16,6 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Map;
 
-/**
- * OAuth2 로그인 성공 시 처리하는 핸들러 클래스입니다.
- */
 @Slf4j
 @Component
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -40,11 +38,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         switch (registrationId) {
             case "google":
-                loginId = (String) userAttributes.get("sub");  // Google의 경우 sub를 식별자로 사용
+                loginId = (String) userAttributes.get("sub");
                 loginType = LoginType.GOOGLE;
                 break;
             case "naver":
-                loginId = (String) userAttributes.get("id");  // Naver의 경우 id를 식별자로 사용
+                loginId = (String) userAttributes.get("id");
                 loginType = LoginType.NAVER;
                 break;
             default:
@@ -54,28 +52,33 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         try {
             Member member = socialLoginService.findMemberByLoginIdAndLoginType(loginId, loginType);
 
-            // 세션 설정
-            request.getSession().setAttribute("member", member);
-            request.getSession().setAttribute("isAuthenticated", true);
-            request.getSession().setAttribute("userRole", member.getRole().name());
+            request.getSession().invalidate();  // 이전 세션 무효화
+            HttpSession newSession = request.getSession(true);  // 새로운 세션 생성
 
-            // 디버그 로그 추가
+            newSession.setAttribute("member", member);
+            newSession.setAttribute("isAuthenticated", true);
+            newSession.setAttribute("userRole", member.getRole().name());
+            newSession.setAttribute("isSocialLogin", loginType != LoginType.BASIC); // 소셜 로그인 여부 설정
+
+            log.info("Session ID after successful authentication: {}", newSession.getId());
             log.info("Session attributes set: isAuthenticated={}, userRole={}",
-                    request.getSession().getAttribute("isAuthenticated"),
-                    request.getSession().getAttribute("userRole"));
+                    newSession.getAttribute("isAuthenticated"),
+                    newSession.getAttribute("userRole"));
 
-            getRedirectStrategy().sendRedirect(request, response, "/mainPage");
+            getRedirectStrategy().sendRedirect(request, response, "/mypage");
         } catch (Exception e) {
-            // 로그 추가
             log.error("Member not found, redirecting to registration page.", e);
 
-            // 사용자가 존재하지 않으면 회원가입 페이지로 리디렉션
-            request.getSession().setAttribute("userAttributes", userAttributes);
-            request.getSession().setAttribute("loginType", loginType.name());
-            request.getSession().setAttribute("loginId", loginId);  // 식별자 저장
+            request.getSession().invalidate();  // 이전 세션 무효화
+            HttpSession newSession = request.getSession(true);  // 새로운 세션 생성
+
+            newSession.setAttribute("userAttributes", userAttributes);
+            newSession.setAttribute("loginType", loginType.name());
+            newSession.setAttribute("loginId", loginId);
             getRedirectStrategy().sendRedirect(request, response, "/register_social");
         }
     }
+
 
 
     private String getClientRegistrationId(Authentication authentication) {
