@@ -21,7 +21,15 @@ public class RestaurantInquiryReply {
 
     @CreationTimestamp
     @Column(nullable = false)
-    private LocalDateTime createdAt;    // 문의 답변 작성일
+    private LocalDateTime createdAt;    // 문의 답변 작성시간
 
-    private LocalDateTime deletedAt;    // 문의 답변 삭제일
+    private LocalDateTime deletedAt;    // 문의 답변 삭제시간
+
+    public RestaurantInquiryReply(String content) {
+        this.content = content;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

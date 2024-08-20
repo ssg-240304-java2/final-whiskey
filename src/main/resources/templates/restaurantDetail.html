@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/restaurantDetail.css">
-    <link rel="stylesheet" href="/css/common.css"/>
     <th:block th:replace="fragments/header :: headerfiles"></th:block>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/restaurantDetail.css}">
+    <link rel="stylesheet" th:href="@{/css/restaurantDetail/info.css}">
+    <link rel="stylesheet" th:href="@{/css/restaurantDetail/reviews.css}">
+    <link rel="stylesheet" th:href="@{/css/restaurantDetail/inquiries.css}">
+    <link rel="stylesheet" th:href="@{/css/restaurantDetail/notices.css}">
+    <link rel="stylesheet" href="/css/common.css"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!--  카카오 api key 를 받아오는 js  -->
     <script src="/js/kakaoMapApiSource.js"></script>
     <title>FoodPolio - 음식점 상세 정보</title>
-    <script src="/js/restaurantDetail.js" defer></script>
 </head>
 <body>
 <div th:replace="fragments/header :: header"></div>
@@ -35,311 +38,55 @@
 <div class="container">
     <div class="main-content">
         <nav class="tabs" role="tablist">
-            <button class="tab active" data-tab="info" role="tab" aria-selected="true" aria-controls="info">
+            <button class="tab active" th:data-tab="info" role="tab" aria-selected="true" aria-controls="info">
                 <i class="fas fa-info-circle"></i> <span>정보</span>
             </button>
-            <button class="tab" data-tab="reviews" role="tab" aria-selected="false" aria-controls="reviews">
+            <button class="tab" th:data-tab="reviews" role="tab" aria-selected="false" aria-controls="reviews">
                 <i class="fas fa-star"></i> <span>리뷰</span>
             </button>
-            <button class="tab" data-tab="inquiries" role="tab" aria-selected="false" aria-controls="inquiries">
+            <button class="tab" th:data-tab="inquiries" role="tab" aria-selected="false" aria-controls="inquiries">
                 <i class="fas fa-question-circle"></i> <span>문의하기</span>
             </button>
-            <button class="tab" data-tab="notices" role="tab" aria-selected="false" aria-controls="notices">
+            <button class="tab" th:data-tab="notices" role="tab" aria-selected="false" aria-controls="notices">
                 <i class="fas fa-bullhorn"></i> <span>공지사항</span>
             </button>
-        <button id="reportForm">신고하기</button>
         </nav>
 
         <!-- 신고 폼 -->
-        <div id="modal" class="modal">
+        <div class="report-modal-form">
+            <div id="modal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
                     <span id="closeModalBtn" class="close-btn">X</span>
-                    <h2>식당 신고하기</h2>
+                    <h2>신고하기</h2>
                 </div>
                 <div class="modal-body">
-                    <form id="modalForm">
+                    <form id="reportModalForm">
                         <div>
                             <label for="reportTile">신고 제목</label>
-                            <input type="text" id="reportTile" name="reportTitle">
+                            <input type="text" id="reportTile" name="reportTitle" required>
                         </div>
                         <div>
                             <label for="reportContent">신고 내용</label>
                             <textarea id="reportContent" name="reportContent" rows="3" required></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit">Submit</button>
+                            <button type="submit">신고</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+        </div>
         <!-- 신고 폼 끝 -->
-        <script>
-            // 모달 열기
-            document.getElementById('reportForm').addEventListener('click', function() {
-                document.getElementById('modal').style.display = 'block';
-            });
 
-            // 모달 닫기
-            document.getElementById('closeModalBtn').addEventListener('click', function() {
-                document.getElementById('modal').style.display = 'none';
-            });
-
-            // 모달 외부 클릭 시 닫기
-            window.addEventListener('click', function(event) {
-                if (event.target == document.getElementById('modal')) {
-                    document.getElementById('modal').style.display = 'none';
-                }
-            });
-
-            // 폼 전송 이벤트
-            document.getElementById('modalForm').addEventListener('submit', function(event) {
-                event.preventDefault(); // 폼 기본 전송 방지
-
-                const formData = new FormData(this);
-                const data = {
-                    title: formData.get('reportTitle'),
-                    content: formData.get('reportContent'),
-                    id: 20
-                };
-
-                // 데이터를 서버로 전송
-                fetch('/restreport/regist', {  // 요청을 보낼 URL로 변경
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
-                })
-                    .then(response => response.json())  // 응답을 JSON으로 변환
-                    .then(data => {
-                        console.log('Success:', data);
-                        // 서버로부터의 응답 처리
-                    })
-                    .catch((error) => {
-                        console.error('Error:', error);
-                        // 에러 처리
-                    });
-
-                // 폼 전송 후 모달 닫기
-                document.getElementById('modal').style.display = 'none';
-
-                // 폼 초기화
-                this.reset();
-            });
-
-
-        </script>
-
-
-
+        <!-- 각 탭 콘텐츠 영역 -->
         <div class="content-area">
             <div class="flex-container">
-                <div id="info" class="tab-content" role="tabpanel" aria-labelledby="info-tab">
-                    <div class="menu-section">
-                        <h2><i class="fas fa-utensils"></i> 인기 메뉴</h2>
-                        <!-- TODO: 백엔드 - 인기 메뉴 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
-                        <div class="menu-items-container">
-                            <div class="menu-items">
-                                <div th:replace="fragments/menuItem :: menuItem('트러플 크림 파스타', '18,000')"></div>
-                                <div th:replace="fragments/menuItem :: menuItem('마르게리타 피자', '22,000')"></div>
-                                <!-- 추가 메뉴 아이템 -->
-                            </div>
-                        </div>
-                        <!-- TODO: 백엔드 - '전체 메뉴 보기' 버튼 클릭 시 전체 메뉴 모달로 이동하는 로직 구현 -->
-                        <button class="view-full-menu"><i class="fas fa-list"></i> 전체 메뉴 보기</button>
-                    </div>
-
-                    <div class="tab-divider"></div>
-
-                    <h2><i class="fas fa-map-marker-alt"></i> 위치 및 영업시간</h2>
-                    <!-- TODO: 백엔드 - 네이버 또는 카카오 지도 API 연동 및 레스토랑 위치 표시 -->
-                    <div id="map" class="map-placeholder">
-                        카카오 지도 API가 여기에 표시됩니다
-                    </div>
-                    <!-- TODO: 백엔드 - 영업시간 데이터를 데이터베이스에서 가져와 동적으로 표시 -->
-                    <table class="hours-table">
-                        <tr>
-                            <td><i class="far fa-clock"></i> 월요일</td>
-                            <td>11:00 AM - 11:00 PM</td>
-                        </tr>
-                        <tr>
-                            <td><i class="far fa-clock"></i> 화요일</td>
-                            <td>11:00 AM - 11:00 PM</td>
-                        </tr>
-                        <tr>
-                            <td><i class="far fa-clock"></i> 수요일</td>
-                            <td>11:00 AM - 11:00 PM</td>
-                        </tr>
-                        <tr>
-                            <td><i class="far fa-clock"></i> 목요일</td>
-                            <td>11:00 AM - 11:00 PM</td>
-                        </tr>
-                        <tr>
-                            <td><i class="far fa-clock"></i> 금요일</td>
-                            <td>11:00 AM - 12:00 AM (다음날)</td>
-                        </tr>
-                        <tr>
-                            <td><i class="far fa-clock"></i> 토요일</td>
-                            <td>11:00 AM - 12:00 AM (다음날)</td>
-                        </tr>
-                        <tr>
-                            <td><i class="far fa-clock"></i> 일요일</td>
-                            <td>11:00 AM - 11:00 PM</td>
-                        </tr>
-                    </table>
-
-                    <div class="tab-divider"></div>
-                    <div class="additional-info">
-                        <h2><i class="fas fa-info-circle"></i> 추가 정보</h2>
-                        <!-- TODO: 백엔드 - 추가 정보를 데이터베이스에서 가져와 동적으로 표시 -->
-                        <ul>
-                            <li><i class="fas fa-parking"></i> 주차 가능</li>
-                            <li><i class="fas fa-wifi"></i> 무료 Wi-Fi</li>
-                            <li><i class="fas fa-calendar-check"></i> 예약 권장</li>
-                            <li><i class="fas fa-shopping-bag"></i> 테이크아웃 가능</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div id="reviews" class="tab-content" role="tabpanel" aria-labelledby="reviews-tab">
-                    <div class="review-header">
-                        <h2><i class="fas fa-star"></i> 리뷰</h2>
-                        <a href="/receipt-verification" class="write-review-button"><i class="fas fa-pen"></i> 리뷰 작성하기</a>
-                    </div>
-                    <div class="review-summary">
-                        <div class="review-cards">
-                            <!-- TODO: 백엔드 - 전체 평점 및 리뷰 수를 계산하여 동적으로 표시 -->
-                            <div class="review-card">
-                                <h3>전체 평점</h3>
-                                <div class="rating">★★★★☆ 4</div>
-                                <p>1,234 리뷰</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="review-list">
-                        <div class="popular-reviews">
-                            <h3><i class="fas fa-thumbs-up"></i> 인기 리뷰</h3>
-                            <!-- TODO: 백엔드 - 인기 리뷰를 좋아요 수 기준으로 정렬하여 가져와 동적으로 표시 -->
-                            <div class="popular-review-cards">
-                                <div class="popular-review-card">
-                                    <div class="review-content">
-                                        <h4>최고의 파스타 맛집!</h4>
-                                        <p>트러플 크림 파스타가 정말 일품이에요. 분위기도 좋고 서비스도 친절해요.</p>
-                                        <div class="review-footer">
-                                            <span class="reviewer"><i class="fas fa-user"></i> 김맛있다</span>
-                                            <span class="likes"><i class="fas fa-thumbs-up"></i> 좋아요 128</span>
-                                        </div>
-                                    </div>
-                                    <div class="image-placeholder">인기 리뷰 이미지</div>
-                                </div>
-                                <div class="popular-review-card">
-                                    <div class="review-content">
-                                        <h4>데이트 코스로 완벽해요</h4>
-                                        <p>와인과 스테이크의 조화가 환상적이에요. 연인과 함께 오기 좋은 곳입니다.</p>
-                                        <div class="review-footer">
-                                            <span class="reviewer"><i class="fas fa-user"></i> 박데이트</span>
-                                            <span class="likes"><i class="fas fa-thumbs-up"></i> 좋아요 95</span>
-                                        </div>
-                                    </div>
-                                    <div class="image-placeholder">인기 리뷰 이미지</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="recent-reviews">
-                            <h3><i class="fas fa-clock"></i> 최근 리뷰</h3>
-                            <!-- TODO: 백엔드 - 최근 리뷰를 날짜순으로 정렬하여 가져와 동적으로 표시 -->
-                            <div class="review-items">
-                                <!-- 리뷰 카드 fragment 사용 -->
-                                <div th:replace="fragments/reviewItem :: reviewItem(
-                                        title='맛있는 파스타와 분위기 좋은 레스토랑',
-                                        content='파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!',
-                                        author='홍길동',
-                                        date='2024-05-01',
-                                        rating='★★★★☆ 4',
-                                        images='',
-                                        menuName='트러플 크림 파스타',
-                                        menuPrice='18,000'
-                                    )" th:attr="data-review-id=${reviewId}"></div>
-                                <!-- 추가 리뷰 카드들... -->
-                            </div>
-                        </div>
-                        <button id="loadMoreReviews" class="load-more">더 보기</button>
-                    </div>
-                </div>
-
-                <div id="inquiries" class="tab-content" role="tabpanel" aria-labelledby="inquiries-tab">
-                    <h2><i class="fas fa-question-circle"></i> 문의하기</h2>
-                    <div class="inquiry-form">
-                        <textarea id="inquiryText" placeholder="이 음식점에 대해 궁금한 점을 물어보세요." rows="4"></textarea>
-                        <button id="submitInquiry" class="submit-inquiry"><i class="fas fa-paper-plane"></i> 문의 등록
-                        </button>
-                    </div>
-                    <div class="inquiry-filter">
-                        <select id="inquirySort">
-                            <option value="recent">최신순</option>
-                            <option value="popular">인기순</option>
-                        </select>
-                    </div>
-                    <div class="recent-inquiries">
-                        <!-- TODO: 백엔드 - 문의 목록을 데이터베이스에서 가져와 동적으로 표시 -->
-                        <!-- TODO: 백엔드 - 각 문의에 대한 답변 데이터도 함께 가져와 표시 -->
-                        <!-- 문의 아이템 fragment 사용 -->
-                        <div th:replace="fragments/inquiryItem :: inquiryItem(
-                                user='김철수',
-                                location='서울시',
-                                reviewCount=10,
-                                photoCount=5,
-                                question='주차 시설이 있나요?',
-                                questionDate='2023년 5월 15일 14:30',
-                                answer='네, 건물 뒤편에 무료 주차장이 마련되어 있습니다.',
-                                answerUser='음식점 관리자',
-                                answerDate='2023년 5월 15일 15:45'
-                            )"></div>
-                    </div>
-                    <div class="inquiry-pagination">
-                        <!-- TODO: 백엔드 - 페이지네이션 구현 (전체 문의 수에 따라 페이지 수 계산) -->
-                        <button class="prev-page"><i class="fas fa-chevron-left"></i> 이전</button>
-                        <span class="current-page">1</span>
-                        <button class="next-page">다음 <i class="fas fa-chevron-right"></i></button>
-                    </div>
-                </div>
-
-                <div id="notices" class="tab-content" role="tabpanel" aria-labelledby="notices-tab">
-                    <div class="notices-header">
-                        <h2><i class="fas fa-bullhorn"></i> 공지사항</h2>
-                        <button id="writeNoticeBtn" class="write-notice-button" style="display: none;">
-                            <i class="fas fa-pen"></i> 공지사항 작성
-                        </button>
-                    </div>
-                    <div class="notices-container">
-                        <div class="notices-scroll">
-                            <div class="notice-card">
-                                <h3>신메뉴 출시</h3>
-                                <p>트러플 리조또가 새롭게 출시되었습니다.</p>
-                                <span class="notice-date">2024-05-01</span>
-                            </div>
-                            <div class="notice-card">
-                                <h3>영업시간 변경</h3>
-                                <p>5월부터 영업시간이 변경됩니다. 자세한 내용은 본문을 확인해주세요.</p>
-                                <span class="notice-date">2024-04-25</span>
-                            </div>
-                            <div class="notice-card">
-                                <h3>임시 휴업 안내</h3>
-                                <p>내부 공사로 인해 5월 10일부터 5월 15일까지 휴업합니다.</p>
-                                <span class="notice-date">2024-04-20</span>
-                            </div>
-                            <!-- 추가 공지사항 카드들... -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TODO: 백엔드 - 문의 등록 API 구현 (POST /api/inquiries) -->
-                <!-- TODO: 백엔드 - 문의 목록 조회 API 구현 (GET /api/inquiries?restaurantId=:id&page=:page&sort=:sort) -->
-                <!-- TODO: 백엔드 - 문의 답변 등록 API 구현 (POST /api/inquiries/:id/replies) -->
-                <!-- TODO: 백엔드 - 문의 좋아요 API 구현 (POST /api/inquiries/:id/like) -->
-
+                <div class="tab-content active" id="info" th:replace="fragments/restaurantDetail/info :: info"></div>
+                <div class="tab-content" id="reviews" th:replace="fragments/restaurantDetail/reviews :: reviews"></div>
+                <div class="tab-content" id="inquiries" th:replace="fragments/restaurantDetail/inquiries :: inquiries"></div>
+                <div class="tab-content" id="notices" th:replace="fragments/restaurantDetail/notices :: notices"></div>
             </div>
         </div>
     </div>
@@ -355,9 +102,10 @@
     </div>
 </div>
 
-<!-- 리뷰 모달 -->
+<!-- 리뷰 모달 추가 -->
 <div th:replace="~{fragments/modal :: modal('reviewModal', '리뷰 상세')}">
     <div th:fragment="content">
+        <h3 id="modalReviewTitle"></h3>
         <p id="modalReviewContent"></p>
         <div id="modalReviewInfo"></div>
     </div>
@@ -372,6 +120,28 @@
         </div>
     </div>
 </div>
+
+<!-- 공지사항 작성 모달 추가 -->
+<div th:replace="~{fragments/modal :: modal('noticeModal', '공지사항 작성')}">
+    <div th:fragment="content">
+        <div class="notice-form">
+            <form id="noticeForm">
+                <div class="form-group">
+                    <label for="noticeTitle">제목</label>
+                    <input type="text" id="noticeTitle" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="noticeContent">내용</label>
+                    <textarea id="noticeContent" name="content" rows="4" required></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">작성</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     window.onload = function () {
         kakao.maps.load(function () {
@@ -385,7 +155,18 @@
                 document.head.appendChild(script);
             }
         });
+
+
     }
 </script>
+
+<!-- restaurantId를 JavaScript에서 사용할 수 있도록 hidden input 추가 -->
+<input type="hidden" id="restaurantId" th:value="${restaurantId}">
+
+    <script th:src="@{/js/restaurantDetail.js}"></script>
+    <script th:src="@{/js/restaurantDetail/reviews.js}"></script>
+    <script th:src="@{/js/restaurantDetail/info.js}"></script>
+    <script th:src="@{/js/restaurantDetail/inquiries.js}"></script>
+    <script th:src="@{/js/restaurantDetail/notices.js}"></script>
 </body>
 </html>

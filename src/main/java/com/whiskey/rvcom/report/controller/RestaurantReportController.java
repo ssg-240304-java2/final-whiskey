@@ -1,46 +1,74 @@
 package com.whiskey.rvcom.report.controller;
 
+import com.whiskey.rvcom.entity.report.RestaurantReport;
 import com.whiskey.rvcom.report.model.dto.ReportData;
-import com.whiskey.rvcom.report.model.dto.RestaurantDTO;
-import com.whiskey.rvcom.report.model.dto.RestaurantReportDTO;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 
-@RestController
-@RequestMapping("/restreport")
+@Controller
+@RequestMapping("/restaurantreport")
 @RequiredArgsConstructor
 public class RestaurantReportController {
 
     private final RestaurantReportService restaurantReportService;
 
     @PostMapping("/regist")
-    public void registRestaurantReport(@RequestBody ReportData report) {
+    public ResponseEntity<Void> registRestaurantReport(@RequestBody ReportData report) {
 
-        System.out.println("report = " + report.getId());
-        System.out.println("report = " + report.getContent());
-        System.out.println("report = " + report.getTitle());
+        RestaurantReport restaurantReport = new RestaurantReport();
+        restaurantReport.setTitle(report.getTitle());
+        restaurantReport.setContent(report.getContent());
+        restaurantReport.setReportedAt(LocalDateTime.now());
+        restaurantReport.setChecked(false);
+        restaurantReport.setVisible(true);
 
-        RestaurantReportDTO restaurantReportDTO = new RestaurantReportDTO();
-        restaurantReportDTO.setTitle(report.getTitle());
-        restaurantReportDTO.setContent(report.getContent());
-        restaurantReportDTO.setReportedAt(LocalDateTime.now());
-        restaurantReportDTO.setChecked(false);
-        restaurantReportDTO.setVisible(true);
-        restaurantReportDTO.setId(null);
+        restaurantReport.setRestaurant(restaurantReportService.returnRestaurant(report.getId()));
 
-        RestaurantDTO restaurantDTO = restaurantReportService.returnRestaurantDTO(report.getId());
-
-        restaurantReportDTO.setRestaurantDTO(restaurantDTO);
-
-        restaurantReportService.saveRestaurantReport(restaurantReportDTO);
-
+        restaurantReportService.saveRestaurantReport(restaurantReport);
+        return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/list")
+    @ResponseBody
+    public Page<RestaurantReport> getReports(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "asc") String sortOrder) {
+        return restaurantReportService.getAllRestaurantReports(page, sortOrder);
+    }
+
+    @GetMapping("/detail/{reportId}")
+    public ResponseEntity<Map<String, Object>> getReportDetail(@PathVariable("reportId") Long id) {
+
+        Map<String, Object> response = new HashMap<>();
+
+        RestaurantReport report = restaurantReportService.getRestaurantReport(id);
+
+        if (report != null) {
+            response.put("report", report);
+        } else {
+            response.put("report", "report not found");
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/update/{reportId}")
+    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
+
+        boolean isPunish = btnId.equals("punish");
+
+        restaurantReportService.restaurantReportPunish(reportId, isPunish);
+
+        if (isPunish){
+            // 메일 발송 코드 예정
+        }
+        return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
+    }
 }

@@ -10,10 +10,16 @@ import java.util.Optional;
 public interface RestaurantInquiryRepository extends JpaRepository<RestaurantInquiry, Long> {
 
     @Query("""
-        select i from RestaurantInquiry i
-        where i.restaurant.id = :restaurantId
-        """)
-    List<RestaurantInquiry> findInquiryByRestaurantId(Long restaurantId);
+            select i
+            from RestaurantInquiry i
+            left join i.reply r
+            where i.restaurant.id = :restaurantId
+            and i.deletedAt is null
+            and (r is null or r.deletedAt is null)
+            """)
+    List<RestaurantInquiry> findAllByRestaurantId(Long restaurantId);
+
+    Optional<RestaurantInquiry> findByReplyId(Long replyId);
 
     Optional<RestaurantInquiry> findByContent(String content);
 }

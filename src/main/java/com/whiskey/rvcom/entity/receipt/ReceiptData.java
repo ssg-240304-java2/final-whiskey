@@ -1,16 +1,17 @@
 package com.whiskey.rvcom.entity.receipt;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Table(name = "tbl_receipt_data")
 @Entity
+@ToString
 public class ReceiptData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

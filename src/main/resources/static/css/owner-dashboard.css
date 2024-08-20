@@ -1,0 +1,212 @@
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    background-color: #252526;
+    box-shadow: inset -1px 0 0 rgba(255,255,255,.1);
+}
+
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.sidebar .nav-link.active {
+    color: #ff6b6b;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff;
+}
+
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+}
+
+main {
+    padding-top: 48px;
+    background-color: #1e1e1e;
+}
+
+.card {
+    border: 1px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    background-color: #252526;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.card-title {
+    color: #e0e0e0;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ff6b6b;
+}
+
+/* Yelp 스타일 색상 (어두운 테마용) */
+:root {
+    --yelp-red: #ff6b6b;
+    --yelp-red-dark: #ff4f4f;
+    --yelp-blue: #4fc3f7;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 767.98px) {
+    .sidebar {
+        top: 5rem;
+    }
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.08);
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.sidebar-header {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+/* 추가적인 스타일 */
+.btn-primary {
+    background-color: var(--yelp-red);
+    border-color: var(--yelp-red);
+}
+
+.btn-primary:hover {
+    background-color: var(--yelp-red-dark);
+    border-color: var(--yelp-red-dark);
+}
+
+.table {
+    color: #e0e0e0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #333;
+}
+
+.foodfolio-logo {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 2rem;
+    color: #ff1a1a;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+}
+
+.foodfolio-logo:hover {
+    color: #ff4d4d;
+    text-shadow: 2px 2px 6px rgba(255,26,26,0.4);
+    transition: all 0.3s ease;
+}
+
+/* 음식점 정보 폼 스타일 */
+#restaurantInfoForm .form-control[readonly] {
+    background-color: #2c2c2c;
+    color: #a0a0a0;
+}
+
+#restaurantInfoForm .btn {
+    margin-top: 20px;
+}
+
+/* 모달 스타일 */
+.modal-content {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+.modal-header {
+    border-bottom: 1px solid #444;
+}
+
+.modal-footer {
+    border-top: 1px solid #444;
+}
+
+/* 메뉴 관리 페이지 스타일 */
+.card {
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 0.9rem;
+}
+
+#addNewMenuBtn {
+    margin-bottom: 20px;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.modal-content {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+.modal-header, .modal-footer {
+    border-color: #444;
+}
+
+.form-control {
+    background-color: #383838;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
+.form-control:focus {
+    background-color: #404040;
+    color: #ffffff;
+    border-color: #ff6b6b;
+    box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+}
