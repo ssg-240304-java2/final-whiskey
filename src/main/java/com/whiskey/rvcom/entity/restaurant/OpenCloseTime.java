@@ -17,7 +17,7 @@ public class OpenCloseTime {
 
     private String closeTime;
 
-//    영업중 여부
+    //    영업중 여부
     @Column(nullable = false)
     private boolean isOpen;
 }
