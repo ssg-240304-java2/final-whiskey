@@ -31,6 +31,8 @@ public class Member {
 
     private String password;    // 비밀번호
 
+    private String introduction;    // 자기소개
+
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createdAt;   // 생성 시점에 현재 시간 초기화
