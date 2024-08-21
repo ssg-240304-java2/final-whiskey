@@ -14,23 +14,18 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container">
-    <!-- TODO: 백엔드 개발자는 사용자 정보를 동적으로 가져와서 profileHeader 프래그먼트에 전달해야 합니다. -->
-    <div th:replace="fragments/mypage_profileHeader :: profileHeader(${member.name}, ${member.createdAt}, ${reviewCount})"></div>
-
+    <div th:replace="fragments/mypage_profileHeader :: profileHeader(${member.name}, ${member.createdAt}, ${reviewCount}, ${profileImageUrl})"></div>
 
     <div class="content-wrapper">
         <div class="sidebar">
-            <!-- TODO: 백엔드 개발자는 사용자의 권한에 따라 다른 사이드바 메뉴를 표시해야 할 수 있습니다. -->
             <div th:replace="fragments/mypage_sidebar :: sidebar"></div>
         </div>
 
         <div class="main-content">
-            <!-- TODO: 백엔드 개발자는 현재 선택된 탭에 따라 적절한 contentSection을 표시해야 합니다. -->
             <div th:replace="fragments/mypage_contentSection :: contentSection('profile')"></div>
 
             <section id="reviews" class="content-section">
                 <h2>내가 작성한 리뷰</h2>
-                <!-- TODO: 백엔드 개발자는 사용자가 작성한 리뷰 목록을 데이터베이스에서 가져와 동적으로 표시해야 합니다. -->
                 <div class="review-list">
                     <div class="review-item">
                         <img src="https://via.placeholder.com/100" alt="레스토랑 이미지" class="restaurant-image">
@@ -53,7 +48,6 @@
 
             <section id="bookmarks" class="content-section">
                 <h2>북마크한 레스토랑</h2>
-                <!-- TODO: 백엔드 개발자는 사용자가 북마크한 레스토랑 목록을 데이터베이스에서 가져와 동적으로 표시해야 합니다. -->
                 <div class="bookmark-list">
                     <div class="bookmark-item">
                         <img src="https://via.placeholder.com/100" alt="레스토랑 이미지" class="restaurant-image">
@@ -75,17 +69,12 @@
         </div>
     </div>
 </div>
-<!-- TODO: 백엔드 개발자는 프로필 수정 모달에 현재 사용자 정보를 미리 채워넣어야 합니다. -->
+
 <!-- 일반 회원 수정 모달 -->
-<div th:if="${isSocialLogin == false}" th:insert="~{fragments/mypage_editProfileModal_basic :: editProfileModalBasic(${member})}"></div>
+<div th:if="${isSocialLogin == false}" th:insert="~{fragments/mypage_editProfileModal_basic :: editProfileModalBasic(${member}, ${profileImageUrl})}"></div>
 
 <!-- 소셜 로그인 사용자 모달 -->
-<div th:if="${isSocialLogin == true}" th:insert="~{fragments/mypage_editProfileModal_social :: editProfileModalSocial(${member})}"></div>
-
-
-
-
-
+<div th:if="${isSocialLogin == true}" th:insert="~{fragments/mypage_editProfileModal_social :: editProfileModalSocial(${member}, ${profileImageUrl})}"></div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -121,7 +110,6 @@
 
         if (btn) {
             btn.onclick = function() {
-                // 소셜 로그인과 일반 로그인 모달을 구분해서 표시
                 if (modalBasic) {
                     modalBasic.style.display = "block";
                     setTimeout(() => modalBasic.classList.add('show'), 10);
@@ -170,9 +158,6 @@
             }
         };
     });
-
-
 </script>
-
 </body>
 </html>

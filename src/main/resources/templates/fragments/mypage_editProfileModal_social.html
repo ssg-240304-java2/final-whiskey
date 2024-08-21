@@ -1,17 +1,43 @@
 <!-- src/main/resources/templates/fragments/mypage_editProfileModal_social.html -->
-<div th:fragment="editProfileModalSocial(member)" id="editProfileModalSocial" class="modal">
+<div th:fragment="editProfileModalSocial(member,profileImageUrl)" id="editProfileModalSocial" class="modal">
     <div class="modal-content">
         <span class="close">×</span>
         <h2>회원정보 수정</h2>
-        <form id="editProfileFormSocial" class="social-profile-form" action="/updateProfileSocial" method="post">
+        <form id="editProfileFormSocial" class="social-profile-form" action="/updateProfileSocial" method="post" enctype="multipart/form-data">
             <label for="socialNickname">닉네임:</label>
             <input type="text" id="socialNickname" name="nickname" th:value="${member.nickname}" required>
 
             <label for="socialIntroduction">자기소개:</label>
             <input type="text" id="socialIntroduction" name="introduction" th:value="${member.introduction != null ? member.introduction : ''}" placeholder="자기소개를 입력하세요">
 
+            <!-- 프로필 사진 업로드 -->
+            <label for="profileImage">프로필 이미지:</label>
+            <input type="file" id="profileImage" name="profileImage" accept="image/*">
+
+            <!-- 이미지 미리보기 -->
+            <img id="profileImagePreview" th:src="${profileImageUrl}" alt="프로필 이미지 미리보기" class="profile-image" style="width: 150px; height: 150px; object-fit: cover; margin-top: 10px;">
+
             <button type="submit">저장</button>
         </form>
-
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileImageInput = document.getElementById('profileImage');
+            const profileImagePreview = document.getElementById('profileImagePreview');
+
+            profileImageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profileImagePreview.src = e.target.result;
+                        profileImagePreview.style.display = 'block'; // 이미지 미리보기를 표시
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    profileImagePreview.style.display = 'none'; // 파일이 없을 경우 이미지 미리보기 숨김
+                }
+            });
+        });
+    </script>
 </div>

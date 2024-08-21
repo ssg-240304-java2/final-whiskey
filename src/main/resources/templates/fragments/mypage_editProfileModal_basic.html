@@ -1,9 +1,9 @@
 <!-- src/main/resources/templates/fragments/mypage_editProfileModal_basic.html -->
-<div th:fragment="editProfileModalBasic(member)" id="editProfileModalBasic" class="modal">
+<div th:fragment="editProfileModalBasic(member,profileImageUrl)" id="editProfileModalBasic" class="modal">
     <div class="modal-content">
         <span class="close">×</span>
         <h2>회원정보 수정</h2>
-        <form id="editProfileFormBasic" class="basic-profile-form" action="/updateProfileBasic" method="post">
+        <form id="editProfileFormBasic" class="basic-profile-form" action="/updateProfileBasic" method="post" enctype="multipart/form-data">
             <label for="basicName">이름:</label>
             <input type="text" id="basicName" name="name" th:value="${member.name}" required>
 
@@ -22,7 +22,32 @@
             <label for="basicIntroduction">자기소개:</label>
             <input type="text" id="basicIntroduction" name="introduction" th:value="${member.introduction != null ? member.introduction : ''}" placeholder="자기소개를 입력하세요">
 
+            <!-- 프로필 사진 업로드 -->
+            <label for="profileImage">프로필 이미지:</label>
+            <input type="file" id="profileImage" name="profileImage" accept="image/*">
+
+            <!-- 이미지 미리보기 -->
+            <img id="profileImagePreview" th:src="${profileImageUrl}" alt="프로필 이미지 미리보기" class="profile-image" style="width: 150px; height: 150px; object-fit: cover; margin-top: 10px;">
+
             <button type="submit">저장</button>
         </form>
     </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#profileImage').on('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#profileImagePreview').attr('src', e.target.result);
+                    $('#profileImagePreview').show();  // 이미지 미리보기 표시
+                }
+                reader.readAsDataURL(file);
+            } else {
+                $('#profileImagePreview').hide();  // 파일이 없을 경우 이미지 미리보기 숨김
+            }
+        });
+    });
+</script>
 </div>

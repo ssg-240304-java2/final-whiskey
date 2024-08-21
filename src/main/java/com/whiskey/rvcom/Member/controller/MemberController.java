@@ -1,5 +1,6 @@
 package com.whiskey.rvcom.Member.controller;
 
+import com.whiskey.rvcom.ImageFile.ImageFileService;
 import com.whiskey.rvcom.Member.emailauth.EmailService;
 import com.whiskey.rvcom.Member.service.MemberManagementService;
 import com.whiskey.rvcom.Member.service.SocialLoginService;
@@ -7,7 +8,9 @@ import com.whiskey.rvcom.Member.service.VerificationService;
 import com.whiskey.rvcom.entity.member.LoginType;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.member.Role;
+import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.review.ReviewService;
+import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,11 +39,12 @@ public class MemberController {
     private final RestTemplate restTemplate;
     private final EmailService emailService;
     private final VerificationService verificationService;
+    private final ImageFileService imageFileService;
 
     @Autowired
     public MemberController(ReviewService reviewService, SocialLoginService socialLoginService,
                             MemberManagementService memberManagementService, PasswordEncoder passwordEncoder,
-                            RestTemplate restTemplate, EmailService emailService, VerificationService verificationService) {
+                            RestTemplate restTemplate, EmailService emailService, VerificationService verificationService, ImageFileService imageFileService) {
         this.reviewService = reviewService;
         this.socialLoginService = socialLoginService;
         this.memberManagementService = memberManagementService;
@@ -47,6 +52,7 @@ public class MemberController {
         this.restTemplate = restTemplate;
         this.emailService = emailService;
         this.verificationService = verificationService;
+        this.imageFileService = imageFileService;
     }
 
     @GetMapping("/")
@@ -101,19 +107,28 @@ public class MemberController {
     }
 
     @GetMapping("/mypage")
-    public String myPage(Model model, HttpSession session) {
+    public String myPage(HttpSession session, Model model) {
         Member member = (Member) session.getAttribute("member");
+
         if (member == null) {
-            log.warn("No member found in session, redirecting to login.");
             return "redirect:/login";
         }
 
-        Boolean isSocialLogin = member.getLoginType() != LoginType.BASIC;
+        String profileImageUrl = "/default/image/path/default-profile.jpg";
+        if (member.getProfileImage() != null) {
+            profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
+        }
+
+        int reviewCount = reviewService.getReviewsByMember(member).size();
+
         model.addAttribute("member", member);
-        model.addAttribute("isSocialLogin", isSocialLogin);
+        model.addAttribute("profileImageUrl", profileImageUrl);
+        model.addAttribute("isSocialLogin", member.getLoginType() != LoginType.BASIC);
+        model.addAttribute("reviewCount", reviewCount); // 리뷰 갯수 추가
 
         return "mypage";
     }
+
 
     @PostMapping("/checkLoginId")
     public ResponseEntity<Map<String, Boolean>> checkLoginId(@RequestParam String loginId) {
@@ -240,7 +255,9 @@ public class MemberController {
     }
 
     @PostMapping("/updateProfileBasic")
-    public String updateProfileBasic(@RequestParam Map<String, String> params, HttpSession session, Model model) {
+    public String updateProfileBasic(@RequestParam Map<String, String> params,
+                                     @RequestParam("profileImage") MultipartFile profileImage,
+                                     HttpSession session, Model model) {
         log.info("Received request to update basic profile with params: {}", params);
 
         Member member = (Member) session.getAttribute("member");
@@ -250,10 +267,7 @@ public class MemberController {
             return "redirect:/login";
         }
 
-        // 전달받은 파라미터를 멤버에 적용하기 전에 로깅
-        log.info("Updating basic member with new parameters - Name: {}, Nickname: {}, Introduction: {}",
-                params.get("name"), params.get("nickname"), params.get("introduction"));
-
+        // 이름, 닉네임, 이메일, 비밀번호 및 자기소개 업데이트
         member.setName(params.get("name"));
         member.setNickname(params.get("nickname"));
         member.setEmail(params.get("email"));
@@ -263,10 +277,20 @@ public class MemberController {
             member.setPassword(passwordEncoder.encode(password));
         }
 
-        // "자기소개" 필드 업데이트
         member.setIntroduction(params.get("introduction"));
 
-        // 변경 사항을 저장하는 코드
+        // 프로필 이미지 업데이트 처리
+        if (!profileImage.isEmpty()) {
+            try {
+                ImageFile imageFile = imageFileService.uploadFile(profileImage);
+                member.setProfileImage(imageFile);
+            } catch (Exception e) {
+                log.error("Error uploading profile image", e);
+                model.addAttribute("error", "프로필 이미지 업로드 중 오류가 발생했습니다.");
+                return "redirect:/mypage";
+            }
+        }
+
         memberManagementService.updateMember(member);
 
         log.info("Successfully updated member: {}", member);
@@ -278,7 +302,12 @@ public class MemberController {
     }
 
     @PostMapping("/updateProfileSocial")
-    public String updateProfileSocial(@RequestParam Map<String, String> params, HttpSession session, Model model) {
+    public String updateProfileSocial(
+            @RequestParam Map<String, String> params,
+            @RequestParam("profileImage") MultipartFile profileImage,
+            HttpSession session,
+            Model model) {
+
         log.info("Received request to update social profile with params: {}", params);
 
         Member member = (Member) session.getAttribute("member");
@@ -288,12 +317,20 @@ public class MemberController {
             return "redirect:/login";
         }
 
-        // 전달받은 파라미터를 멤버에 적용하기 전에 로깅
-        log.info("Updating social member with new parameters - Nickname: {}, Introduction: {}",
-                params.get("nickname"), params.get("introduction"));
-
         member.setNickname(params.get("nickname"));
         member.setIntroduction(params.get("introduction"));
+
+        // 프로필 이미지가 업로드된 경우
+        if (!profileImage.isEmpty()) {
+            try {
+                ImageFile imageFile = imageFileService.uploadFile(profileImage);
+                member.setProfileImage(imageFile);
+            } catch (Exception e) {
+                log.error("Error uploading profile image", e);
+                model.addAttribute("error", "프로필 이미지 업로드 중 오류가 발생했습니다.");
+                return "redirect:/mypage";
+            }
+        }
 
         // 변경 사항을 저장하는 코드
         socialLoginService.updateMember(member);

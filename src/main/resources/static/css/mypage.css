@@ -27,12 +27,13 @@ body {
     border-radius: 8px;
     padding: 30px;
     background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
+    border: 1px solid var(--border-color); /* 경계선 추가 */
     transition: box-shadow 0.3s ease;
 }
 
 .profile-header:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
 }
 
 .profile-image {
@@ -60,7 +61,8 @@ body {
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
+    border: 1px solid var(--border-color); /* 경계선 추가 */
 }
 
 .content-section {
@@ -85,7 +87,8 @@ body {
     width: 250px;
     padding: 30px;
     background-color: #f2f2f2;
-    border-right: 1px solid #e6e6e6;
+    border-right: 2px solid #cccccc; /* 사이드바와 메인 콘텐츠 구분 */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
 }
 
 .profile-nav ul {
@@ -130,6 +133,10 @@ body {
 .main-content {
     flex: 1;
     padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
+    border: 1px solid var(--border-color); /* 경계선 추가 */
 }
 
 .edit-profile-btn {
@@ -349,13 +356,21 @@ body {
 @media (max-width: 768px) {
     .content-wrapper {
         flex-direction: column;
+        box-shadow: none; /* 반응형에서 전체 그림자 제거 */
     }
 
     .sidebar {
         width: 100%;
         border-right: none;
-        border-bottom: 1px solid #e6e6e6;
+        border-bottom: 2px solid #cccccc; /* 사이드바와 메인 콘텐츠 구분 */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
         padding: 20px;
+    }
+
+    .main-content {
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* 메인 콘텐츠 위쪽 그림자 추가 */
+        border-top: 2px solid #cccccc; /* 메인 콘텐츠와 사이드바 구분 */
+        padding: 30px;
     }
 
     .profile-nav ul {

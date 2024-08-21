@@ -41,7 +41,6 @@ public class RequestHandler {
             System.out.println("Text: " + mailRequestObject.getText());
 
             SimpleMailMessage message = new SimpleMailMessage();
-//            message.setFrom("${{secrets.MAIL_URL}}");
             message.setFrom("admin@dokalab.site");
             message.setTo(mailRequestObject.getTo());
             message.setSubject(mailRequestObject.getSubject());
