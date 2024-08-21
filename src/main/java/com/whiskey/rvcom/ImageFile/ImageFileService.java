@@ -37,7 +37,6 @@ public class ImageFileService {
 
     /**
      * 이미지 파일을 업로드하고 해당 파일의 엔티티를 생성합니다.
-     *
      * @param multipartFile 사용자가 업로드한 MultipartFile 객체
      * @return 생성된 ImageFile 엔티티
      * @throws Exception 파일 업로드 실패 또는 유효하지 않은 파일 형식일 경우 발생
@@ -71,7 +70,6 @@ public class ImageFileService {
 
     /**
      * MultipartFile을 웹서버 로컬에 저장합니다.
-     *
      * @param multipartFile 사용자가 업로드한 MultipartFile 객체
      * @return 저장된 로컬 파일 경로
      * @throws IOException 파일 저장 중 오류 발생 시
@@ -91,7 +89,6 @@ public class ImageFileService {
 
     /**
      * 웹서버 로컬에 저장된 파일을 삭제합니다.
-     *
      * @param filePath 삭제할 파일 경로
      */
     private void deleteFileLocally(String filePath) {

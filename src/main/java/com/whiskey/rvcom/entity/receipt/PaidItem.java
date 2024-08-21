@@ -1,13 +1,14 @@
 package com.whiskey.rvcom.entity.receipt;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Table(name = "tbl_paid_item")
 @Entity
+@ToString
 public class PaidItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

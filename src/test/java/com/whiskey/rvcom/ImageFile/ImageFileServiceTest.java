@@ -64,26 +64,25 @@ public class ImageFileServiceTest {
     @Test
     public void testFileUpload() throws Exception {
         logger.info("실제 NCP 서버 파일 업로드 테스트 시작: {}", filePath);
-
+    
         // 테스트용 MultipartFile 생성
         File file = new File(filePath);
         FileInputStream input = new FileInputStream(file);
         MultipartFile multipartFile = new MockMultipartFile("file",
                 file.getName(), "image/gif", input);
-
+    
         // FileUploader를 생성할 때 host 변수 사용
         FileUploader fileUploader = new FileUploader(filePath, host);
-
+        
         // 파일 업로드 실행
         FileNameGroup uploadedFileName = fileUploader.upload();
-
+    
         assertNotNull(uploadedFileName);
         assertNotNull(uploadedFileName.getOriginalFileName());
         assertNotNull(uploadedFileName.getUuidFileName());
         assertTrue(uploadedFileName.getOriginalFileName().endsWith("racoon-pedro.gif"));
         logger.info("실제 NCP 서버 파일 업로드 성공: {} -> {}", uploadedFileName.getOriginalFileName(), uploadedFileName.getUuidFileName());
     }
-
     /**
      * 실제 NCP 서버에 파일을 업로드하는 기능을 테스트합니다.
      * 모의 객체가 아닌 실제 MultipartFile을 사용하여 파일을 업로드하고, 결과를 검증합니다.
@@ -91,7 +90,6 @@ public class ImageFileServiceTest {
     @Test
     public void testRealFileUpload() throws Exception {
         logger.info("실제 NCP 서버 파일 업로드 테스트 시작: {}", filePath);
-
         // 실제 파일로 MultipartFile 생성
         File file = new File(filePath);
         FileInputStream input = new FileInputStream(file);
@@ -100,37 +98,30 @@ public class ImageFileServiceTest {
             public String getName() {
                 return "file";
             }
-
             @Override
             public String getOriginalFilename() {
                 return file.getName();
             }
-
             @Override
             public String getContentType() {
                 return "image/gif";
             }
-
             @Override
             public boolean isEmpty() {
                 return file.length() == 0;
             }
-
             @Override
             public long getSize() {
                 return file.length();
             }
-
             @Override
             public byte[] getBytes() throws IOException {
                 return Files.readAllBytes(file.toPath());
             }
-
             @Override
             public InputStream getInputStream() throws IOException {
                 return new FileInputStream(file);
             }
-
             @Override
             public void transferTo(File dest) throws IOException, IllegalStateException {
                 Files.copy(file.toPath(), dest.toPath());

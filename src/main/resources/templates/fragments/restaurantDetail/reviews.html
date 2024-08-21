@@ -1,0 +1,81 @@
+<div th:fragment="reviews" class="tab-content" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+    <div class="review-header">
+        <h2><i class="fas fa-star"></i> 리뷰</h2>
+        <a href="/receipt-verification" class="write-review-button"><i class="fas fa-pen"></i> 리뷰 작성하기</a>
+    </div>
+    <div class="review-summary">
+        <div class="review-cards">
+            <!-- TODO: 백엔드 - 전체 평점 및 리뷰 수를 계산하여 동적으로 표시 -->
+            <div class="review-card">
+                <h3>전체 평점</h3>
+<!--                // rating값이 바인딩된다. rating은 java의 double 타입이며-->
+<!--                // 화면에는 소수점 첫째자리까지만 표시되어야 한다.  ★★★★☆ 4-->
+<!--                // 그리고 별의 개수를 1~5개로 표시하되, 소수점은 버린다.-->
+                <div class="rating" th:text="${ratingPhase}"></div>
+                <p th:text="${reviews.size() + '개의 리뷰'}">1,234 리뷰</p>
+            </div>
+
+        </div>
+    </div>
+    <div class="review-list">
+        <div class="popular-reviews">
+            <h3><i class="fas fa-thumbs-up"></i> 인기 리뷰</h3>
+            <!-- TODO: 백엔드 - 인기 리뷰를 좋아요 수 기준으로 정렬하여 가져와 동적으로 표시 -->
+            <div class="popular-review-cards">
+                <div class="popular-review-card">
+                    <div class="review-content">
+                        <h4>최고의 파스타 맛집!</h4>
+                        <p>트러플 크림 파스타가 정말 일품이에요. 분위기도 좋고 서비스도 친절해요.</p>
+                        <div class="review-footer">
+                            <span class="reviewer"><i class="fas fa-user"></i> 김맛있다</span>
+                            <span class="likes"><i class="fas fa-thumbs-up"></i> 좋아요 128</span>
+                        </div>
+                    </div>
+                    <div class="image-placeholder">인기 리뷰 이미지</div>
+                </div>
+                <div class="popular-review-card">
+                    <div class="review-content">
+                        <h4>데이트 코스로 완벽해요</h4>
+                        <p>와인과 스테이크의 조화가 환상적이에요. 연인과 함께 오기 좋은 곳입니다.</p>
+                        <div class="review-footer">
+                            <span class="reviewer"><i class="fas fa-user"></i> 박데이트</span>
+                            <span class="likes"><i class="fas fa-thumbs-up"></i> 좋아요 95</span>
+                        </div>
+                    </div>
+                    <div class="image-placeholder">인기 리뷰 이미지</div>
+                </div>
+            </div>
+        </div>
+        <div class="recent-reviews">
+            <h3><i class="fas fa-clock"></i> 최근 리뷰</h3>
+            <!-- TODO: 백엔드 - 최근 리뷰를 날짜순으로 정렬하여 가져와 동적으로 표시 -->
+            <div class="review-items" th:each="review : ${reviews}">
+                <!-- 리뷰 카드 fragment 사용 -->
+<!--                <div th:replace="fragments/reviewItem :: reviewItem(-->
+<!--                        title='맛있는 파스타와 분위기 좋은 레스토랑',-->
+<!--                        content='파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!',-->
+<!--                        author='홍길동',-->
+<!--                        date='2024-05-01',-->
+<!--                        rating='★★★★☆ 4',-->
+<!--                        images='',-->
+<!--                        menuName='트러플 크림 파스타',-->
+<!--                        menuPrice='18,000'-->
+<!--                    )" th:attr="data-review-id=${reviewId}"></div>-->
+                <!-- 추가 리뷰 카드들... -->
+
+                <div th:replace="fragments/reviewItem :: reviewItem(
+                        title=${review.content},
+                        content=${review.content},
+                        author=${review.reviewer.nickname},
+                        date=${#temporals.format(review.createdAt, 'yyyy-MM-dd')},
+                        rating=${#strings.repeat('★', review.rating.value) + #strings.repeat('☆', 5 - review.rating.value)},
+                        images=${review.reviewImages},
+                        menus=${review.receiptData},
+                        likes=${review.likes},
+                        comments=${review.reviewComments}
+                    )" th:attr="data-review-id=${review.id}"></div>
+            </div>
+        </div>
+        <button id="loadMoreReviews" class="load-more">더 보기</button>
+    </div>
+</div>

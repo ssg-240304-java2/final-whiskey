@@ -1,0 +1,61 @@
+<div th:fragment="info" class="tab-content" id="info" role="tabpanel" aria-labelledby="info-tab">
+    <div class="menu-section">
+        <button style="float: right;" id="restaurantReport">신고하기</button>
+        <h2><i class="fas fa-utensils"></i> 인기 메뉴</h2>
+        <div class="menu-items-container">
+            <div class="menu-items">
+                <div th:replace="fragments/menuItem :: menuItem('트러플 크림 파스타', '18,000')"></div>
+                <div th:replace="fragments/menuItem :: menuItem('마르게리타 피자', '22,000')"></div>
+            </div>
+        </div>
+        <button class="view-full-menu"><i class="fas fa-list"></i> 전체 메뉴 보기</button>
+    </div>
+
+    <div class="tab-divider"></div>
+
+    <h2><i class="fas fa-map-marker-alt"></i> 위치 및 영업시간</h2>
+    <div id="map" class="map-placeholder">
+        카카오 지도 API가 여기에 표시됩니다
+    </div>
+    <table class="hours-table">
+        <tr>
+            <td><i class="far fa-clock"></i> 월요일</td>
+            <td>11:00 AM - 11:00 PM</td>
+        </tr>
+        <tr>
+            <td><i class="far fa-clock"></i> 화요일</td>
+            <td>11:00 AM - 11:00 PM</td>
+        </tr>
+        <tr>
+            <td><i class="far fa-clock"></i> 수요일</td>
+            <td>11:00 AM - 11:00 PM</td>
+        </tr>
+        <tr>
+            <td><i class="far fa-clock"></i> 목요일</td>
+            <td>11:00 AM - 11:00 PM</td>
+        </tr>
+        <tr>
+            <td><i class="far fa-clock"></i> 금요일</td>
+            <td>11:00 AM - 12:00 AM (다음날)</td>
+        </tr>
+        <tr>
+            <td><i class="far fa-clock"></i> 토요일</td>
+            <td>11:00 AM - 12:00 AM (다음날)</td>
+        </tr>
+        <tr>
+            <td><i class="far fa-clock"></i> 일요일</td>
+            <td>11:00 AM - 11:00 PM</td>
+        </tr>
+    </table>
+
+    <div class="tab-divider"></div>
+    <div class="additional-info">
+        <h2><i class="fas fa-info-circle"></i> 추가 정보</h2>
+        <ul>
+            <li><i class="fas fa-parking"></i> 주차 가능</li>
+            <li><i class="fas fa-wifi"></i> 무료 Wi-Fi</li>
+            <li><i class="fas fa-calendar-check"></i> 예약 권장</li>
+            <li><i class="fas fa-shopping-bag"></i> 테이크아웃 가능</li>
+        </ul>
+    </div>
+</div>

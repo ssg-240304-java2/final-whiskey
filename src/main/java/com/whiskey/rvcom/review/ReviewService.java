@@ -1,6 +1,7 @@
 package com.whiskey.rvcom.review;
 
 import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.*;
 import com.whiskey.rvcom.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,15 @@ public class ReviewService {
         return reviewRepository.findByReviewer(member);
     }
 
+    /**
+     * 음식점 객체로 리뷰 리스트 조회
+     * @param restaurant 음식점 객체
+     * @return 리뷰 리스트
+     */
+    public List<Review> getReviewsByRestaurant(Restaurant restaurant) {
+        return reviewRepository.findByRestaurant(restaurant);
+    }
+
     // TODO. Resource 담당자쪽 service에 구현되도록 업무요청 전달 -> 컨트롤러 모듈에서 받아 처리할 예정
     // DESC. 2024/08/11 19:27 - 업무요청 완료
 
@@ -40,8 +50,9 @@ public class ReviewService {
      * @param review 리뷰 객체
      */
     @Transactional
-    public void saveReview(Review review) {
+    public Review saveReview(Review review) {
         reviewRepository.save(review);
+        return review;
     }
 
     /**
@@ -53,13 +64,26 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+//    /**
+//     * 리뷰에 좋아요 추가
+//     * @param review 리뷰 객체
+//     * @param reviewLike 리뷰 좋아요 객체
+//     */
+//    @Transactional
+//    public void addLikeToReview(Review review, ReviewLike reviewLike) {
+//        review.getLikes().add(reviewLike);
+//    }
+
     /**
-     * 리뷰에 좋아요 추가
-     * @param review 리뷰 객체
-     * @param reviewLike 리뷰 좋아요 객체
+     * 음식점 당 총 Review-Rating 값의 평균치를 계산하여 반환
+     * @param restaurant 음식점 객체
+     * @return 음식점에 대한 리뷰 평균 평점
      */
-    @Transactional
-    public void addLikeToReview(Review review, ReviewLike reviewLike) {
-        review.getLikes().add(reviewLike);
+    public double getAverageRatingForRestaurant(Restaurant restaurant) {
+        List<Review> reviews = getReviewsByRestaurant(restaurant);
+        return reviews.stream()
+                .mapToInt(review -> review.getRating().getValue())
+                .average()
+                .orElse(0);
     }
 }

@@ -2,6 +2,7 @@ package com.whiskey.rvcom.notice;
 
 import com.whiskey.rvcom.notice.dto.RestaurantNoticeRequestDTO;
 import com.whiskey.rvcom.notice.dto.RestaurantNoticeResponseDTO;
+import com.whiskey.rvcom.repository.RestaurantNoticeRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,9 @@ class RestaurantNoticeServiceTest {
     @Autowired
     private RestaurantNoticeService noticeService;
 
+    @Autowired
+    private RestaurantNoticeRepository noticeRepository;
+
     @Test
     void findNoticeByRestaurantId() {
         // given
@@ -27,6 +31,9 @@ class RestaurantNoticeServiceTest {
 
         // when
         List<RestaurantNoticeResponseDTO> findNotices = noticeService.findNoticeByRestaurantId(restaurantId);
+        for (RestaurantNoticeResponseDTO notice : findNotices) {
+            System.out.println("notice = " + notice);
+        }
 
         // then
         assertThat(findNotices).isNotNull();
@@ -47,5 +54,18 @@ class RestaurantNoticeServiceTest {
 
         // then
         assertThat(findNotices.get(findNotices.size() - 1).title()).isEqualTo(title);
+    }
+
+    @Test
+    void deleteNotice() {
+        // given
+        Long noticeId = 4L;
+
+        // when
+        noticeService.delete(noticeId);
+
+        // then
+        assertThat(noticeRepository.findById(noticeId).orElseThrow().isDeleted())
+                .isTrue();
     }
 }
