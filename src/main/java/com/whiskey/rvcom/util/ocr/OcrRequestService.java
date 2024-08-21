@@ -10,7 +10,7 @@ public class OcrRequestService {
      * @return ReceiptResponse OCR 처리 결과 객체
      */
     public ReceiptResponse invoke(String fileName) throws Exception {
-        String requestUrl = "";
+        String requestUrl = "http://web.dokalab.site:8082/ocr/receipt";
         RestInvoker<ReceiptResponse> invoker = RestInvoker.create(requestUrl, ReceiptResponse.class);
 
         OcrRequestHead requestHead = new OcrRequestHead();

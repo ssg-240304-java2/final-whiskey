@@ -45,19 +45,30 @@
         <div class="recent-reviews">
             <h3><i class="fas fa-clock"></i> 최근 리뷰</h3>
             <!-- TODO: 백엔드 - 최근 리뷰를 날짜순으로 정렬하여 가져와 동적으로 표시 -->
-            <div class="review-items">
+            <div class="review-items" th:each="review : ${reviews}">
                 <!-- 리뷰 카드 fragment 사용 -->
+<!--                <div th:replace="fragments/reviewItem :: reviewItem(-->
+<!--                        title='맛있는 파스타와 분위기 좋은 레스토랑',-->
+<!--                        content='파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!',-->
+<!--                        author='홍길동',-->
+<!--                        date='2024-05-01',-->
+<!--                        rating='★★★★☆ 4',-->
+<!--                        images='',-->
+<!--                        menuName='트러플 크림 파스타',-->
+<!--                        menuPrice='18,000'-->
+<!--                    )" th:attr="data-review-id=${reviewId}"></div>-->
+                <!-- 추가 리뷰 카드들... -->
+
                 <div th:replace="fragments/reviewItem :: reviewItem(
-                        title='맛있는 파스타와 분위기 좋은 레스토랑',
-                        content='파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!',
-                        author='홍길동',
-                        date='2024-05-01',
-                        rating='★★★★☆ 4',
+                        title=${review.content},
+                        content=${review.content},
+                        author=${review.reviewer.nickname},
+                        date=${#temporals.format(review.createdAt, 'yyyy-MM-dd')},
+                        rating=${#strings.repeat('★', review.rating.value) + #strings.repeat('☆', 5 - review.rating.value)},
                         images='',
                         menuName='트러플 크림 파스타',
                         menuPrice='18,000'
                     )" th:attr="data-review-id=${reviewId}"></div>
-                <!-- 추가 리뷰 카드들... -->
             </div>
         </div>
         <button id="loadMoreReviews" class="load-more">더 보기</button>

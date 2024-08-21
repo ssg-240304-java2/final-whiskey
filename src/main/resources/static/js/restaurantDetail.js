@@ -3,13 +3,13 @@ window.RestaurantDetail = {
     initInfo: null,
     initReviews: null,
     initInquiries: null,
-    initNotices: null
+    initNotices: null,
 };
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
     setupTabs();
     setupModals();
     setupReports();
+    setInitialTab();
 });
 
 function setupReports() {
@@ -17,40 +17,42 @@ function setupReports() {
     let idx;
 
     // 모달 열기
-    document.getElementById('restaurantReport').addEventListener('click', function() {
+    document.getElementById('restaurantReport').addEventListener('click', function () {
         document.getElementById('modal').style.display = 'block';
         reportType = "restaurant";
     });
-    document.getElementById('reviewReport').addEventListener('click', function() {
+    document.getElementById('reviewReport').addEventListener('click', function () {
         document.getElementById('modal').style.display = 'block';
         reportType = "review";
     });
-    document.getElementById('commentReport').addEventListener('click', function() {
+    document.getElementById('commentReport').addEventListener('click', function () {
         document.getElementById('modal').style.display = 'block';
         reportType = "reviewcomment";
     });
 
     // 모달 닫기
-    document.getElementById('closeModalBtn').addEventListener('click', function() {
-        document.getElementById('modal').style.display = 'none';
-    });
+    document
+        .getElementById("closeModalBtn")
+        .addEventListener("click", function () {
+            document.getElementById("modal").style.display = "none";
+        });
 
     // 모달 외부 클릭 시 닫기
-    window.addEventListener('click', function(event) {
-        if (event.target == document.getElementById('modal')) {
-            document.getElementById('modal').style.display = 'none';
+    window.addEventListener("click", function (event) {
+        if (event.target == document.getElementById("modal")) {
+            document.getElementById("modal").style.display = "none";
         }
     });
 
     // 폼 전송 이벤트
-    document.getElementById('reportModalForm').addEventListener('submit', function(event) {
+    document.getElementById('reportModalForm').addEventListener('submit', function (event) {
         event.preventDefault(); // 폼 기본 전송 방지
 
-        if(reportType === "restaurant") {
+        if (reportType === "restaurant") {
             idx = 20; // 레스토랑의 id 가져올 예정
-        } else if(reportType === "review") {
+        } else if (reportType === "review") {
             idx = 3; // 리뷰의 id 가져올 예정
-        } else if(reportType === "reviewcomment") {
+        } else if (reportType === "reviewcomment") {
             idx = 2; // 댓글의 id 가져올 예정
         }
 
@@ -68,21 +70,44 @@ function setupReports() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
-        }) .then(response => {
+        }).then(response => {
             if (response.ok) {  // 응답 상태 코드가 200-299일 경우
                 alert('신고가 접수되었습니다.');
             } else {
                 alert('신고 접수에 실패했습니다.');
             }
-        }) .catch(error => alert(error('There was a problem with the fetch operation:', error)));
-        // 폼 전송 후 모달 닫기
-        document.getElementById('modal').style.display = 'none';
 
-        // 폼 초기화
-        this.reset();
+            const formData = new FormData(this);
+            const data = {
+                title: formData.get("reportTitle"),
+                content: formData.get("reportContent"),
+                id: idx,
+            };
+
+            // 데이터를 서버로 전송
+            fetch(`/${reportType}report/regist`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data), // 데이터를 JSON 형식으로 변환
+            })
+                .then((data) => console.log(data))
+                .catch((error) =>
+                    console.error(
+                        "There was a problem with the fetch operation:",
+                        error
+                    )
+                );
+
+            // 폼 전송 후 모달 닫기
+            document.getElementById("modal").style.display = "none";
+
+            // 폼 초기화
+            this.reset();
+        });
     });
 }
-
 
 
 function setupTabs() {
@@ -141,3 +166,5 @@ function setupModals() {
     // 답변 모달 설정
     RestaurantDetail.setupModal('replyModal');
 }
+// TODO: 백엔드 개발자는 각 탭(info, reviews, inquiries, notices)에 대한 데이터 로딩 API 구현 필요
+// TODO: 백엔드 개발자는 신고 기능(restaurantreport, reviewreport, commentreport)에 대한 API 구현 필요

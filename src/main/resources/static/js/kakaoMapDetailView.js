@@ -1,5 +1,5 @@
 // TODO: 음식점의 주소를 전달받아 음식점의 주소를 표시
-var restaurantLocation = new kakao.maps.LatLng(39.0196, 125.7520); // 음식점의 좌표
+var restaurantLocation = new kakao.maps.LatLng($('input[id=latitude]').val(), $('input[id=longitude]').val()); // 음식점의 좌표
 
 var mapContainer = document.getElementById('map'),
     mapOption = {

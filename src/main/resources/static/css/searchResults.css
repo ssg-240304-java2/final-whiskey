@@ -4,7 +4,7 @@
     --secondary-color: #f15c4f;
     --background-color: #f8f8f8;
     --text-color: #333;
-    --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    --card-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 /* 검색 배너 스타일 */
@@ -44,7 +44,7 @@
 .search-title {
     font-size: 36px; /* 48px에서 36px로 줄였습니다 */
     margin-bottom: 5px; /* 10px에서 5px로 줄였습니다 */
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .search-meta {
@@ -75,14 +75,15 @@
 .search-layout {
     display: flex;
     width: 100%;
+    justify-content: center;
 }
 
 /* 지도 컨테이너 스타일 */
 .map-container {
     width: 25%;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 260px);
     position: relative;
-    top: 50px;
+    top: 0;
 }
 
 
@@ -112,6 +113,9 @@
 .results-container {
     flex: 1;
     margin-right: 20px;
+    height: calc(100vh - 260px);
+    overflow: scroll;
+    scrollbar-width: none;
 }
 
 /* 사이드바 스타일 */
@@ -171,7 +175,7 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
@@ -211,7 +215,7 @@
 
 .result-card:hover {
     border-color: var(--secondary-color);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 /* 결과 카드 링크 스타일 */
@@ -222,7 +226,7 @@
 }
 
 .result-card-link:hover {
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease;
 }
 
@@ -286,4 +290,16 @@
         width: 100%;
         height: 200px;
     }
+}
+
+/* 지도가 div를 초과하는 상황 방지 */
+#map-container svg {
+    max-width: fit-content;
+    max-height: fit-content;
+}
+
+/* 지도가 스크롤시 사용자의 화면에 고정 */
+#map-container {
+    position: sticky;
+    margin: 40px 20px;
 }
