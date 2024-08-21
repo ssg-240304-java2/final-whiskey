@@ -40,7 +40,8 @@ function setupReports() {
     document.getElementById('reportModalForm').addEventListener('submit', function (event) {
         event.preventDefault(); // 폼 기본 전송 방지
 
-        idx = 20; // 레스토랑의 id 가져올 예정
+        idx = document.getElementById('restaurantId').value;
+        console.log(idx);
 
         const formData = new FormData(this);
         const data = {
