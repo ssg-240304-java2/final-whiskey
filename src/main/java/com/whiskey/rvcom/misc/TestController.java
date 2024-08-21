@@ -107,6 +107,9 @@ public class TestController {
         Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
 
         model.addAttribute("restaurant", restaurant);
+        model.addAttribute("restaurantId", restaurantId);
+
+        model.addAttribute("tab", tab); // 저 탭과 관련한 내용은 PathVariable이 아닌 상수 info 로~
 
         String today = LocalDate.now().getDayOfWeek().toString();
 
