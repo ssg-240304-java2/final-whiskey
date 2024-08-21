@@ -45,18 +45,16 @@ function getLocationRestaurant(lat, lng) {
         success: function (restaurantList) {
             for (let restaurant of restaurantList) {
                 var restaurantGrid = document.getElementById("restaurant-grid");
-                var element = document.createElement('div');
 
                 var dayOfWeek = new Date().getDay();
-
 
                 var openCloseTime;
 
                 function avoidNotNull(obj) {
-                    if (obj) {
+                    if (obj !== null) {
                         console.log(obj);
-                        let openTime = obj.openTime ? obj.openTime : '00:00';
-                        let closeTime = obj.closeTime ? obj.closeTime : '00:00';
+                        let openTime = obj.openTime !== "" ? obj.openTime : '00:00';
+                        let closeTime = obj.closeTime !== "" ? obj.closeTime : '00:00';
                         return openTime + " - " + closeTime;
                     }
                     return "00:00 - 00:00";
@@ -96,8 +94,9 @@ function getLocationRestaurant(lat, lng) {
                     distance = (distance * 1000).toFixed(0) + "m";
                 }
 
-                element.innerHTML = `
-                    <div class="restaurant-card">
+
+                var element = document.createElement('div');
+                element.innerHTML = `<div class="restaurant-card">
                         <div class="restaurant-image-placeholder">
                             음식점 사진
                         </div>
@@ -109,7 +108,8 @@ function getLocationRestaurant(lat, lng) {
                             </p>
                             <p class="hours"><i class="far fa-clock"></i> <span>${openCloseTime}</span></p>
                             <div class="rating">★★★★★</div>
-                            <button class="find-order"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
+                            <button class="find-order" onclick="location.href='/restaurant/detail/${restaurant.id}'"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
+                            
                         </div>
                     </div>`;
 
