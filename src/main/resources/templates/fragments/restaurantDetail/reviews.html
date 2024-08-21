@@ -65,10 +65,11 @@
                         author=${review.reviewer.nickname},
                         date=${#temporals.format(review.createdAt, 'yyyy-MM-dd')},
                         rating=${#strings.repeat('★', review.rating.value) + #strings.repeat('☆', 5 - review.rating.value)},
-                        images='',
-                        menuName='트러플 크림 파스타',
-                        menuPrice='18,000'
-                    )" th:attr="data-review-id=${reviewId}"></div>
+                        images=${review.reviewImages},
+                        menus=${review.receiptData},
+                        likes=${review.likes},
+                        comments=${review.reviewComments}
+                    )" th:attr="data-review-id=${review.id}"></div>
             </div>
         </div>
         <button id="loadMoreReviews" class="load-more">더 보기</button>

@@ -21,6 +21,7 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final ReviewCommentService reviewCommentService;
     private final ReviewLikeService reviewLikeService;
+    private final ReviewImageService reviewImageService;
 
     // use path variable
     // 리뷰 목록 조회 요청
@@ -39,6 +40,12 @@ public class ReviewController {
         Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
         List<Review> reviewsByRestaurant = reviewService.getReviewsByRestaurant(restaurant);
 
+        reviewsByRestaurant.sort((r1, r2) -> r2.getCreatedAt().compareTo(r1.getCreatedAt()));
+
+        // review 각각에서 isSuspended가 false인 review만 가져오기
+        reviewsByRestaurant.removeIf(review -> review.isSuspended());
+
+        model.addAttribute("restaurant", restaurant);
         model.addAttribute("reviews", reviewsByRestaurant);
 
         return "restaurantDetail";
