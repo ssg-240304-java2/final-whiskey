@@ -2,8 +2,6 @@ package com.whiskey.rvcom.report.service;
 
 import com.whiskey.rvcom.entity.report.ReviewCommentReport;
 import com.whiskey.rvcom.entity.review.ReviewComment;
-import com.whiskey.rvcom.review.dto.ReviewCommentDTO;
-import com.whiskey.rvcom.report.model.dto.ReviewCommentReportDTO;
 import com.whiskey.rvcom.repository.ReviewCommentReportRepository;
 import com.whiskey.rvcom.repository.ReviewCommentRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,8 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

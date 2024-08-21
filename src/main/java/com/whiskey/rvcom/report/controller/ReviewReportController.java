@@ -1,8 +1,10 @@
 package com.whiskey.rvcom.report.controller;
 
 import com.whiskey.rvcom.entity.report.ReviewReport;
+import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.service.ReviewReportService;
+import com.whiskey.rvcom.review.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.Map;
 public class ReviewReportController {
 
     private final ReviewReportService reviewReportService;
+    private final ReviewService reviewService;
 
     /***
      * 리뷰 신고 등록
@@ -73,14 +76,27 @@ public class ReviewReportController {
         return ResponseEntity.ok(response);
     }
 
+    /***
+     * 리뷰신고 처리 (신고와 리뷰 상태값 변경)
+     * @param reportId
+     * @param btnId
+     * @return
+     */
     @PutMapping("/update/{reportId}")
     public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
 
         boolean isPunish = btnId.equals("punish");
 
         reviewReportService.reviewReportPunish(reportId, isPunish);
+        ReviewReport reviewReport = reviewReportService.getReviewReport(reportId);
 
         if(isPunish) {
+            Review review = reviewReport.getReview();
+            // 리뷰 상태값 변경 (노출 여부)
+            review.setSuspended(isPunish);
+
+            reviewService.saveReview(review);
+
             // 메일 발송 코드 예정
         }
         return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
