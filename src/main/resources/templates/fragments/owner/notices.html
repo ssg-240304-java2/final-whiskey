@@ -24,7 +24,7 @@
                         <div class="notice-footer">
                             <span class="notice-date" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}">2023-05-20 14:30</span>
                             <span class="notice-status" th:text="${notice.isDeleted ? '삭제됨' : '작성 완료'}">작성 완료</span>
-                            <button th:if="${!notice.isDeleted}" class="btn btn-sm btn-outline-danger" th:onclick="'deleteNotice(' + ${notice.id} + ')'">
+                            <button th:if="${!notice.isDeleted}" class="btn btn-sm btn-outline-danger delete-notice" th:data-id="${notice.id}">
                                 <i class="fas fa-trash"></i> 삭제
                             </button>
                         </div>
@@ -114,27 +114,54 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 공지사항 관련 JavaScript -->
-    <script th:inline="javascript">
+        <!-- 공지사항 삭제 확인 모달 -->
+        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmModalLabel">공지사항 삭제 확인</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        정말로 이 공지사항을 삭제하시겠습니까?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-danger" id="confirmDelete">삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 공지사항 관련 JavaScript -->
+        <script th:inline="javascript">
+            
+            let noticeIdToDelete;
+        
         // 공지사항 작성
         function createNotice() {
             // TODO: 백엔드 API와 연동하여 공지사항 작성 로직 구현
             console.log('공지사항 작성');
             $('#createNoticeModal').modal('hide');
         }
-
-        // 공지사항 삭제
+        
+        // 공지사항 삭제 확인 모달 표시
         function deleteNotice(noticeId) {
-            if (confirm('정말로 이 공지사항을 삭제하시겠습니까?')) {
-                // TODO: 백엔드 API와 연동하여 공지사항 삭제 로직 구현
-                console.log('공지사항 삭제: ' + noticeId);
-                // 삭제 성공 시 알림
-                alert('공지사항이 삭제되었습니다.');
-                // TODO: 페이지 새로고침 또는 해당 공지사항 행 제거
+                noticeIdToDelete = noticeId;
+                $('#deleteConfirmModal').modal('show');
             }
-        }
-    </script>
+
+            // 삭제 확인 시 실행되는 함수
+            $(document).ready(function() {
+                $('#confirmDelete').click(function() {
+                    // TODO: 백엔드 API와 연동하여 공지사항 삭제 로직 구현
+                    console.log('공지사항 삭제: ' + noticeIdToDelete);
+                    $('#deleteConfirmModal').modal('hide');
+                    // 삭제 후 페이지 새로고침 또는 해당 공지사항 행 제거 로직 추가
+                });
+            });
+        </script>
+    </div>
 </body>
 </html>
