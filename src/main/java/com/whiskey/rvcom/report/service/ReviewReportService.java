@@ -2,18 +2,18 @@ package com.whiskey.rvcom.report.service;
 
 import com.whiskey.rvcom.entity.report.ReviewReport;
 import com.whiskey.rvcom.entity.review.Review;
-import com.whiskey.rvcom.review.dto.ReviewDTO;
-import com.whiskey.rvcom.report.model.dto.ReviewReportDTO;
 import com.whiskey.rvcom.repository.ReviewReportRepository;
 import com.whiskey.rvcom.repository.ReviewRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -27,36 +27,30 @@ public class ReviewReportService {
 
 
     // 리뷰 신고 전체 조회
-    public List<ReviewReportDTO> getAllReviewReports() {
+    public Page<ReviewReport> getAllReviewReports(int page, String sortOrder) {
 
-        List<ReviewReportDTO> reviewReportDTOList = new ArrayList<>();
+        Sort sort = Sort.by("reportedAt");
 
-        List<ReviewReport> reports = reviewReportRepository.findAll();
-
-        for (ReviewReport report : reports) {
-            ReviewDTO reviewDTO = modelMapper.map(report.getReview(), ReviewDTO.class);
-            ReviewReportDTO reviewReportDTO = modelMapper.map(report, ReviewReportDTO.class);
-
-            reviewReportDTO.setReviewDTO(reviewDTO);
-            reviewReportDTOList.add(reviewReportDTO);
+        if ("desc".equalsIgnoreCase(sortOrder)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
         }
-        return reviewReportDTOList;
+
+        Pageable pageable = PageRequest.of(page, 10, sort);
+        return reviewReportRepository.findAll(pageable);
     }
 
 
-    // 식당 신고 세부 조회
-    public ReviewReportDTO getReviewReport(Long id) {
+    // 리뷰 신고 세부 조회
+    public ReviewReport getReviewReport(Long id) {
 
-        ReviewReport reviewReport = reviewReportRepository.findById(id)
+        return reviewReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewReport not found with ID: " + id));
-
-        ReviewReportDTO result = modelMapper.map(reviewReport, ReviewReportDTO.class);
-        result.setReviewDTO(modelMapper.map(reviewReport.getReview(), ReviewDTO.class));
-
-        return result;
     }
 
     // 리뷰 신고 상태값 변경
+    @Transactional
     public void reviewReportPunish(Long id, boolean isPunish) {
 
         ReviewReport reviewReport = reviewReportRepository.findById(id)
@@ -76,31 +70,26 @@ public class ReviewReportService {
 
     // 리뷰 신고 등록
     @Transactional
-    public void saveReviewReport(ReviewReportDTO report) {
+    public void saveReviewReport(ReviewReport report) {
 
         ReviewReport reviewReport = modelMapper.map(report, ReviewReport.class);
 
-        ReviewDTO reviewDTO = report.getReviewDTO();
+        Review review = report.getReview();
 
-        Long reviewId = reviewDTO.getId();
+        Long reviewId = review.getId();
 
-        Review review = reviewRepository.findById(reviewId)
+        review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new EntityNotFoundException("Review not found with ID: " + reviewId));
 
-        reviewReport.setReview(review);
-
-        review = modelMapper.map(reviewDTO, Review.class);
         reviewReport.setReview(review);
 
         reviewReportRepository.save(reviewReport);
     }
 
 
-    public ReviewDTO returnReviewDTO(Long id) {
+    public Review returnReview(Long id) {
 
-        Review review = reviewRepository.findById(id)
+        return reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Review not found with ID: " + id));
-
-        return modelMapper.map(review, ReviewDTO.class);
     }
 }

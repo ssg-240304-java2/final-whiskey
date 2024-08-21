@@ -121,25 +121,19 @@ function setupReports() {
     let reportType;
     let idx;
 
-    // 모달 열기 이벤트 리스너 설정
-    document
-        .getElementById("restaurantReport")
-        .addEventListener("click", function () {
-            document.getElementById("modal").style.display = "block";
-            reportType = "restaurant";
-        });
-    document
-        .getElementById("reviewReport")
-        .addEventListener("click", function () {
-            document.getElementById("modal").style.display = "block";
-            reportType = "review";
-        });
-    document
-        .getElementById("commentReport")
-        .addEventListener("click", function () {
-            document.getElementById("modal").style.display = "block";
-            reportType = "comment";
-        });
+    // 모달 열기
+    document.getElementById('restaurantReport').addEventListener('click', function() {
+        document.getElementById('modal').style.display = 'block';
+        reportType = "restaurant";
+    });
+    document.getElementById('reviewReport').addEventListener('click', function() {
+        document.getElementById('modal').style.display = 'block';
+        reportType = "review";
+    });
+    document.getElementById('commentReport').addEventListener('click', function() {
+        document.getElementById('modal').style.display = 'block';
+        reportType = "reviewcomment";
+    });
 
     // 모달 닫기
     document
@@ -156,18 +150,36 @@ function setupReports() {
     });
 
     // 폼 전송 이벤트
-    document
-        .getElementById("reportModalForm")
-        .addEventListener("submit", function (event) {
-            event.preventDefault(); // 폼 기본 전송 방지
+    document.getElementById('reportModalForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // 폼 기본 전송 방지
 
-            // TODO: 백엔드 개발자는 각 reportType에 따른 실제 id 값을 가져오는 로직 구현 필요
-            if (reportType === "restaurant") {
-                idx = 20; // 레스토랑의 id 가져올 예정
-            } else if (reportType === "review") {
-                idx = 3; // 리뷰의 id 가져올 예정
-            } else if (reportType === "comment") {
-                idx = 2; // 댓글의 id 가져올 예정
+        if(reportType === "restaurant") {
+            idx = 20; // 레스토랑의 id 가져올 예정
+        } else if(reportType === "review") {
+            idx = 3; // 리뷰의 id 가져올 예정
+        } else if(reportType === "reviewcomment") {
+            idx = 2; // 댓글의 id 가져올 예정
+        }
+
+        const formData = new FormData(this);
+        const data = {
+            title: formData.get('reportTitle'),
+            content: formData.get('reportContent'),
+            id: idx
+        };
+
+        // 데이터를 서버로 전송
+        fetch(`/${reportType}report/regist`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
+        }) .then(response => {
+            if (response.ok) {  // 응답 상태 코드가 200-299일 경우
+                alert('신고가 접수되었습니다.');
+            } else {
+                alert('신고 접수에 실패했습니다.');
             }
 
             const formData = new FormData(this);

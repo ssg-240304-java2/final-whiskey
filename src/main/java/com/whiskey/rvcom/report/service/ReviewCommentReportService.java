@@ -9,6 +9,10 @@ import com.whiskey.rvcom.repository.ReviewCommentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,32 +29,26 @@ public class ReviewCommentReportService {
 
 
     // 댓글 신고 전체 조회
-    public List<ReviewCommentReportDTO> getAllReviewCommentReports() {
-        List<ReviewCommentReportDTO> reviewCommentReportDTOList = new ArrayList<>();
+    public Page<ReviewCommentReport> getAllReviewCommentReports(int page, String sortOrder) {
 
-        List<ReviewCommentReport> reports = reviewCommentReportRepository.findAll();
+        Sort sort = Sort.by("reportedAt");
 
-        for (ReviewCommentReport report : reports) {
-            ReviewCommentDTO reviewCommentDTO = modelMapper.map(report.getReviewComment(), ReviewCommentDTO.class);
-            ReviewCommentReportDTO reviewCommentReportDTO = modelMapper.map(report, ReviewCommentReportDTO.class);
-
-            reviewCommentReportDTO.setReviewCommentDTO(reviewCommentDTO);
-            reviewCommentReportDTOList.add(reviewCommentReportDTO);
+        if("desc".equalsIgnoreCase(sortOrder)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
         }
-        return reviewCommentReportDTOList;
+
+        Pageable pageable = PageRequest.of(page, 10, sort);
+        return reviewCommentReportRepository.findAll(pageable);
     }
 
 
     // 댓글 신고 세부 조회
-    public ReviewCommentReportDTO getReviewCommentReport(Long id) {
+    public ReviewCommentReport getReviewCommentReport(Long id) {
 
-        ReviewCommentReport reviewCommentReport = reviewCommentReportRepository.findById(id)
+        return reviewCommentReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewCommentReport not found with ID: " + id));
-
-        ReviewCommentReportDTO result = modelMapper.map(reviewCommentReport, ReviewCommentReportDTO.class);
-        result.setReviewCommentDTO(modelMapper.map(reviewCommentReport.getReviewComment(), ReviewCommentDTO.class));
-
-        return result;
     }
 
     // 댓글 신고 상태값 변경
@@ -72,31 +70,26 @@ public class ReviewCommentReportService {
 
     // 댓글 신고 등록
     @Transactional
-    public void saveReviewCommentReport(ReviewCommentReportDTO report) {
+    public void saveReviewCommentReport(ReviewCommentReport report) {
 
         ReviewCommentReport reviewCommentReport = modelMapper.map(report, ReviewCommentReport.class);
 
-        ReviewCommentDTO reviewCommentDTO = report.getReviewCommentDTO();
+        ReviewComment reviewComment = report.getReviewComment();
 
         // 목록 조회 시 존재하지 않을 경우 예외를 던지고, 존재하면 영속성 주입시키기 위한 id
-        Long reviewCommentId = reviewCommentDTO.getId();
+        Long reviewCommentId = reviewComment.getId();
 
-        ReviewComment reviewComment = reviewCommentRepository.findById(reviewCommentId)
+        reviewComment = reviewCommentRepository.findById(reviewCommentId)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewComment not found" + reviewCommentId));
 
-        reviewCommentReport.setReviewComment(reviewComment);
-
-        reviewComment = modelMapper.map(reviewCommentDTO, ReviewComment.class);
         reviewCommentReport.setReviewComment(reviewComment);
 
         reviewCommentReportRepository.save(reviewCommentReport);
     }
 
-    public ReviewCommentDTO returnReviewCommentDTO(Long id) {
+    public ReviewComment returnReviewComment(Long id) {
 
-        ReviewComment reviewComment = reviewCommentRepository.findById(id)
+        return reviewCommentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewComment not found with ID: " + id));
-
-        return modelMapper.map(reviewComment, ReviewCommentDTO.class);
     }
 }
