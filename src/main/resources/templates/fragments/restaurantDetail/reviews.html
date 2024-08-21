@@ -8,9 +8,13 @@
             <!-- TODO: 백엔드 - 전체 평점 및 리뷰 수를 계산하여 동적으로 표시 -->
             <div class="review-card">
                 <h3>전체 평점</h3>
-                <div class="rating">★★★★☆ 4</div>
-                <p>1,234 리뷰</p>
+<!--                // rating값이 바인딩된다. rating은 java의 double 타입이며-->
+<!--                // 화면에는 소수점 첫째자리까지만 표시되어야 한다.  ★★★★☆ 4-->
+<!--                // 그리고 별의 개수를 1~5개로 표시하되, 소수점은 버린다.-->
+                <div class="rating" th:text="${ratingPhase}"></div>
+                <p th:text="${reviews.size() + '개의 리뷰'}">1,234 리뷰</p>
             </div>
+
         </div>
     </div>
     <div class="review-list">
