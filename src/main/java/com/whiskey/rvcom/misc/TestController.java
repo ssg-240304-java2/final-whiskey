@@ -58,12 +58,12 @@ public class TestController {
         return "restaurantDetail";
     }
 
-    @GetMapping("/receipt-verification")
-    // 영수증 인증 페이지로 이동
-    public String getReceiptVerification() {
-        return "receiptVerification";
-    }
-
+//    @GetMapping("/receipt-verification")
+//    // 영수증 인증 페이지로 이동
+//    public String getReceiptVerification() {
+//        return "receiptVerification";
+//    }
+    
     @GetMapping("/write-review")
     // 리뷰 작성 페이지로 이동
     public String getWriteReview() {
