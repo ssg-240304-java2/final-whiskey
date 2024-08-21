@@ -114,7 +114,7 @@ public class MemberController {
             return "redirect:/login";
         }
 
-        String profileImageUrl = "/default/image/path/default-profile.jpg";
+        String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
         if (member.getProfileImage() != null) {
             profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
         }
