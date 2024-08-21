@@ -14,15 +14,19 @@ import java.util.List;
 public class RestaurantNoticeController {
     private final RestaurantNoticeService noticeService;
 
-    // TODO: 해당 음식점의 공지사항 전체 조회
+    /**
+     * 해당 음식점의 공지사항 전체 조회
+     * @param restaurantId
+     * @return 음식점 공지사항 리스트
+     */
     @GetMapping("/restaurant/{restaurantId}/notice")
     public List<RestaurantNoticeResponseDTO> findNoticeByRestaurantId(@PathVariable Long restaurantId) {
         return noticeService.findNoticeByRestaurantId(restaurantId);
     }
 
     // TODO: 해당 음식점의 점주가 공지사항 작성
-    @PostMapping("/restaurant/notice")
-    public void save(RestaurantNoticeRequestDTO request, Long restaurantId) {
+    @PostMapping("/restaurant/{restaurantId}/notice")
+    public void save(@PathVariable Long restaurantId, @RequestBody RestaurantNoticeRequestDTO request) {
         noticeService.save(request, restaurantId);
     }
 
