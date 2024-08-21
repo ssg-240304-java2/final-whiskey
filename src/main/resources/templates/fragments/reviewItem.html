@@ -1,7 +1,7 @@
 <!-- src/main/resources/templates/fragments/reviewItem.html -->
 <div th:fragment="reviewItem(title, content, author, date, rating, images, menus, likes, comments)">
     <div class="review-item">
-        <button style="float: right;" id="reviewReport">신고하기</button>
+        <button class="report-button" style="padding-top: 5px; float: right;" id="reviewReport">신고하기</button>
         <h4 class="review-title" th:text="${title}">리뷰 제목</h4>
         <div class="review-header">
             <div class="review-text">
@@ -70,6 +70,7 @@
             <div th:each="menu : ${menus.paidItems}">
                 <span th:text="${'메뉴 이름: ' + menu.itemName + ' / '}">메뉴 이름</span>
                 <span th:text="${'단가: ' + menu.price + '원 / '}">메뉴 가격</span>
+<!--                <span th:text="${'단가: ' + #numbers.formatDecimal(menu.price, 0, '###,###') + '원 / '}">메뉴 가격</span>-->
                 <span th:text="${'수량: ' + menu.quantity}">메뉴 이름</span>
             </div>
 
@@ -101,7 +102,7 @@
                 <!-- 예시 댓글 -->
                 <div class="comment" th:each="comment : ${comments}">
                     <p th:text="${comment.content}"></p>
-                    <button style="float: right;" id="commentReport">신고하기</button>
+                    <button class="report-button" style="float: right;" id="commentReport">신고하기</button>
                     <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')} + ' / ' + ${comment.commenter.nickname}"></span>
                 </div>
 <!--                <div class="comment" th:each="comment : ${comments}">-->
