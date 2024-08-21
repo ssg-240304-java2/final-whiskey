@@ -1,68 +1,30 @@
 $(document).ready(function() {
-    $('#emailVerifyBtn').on('click', function() {
-        const email = $('#email').val();
+    // 로그인 ID 중복 확인 로직
+    $('#loginIdCheckBtn').on('click', function() {
+        const loginId = $('#loginId').val();
 
-        if (!email) {
-            alert('이메일을 입력하세요.');
+        if (!loginId) {
+            alert('로그인 ID를 입력하세요.');
             return;
         }
 
-        // 클라이언트에서 인증 코드 생성 (6자리 숫자 코드)
-        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-        console.log('생성된 인증 코드:', verificationCode);
-
-        // 서버로 전송할 데이터
-        const data = {
-            key: email,       // 이메일을 key로 사용
-            value: verificationCode // 생성된 인증 코드를 value로 사용
-        };
-
-        // 서버로 인증 코드 전송
         $.ajax({
-            url: '/api/redis/save',
+            url: '/checkLoginId', // 서버에서 로그인 ID 중복 확인하는 API 엔드포인트
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: { loginId: loginId },
             success: function(response) {
-                console.log(response);
-                alert('인증 코드가 이메일로 전송되었습니다.');
-            },
-            error: function(error) {
-                console.error('에러:', error);
-                alert('인증 코드 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
-        });
-    });
-
-    // 인증 코드 확인 버튼 클릭 이벤트
-    $('#verifyCodeBtn').on('click', function() {
-        const email = $('#email').val();
-        const code = $('#emailVerificationCode').val();
-
-        if (!email || !code) {
-            alert('이메일과 인증 코드를 입력하세요.');
-            return;
-        }
-
-        $.ajax({
-            // url: '${{secrets.MAIL_URL}}', // GET 요청을 보낼 URL
-            url: 'http://localhost:8080',
-            method: 'GET',
-            data: { key: email, code: code }, // 이메일과 인증 코드를 쿼리 파라미터로 보냄
-            success: function(response) {
-                if (response) {
-                    alert('인증이 완료되었습니다.');
-                    $('#verifyCodeBtn').addClass('verified').text('인증 완료');
-                    $('#verifyCodeBtn').prop('disabled', true);
-                    $('#submit-btn').prop('disabled', false); // 회원가입 버튼 활성화
-                } else {
-                    alert('인증 코드가 올바르지 않습니다.');
+                if (response.exists) {
+                    $('#loginId-check-message').show().text('이미 사용 중인 로그인 ID입니다.');
                     $('#submit-btn').prop('disabled', true);
+                } else {
+                    $('#loginId-check-message').show().css('color', 'green').text('사용 가능한 로그인 ID입니다.');
+                    $('#submit-btn').prop('disabled', false);
                 }
             },
             error: function(error) {
-                alert('인증 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
+                console.error('에러:', error);
+                alert('로그인 ID 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
             }
         });
     });
