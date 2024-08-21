@@ -41,11 +41,11 @@ function setupTabs() {
             if (
                 RestaurantDetail[
                     `init${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`
-                ]
+                    ]
             ) {
                 RestaurantDetail[
                     `init${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`
-                ]();
+                    ]();
             }
         }
 
@@ -122,15 +122,15 @@ function setupReports() {
     let idx;
 
     // 모달 열기
-    document.getElementById('restaurantReport').addEventListener('click', function() {
+    document.getElementById('restaurantReport').addEventListener('click', function () {
         document.getElementById('modal').style.display = 'block';
         reportType = "restaurant";
     });
-    document.getElementById('reviewReport').addEventListener('click', function() {
+    document.getElementById('reviewReport').addEventListener('click', function () {
         document.getElementById('modal').style.display = 'block';
         reportType = "review";
     });
-    document.getElementById('commentReport').addEventListener('click', function() {
+    document.getElementById('commentReport').addEventListener('click', function () {
         document.getElementById('modal').style.display = 'block';
         reportType = "reviewcomment";
     });
@@ -150,14 +150,14 @@ function setupReports() {
     });
 
     // 폼 전송 이벤트
-    document.getElementById('reportModalForm').addEventListener('submit', function(event) {
+    document.getElementById('reportModalForm').addEventListener('submit', function (event) {
         event.preventDefault(); // 폼 기본 전송 방지
 
-        if(reportType === "restaurant") {
+        if (reportType === "restaurant") {
             idx = 20; // 레스토랑의 id 가져올 예정
-        } else if(reportType === "review") {
+        } else if (reportType === "review") {
             idx = 3; // 리뷰의 id 가져올 예정
-        } else if(reportType === "reviewcomment") {
+        } else if (reportType === "reviewcomment") {
             idx = 2; // 댓글의 id 가져올 예정
         }
 
@@ -175,7 +175,7 @@ function setupReports() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
-        }) .then(response => {
+        }).then(response => {
             if (response.ok) {  // 응답 상태 코드가 200-299일 경우
                 alert('신고가 접수되었습니다.');
             } else {
@@ -211,7 +211,9 @@ function setupReports() {
             // 폼 초기화
             this.reset();
         });
+    });
 }
+
 
 // TODO: 백엔드 개발자는 각 탭(info, reviews, inquiries, notices)에 대한 데이터 로딩 API 구현 필요
 // TODO: 백엔드 개발자는 신고 기능(restaurantreport, reviewreport, commentreport)에 대한 API 구현 필요
