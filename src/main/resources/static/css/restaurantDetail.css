@@ -208,6 +208,15 @@ body {
     transition: color 0.3s ease;
 }
 
+.report-button {
+    background: none;
+    border: none;
+    color: #f15c4f;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
 .comment-button:hover {
     color: #f15c4f;
 }
