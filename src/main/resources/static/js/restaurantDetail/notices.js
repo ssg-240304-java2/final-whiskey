@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
             event.preventDefault();
             // TODO: 폼 데이터를 백엔드로 전송하는 로직 구현
             // 공지사항 작성 폼 제출 (restaurantId, title, content)
-            const restaurantId = document.getElementById('restaurant').value;
+            const restaurantId = document.getElementById('restaurantId').value;
             const title = document.getElementById('noticeTitle').value;
             const content = document.getElementById('noticeContent').value;
 
