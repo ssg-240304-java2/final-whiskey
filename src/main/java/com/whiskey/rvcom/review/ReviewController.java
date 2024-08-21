@@ -45,6 +45,33 @@ public class ReviewController {
         // review 각각에서 isSuspended가 false인 review만 가져오기
         reviewsByRestaurant.removeIf(review -> review.isSuspended());
 
+        double rating = reviewService.getAverageRatingForRestaurant(restaurant);
+        StringBuilder ratingPhase = new StringBuilder();
+        // ★★★★☆
+//        for (int i = 0; i < 5; i++) {
+//            if (i < rating) {
+//                ratingPhase.append("★");
+//            } else {
+//                ratingPhase.append("☆");
+//            }
+//        }
+        // 2.5 -> ★★☆☆☆
+        // 지금 2.5에 3개가 나옴. 즉, 버림처리하도록 바꿔야 함.
+        int ratingInt = (int) rating;
+        for (int i = 0; i < 5; i++) {
+            if (i < ratingInt) {
+                ratingPhase.append("★");
+            } else {
+                ratingPhase.append("☆");
+            }
+        }
+
+        ratingPhase.append(" ").append(rating);
+
+        System.out.println("rating = " + rating);
+        System.out.println("ratingPhase = " + ratingPhase);
+
+        model.addAttribute("ratingPhase", ratingPhase.toString());
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("reviews", reviewsByRestaurant);
 
