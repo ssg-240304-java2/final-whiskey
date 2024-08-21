@@ -2,6 +2,7 @@ package com.whiskey.rvcom.misc;
 
 import com.whiskey.rvcom.entity.restaurant.OpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.restaurant.WeeklyOpenCloseTime;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -63,7 +64,7 @@ public class TestController {
 //    public String getReceiptVerification() {
 //        return "receiptVerification";
 //    }
-    
+
     @GetMapping("/write-review")
     // 리뷰 작성 페이지로 이동
     public String getWriteReview() {
@@ -99,7 +100,7 @@ public class TestController {
     public void adminReport() {
     }
 
-  // --------------
+    // --------------
     @GetMapping("/restaurant/{restaurantId}/{tab}")
     public String getRestaurantDetailWithTab(Model model, @PathVariable Long restaurantId, @PathVariable String tab) {
         // TODO: restaurantId와 tab에 따른 데이터 로딩 로직 구현
@@ -136,8 +137,66 @@ public class TestController {
                 restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getSunday(), model);
                 break;
         }
+
+        restaurantWeeklyOpeningTime(model, restaurant.getWeeklyOpenCloseTime());
+
         return "restaurantDetail";
 
+    }
+
+    private void restaurantWeeklyOpeningTime(Model model, WeeklyOpenCloseTime weeklyOpenCloseTime) {
+        if (weeklyOpenCloseTime.getMonday() != null) {
+            model.addAttribute("monday", convert12HourFormat(weeklyOpenCloseTime.getMonday().getOpenTime()) + " - " + convert12HourFormat(weeklyOpenCloseTime.getMonday().getCloseTime()));
+        } else {
+            model.addAttribute("monday", "미영업");
+        }
+
+        if (weeklyOpenCloseTime.getTuesday() != null) {
+            model.addAttribute("tuesday", convert12HourFormat(weeklyOpenCloseTime.getTuesday().getOpenTime()) + " - " + convert12HourFormat(weeklyOpenCloseTime.getTuesday().getCloseTime()));
+        } else {
+            model.addAttribute("tuesday", "미영업");
+        }
+
+        if (weeklyOpenCloseTime.getWednesday() != null) {
+            model.addAttribute("wednesday", convert12HourFormat(weeklyOpenCloseTime.getWednesday().getOpenTime()) + " - " + convert12HourFormat(weeklyOpenCloseTime.getWednesday().getCloseTime()));
+        } else {
+            model.addAttribute("wednesday", "미영업");
+        }
+
+        if (weeklyOpenCloseTime.getThursday() != null) {
+            model.addAttribute("thursday", convert12HourFormat(weeklyOpenCloseTime.getThursday().getOpenTime()) + " - " + convert12HourFormat(weeklyOpenCloseTime.getThursday().getCloseTime()));
+        } else {
+            model.addAttribute("thursday", "미영업");
+        }
+
+        if (weeklyOpenCloseTime.getFriday() != null) {
+            model.addAttribute("friday", convert12HourFormat(weeklyOpenCloseTime.getFriday().getOpenTime()) + " - " + convert12HourFormat(weeklyOpenCloseTime.getFriday().getCloseTime()));
+        } else {
+            model.addAttribute("friday", "미영업");
+        }
+
+        if (weeklyOpenCloseTime.getSaturday() != null) {
+            model.addAttribute("saturday", convert12HourFormat(weeklyOpenCloseTime.getSaturday().getOpenTime()) + " - " + convert12HourFormat(weeklyOpenCloseTime.getSaturday().getCloseTime()));
+        } else {
+            model.addAttribute("saturday", "미영업");
+        }
+
+        if (weeklyOpenCloseTime.getSunday() != null) {
+            model.addAttribute("sunday", convert12HourFormat(weeklyOpenCloseTime.getSunday().getOpenTime()) + " - " + convert12HourFormat(weeklyOpenCloseTime.getSunday().getCloseTime()));
+        } else {
+            model.addAttribute("sunday", "미영업");
+        }
+    }
+
+    private String convert12HourFormat(String time) {
+        int hour = Integer.parseInt(time.split(":")[0]);
+        String minute = time.split(":")[1];
+
+        if (hour >= 12) {
+            return hour + ":" + minute + " PM";
+        } else {
+            return hour + ":" + minute + " AM";
+        }
     }
 
     private void restaurantTimeData(OpenCloseTime openCloseTime, Model model) {
