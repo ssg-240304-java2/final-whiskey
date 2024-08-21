@@ -1,15 +1,20 @@
-<div th:fragment="info(monday, tuesday, wednesday, thursday, friday, saturday, sunday)" class="tab-content" id="info"
+<div th:fragment="info(monday, tuesday, wednesday, thursday, friday, saturday, sunday, menuList)" class="tab-content"
+     id="info"
      role="tabpanel" aria-labelledby="info-tab">
     <div class="menu-section">
         <button style="float: right;" id="restaurantReport">신고하기</button>
         <h2><i class="fas fa-utensils"></i> 인기 메뉴</h2>
-        <div class="menu-items-container">
-            <div class="menu-items">
-                <div th:replace="fragments/menuItem :: menuItem('트러플 크림 파스타', '18,000')"></div>
-                <div th:replace="fragments/menuItem :: menuItem('마르게리타 피자', '22,000')"></div>
+        <div th:if="${!menuList.isEmpty()}" class="menu-items-container">
+            <div class="menu-items" th:each="menu: ${menuList}">
+                <div th:replace="fragments/menuItem :: menuItem(${menu.getName()}, ${menu.getPrice()})"></div>
             </div>
         </div>
-        <button class="view-full-menu"><i class="fas fa-list"></i> 전체 메뉴 보기</button>
+        <div th:if="${menuList.isEmpty()}" class="menu-items-container">
+            <div class="menu-items">
+                <p>영업점에서 등록한 메뉴가 없습니다.</p>
+            </div>
+        </div>
+        <button th:if="${!menuList.isEmpty()}" class="view-full-menu"><i class="fas fa-list"></i> 전체 메뉴 보기</button>
     </div>
 
     <div class="tab-divider"></div>

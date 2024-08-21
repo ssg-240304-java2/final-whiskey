@@ -3,6 +3,7 @@ package com.whiskey.rvcom.misc;
 import com.whiskey.rvcom.entity.restaurant.OpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.WeeklyOpenCloseTime;
+import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -139,6 +141,9 @@ public class TestController {
         }
 
         restaurantWeeklyOpeningTime(model, restaurant.getWeeklyOpenCloseTime());
+
+        List<Menu> menuList = restaurantService.getMenuList(restaurantId);
+        model.addAttribute("menuList", menuList);
 
         return "restaurantDetail";
 
