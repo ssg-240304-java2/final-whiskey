@@ -12,63 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setupReports();
 });
 
-function setupTabs() {
-    const tabs = document.querySelectorAll('.tab');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabId = tab.getAttribute('data-tab');
-            activateTab(tab, tabId);
-        });
-    });
-
-    function activateTab(clickedTab, tabId) {
-        tabs.forEach(t => t.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-
-        clickedTab.classList.add('active');
-        const activeContent = document.getElementById(tabId);
-        if (activeContent) {
-            activeContent.classList.add('active');
-            // 탭 전환 시 해당 탭의 초기화 함수 호출
-            if (RestaurantDetail[`init${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`]) {
-                RestaurantDetail[`init${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`]();
-            }
-        }
-    }
-
-    // 기본 탭 활성화
-    const defaultTab = document.querySelector('.tab[data-tab="info"]');
-    if (defaultTab) {
-        defaultTab.click();
-    }
-}
-
-function setupModals() {
-    // 모달 설정을 전역 객체에 추가
-    window.RestaurantDetail.setupModal = function(modalId) {
-        const modal = document.getElementById(modalId);
-        const closeBtn = modal.querySelector('.close');
-
-        closeBtn.onclick = function() {
-            modal.style.display = 'none';
-        };
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
-        };
-    };
-
-    // 공지사항 모달 설정
-    RestaurantDetail.setupModal('noticeModal');
-
-    // 답변 모달 설정
-    RestaurantDetail.setupModal('replyModal');
-}
-
 function setupReports() {
     let reportType;
     let idx;
@@ -138,4 +81,63 @@ function setupReports() {
         // 폼 초기화
         this.reset();
     });
+}
+
+
+
+function setupTabs() {
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.getAttribute('data-tab');
+            activateTab(tab, tabId);
+        });
+    });
+
+    function activateTab(clickedTab, tabId) {
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        clickedTab.classList.add('active');
+        const activeContent = document.getElementById(tabId);
+        if (activeContent) {
+            activeContent.classList.add('active');
+            // 탭 전환 시 해당 탭의 초기화 함수 호출
+            if (RestaurantDetail[`init${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`]) {
+                RestaurantDetail[`init${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`]();
+            }
+        }
+    }
+
+    // 기본 탭 활성화
+    const defaultTab = document.querySelector('.tab[data-tab="info"]');
+    if (defaultTab) {
+        defaultTab.click();
+    }
+}
+
+function setupModals() {
+    // 모달 설정을 전역 객체에 추가
+    window.RestaurantDetail.setupModal = function(modalId) {
+        const modal = document.getElementById(modalId);
+        const closeBtn = modal.querySelector('.close');
+
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        };
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+    };
+
+    // 공지사항 모달 설정
+    RestaurantDetail.setupModal('noticeModal');
+
+    // 답변 모달 설정
+    RestaurantDetail.setupModal('replyModal');
 }
