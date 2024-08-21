@@ -117,6 +117,12 @@ body {
     margin-right: 10px;
 }
 
+.close-now {
+    color: #931e1e;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
 /* 탭 스타일 */
 .tabs {
     display: flex;
