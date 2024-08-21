@@ -17,8 +17,10 @@ public class EmailService {
     public void sendVerificationCode(String toEmail, String verificationCode) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
+        message.setFrom("admin@dokalab.site");
         message.setSubject("Your Verification Code");
         message.setText("Your verification code is: " + verificationCode);
+        System.out.println("check");
         mailSender.send(message);
     }
 }

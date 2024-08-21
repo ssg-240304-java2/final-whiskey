@@ -18,10 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
@@ -157,13 +154,15 @@ public class MemberController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:8080")
+
     @PostMapping("/api/redis/save")
-    public ResponseEntity<String> sendVerificationCode(@RequestParam String email) {
+    @ResponseBody
+    public ResponseEntity<String> sendVerificationCode(@RequestBody Map<String, String> data) {
         try {
-            String verificationCode = verificationService.generateAndSaveVerificationCode(email);
-            emailService.sendVerificationCode(email, verificationCode);
-            log.info("Generated and sent verification code to email: {}", email);
+            System.out.println(data.get("key") + ", " + data.get("value"));
+//            String verificationCode = verificationService.generateAndSaveVerificationCode(email);
+            emailService.sendVerificationCode(data.get("key"), data.get("value"));
+//            log.info("Generated and sent verification code to email: {}", email);
             return ResponseEntity.ok("인증 코드가 이메일로 전송되었습니다.");
         } catch (Exception e) {
             log.error("Error during sending verification code", e);

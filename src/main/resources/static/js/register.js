@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    // 이메일 인증 코드 전송 버튼 클릭 이벤트
     $('#emailVerifyBtn').on('click', function() {
         const email = $('#email').val();
 
@@ -7,22 +6,31 @@ $(document).ready(function() {
             alert('이메일을 입력하세요.');
             return;
         }
+
+        // 클라이언트에서 인증 코드 생성 (6자리 숫자 코드)
+        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+        console.log('생성된 인증 코드:', verificationCode);
+
+        // 서버로 전송할 데이터
         const data = {
-            key: email,
-            value: '인증 코드'  // 여기서 '인증 코드'는 실제 생성된 인증 코드로 대체해야 합니다
+            key: email,       // 이메일을 key로 사용
+            value: verificationCode // 생성된 인증 코드를 value로 사용
         };
 
+        // 서버로 인증 코드 전송
         $.ajax({
-            url: '${{secrets.MAIL_URL}}',
+            url: '/api/redis/save',
             method: 'POST',
-            contentType: 'application/json',  // Content-Type을 JSON으로 설정
-            data: JSON.stringify(data),  // JSON 데이터로 직렬화하여 전송
+            contentType: 'application/json',
+            data: JSON.stringify(data),
             success: function(response) {
+                console.log(response);
                 alert('인증 코드가 이메일로 전송되었습니다.');
             },
             error: function(error) {
-                alert('인증 코드 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
                 console.error('에러:', error);
+                alert('인증 코드 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
             }
         });
     });
@@ -39,7 +47,7 @@ $(document).ready(function() {
 
         $.ajax({
             // url: '${{secrets.MAIL_URL}}', // GET 요청을 보낼 URL
-            url: '${{secrets.MAIL_URL}}',
+            url: 'http://localhost:8080',
             method: 'GET',
             data: { key: email, code: code }, // 이메일과 인증 코드를 쿼리 파라미터로 보냄
             success: function(response) {
