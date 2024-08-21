@@ -2,6 +2,7 @@ package com.whiskey.rvcom.misc;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 @Controller
@@ -43,11 +44,11 @@ public class TestController {
         return "restaurantDetail";
     }
 
-    @GetMapping("/receipt-verification")
-    // 영수증 인증 페이지로 이동
-    public String getReceiptVerification() {
-        return "receiptVerification";
-    }
+//    @GetMapping("/receipt-verification")
+//    // 영수증 인증 페이지로 이동
+//    public String getReceiptVerification() {
+//        return "receiptVerification";
+//    }
     
     @GetMapping("/write-review")
     // 리뷰 작성 페이지로 이동
@@ -82,5 +83,12 @@ public class TestController {
 
     @GetMapping("/adminReport")
     public void adminReport() {
+    }
+
+    @GetMapping("/restaurant/{restaurantId}/{tab}")
+    public String getRestaurantDetailWithTab(@PathVariable Long restaurantId, @PathVariable String tab) {
+        // TODO: restaurantId와 tab에 따른 데이터 로딩 로직 구현
+        // TODO: 모델에 restaurantId와 tab 정보 추가
+        return "restaurantDetail";
     }
 }

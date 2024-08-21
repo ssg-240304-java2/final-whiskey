@@ -6,6 +6,7 @@
     <title>영수증 인증 - Foodfolio</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/receiptVerification.css}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         
     </style>
@@ -48,6 +49,7 @@
         const fileInput = document.getElementById('fileInput');
         const preview = document.getElementById('preview');
         const verifyBtn = document.getElementById('verifyBtn');
+        const nextStepBtn = document.getElementById('nextStepBtn');
 
         // 드래그 앤 드롭 이벤트를 처리합니다.
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -93,6 +95,9 @@
         // 파일 입력 변경 이벤트를 처리합니다.
         fileInput.addEventListener('change', function() {
             handleFiles(this.files);
+
+            const file = this.files[0];
+            if(file) uploadFileToServer(file);
         });
 
         // 파일을 처리하고 미리보기를 표시하는 함수입니다.
@@ -114,13 +119,107 @@
         }
 
         // 인증 버튼 클릭 이벤트를 처리합니다.
-        verifyBtn.addEventListener('click', function() {
+        verifyBtn.addEventListener('click', async function() {
         // TODO: 네이버 클로바 OCR API를 호출하여 영수증 이미지를 분석하고 결과를 처리하는 로직을 구현해야 합니다.
         // TODO: API 호출 결과를 바탕으로 영수증 정보를 추출하고 화면에 표시해야 합니다.
         // TODO: 영수증 인증 성공 여부에 따라 적절한 피드백을 사용자에게 제공해야 합니다.
-        alert('영수증 인증이 완료되었습니다.');
-            nextStepBtn.style.display = 'block';
-        });
+            // ajax 비동기로
+            // receipt/verification - post요청 전달
+            // 이미지 경로를 전달해야 함
+            await verifyReceipt();
+
+        })
+        // alert('영수증 인증이 완료되었습니다.');
+        //     nextStepBtn.style.display = 'block';
+        // });
+
+        async function verifyReceipt() {
+            // const uploadedFileName = await uploadFileToServer(preview.src);
+            // console.log('uploadedFileName', uploadedFileName);
+            
+            console.log('verifyReceipt', preview.src);
+            
+            const ocrResponseObject = await ocrProcess(preview.src);
+
+            alert('영수증 인증이 완료되었습니다.');
+
+            // receiptInfo.style.display = 'block';    // 영수증 인식정보 페이지 노출
+            // verifyBtn.style.display = 'none';       // 인증 버튼 숨김
+            // nextStepBtn.style.display = 'block';    // 다음 단계 버튼 노출
+        }
+        
+        async function ocrProcess(filePath) {
+            console.log('ocrProcess', filePath);
+            
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/receipt/verification',
+                    type: 'POST',
+                    data: { imagePath: filePath },
+                    success: function(response) {
+                        console.log('ocrProcess response', response);
+
+                        document.getElementById('storeName').textContent = response.storeName;
+
+                        const paidAt = new Date(response.paidAt);
+                        // const formattedDate = paidAt.toLocaleDateString();
+                        // document.getElementById('receiptDate').textContent = formattedDate;
+                        // 2010년 01월 01일 형식으로 출력
+                        document.getElementById('receiptDate').textContent = `${paidAt.getFullYear()}년 ${paidAt.getMonth() + 1}월 ${paidAt.getDate()}일`;
+
+                        // document.getElementById('totalAmount').textContent = response.totalPrice;
+                        // 50,000원 형식으로 출력
+                        document.getElementById('totalAmount').textContent = response.totalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "원";
+                        
+                        let menuItems = "";
+                        let i = 0;
+                        response.paidItems.forEach(menu => {
+                            if(i === 0) {
+                                menuItems += menu.itemName;
+                                i++;
+                                
+                                return;
+                            }
+                            menuItems += " / " + menu.itemName;
+                        });
+                    
+                        document.getElementById('menuItems').textContent = menuItems;
+
+                        document.getElementById('preview').style.display = 'none';
+                        document.getElementById('receiptInfo').style.display = 'block';
+                        nextStepBtn.style.display = 'block';
+
+                        resolve(response);
+                    }, error: function() {
+                        reject();
+                    }
+                });
+            });
+        }
+
+        async function uploadFileToServer(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: '/upload',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        alert('파일 업로드에 성공했습니다.');
+                        console.log('uploaded filepath: ', response);
+
+                        resolve(response);
+                    }, error: function() {
+                        alert('파일 업로드에 실패했습니다.');
+                        reject();
+                    }
+                });
+            })
+        }
 
         nextStepBtn.addEventListener('click', function() {
             // TODO: 리뷰 작성 페이지로 이동하는 로직을 구현해야 합니다.
@@ -152,9 +251,11 @@
             const imageDataUrl = canvas.toDataURL('image/jpeg');
             preview.src = imageDataUrl;
             preview.style.display = 'block';
-            verifyBtn.style.display = 'block';
             retakeBtn.style.display = 'inline-block';
-            receiptInfo.style.display = 'block';
+
+            // TODO: 
+            verifyBtn.style.display = 'block';
+            // receiptInfo.style.display = 'block'; // TODO: 이 버튼은 영수증 인증하기 버튼 클릭 시 노출되어야 함
             // TODO: 캡처된 이미지를 서버로 전송하여 OCR 처리를 수행하는 API를 호출해야 합니다.
             // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
         });
@@ -164,7 +265,8 @@
             preview.style.display = 'none';
             retakeBtn.style.display = 'none';
             receiptInfo.style.display = 'none';
-            verifyBtn.style.display = 'none';
+            verifyBtn.style.display = 'block';
+            nextStepBtn.style.display = 'none';
         });
     </script>
 </body>

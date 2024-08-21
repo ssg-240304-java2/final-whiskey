@@ -24,4 +24,12 @@ public class RestaurantInquiryReply {
     private LocalDateTime createdAt;    // 문의 답변 작성시간
 
     private LocalDateTime deletedAt;    // 문의 답변 삭제시간
+
+    public RestaurantInquiryReply(String content) {
+        this.content = content;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }
