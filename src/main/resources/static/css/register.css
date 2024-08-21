@@ -151,17 +151,17 @@ form button:hover {
 }
 
 /* 이메일 컨테이너 스타일 */
-.email-container {
+.email-container, .verification-container {
     display: flex;
     gap: 10px;
 }
 
-.email-container input[type="email"] {
+.email-container input[type="email"], .verification-container input[type="text"] {
     flex-grow: 1;
 }
 
-/* 이메일 인증 버튼 스타일 */
-#emailVerifyBtn {
+/* 이메일 인증 버튼 및 확인 버튼 스타일 */
+#emailVerifyBtn, #verifyCodeBtn {
     padding: 12px 20px;
     background-color: var(--main-color);
     color: white;
@@ -171,13 +171,14 @@ form button:hover {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
-#emailVerifyBtn:hover {
+#emailVerifyBtn:hover, #verifyCodeBtn:hover {
     background-color: var(--main-color-dark);
 }
 
-#emailVerifyBtn.verified {
+#emailVerifyBtn.verified, #verifyCodeBtn.verified {
     background-color: #28a745;
     cursor: not-allowed;
 }
@@ -198,11 +199,11 @@ form button:hover {
         height: 200px;
     }
 
-    .email-container {
+    .email-container, .verification-container {
         flex-direction: column;
     }
 
-    #emailVerifyBtn {
+    #emailVerifyBtn, #verifyCodeBtn {
         width: 100%;
         margin-top: 10px;
     }

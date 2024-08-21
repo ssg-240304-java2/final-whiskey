@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodfolio 회원가입</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/register.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="register-page">
+<div class="register-container">
+    <div class="image-section">
+        <img src="https://via.placeholder.com/500" alt="랜덤 음식 이미지">
+    </div>
+    <div class="form-section">
+        <h1>Foodfolio 회원가입</h1>
+        <form action="/register_basic" method="post">
+            <div class="email-container">
+                <input type="email" id="email" name="email" placeholder="이메일" required>
+                <button type="button" id="emailVerifyBtn">인증 코드 받기</button>
+            </div>
+            <div class="verification-container">
+                <input type="text" id="emailVerificationCode" name="emailVerificationCode" placeholder="인증 코드" required disabled>
+                <button type="button" id="verifyCodeBtn">확인</button>
+            </div>
+            <input type="text" name="loginId" placeholder="로그인 ID" required>
+            <input type="text" name="name" placeholder="이름" required>
+            <input type="text" name="nickname" placeholder="닉네임" required>
+            <input type="password" id="password" name="password" placeholder="비밀번호" required>
+            <input type="password" id="passwordConfirm" placeholder="비밀번호 확인" required>
+            <span id="password-match-message" style="color:red; display:none;">비밀번호가 일치하지 않습니다.</span>
+            <button type="submit" id="submit-btn" disabled>회원가입</button>
+        </form>
+        <div class="options">
+            <span>이미 계정이 있으신가요? <a href="/login">로그인</a></span>
+        </div>
+    </div>
+</div>
+<script src="/js/register.js"></script> <!-- 분리된 JavaScript 파일을 로드 -->
+</body>
+</html>

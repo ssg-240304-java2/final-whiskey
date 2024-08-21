@@ -102,32 +102,30 @@ body {
     margin-bottom: 30px;
 }
 
-/* 소셜 로그인 버튼 스타일 */
-.social-login button {
+/* 소셜 로그인 링크 스타일 */
+.social-login a {
+    display: block;
     width: 48%;
-    padding: 12px;
-    border: none;
+    height: 50px;
+    background-size: contain; /* 이미지가 원본 크기에 맞게 조정되도록 설정 */
+    background-repeat: no-repeat;
+    background-position: center;
     border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
     transition: all 0.3s ease;
 }
 
 /* 구글 로그인 버튼 */
 .social-login .google {
-    background-color: #4285F4;
-    color: white;
+    background-image: url('/images/web_neutral.png'); /* 이미지를 해당 경로에 넣어주세요 */
 }
 
 /* 네이버 로그인 버튼 */
 .social-login .naver {
-    background-color: #03c75a;
-    color: white;
+    background-image: url('/images/btnG_complete.png'); /* 이미지를 해당 경로에 넣어주세요 */
 }
 
 /* 소셜 로그인 버튼 호버 효과 */
-.social-login button:hover {
+.social-login a:hover {
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
@@ -163,7 +161,7 @@ form {
 }
 
 /* 입력 필드 스타일 */
-form input[type="email"],
+form input[type="text"],  /* 아이디 입력 필드 */
 form input[type="password"] {
     padding: 12px;
     margin: 10px 0;
@@ -171,10 +169,12 @@ form input[type="password"] {
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* 입력 필드 포커스 효과 */
-form input[type="email"]:focus,
+form input[type="text"]:focus, /* 아이디 입력 필드 포커스 */
 form input[type="password"]:focus {
     border-color: var(--main-color);
     box-shadow: 0 0 0 2px rgba(211, 35, 35, 0.1);
@@ -242,7 +242,7 @@ form button:hover {
         flex-direction: column;
     }
 
-    .social-login button {
+    .social-login a {
         width: 100%;
         margin-bottom: 10px;
     }

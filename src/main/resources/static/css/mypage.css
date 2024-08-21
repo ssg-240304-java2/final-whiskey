@@ -27,12 +27,13 @@ body {
     border-radius: 8px;
     padding: 30px;
     background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
+    border: 1px solid var(--border-color); /* 경계선 추가 */
     transition: box-shadow 0.3s ease;
 }
 
 .profile-header:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
 }
 
 .profile-image {
@@ -60,7 +61,8 @@ body {
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
+    border: 1px solid var(--border-color); /* 경계선 추가 */
 }
 
 .content-section {
@@ -69,8 +71,12 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .content-section.active {
@@ -81,7 +87,8 @@ body {
     width: 250px;
     padding: 30px;
     background-color: #f2f2f2;
-    border-right: 1px solid #e6e6e6;
+    border-right: 2px solid #cccccc; /* 사이드바와 메인 콘텐츠 구분 */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
 }
 
 .profile-nav ul {
@@ -112,10 +119,11 @@ body {
     text-align: center;
 }
 
-.profile-nav .nav-item.active a, .profile-nav .nav-item a:hover {
+.profile-nav .nav-item.active a,
+.profile-nav .nav-item a:hover {
     background-color: #fff;
     color: var(--primary-color);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .profile-nav .nav-item.active a {
@@ -125,6 +133,10 @@ body {
 .main-content {
     flex: 1;
     padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
+    border: 1px solid var(--border-color); /* 경계선 추가 */
 }
 
 .edit-profile-btn {
@@ -140,6 +152,22 @@ body {
 }
 
 .edit-profile-btn:hover {
+    background-color: var(--hover-color);
+}
+
+.unsubscribe-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    font-weight: 500;
+}
+
+.unsubscribe-btn:hover {
     background-color: var(--hover-color);
 }
 
@@ -173,19 +201,22 @@ body {
     font-size: 0.9em;
 }
 
-.profile-section, #recent-activity {
+.profile-section,
+#recent-activity {
     border-radius: 8px;
     padding: 25px;
     margin-bottom: 30px;
     background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.profile-details, .user-bio {
+.profile-details,
+.user-bio {
     margin-bottom: 25px;
 }
 
-.review-item, .bookmark-item {
+.review-item,
+.bookmark-item {
     display: flex;
     margin-bottom: 25px;
     border-bottom: 1px solid var(--border-color);
@@ -193,11 +224,13 @@ body {
     transition: transform 0.3s ease;
 }
 
-.review-item:hover, .bookmark-item:hover {
+.review-item:hover,
+.bookmark-item:hover {
     transform: translateY(-5px);
 }
 
-.review-item .restaurant-image, .bookmark-item .restaurant-image {
+.review-item .restaurant-image,
+.bookmark-item .restaurant-image {
     width: 120px;
     height: 120px;
     object-fit: cover;
@@ -244,7 +277,7 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.4);
+    background-color: rgba(0, 0, 0, 0.4);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -255,7 +288,7 @@ body {
 
 .modal-content {
     background-color: #fefefe;
-    margin: 10% auto;
+    margin: 5% auto;
     padding: 30px;
     border: 1px solid #888;
     width: 90%;
@@ -283,14 +316,9 @@ body {
     color: var(--primary-color);
 }
 
-#editProfileForm label {
-    display: block;
-    margin-top: 15px;
-    font-weight: 500;
-}
-
-#editProfileForm input,
-#editProfileForm textarea {
+/* 기본 및 소셜 프로필 수정 폼 스타일 */
+.basic-profile-form input,
+.social-profile-form input {
     width: 100%;
     padding: 10px;
     margin-top: 5px;
@@ -299,7 +327,8 @@ body {
     font-size: 1em;
 }
 
-#editProfileForm button {
+.basic-profile-form button,
+.social-profile-form button {
     margin-top: 25px;
     padding: 12px 24px;
     background-color: var(--primary-color);
@@ -312,20 +341,36 @@ body {
     transition: background-color 0.3s ease;
 }
 
-#editProfileForm button:hover {
+.basic-profile-form button:hover,
+.social-profile-form button:hover {
     background-color: var(--hover-color);
+}
+
+.basic-profile-form label,
+.social-profile-form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 500;
 }
 
 @media (max-width: 768px) {
     .content-wrapper {
         flex-direction: column;
+        box-shadow: none; /* 반응형에서 전체 그림자 제거 */
     }
 
     .sidebar {
         width: 100%;
         border-right: none;
-        border-bottom: 1px solid #e6e6e6;
+        border-bottom: 2px solid #cccccc; /* 사이드바와 메인 콘텐츠 구분 */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
         padding: 20px;
+    }
+
+    .main-content {
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* 메인 콘텐츠 위쪽 그림자 추가 */
+        border-top: 2px solid #cccccc; /* 메인 콘텐츠와 사이드바 구분 */
+        padding: 30px;
     }
 
     .profile-nav ul {
@@ -359,14 +404,31 @@ body {
         margin-bottom: 20px;
     }
 
-    .review-item, .bookmark-item {
+    .review-item,
+    .bookmark-item {
         flex-direction: column;
     }
 
-    .review-item .restaurant-image, .bookmark-item .restaurant-image {
+    .review-item .restaurant-image,
+    .bookmark-item .restaurant-image {
         width: 100%;
         height: 200px;
         margin-right: 0;
         margin-bottom: 15px;
+    }
+
+    /* 탈퇴 버튼 반응형 조정 */
+    .unsubscribe-btn {
+        width: 100%;
+        margin-top: 15px;
+        padding: 12px;
+        font-size: 1.1em;
+    }
+
+    .edit-profile-btn {
+        width: 100%;
+        margin-top: 15px;
+        padding: 12px;
+        font-size: 1.1em;
     }
 }
