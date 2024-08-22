@@ -83,7 +83,17 @@
         <!-- 각 탭 콘텐츠 영역 -->
         <div class="content-area">
             <div class="flex-container">
-                <div class="tab-content active" id="info" th:replace="fragments/restaurantDetail/info :: info"></div>
+                <div class="tab-content active" id="info" th:replace="fragments/restaurantDetail/info :: info(
+                    monday=${monday},
+                    tuesday=${tuesday},
+                    wednesday=${wednesday},
+                    thursday=${thursday},
+                    friday=${friday},
+                    saturday=${saturday},
+                    sunday=${sunday},
+                    menuList=${menuList}
+                )"></div>
+                <div></div>
                 <div class="tab-content" id="reviews" th:replace="fragments/restaurantDetail/reviews :: reviews"></div>
                 <div class="tab-content" id="inquiries"
                      th:replace="fragments/restaurantDetail/inquiries :: inquiries"></div>

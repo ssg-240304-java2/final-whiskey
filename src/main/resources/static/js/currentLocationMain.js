@@ -108,7 +108,7 @@ function getLocationRestaurant(lat, lng) {
                             </p>
                             <p class="hours"><i class="far fa-clock"></i> <span>${openCloseTime}</span></p>
                             <div class="rating">★★★★★</div>
-                            <button class="find-order" onclick="location.href='/restaurant/detail/${restaurant.id}'"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
+                            <button class="find-order" onclick="location.href='/restaurant/${restaurant.id}/info'"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
                             
                         </div>
                     </div>`;
