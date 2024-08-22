@@ -15,13 +15,13 @@ public class TestController {
         this.restaurantService = restaurantService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/test")
     // 테스트 메인 페이지로 이동(로컬호스트 홈)
     public String getMain() {
         return "main";
     }
 
-    @GetMapping("/mainPage")
+    @GetMapping("/")
     // 메인 페이지로 이동
     public String getMainPage() {
         return "mainPage";
