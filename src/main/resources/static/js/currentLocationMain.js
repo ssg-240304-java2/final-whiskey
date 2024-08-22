@@ -38,42 +38,62 @@ var callback = function (result, status) {
 function getLocationRestaurant(lat, lng) {
     var restaurantGrid = document.getElementById("restaurant-grid");
 
+    // 스켈레톤 UI 표시
+    restaurantGrid.innerHTML = Array(6).fill().map(() => `
+        <div class="restaurant-card skeleton">
+            <div class="restaurant-image-placeholder skeleton-image"></div>
+            <div class="restaurant-info">
+                <div class="skeleton-text skeleton-title"></div>
+                <div class="skeleton-text skeleton-details"></div>
+                <div class="skeleton-text skeleton-hours"></div>
+                <div class="skeleton-text skeleton-rating"></div>
+            </div>
+        </div>
+    `).join('');
+
     $.ajax({
         url: "/restaurant/userLocationMain",
         type: "GET",
         data: {lat, lng},
         success: function (restaurantList) {
-            for (let restaurant of restaurantList) {
-                var restaurantGrid = document.getElementById("restaurant-grid");
+            // 스켈레톤 UI 제거
+            restaurantGrid.innerHTML = '';
 
+            restaurantList.forEach((restaurant, index) => {
+                setTimeout(() => {
+                    var element = document.createElement('div');
+                    element.className = 'pop-in';
+                    element.innerHTML = `<div class="restaurant-card">
+                            <div class="restaurant-image-placeholder">
+                                음식점 사진
+                            </div>
+                            <div class="restaurant-info">
+                                <h3>${restaurant.name}</h3>
+                                <p class="restaurant-details">
+                                    <span class="distance">${restaurant.distance}</span>
+                                    <span class="category">${restaurant.category}</span>
+                                </p>
+                                <p class="hours"><i class="far fa-clock"></i> <span>${restaurant.openCloseTime}</span></p>
+                                <div class="rating">★★★★★</div>
+                                <button class="find-order" onclick="location.href='/restaurant/${restaurant.id}/info'"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
+                            </div>
+                        </div>`;
 
-                var element = document.createElement('div');
-                element.innerHTML = `<div class="restaurant-card">
-                        <div class="restaurant-image-placeholder">
-                            음식점 사진
-                        </div>
-                        <div class="restaurant-info">
-                            <h3>${restaurant.name}</h3>
-                            <p class="restaurant-details">
-                                <span class="distance">${restaurant.distance}</span>
-                                <span class="category">${restaurant.category}</span>
-                            </p>
-                            <p class="hours"><i class="far fa-clock"></i> <span>${restaurant.openCloseTime}</span></p>
-                            <div class="rating">★★★★★</div>
-                            <button class="find-order" onclick="location.href='/restaurant/${restaurant.id}/info'"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
-                            
-                        </div>
-                    </div>`;
-
-                restaurantGrid.appendChild(element);
-            }
+                    restaurantGrid.appendChild(element);
+                }, index * 200); // 각 카드를 150ms 간격으로 표시
+            });
         },
         error: function () {
             console.log("데이터 불러오기 실패!!");
+            // 에러 발생 시 사용자에게 알림
+            restaurantGrid.innerHTML = '<p class="error-message">음식점 정보를 불러오는 데 실패했습니다. 다시 시도해 주세요.</p>';
         }
     });
 }
 
+// TODO: 필터링 기능 구현
+// 정렬 기준과 음식 종류에 따른 필터링 로직을 추가해야 합니다.
+// 선택된 필터 옵션에 따라 서버에 요청을 보내고 결과를 업데이트하는 함수를 구현해야 합니다.
 function getDistance(lat1, lng1, lat2, lng2) {
     var R = 6371;
     var dLat = (lat2 - lat1) * (Math.PI / 180);
