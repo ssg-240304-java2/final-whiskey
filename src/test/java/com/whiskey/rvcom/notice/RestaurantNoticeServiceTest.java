@@ -45,7 +45,7 @@ class RestaurantNoticeServiceTest {
         Long restaurantId = 2L;
         String title = "오늘의 메뉴 안내";
         String content = "오늘의 메뉴는 돈까스입니다. 많은 관심 부탁드립니다.";
-        RestaurantNoticeRequestDTO request = new RestaurantNoticeRequestDTO(restaurantId, title, content);
+        RestaurantNoticeRequestDTO request = new RestaurantNoticeRequestDTO(title, content);
 
         // when
         noticeService.save(request, restaurantId);
