@@ -23,9 +23,8 @@
             </script>
         </div>
 
-        <!-- 에러 메시지 표시 -->
-        <div th:if="${error}" class="error-message" style="color: red; margin-bottom: 10px;">
-            <p th:text="${error}"></p>
+        <div th:if="${param.error}" class="error-message" style="color: red; margin-bottom: 10px;">
+            <p th:text="${param.error}"></p>
         </div>
 
         <div class="social-login">
@@ -38,12 +37,11 @@
             <input type="text" id="loginId" name="loginId" placeholder="아이디" required />
             <input type="password" id="password" name="password" placeholder="비밀번호" required />
             <div class="options">
-                <label>
-                    <input type="checkbox"> 로그인 상태 유지
-                </label>
                 <a href="#">비밀번호를 잊으셨나요?</a>
             </div>
+
             <button type="submit">로그인</button>
+
         </form>
 
         <div class="options">

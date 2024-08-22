@@ -1,5 +1,6 @@
 package com.whiskey.rvcom.config;
 
+import com.whiskey.rvcom.Member.handler.CustomAuthenticationFailureHandler;
 import com.whiskey.rvcom.Member.service.CustomOAuth2AuthService;
 import com.whiskey.rvcom.Member.service.CustomOidcUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +27,13 @@ public class SecurityConfig {
 
     private final CustomOAuth2AuthService customOAuth2AuthService;
     private final CustomOidcUserService customOidcUserService;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
     public SecurityConfig(CustomOAuth2AuthService customOAuth2AuthService,
-                          CustomOidcUserService customOidcUserService) {
+                          CustomOidcUserService customOidcUserService, CustomAuthenticationFailureHandler customAuthenticationFailureHandler) {
         this.customOAuth2AuthService = customOAuth2AuthService;
         this.customOidcUserService = customOidcUserService;
+        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
     }
 
     @Bean
@@ -49,7 +52,7 @@ public class SecurityConfig {
                         .loginPage("/login")
                         .loginProcessingUrl("/perform_login")
                         .defaultSuccessUrl("/mainPage", true)
-                        .failureUrl("/login?error=true")
+                        .failureHandler(customAuthenticationFailureHandler)
                         .successHandler((request, response, authentication) -> {
                             log.info("User {} has successfully logged in.", authentication.getName());
                             SecurityContextHolder.getContext().setAuthentication(authentication);
