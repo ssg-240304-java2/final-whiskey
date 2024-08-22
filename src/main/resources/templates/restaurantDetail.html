@@ -94,7 +94,8 @@
                     menuList=${menuList}
                 )"></div>
                 <div></div>
-                <div class="tab-content" id="reviews" th:replace="fragments/restaurantDetail/reviews :: reviews"></div>
+                <div class="tab-content" id="reviews"
+                     th:replace="fragments/restaurantDetail/reviews :: reviews(ratingPhase=${ratingPhase}, reviews=${reviews})"></div>
                 <div class="tab-content" id="inquiries"
                      th:replace="fragments/restaurantDetail/inquiries :: inquiries"></div>
                 <div class="tab-content" id="notices" th:replace="fragments/restaurantDetail/notices :: notices"></div>

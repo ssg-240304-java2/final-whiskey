@@ -5,6 +5,7 @@ import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.WeeklyOpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
+import com.whiskey.rvcom.review.ReviewService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,15 +15,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
 public class TestController {
 
     RestaurantService restaurantService;
+    ReviewService reviewService;
 
-    public TestController(RestaurantService restaurantService) {
+    public TestController(RestaurantService restaurantService, ReviewService reviewService) {
         this.restaurantService = restaurantService;
+        this.reviewService = reviewService;
     }
 
     @GetMapping("/")
@@ -145,8 +149,13 @@ public class TestController {
         List<Menu> menuList = restaurantService.getMenuList(restaurantId);
         model.addAttribute("menuList", menuList);
 
-        return "restaurantDetail";
+        // 리뷰 관련 정보
+        Map<String, Object> reviewAttributes = reviewService.getReviewsByRestaurant(restaurant);
 
+        model.addAttribute("ratingPhase", reviewAttributes.get("ratingPhase"));
+        model.addAttribute("reviews", reviewAttributes.get("reviews"));
+
+        return "restaurantDetail";
     }
 
     private void restaurantWeeklyOpeningTime(Model model, WeeklyOpenCloseTime weeklyOpenCloseTime) {
