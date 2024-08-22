@@ -14,7 +14,7 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container">
-    <div th:replace="fragments/mypage_profileHeader :: profileHeader(${member.name}, ${member.createdAt}, ${reviewCount}, ${profileImageUrl})"></div>
+    <div th:replace="fragments/mypage_profileHeader :: profileHeader(${member.name}, ${member.createdAt}, ${reviews.size()}, ${profileImageUrl})"></div>
 
     <div class="content-wrapper">
         <div class="sidebar">
@@ -28,32 +28,43 @@
                 <h2>내가 작성한 리뷰</h2>
                 <div class="review-list">
                     <div th:each="review : ${reviews}" class="review-item">
+                        <!-- 이미지 갤러리 -->
                         <div class="review-images">
-                            <img th:each="image : ${reviewImagesMap[review.id]}" th:src="@{'/images/' + ${image.imageFile.uuidFileName}}" alt="리뷰 이미지" class="review-image">
+                            <img th:each="image : ${reviewImagesMap[review.id]}" th:src="${image}" alt="리뷰 이미지" class="restaurant-image">
                         </div>
+                        <!-- 리뷰 내용 -->
                         <div class="review-content">
                             <h3 th:text="${review.restaurant.name}">음식점 이름</h3>
                             <div class="rating">
-                                <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, review.rating)}"></i>
-                                <i class="far fa-star" th:each="i : ${#numbers.sequence(review.rating + 1, 5)}"></i>
-                                <span th:text="${review.rating}">4.0</span>
+                                <!-- Filled stars -->
+                                <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, review.rating.value)}"></i>
+                                <!-- Empty stars -->
+                                <i class="far fa-star" th:each="i : ${#numbers.sequence(review.rating.value + 1, 5)}"></i>
+                                <span th:text="${review.rating.value}">4.0</span>
                             </div>
                             <p class="review-text" th:text="${review.content}">리뷰 내용</p>
-                            <span class="review-date" th:text="${#dates.format(review.createdAt, 'yyyy년 MM월 dd일')}">2023년 5월 20일</span>
+                            <span class="review-date" th:text="${#temporals.format(review.createdAt, 'yyyy년 MM월 dd일')}">2023년 5월 20일</span>
                         </div>
                     </div>
                 </div>
 
+                <!-- Pagination -->
                 <div class="pagination">
                     <ul>
                         <li th:if="${currentPage > 0}">
-                            <a th:href="@{'/mypage'(page=${currentPage - 1}, size=${size})}">&laquo; Previous</a>
+                            <a th:href="@{'/mypage'(page=0, size=${size})}">&laquo; 맨 처음</a>
+                        </li>
+                        <li th:if="${currentPage > 0}">
+                            <a th:href="@{'/mypage'(page=${currentPage - 1}, size=${size})}">&laquo; 이전</a>
                         </li>
                         <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
                             <a th:classappend="${i == currentPage} ? 'active'" th:href="@{'/mypage'(page=${i}, size=${size})}" th:text="${i + 1}">1</a>
                         </li>
                         <li th:if="${currentPage < totalPages - 1}">
-                            <a th:href="@{'/mypage'(page=${currentPage + 1}, size=${size})}">Next &raquo;</a>
+                            <a th:href="@{'/mypage'(page=${currentPage + 1}, size=${size})}">다음 &raquo;</a>
+                        </li>
+                        <li th:if="${currentPage < totalPages - 1}">
+                            <a th:href="@{'/mypage'(page=${totalPages - 1}, size=${size})}">맨 마지막 &raquo;</a>
                         </li>
                     </ul>
                 </div>

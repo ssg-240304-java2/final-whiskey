@@ -4,7 +4,7 @@
     --background-color: #f5f5f5;
     --text-color: #333;
     --border-color: #e6e6e6;
-    --hover-color: #af1d1d; /* 호버 색상을 #af1d1d로 변경 */
+    --hover-color: #af1d1d;
 }
 
 body {
@@ -139,6 +139,36 @@ body {
     border: 1px solid var(--border-color);
 }
 
+.review-item {
+    display: block;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 25px;
+    transition: transform 0.3s ease;
+}
+
+.review-item:hover {
+    transform: translateY(-5px);
+}
+
+.review-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.review-images img {
+    width: calc(33.33% - 10px); /* 세 개의 이미지를 가로로 나란히 배치 */
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.review-content {
+    text-align: left;
+}
+
 .edit-profile-btn {
     background-color: var(--primary-color);
     color: white;
@@ -169,6 +199,36 @@ body {
 
 .unsubscribe-btn:hover {
     background-color: var(--hover-color); /* 호버 색상 변경 */
+}
+
+.pagination {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.pagination ul {
+    list-style: none;
+    padding: 0;
+    display: inline-flex;
+}
+
+.pagination ul li {
+    margin: 0 5px;
+}
+
+.pagination ul li a {
+    text-decoration: none;
+    color: var(--primary-color);
+    padding: 10px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination ul li a:hover,
+.pagination ul li a.active {
+    background-color: var(--primary-color);
+    color: #fff;
 }
 
 .activity-feed {
@@ -215,7 +275,6 @@ body {
     margin-bottom: 25px;
 }
 
-.review-item,
 .bookmark-item {
     display: flex;
     margin-bottom: 25px;
@@ -224,48 +283,16 @@ body {
     transition: transform 0.3s ease;
 }
 
-.review-item:hover,
 .bookmark-item:hover {
     transform: translateY(-5px);
 }
 
-.review-item .restaurant-image,
 .bookmark-item .restaurant-image {
     width: 120px;
     height: 120px;
     object-fit: cover;
     margin-right: 25px;
     border-radius: 8px;
-}
-
-.following-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 25px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 25px;
-}
-
-.following-item .user-image {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    margin-right: 25px;
-}
-
-.unfollow-btn {
-    margin-left: auto;
-    padding: 8px 16px;
-    background-color: var(--secondary-color);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.unfollow-btn:hover {
-    background-color: var(--hover-color); /* 호버 색상 변경 */
 }
 
 .modal {
@@ -356,7 +383,7 @@ body {
 @media (max-width: 768px) {
     .content-wrapper {
         flex-direction: column;
-        box-shadow: none; /* 반응형에서 전체 그림자 제거 */
+        box-shadow: none;
     }
 
     .sidebar {
@@ -417,7 +444,6 @@ body {
         margin-bottom: 15px;
     }
 
-    /* 탈퇴 버튼 반응형 조정 */
     .unsubscribe-btn {
         width: 100%;
         margin-top: 15px;

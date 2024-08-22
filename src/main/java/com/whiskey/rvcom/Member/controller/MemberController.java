@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -109,7 +110,7 @@ public class MemberController {
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model,
                          @RequestParam(value = "page", defaultValue = "0") int page,
-                         @RequestParam(value = "size", defaultValue = "5") int size) {
+                         @RequestParam(value = "size", defaultValue = "2") int size) {
 
         Member member = (Member) session.getAttribute("member");
 
@@ -117,24 +118,27 @@ public class MemberController {
             return "redirect:/login";
         }
 
+        // 프로필 이미지 URL 설정
         String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
         if (member.getProfileImage() != null) {
             profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
         }
 
-        // 리뷰 전체 목록을 가져옴
+        // 회원의 리뷰를 가져옴
         List<Review> reviews = reviewService.getReviewsByMember(member);
 
-        // 페이지네이션을 위한 하위 리스트를 만듦
+        // 페이지네이션을 위한 하위 리스트 생성
         int start = Math.min(page * size, reviews.size());
         int end = Math.min((page + 1) * size, reviews.size());
         List<Review> paginatedReviews = reviews.subList(start, end);
 
-        // 각 리뷰에 대한 리뷰 이미지 리스트를 가져옴
-        Map<Long, List<ReviewImage>> reviewImagesMap = new HashMap<>();
+        // 리뷰 이미지 리스트를 가져와서 URL로 변환
+        Map<Long, List<String>> reviewImagesMap = new HashMap<>();
         for (Review review : paginatedReviews) {
-            List<ReviewImage> reviewImages = reviewImageService.getReviewImagesByReview(review);
-            reviewImagesMap.put(review.getId(), reviewImages);
+            List<String> imageUrls = reviewImageService.getReviewImagesByReview(review).stream()
+                    .map(image -> ImagePathParser.parse(image.getImageFile().getUuidFileName()))
+                    .collect(Collectors.toList());
+            reviewImagesMap.put(review.getId(), imageUrls);
         }
 
         int totalPages = (int) Math.ceil((double) reviews.size() / size);
@@ -143,7 +147,7 @@ public class MemberController {
         model.addAttribute("profileImageUrl", profileImageUrl);
         model.addAttribute("isSocialLogin", member.getLoginType() != LoginType.BASIC);
         model.addAttribute("reviews", paginatedReviews); // 페이지네이션 된 리뷰 목록
-        model.addAttribute("reviewImagesMap", reviewImagesMap); // 리뷰 이미지 맵
+        model.addAttribute("reviewImagesMap", reviewImagesMap); // 리뷰 이미지 URL 맵
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
 
@@ -173,11 +177,6 @@ public class MemberController {
             model.addAttribute("error", "이미 존재하는 로그인 ID입니다. 다른 ID를 사용해주세요.");
             return "register_basic";
         }
-
-//        if (!verificationService.verifyCode(email, verificationCode)) {
-//            model.addAttribute("error", "인증 코드가 올바르지 않습니다.");
-//            return "register_basic";
-//        }
 
         String encodedPassword = passwordEncoder.encode(password);
 
@@ -358,6 +357,26 @@ public class MemberController {
 
         return "redirect:/mypage";
     }
+
+    @GetMapping("/owner-dashboard")
+    public String ownerDashboard(HttpSession session, Model model) {
+        Member member = (Member) session.getAttribute("member");
+
+        if (member == null) {
+            return "redirect:/login";
+        }
+
+        String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
+        if (member.getProfileImage() != null) {
+            profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
+        }
+
+        model.addAttribute("profileImageUrl", profileImageUrl);
+        model.addAttribute("memberName", member.getName());
+
+        return "owner/dashboard";
+    }
+
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
