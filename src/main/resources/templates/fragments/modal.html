@@ -3,8 +3,8 @@
     <div th:id="${id}" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <span class="close close-btn">×</span>
                 <h2 th:text="${title}">모달 제목</h2>
+                <span class="close close-btn">×</span>
             </div>
             <div class="modal-body">
                 <div th:replace="~{::content}">
