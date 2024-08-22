@@ -99,12 +99,12 @@ function getLocationRestaurant(lat, lng) {
                                 </p>
                                 <p class="hours"><i class="far fa-clock"></i> <span>${restaurant.openCloseTime}</span></p>
                                 <div class="rating">★★★★★</div>
-                                <button class="find-order" onclick="location.href='/restaurant/${restaurant.id}/info'"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
+                                <button class="find-order" onclick="location.href='/restaurant/${restaurant.id}/info'"><i class="fas fa-info-circle"></i> 상세 정보</button>
                             </div>
                         </div>`;
 
                     restaurantGrid.appendChild(element);
-                }, index * 200); // 각 카드를 150ms 간격으로 표시
+                }, index * 100); // 각 카드를 150ms 간격으로 표시
             });
         },
         error: function () {
