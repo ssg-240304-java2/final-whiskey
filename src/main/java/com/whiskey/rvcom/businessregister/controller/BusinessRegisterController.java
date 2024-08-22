@@ -84,7 +84,6 @@ public class BusinessRegisterController {
         return businessRegisterService.getAllBusinessRegister(page, sortOrder);
     }
 
-
     // 임시 페이지 이동용
     @GetMapping("/registrestaurant")
     private String moveToPage() {

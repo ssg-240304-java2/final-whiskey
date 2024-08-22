@@ -3,7 +3,6 @@ package com.whiskey.rvcom.businessregister.service;
 
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Address;
-import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
 import com.whiskey.rvcom.repository.AddressRepository;
 import com.whiskey.rvcom.repository.MemberRepository;
@@ -43,14 +42,8 @@ public class BusinessRegisterService {
         return addressRepository.save(restaurantAddress);
     }
 
-    public RestaurantCategory getCategory(String category) {
-        RestaurantCategory result = RestaurantCategory.valueOf(category);
-        System.out.println("result = " + result);
-        return result;
-    }
-
     public Page<RestaurantRegistration> getAllBusinessRegister(int page, String sortOrder) {
-        Sort sort = Sort.by("reportedAt");
+        Sort sort = Sort.by("createdAt");
 
         if ("desc".equalsIgnoreCase(sortOrder)) {
             sort = sort.descending();
