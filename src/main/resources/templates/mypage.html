@@ -48,6 +48,7 @@
                     </div>
                 </div>
 
+
                 <!-- Pagination -->
                 <div class="pagination">
                     <ul>
@@ -70,32 +71,34 @@
                 </div>
             </section>
 
-
             <section id="bookmarks" class="content-section">
                 <h2>북마크한 레스토랑</h2>
                 <div class="bookmark-list">
-                    <div class="bookmark-item">
-                        <img src="https://via.placeholder.com/100" alt="레스토랑 이미지" class="restaurant-image">
+                    <div th:each="favorite : ${favorites}" class="bookmark-item">
+                        <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : '/default/image/path.jpg'}" alt="레스토랑 이미지" class="restaurant-image">
                         <div class="bookmark-content">
-                            <h3>정통 이탈리안</h3>
-                            <p>인천시 연수구 송도동</p>
+                            <h3 th:text="${favorite.restaurant.name}">레스토랑 이름</h3>
+                            <p th:text="${favorite.restaurant.address.name}">레스토랑 주소</p>
                             <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <span>5.0</span>
+                                <!-- Filled stars -->
+                                <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(restaurantRatingsMap[favorite.restaurant.id]))}"></i>
+                                <!-- Empty stars -->
+                                <i class="far fa-star" th:each="i : ${#numbers.sequence(T(java.lang.Math).round(restaurantRatingsMap[favorite.restaurant.id]) + 1, 5)}"></i>
+                                <span th:text="${restaurantRatingsMap[favorite.restaurant.id]}">5.0</span>
                             </div>
+                            <button class="remove-favorite-btn" th:data-restaurant-id="${favorite.restaurant.id}">북마크 해제</button>
                         </div>
                     </div>
                 </div>
             </section>
-        </div>
-    </div>
-</div>
 
-<!-- 일반 회원 수정 모달 -->
+
+
+
+
+
+
+            <!-- 일반 회원 수정 모달 -->
 <div th:if="${isSocialLogin == false}" th:insert="~{fragments/mypage_editProfileModal_basic :: editProfileModalBasic(${member}, ${profileImageUrl})}"></div>
 
 <!-- 소셜 로그인 사용자 모달 -->

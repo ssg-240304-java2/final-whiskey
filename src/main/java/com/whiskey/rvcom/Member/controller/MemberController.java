@@ -3,12 +3,14 @@ package com.whiskey.rvcom.Member.controller;
 import com.whiskey.rvcom.ImageFile.ImageFileService;
 import com.whiskey.rvcom.Member.service.MemberManagementService;
 import com.whiskey.rvcom.Member.service.SocialLoginService;
+import com.whiskey.rvcom.entity.favorite.Favorite;
 import com.whiskey.rvcom.entity.member.LoginType;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.member.Role;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.entity.review.ReviewImage;
+import com.whiskey.rvcom.favorite.FavoriteService;
 import com.whiskey.rvcom.review.ReviewImageService;
 import com.whiskey.rvcom.review.ReviewService;
 import com.whiskey.rvcom.util.ImagePathParser;
@@ -42,11 +44,12 @@ public class MemberController {
     private final RestTemplate restTemplate;
     private final ImageFileService imageFileService;
     private final ReviewImageService reviewImageService;
+    private final FavoriteService favoriteService;
 
     @Autowired
     public MemberController(ReviewService reviewService, SocialLoginService socialLoginService,
                             MemberManagementService memberManagementService, PasswordEncoder passwordEncoder,
-                            RestTemplate restTemplate, ImageFileService imageFileService, ReviewImageService reviewImageService) {
+                            RestTemplate restTemplate, ImageFileService imageFileService, ReviewImageService reviewImageService, FavoriteService favoriteService) {
         this.reviewService = reviewService;
         this.socialLoginService = socialLoginService;
         this.memberManagementService = memberManagementService;
@@ -54,6 +57,7 @@ public class MemberController {
         this.restTemplate = restTemplate;
         this.imageFileService = imageFileService;
         this.reviewImageService = reviewImageService;
+        this.favoriteService = favoriteService;
     }
 
     @GetMapping("/")
@@ -118,6 +122,14 @@ public class MemberController {
             return "redirect:/login";
         }
 
+        List<Favorite> favorites = favoriteService.getFavoritesByMember(member);
+
+        // 로그를 추가하여 가져온 북마크 데이터를 확인합니다.
+        System.out.println("북마크된 레스토랑 수: " + favorites.size());
+        for (Favorite favorite : favorites) {
+            System.out.println("북마크된 레스토랑: " + favorite.getRestaurant().getName());
+        }
+
         // 프로필 이미지 URL 설정
         String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
         if (member.getProfileImage() != null) {
@@ -141,6 +153,13 @@ public class MemberController {
             reviewImagesMap.put(review.getId(), imageUrls);
         }
 
+        // 북마크된 레스토랑의 평균 평점을 계산하여 가져옴
+        Map<Long, Double> restaurantRatingsMap = new HashMap<>();
+        for (Favorite favorite : favorites) {
+            double averageRating = reviewService.getAverageRatingForRestaurant(favorite.getRestaurant());
+            restaurantRatingsMap.put(favorite.getRestaurant().getId(), averageRating);
+        }
+
         int totalPages = (int) Math.ceil((double) reviews.size() / size);
 
         model.addAttribute("member", member);
@@ -148,11 +167,16 @@ public class MemberController {
         model.addAttribute("isSocialLogin", member.getLoginType() != LoginType.BASIC);
         model.addAttribute("reviews", paginatedReviews); // 페이지네이션 된 리뷰 목록
         model.addAttribute("reviewImagesMap", reviewImagesMap); // 리뷰 이미지 URL 맵
+        model.addAttribute("restaurantRatingsMap", restaurantRatingsMap); // 레스토랑 평점 맵
+        model.addAttribute("favorites", favorites); // 북마크된 레스토랑 목록 추가
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
 
         return "mypage";
     }
+
+
+
 
 
 

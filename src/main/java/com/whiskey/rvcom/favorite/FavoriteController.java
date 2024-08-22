@@ -4,13 +4,17 @@ import com.whiskey.rvcom.Member.service.MemberManagementService;
 import com.whiskey.rvcom.Member.service.SocialLoginService;
 import com.whiskey.rvcom.entity.favorite.Favorite;
 import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.repository.ImageFileRepository;
+import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 즐겨찾기 관련 API를 처리하는 컨트롤러
@@ -21,14 +25,10 @@ import java.util.List;
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
-    private final MemberManagementService memberManagementService;
-    private final SocialLoginService socialLoginService;
 
     @Autowired
-    public FavoriteController(FavoriteService favoriteService, MemberManagementService memberManagementService, SocialLoginService socialLoginService) {
+    public FavoriteController(FavoriteService favoriteService) {
         this.favoriteService = favoriteService;
-        this.memberManagementService = memberManagementService;
-        this.socialLoginService = socialLoginService;
     }
 
     /**
@@ -37,14 +37,30 @@ public class FavoriteController {
      * @return 즐겨찾기 목록
      */
     @GetMapping("/member")
-    public ResponseEntity<List<Favorite>> getFavoritesByMember(HttpSession session) {
+    public ResponseEntity<List<Map<String, Object>>> getFavoritesByMember(HttpSession session) {
         Member member = (Member) session.getAttribute("member");
 
         if (member == null) {
             return ResponseEntity.status(401).build(); // Unauthorized
         }
 
-        return ResponseEntity.ok(favoriteService.getFavoritesByMember(member));
+        List<Favorite> favorites = favoriteService.getFavoritesByMember(member);
+        List<Map<String, Object>> favoritesWithImages = favorites.stream().map(favorite -> {
+            Map<String, Object> favoriteMap = new HashMap<>();
+            favoriteMap.put("favorite", favorite);
+
+            // 커버 이미지 URL 생성
+            ImageFile coverImage = favorite.getRestaurant().getCoverImage();
+            if (coverImage != null) {
+                favoriteMap.put("imageUrl", ImagePathParser.parse(coverImage.getUuidFileName()));
+            } else {
+                favoriteMap.put("imageUrl", "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg"); // 기본 이미지 설정
+            }
+
+            return favoriteMap;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(favoritesWithImages);
     }
 
     /**
@@ -62,11 +78,11 @@ public class FavoriteController {
         }
 
         try {
-            Restaurant restaurant = new Restaurant(); // 임시 코드
+            Restaurant restaurant = new Restaurant();
             restaurant.setId(restaurantId);
             Favorite favorite = favoriteService.addFavorite(member, restaurant);
             return ResponseEntity.ok(favorite);
-        } catch (IllegalStateException e) { // 중복 즐겨찾기 예외 처리
+        } catch (IllegalStateException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -85,7 +101,7 @@ public class FavoriteController {
             return ResponseEntity.status(401).build(); // Unauthorized
         }
 
-        Restaurant restaurant = new Restaurant(); // 임시 코드
+        Restaurant restaurant = new Restaurant();
         restaurant.setId(restaurantId);
         favoriteService.removeFavorite(member, restaurant);
         return ResponseEntity.ok().build();
@@ -105,7 +121,7 @@ public class FavoriteController {
             return ResponseEntity.status(401).build(); // Unauthorized
         }
 
-        Restaurant restaurant = new Restaurant(); // 임시 코드
+        Restaurant restaurant = new Restaurant();
         restaurant.setId(restaurantId);
         boolean isFavorite = favoriteService.isFavorite(member, restaurant);
         return ResponseEntity.ok(isFavorite);
@@ -118,7 +134,7 @@ public class FavoriteController {
      */
     @GetMapping("/count/{restaurantId}")
     public ResponseEntity<Long> getFavoriteCount(@PathVariable Long restaurantId) {
-        Restaurant restaurant = new Restaurant(); // 임시 코드
+        Restaurant restaurant = new Restaurant();
         restaurant.setId(restaurantId);
         long count = favoriteService.getFavoriteCount(restaurant);
         return ResponseEntity.ok(count);
@@ -127,4 +143,5 @@ public class FavoriteController {
     // TODO: 즐겨찾기 목록 페이징 처리 API 추가
     // TODO: 즐겨찾기 목록 정렬 기능 API 추가
 }
+
 

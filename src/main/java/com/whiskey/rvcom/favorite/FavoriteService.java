@@ -1,8 +1,11 @@
 package com.whiskey.rvcom.favorite;
 
+import com.whiskey.rvcom.ImageFile.ImageFileService;
 import com.whiskey.rvcom.entity.favorite.Favorite;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.review.Review;
+import com.whiskey.rvcom.entity.review.ReviewImage;
 import com.whiskey.rvcom.repository.FavoriteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ public class FavoriteService {
     public List<Favorite> getFavoritesByMember(Member member) {
         return favoriteRepository.findByMember(member); 
     }
+
 
     /**
      * 새로운 즐겨찾기를 추가.
