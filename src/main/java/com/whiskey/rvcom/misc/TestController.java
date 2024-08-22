@@ -84,7 +84,7 @@ public class TestController {
     @GetMapping("/adminMain")
     // 관리자-신고 페이지로 이동
     public String getAdminReport() {
-        return "adminMain";
+        return "admin/adminMain";
     }
 
     @GetMapping("/adminReport")
