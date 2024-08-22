@@ -1,30 +1,26 @@
 <!-- src/main/resources/templates/fragments/inquiryItem.html -->
-<div th:fragment="inquiryItem(user, location, reviewCount, photoCount, question, questionDate, answer, answerUser, answerDate)">
+<div th:fragment="inquiryItem(inquiry)">
     <div class="inquiry-item">
         <div class="inquiry-header">
-            <img src="https://via.placeholder.com/40" alt="사용자 프로필" class="user-avatar">
+            <!-- 이미지 사용 예정 -->
+<!--            <img src="https://via.placeholder.com/40" alt="사용자 프로필" class="user-avatar">-->
             <div class="inquiry-user-info">
-                <span class="inquiry-user" th:text="${user}">사용자 이름</span>
-                <span class="inquiry-location" th:text="${location}">위치</span>
-                <div class="user-stats">
-                    <span class="review-count" th:text="${'리뷰 ' + reviewCount}">리뷰 수</span>
-                    <span class="photo-count" th:text="${'사진 ' + photoCount}">사진 수</span>
-                </div>
+                <span class="inquiry-user" th:text="${inquiry.writer}">작성자 이름</span>
             </div>
         </div>
         <div class="inquiry-content">
-            <p class="inquiry-question" th:text="${question}">질문 내용</p>
-            <p class="inquiry-date" th:text="${questionDate + ' 질문'}">질문 날짜</p>
+            <p class="inquiry-question" th:text="${inquiry.content}">문의 내용</p>
+            <p class="inquiry-date" th:text="${#dates.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}">문의 날짜</p>
         </div>
-        <div class="inquiry-answer" th:if="${answer}">
-            <p class="answer-text" th:text="${answer}">답변 내용</p>
+        <div class="inquiry-answer" th:if="${inquiry.reply}">
+            <p class="answer-text" th:text="${inquiry.reply.content}">답변 내용</p>
             <p class="answer-meta">
-                <span class="answer-user" th:text="${answerUser}">답변자</span>
-                <span class="answer-date" th:text="${answerDate + ' 답변'}">답변 날짜</span>
+                <span class="answer-date"
+                      th:text="${#dates.format(inquiry.reply.createdAt, 'yyyy-MM-dd HH:mm')}">답변 날짜</span>
             </p>
         </div>
         <div class="inquiry-footer">
-            <button class="like-inquiry">👍 유용해요 5</button>
+<!--            <button class="like-inquiry">👍 유용해요 5</button>-->
             <button class="reply-inquiry" th:attr="data-inquiry-id=${inquiryId}">💬 답변하기</button>
         </div>
     </div>

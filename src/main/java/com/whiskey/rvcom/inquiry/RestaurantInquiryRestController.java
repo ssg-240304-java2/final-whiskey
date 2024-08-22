@@ -6,10 +6,8 @@ import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryResponseDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,8 +27,8 @@ public class RestaurantInquiryRestController {
     }
 
     // TODO: 음식점의 문의글 조회하기(답변 포함)
-    @GetMapping("/restaurants/inquiries")
-    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(Long restaurantId) {
+    @GetMapping("/restaurant/{restaurantId}/inquiries")
+    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
         return inquiryService.findAllByRestaurantId(restaurantId);
     }
 
