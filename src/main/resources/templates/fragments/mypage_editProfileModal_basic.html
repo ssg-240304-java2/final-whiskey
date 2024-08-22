@@ -39,4 +39,24 @@
             <button type="submit" id="submit-btn">저장</button>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileImageInput = document.getElementById('profileImage');
+            const profileImagePreview = document.getElementById('profileImagePreview');
+
+            profileImageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profileImagePreview.src = e.target.result;
+                        profileImagePreview.style.display = 'block'; // 이미지 미리보기를 표시
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    profileImagePreview.style.display = 'none'; // 파일이 없을 경우 이미지 미리보기 숨김
+                }
+            });
+        });
+    </script>
 </div>
