@@ -1,79 +1,52 @@
 $(document).ready(function() {
-    $('#emailVerifyBtn').on('click', function() {
-        const email = $('#email').val();
+    // 로그인 ID 입력 시 이메일 자동 채우기
+    $('#loginId').on('keyup', function() {
+        const loginId = $(this).val();
 
-        if (!email) {
-            alert('이메일을 입력하세요.');
-            return;
+        // 로그인 ID가 이메일 형식이 아닌 경우 자동으로 이메일 필드에 채우기
+        if (loginId.includes('@')) {
+            $('#email').val(loginId);
+        } else {
+            const domain = '@example.com'; // 기본 도메인 설정
+            $('#email').val(loginId + domain);
         }
-
-        // 클라이언트에서 인증 코드 생성 (6자리 숫자 코드)
-        const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-
-        console.log('생성된 인증 코드:', verificationCode);
-
-        // 서버로 전송할 데이터
-        const data = {
-            key: email,       // 이메일을 key로 사용
-            value: verificationCode // 생성된 인증 코드를 value로 사용
-        };
-
-        // 서버로 인증 코드 전송
-        $.ajax({
-            url: '/api/redis/save',
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(response) {
-                console.log(response);
-                alert('인증 코드가 이메일로 전송되었습니다.');
-            },
-            error: function(error) {
-                console.error('에러:', error);
-                alert('인증 코드 전송 중 오류가 발생했습니다. 다시 시도해주세요.');
-            }
-        });
     });
 
-    // 인증 코드 확인 버튼 클릭 이벤트
-    $('#verifyCodeBtn').on('click', function() {
-        const email = $('#email').val();
-        const code = $('#emailVerificationCode').val();
+    // 로그인 ID 중복 확인
+    $('#loginIdCheckBtn').on('click', function() {
+        const loginId = $('#loginId').val();
 
-        if (!email || !code) {
-            alert('이메일과 인증 코드를 입력하세요.');
+        if (!loginId) {
+            alert('로그인 ID를 입력하세요.');
             return;
         }
 
         $.ajax({
-            // url: '${{secrets.MAIL_URL}}', // GET 요청을 보낼 URL
-            url: 'http://localhost:8080',
-            method: 'GET',
-            data: { key: email, code: code }, // 이메일과 인증 코드를 쿼리 파라미터로 보냄
+            url: '/checkLoginId',
+            type: 'POST',
+            data: { loginId: loginId },
             success: function(response) {
-                if (response) {
-                    alert('인증이 완료되었습니다.');
-                    $('#verifyCodeBtn').addClass('verified').text('인증 완료');
-                    $('#verifyCodeBtn').prop('disabled', true);
-                    $('#submit-btn').prop('disabled', false); // 회원가입 버튼 활성화
-                } else {
-                    alert('인증 코드가 올바르지 않습니다.');
+                if (response.exists) {
+                    $('#loginId-check-message').text('이미 사용 중인 로그인 ID입니다.').css('color', 'red').show();
                     $('#submit-btn').prop('disabled', true);
+                } else {
+                    $('#loginId-check-message').text('사용 가능한 로그인 ID입니다.').css('color', 'green').show();
+                    $('#submit-btn').prop('disabled', false);
                 }
             },
-            error: function(error) {
-                alert('인증 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
+            error: function() {
+                alert('로그인 ID 중복 확인 중 오류가 발생했습니다.');
             }
         });
     });
 
-    // 비밀번호 확인 로직
+    // 비밀번호 확인
     $('#password, #passwordConfirm').on('keyup', function() {
         const password = $('#password').val();
         const passwordConfirm = $('#passwordConfirm').val();
 
-        if (password.length > 0 && password !== passwordConfirm) {
-            $('#password-match-message').show().text('비밀번호가 일치하지 않습니다.');
+        if (password !== passwordConfirm) {
+            $('#password-match-message').show();
             $('#submit-btn').prop('disabled', true);
         } else {
             $('#password-match-message').hide();

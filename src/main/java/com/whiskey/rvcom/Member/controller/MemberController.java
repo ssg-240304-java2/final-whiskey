@@ -1,10 +1,8 @@
 package com.whiskey.rvcom.Member.controller;
 
 import com.whiskey.rvcom.ImageFile.ImageFileService;
-import com.whiskey.rvcom.Member.emailauth.EmailService;
 import com.whiskey.rvcom.Member.service.MemberManagementService;
 import com.whiskey.rvcom.Member.service.SocialLoginService;
-import com.whiskey.rvcom.Member.service.VerificationService;
 import com.whiskey.rvcom.entity.member.LoginType;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.member.Role;
@@ -37,21 +35,17 @@ public class MemberController {
     private final MemberManagementService memberManagementService;
     private final PasswordEncoder passwordEncoder;
     private final RestTemplate restTemplate;
-    private final EmailService emailService;
-    private final VerificationService verificationService;
     private final ImageFileService imageFileService;
 
     @Autowired
     public MemberController(ReviewService reviewService, SocialLoginService socialLoginService,
                             MemberManagementService memberManagementService, PasswordEncoder passwordEncoder,
-                            RestTemplate restTemplate, EmailService emailService, VerificationService verificationService, ImageFileService imageFileService) {
+                            RestTemplate restTemplate, ImageFileService imageFileService) {
         this.reviewService = reviewService;
         this.socialLoginService = socialLoginService;
         this.memberManagementService = memberManagementService;
         this.passwordEncoder = passwordEncoder;
         this.restTemplate = restTemplate;
-        this.emailService = emailService;
-        this.verificationService = verificationService;
         this.imageFileService = imageFileService;
     }
 
@@ -152,10 +146,10 @@ public class MemberController {
             return "register_basic";
         }
 
-        if (!verificationService.verifyCode(email, verificationCode)) {
-            model.addAttribute("error", "인증 코드가 올바르지 않습니다.");
-            return "register_basic";
-        }
+//        if (!verificationService.verifyCode(email, verificationCode)) {
+//            model.addAttribute("error", "인증 코드가 올바르지 않습니다.");
+//            return "register_basic";
+//        }
 
         String encodedPassword = passwordEncoder.encode(password);
 
@@ -166,22 +160,6 @@ public class MemberController {
         } catch (Exception e) {
             model.addAttribute("error", "회원가입 중 오류가 발생했습니다.");
             return "register_basic";
-        }
-    }
-
-
-    @PostMapping("/api/redis/save")
-    @ResponseBody
-    public ResponseEntity<String> sendVerificationCode(@RequestBody Map<String, String> data) {
-        try {
-            System.out.println(data.get("key") + ", " + data.get("value"));
-//            String verificationCode = verificationService.generateAndSaveVerificationCode(email);
-            emailService.sendVerificationCode(data.get("key"), data.get("value"));
-//            log.info("Generated and sent verification code to email: {}", email);
-            return ResponseEntity.ok("인증 코드가 이메일로 전송되었습니다.");
-        } catch (Exception e) {
-            log.error("Error during sending verification code", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("인증 코드 전송 중 오류가 발생했습니다. 다시 시도해주세요.");
         }
     }
 
@@ -258,14 +236,23 @@ public class MemberController {
     public String updateProfileBasic(@RequestParam Map<String, String> params,
                                      @RequestParam("profileImage") MultipartFile profileImage,
                                      HttpSession session, Model model) {
-        log.info("Received request to update basic profile with params: {}", params);
-
         Member member = (Member) session.getAttribute("member");
 
         if (member == null) {
             log.warn("No member found in session, redirecting to login.");
             return "redirect:/login";
         }
+
+        String newLoginId = params.get("loginId");
+        if (!newLoginId.equals(member.getLoginId()) && memberManagementService.existsByLoginId(newLoginId)) {
+            model.addAttribute("error", "이미 존재하는 로그인 ID입니다. 다른 ID를 사용해주세요.");
+            model.addAttribute("member", member);
+            model.addAttribute("profileImageUrl", member.getProfileImage() != null ? ImagePathParser.parse(member.getProfileImage().getUuidFileName()) : "/default/image/path/default-profile.jpg");
+            return "mypage"; // 에러 메시지와 함께 마이페이지로 리턴
+        }
+
+        // 로그인 ID 업데이트
+        member.setLoginId(newLoginId);
 
         // 이름, 닉네임, 이메일, 비밀번호 및 자기소개 업데이트
         member.setName(params.get("name"));
@@ -300,6 +287,7 @@ public class MemberController {
 
         return "redirect:/mypage";
     }
+
 
     @PostMapping("/updateProfileSocial")
     public String updateProfileSocial(

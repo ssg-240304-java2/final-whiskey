@@ -4,7 +4,7 @@
     --background-color: #f5f5f5;
     --text-color: #333;
     --border-color: #e6e6e6;
-    --hover-color: #f15c00;
+    --hover-color: #af1d1d; /* 호버 색상을 #af1d1d로 변경 */
 }
 
 body {
@@ -27,8 +27,8 @@ body {
     border-radius: 8px;
     padding: 30px;
     background-color: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
-    border: 1px solid var(--border-color); /* 경계선 추가 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
     transition: box-shadow 0.3s ease;
 }
 
@@ -61,8 +61,8 @@ body {
     background-color: #fff;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
-    border: 1px solid var(--border-color); /* 경계선 추가 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
 }
 
 .content-section {
@@ -87,8 +87,8 @@ body {
     width: 250px;
     padding: 30px;
     background-color: #f2f2f2;
-    border-right: 2px solid #cccccc; /* 사이드바와 메인 콘텐츠 구분 */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+    border-right: 2px solid #cccccc;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .profile-nav ul {
@@ -135,8 +135,8 @@ body {
     padding: 30px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* 그림자 더 강조 */
-    border: 1px solid var(--border-color); /* 경계선 추가 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
 }
 
 .edit-profile-btn {
@@ -152,7 +152,7 @@ body {
 }
 
 .edit-profile-btn:hover {
-    background-color: var(--hover-color);
+    background-color: var(--hover-color); /* 호버 색상 변경 */
 }
 
 .unsubscribe-btn {
@@ -168,7 +168,7 @@ body {
 }
 
 .unsubscribe-btn:hover {
-    background-color: var(--hover-color);
+    background-color: var(--hover-color); /* 호버 색상 변경 */
 }
 
 .activity-feed {
@@ -265,7 +265,7 @@ body {
 }
 
 .unfollow-btn:hover {
-    background-color: #005f9e;
+    background-color: var(--hover-color); /* 호버 색상 변경 */
 }
 
 .modal {
@@ -313,7 +313,7 @@ body {
 
 .close:hover,
 .close:focus {
-    color: var(--primary-color);
+    color: var(--hover-color); /* 호버 색상 변경 */
 }
 
 /* 기본 및 소셜 프로필 수정 폼 스타일 */
@@ -343,7 +343,7 @@ body {
 
 .basic-profile-form button:hover,
 .social-profile-form button:hover {
-    background-color: var(--hover-color);
+    background-color: var(--hover-color); /* 호버 색상 변경 */
 }
 
 .basic-profile-form label,
@@ -362,14 +362,14 @@ body {
     .sidebar {
         width: 100%;
         border-right: none;
-        border-bottom: 2px solid #cccccc; /* 사이드바와 메인 콘텐츠 구분 */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+        border-bottom: 2px solid #cccccc;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         padding: 20px;
     }
 
     .main-content {
-        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1); /* 메인 콘텐츠 위쪽 그림자 추가 */
-        border-top: 2px solid #cccccc; /* 메인 콘텐츠와 사이드바 구분 */
+        box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+        border-top: 2px solid #cccccc;
         padding: 30px;
     }
 

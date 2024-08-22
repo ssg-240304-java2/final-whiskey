@@ -158,6 +158,69 @@
             }
         };
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Script loaded and ready.');
+
+        // 로그인 ID 중복 확인 로직
+        document.getElementById('loginIdCheckBtn').addEventListener('click', function() {
+            const loginId = document.getElementById('basicLoginId').value;
+
+            if (!loginId) {
+                document.getElementById('loginId-check-message').textContent = '로그인 ID를 입력하세요.';
+                document.getElementById('loginId-check-message').style.color = 'red';
+                document.getElementById('loginId-check-message').style.display = 'block';
+                return;
+            }
+
+            console.log('Checking login ID:', loginId);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/checkLoginId', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    console.log('XHR Ready State:', xhr.readyState, 'Status:', xhr.status);
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log('Response from server:', response);
+                        if (response.exists) {
+                            document.getElementById('loginId-check-message').textContent = '이미 사용 중인 로그인 ID입니다.';
+                            document.getElementById('loginId-check-message').style.color = 'red';
+                            document.getElementById('loginId-check-message').style.display = 'block';
+                            document.getElementById('submit-btn').disabled = true;
+                        } else {
+                            document.getElementById('loginId-check-message').textContent = '사용할 수 있는 로그인 ID입니다.';
+                            document.getElementById('loginId-check-message').style.color = 'green';
+                            document.getElementById('loginId-check-message').style.display = 'block';
+                            document.getElementById('submit-btn').disabled = false;
+                        }
+                    } else {
+                        console.error('Server error or other issue.', xhr.status, xhr.statusText);
+                    }
+                }
+            };
+            xhr.send('loginId=' + encodeURIComponent(loginId));
+        });
+
+        // 비밀번호 확인 로직
+        document.getElementById('basicPassword').addEventListener('keyup', checkPasswords);
+        document.getElementById('basicConfirmPassword').addEventListener('keyup', checkPasswords);
+
+        function checkPasswords() {
+            const password = document.getElementById('basicPassword').value;
+            const confirmPassword = document.getElementById('basicConfirmPassword').value;
+
+            if (password.length > 0 && password !== confirmPassword) {
+                document.getElementById('password-match-message').textContent = '비밀번호가 일치하지 않습니다.';
+                document.getElementById('password-match-message').style.display = 'block';
+                document.getElementById('submit-btn').disabled = true;
+            } else {
+                document.getElementById('password-match-message').style.display = 'none';
+                document.getElementById('submit-btn').disabled = false;
+            }
+        }
+    });
 </script>
 </body>
 </html>

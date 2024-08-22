@@ -22,7 +22,7 @@
                 <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/register_basic">회원가입</a>
 
                 <a th:if="${isAuthenticated}" href="/logout">로그아웃</a>
-                <a th:if="${isAuthenticated}" href="/mypage">마이페이지</a>
+                <a th:if="${isAuthenticated} and ${userRole != 'ADMIN'}" href="/mypage">마이페이지</a>
 
                 <a th:if="${isAuthenticated} and ${userRole == 'USER'}" href="/register-store">입점 신청</a>
                 <a th:if="${isAuthenticated} and ${userRole == 'OWNER'}" href="/dashboard">점주 페이지</a>
