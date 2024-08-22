@@ -8,6 +8,7 @@ import com.whiskey.rvcom.entity.member.LoginType;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.member.Role;
 import com.whiskey.rvcom.entity.resource.ImageFile;
+import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.entity.review.ReviewImage;
 import com.whiskey.rvcom.favorite.FavoriteService;
@@ -111,10 +112,33 @@ public class MemberController {
         return "mainPage";
     }
 
+    @PostMapping("/mypage/remove-favorite")
+    public String removeFavorite(HttpSession session, @RequestParam("restaurantId") Long restaurantId,
+                                 @RequestParam("bookmarkPage") int bookmarkPage,
+                                 @RequestParam("bookmarkSize") int bookmarkSize) {
+        Member member = (Member) session.getAttribute("member");
+
+        if (member == null) {
+            return "redirect:/login";
+        }
+
+        // 레스토랑 ID를 사용해 해당 레스토랑을 찾음
+        Restaurant restaurant = favoriteService.findRestaurantById(restaurantId);
+
+        if (restaurant != null) {
+            favoriteService.removeFavorite(member, restaurant);
+        }
+
+        // 북마크 페이지로 리다이렉트
+        return "redirect:/mypage?bookmarkPage=" + bookmarkPage + "&bookmarkSize=" + bookmarkSize;
+    }
+
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model,
                          @RequestParam(value = "page", defaultValue = "0") int page,
-                         @RequestParam(value = "size", defaultValue = "2") int size) {
+                         @RequestParam(value = "size", defaultValue = "2") int size,
+                         @RequestParam(value = "bookmarkPage", defaultValue = "0") int bookmarkPage,
+                         @RequestParam(value = "bookmarkSize", defaultValue = "2") int bookmarkSize) {
 
         Member member = (Member) session.getAttribute("member");
 
@@ -124,11 +148,10 @@ public class MemberController {
 
         List<Favorite> favorites = favoriteService.getFavoritesByMember(member);
 
-        // 로그를 추가하여 가져온 북마크 데이터를 확인합니다.
-        System.out.println("북마크된 레스토랑 수: " + favorites.size());
-        for (Favorite favorite : favorites) {
-            System.out.println("북마크된 레스토랑: " + favorite.getRestaurant().getName());
-        }
+        // 북마크 페이지네이션을 위한 하위 리스트 생성
+        int bookmarkStart = Math.min(bookmarkPage * bookmarkSize, favorites.size());
+        int bookmarkEnd = Math.min((bookmarkPage + 1) * bookmarkSize, favorites.size());
+        List<Favorite> paginatedFavorites = favorites.subList(bookmarkStart, bookmarkEnd);
 
         // 프로필 이미지 URL 설정
         String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
@@ -161,6 +184,7 @@ public class MemberController {
         }
 
         int totalPages = (int) Math.ceil((double) reviews.size() / size);
+        int bookmarkTotalPages = (int) Math.ceil((double) favorites.size() / bookmarkSize);
 
         model.addAttribute("member", member);
         model.addAttribute("profileImageUrl", profileImageUrl);
@@ -168,14 +192,15 @@ public class MemberController {
         model.addAttribute("reviews", paginatedReviews); // 페이지네이션 된 리뷰 목록
         model.addAttribute("reviewImagesMap", reviewImagesMap); // 리뷰 이미지 URL 맵
         model.addAttribute("restaurantRatingsMap", restaurantRatingsMap); // 레스토랑 평점 맵
-        model.addAttribute("favorites", favorites); // 북마크된 레스토랑 목록 추가
+        model.addAttribute("favorites", paginatedFavorites); // 북마크된 레스토랑 목록 추가
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("bookmarkCurrentPage", bookmarkPage);
+        model.addAttribute("bookmarkTotalPages", bookmarkTotalPages);
+        model.addAttribute("bookmarkSize", bookmarkSize);
 
         return "mypage";
     }
-
-
 
 
 

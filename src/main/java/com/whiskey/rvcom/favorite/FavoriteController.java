@@ -7,9 +7,12 @@ import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.repository.ImageFileRepository;
+import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +28,12 @@ import java.util.stream.Collectors;
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
+    private final RestaurantService restaurantService;
 
     @Autowired
-    public FavoriteController(FavoriteService favoriteService) {
+    public FavoriteController(FavoriteService favoriteService, RestaurantService restaurantService) {
         this.favoriteService = favoriteService;
+        this.restaurantService = restaurantService;
     }
 
     /**
@@ -93,18 +98,19 @@ public class FavoriteController {
      * @param restaurantId 음식점 ID
      * @return 삭제 성공 여부
      */
-    @DeleteMapping
-    public ResponseEntity<Void> removeFavorite(HttpSession session, @RequestParam Long restaurantId) {
+    @PostMapping("/remove")
+    @Transactional
+    public ResponseEntity<String> removeFavorite(@RequestParam("restaurantId") Long restaurantId, HttpSession session) {
         Member member = (Member) session.getAttribute("member");
 
         if (member == null) {
-            return ResponseEntity.status(401).build(); // Unauthorized
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
         }
 
-        Restaurant restaurant = new Restaurant();
-        restaurant.setId(restaurantId);
+        Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
         favoriteService.removeFavorite(member, restaurant);
-        return ResponseEntity.ok().build();
+
+        return ResponseEntity.ok("Favorite removed");
     }
 
     /**

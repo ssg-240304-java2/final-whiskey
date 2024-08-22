@@ -48,7 +48,6 @@
                     </div>
                 </div>
 
-
                 <!-- Pagination -->
                 <div class="pagination">
                     <ul>
@@ -75,7 +74,7 @@
                 <h2>북마크한 레스토랑</h2>
                 <div class="bookmark-list">
                     <div th:each="favorite : ${favorites}" class="bookmark-item">
-                        <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : '/default/image/path.jpg'}" alt="레스토랑 이미지" class="restaurant-image">
+                        <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : 'https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg'}" alt="레스토랑 이미지" class="restaurant-image">
                         <div class="bookmark-content">
                             <h3 th:text="${favorite.restaurant.name}">레스토랑 이름</h3>
                             <p th:text="${favorite.restaurant.address.name}">레스토랑 주소</p>
@@ -86,23 +85,50 @@
                                 <i class="far fa-star" th:each="i : ${#numbers.sequence(T(java.lang.Math).round(restaurantRatingsMap[favorite.restaurant.id]) + 1, 5)}"></i>
                                 <span th:text="${restaurantRatingsMap[favorite.restaurant.id]}">5.0</span>
                             </div>
-                            <button class="remove-favorite-btn" th:data-restaurant-id="${favorite.restaurant.id}">북마크 해제</button>
+
+                            <!-- 북마크 해제 폼 -->
+                            <form th:action="@{/mypage/remove-favorite}" method="post">
+                                <input type="hidden" name="restaurantId" th:value="${favorite.restaurant.id}" />
+                                <input type="hidden" name="bookmarkPage" th:value="${bookmarkCurrentPage}" />
+                                <input type="hidden" name="bookmarkSize" th:value="${bookmarkSize}" />
+                                <button type="submit" class="remove-favorite-btn">북마크 해제</button>
+                            </form>
                         </div>
                     </div>
+                </div>
+
+                <!-- 페이지네이션 -->
+                <div class="pagination">
+                    <ul>
+                        <li th:if="${bookmarkCurrentPage > 0}">
+                            <a th:href="@{'/mypage'(bookmarkPage=0, bookmarkSize=${bookmarkSize})}">&laquo; 맨 처음</a>
+                        </li>
+                        <li th:if="${bookmarkCurrentPage > 0}">
+                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkCurrentPage - 1}, bookmarkSize=${bookmarkSize})}">&laquo; 이전</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(0, bookmarkTotalPages - 1)}">
+                            <a th:classappend="${i == bookmarkCurrentPage} ? 'active'" th:href="@{'/mypage'(bookmarkPage=${i}, bookmarkSize=${bookmarkSize})}" th:text="${i + 1}">1</a>
+                        </li>
+                        <li th:if="${bookmarkCurrentPage < bookmarkTotalPages - 1}">
+                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkCurrentPage + 1}, bookmarkSize=${bookmarkSize})}">다음 &raquo;</a>
+                        </li>
+                        <li th:if="${bookmarkCurrentPage < bookmarkTotalPages - 1}">
+                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkTotalPages - 1}, bookmarkSize=${bookmarkSize})}">맨 마지막 &raquo;</a>
+                        </li>
+                    </ul>
                 </div>
             </section>
 
 
-
-
-
-
-
             <!-- 일반 회원 수정 모달 -->
-<div th:if="${isSocialLogin == false}" th:insert="~{fragments/mypage_editProfileModal_basic :: editProfileModalBasic(${member}, ${profileImageUrl})}"></div>
+            <div th:if="${isSocialLogin == false}" th:insert="~{fragments/mypage_editProfileModal_basic :: editProfileModalBasic(${member}, ${profileImageUrl})}"></div>
 
-<!-- 소셜 로그인 사용자 모달 -->
-<div th:if="${isSocialLogin == true}" th:insert="~{fragments/mypage_editProfileModal_social :: editProfileModalSocial(${member}, ${profileImageUrl})}"></div>
+            <!-- 소셜 로그인 사용자 모달 -->
+            <div th:if="${isSocialLogin == true}" th:insert="~{fragments/mypage_editProfileModal_social :: editProfileModalSocial(${member}, ${profileImageUrl})}"></div>
+
+        </div>
+    </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -248,6 +274,51 @@
                 document.getElementById('submit-btn').disabled = false;
             }
         }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const removeFavoriteButtons = document.querySelectorAll('.remove-favorite-btn');
+
+        removeFavoriteButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
+
+                const restaurantId = this.closest('form').querySelector('input[name="restaurantId"]').value;
+                const bookmarkPage = this.closest('form').querySelector('input[name="bookmarkPage"]').value;
+                const bookmarkSize = this.closest('form').querySelector('input[name="bookmarkSize"]').value;
+
+                if (!restaurantId) {
+                    alert('레스토랑 ID가 유효하지 않습니다.');
+                    return;
+                }
+
+                fetch('/mypage/remove-favorite', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        'restaurantId': restaurantId,
+                        'bookmarkPage': bookmarkPage,
+                        'bookmarkSize': bookmarkSize
+                    })
+                })
+                    .then(response => {
+                        return response.text().then(text => {
+                            if (response.ok) {
+                                alert('북마크가 해제되었습니다.');
+                                window.location.reload(); // 페이지 새로고침
+                            } else {
+                                alert(`북마크 해제에 실패했습니다: ${text}`);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('북마크 해제 중 오류가 발생했습니다.');
+                    });
+            });
+        });
     });
 </script>
 </body>
