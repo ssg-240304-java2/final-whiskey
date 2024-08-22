@@ -52,14 +52,14 @@
             const button = document.createElement('button');
             button.innerText = i + 1;
             button.disabled = i === currentPage;
-            button.addEventListener('click', () => fetchReviewReports(i, currentSortOrder));
+            button.addEventListener('click', async () => await fetchReviewReports(i, currentSortOrder));
             pagination.appendChild(button);
         }
     }
 
     // 페이지 로드 후 초기 데이터 요청
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchReviewReports(0); // 기본 페이지 요청
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchReviewReports(0); // 기본 페이지 요청
     });
 
 </script>
@@ -142,9 +142,9 @@
     });
 
 
-    document.getElementById('reportDate').addEventListener('click', function() {
+    document.getElementById('reportDate').addEventListener('click', async function() {
         currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
-        fetchReviewReports(0, currentSortOrder);
+        await fetchReviewReports(0, currentSortOrder);
     });
 </script>
 </body>
