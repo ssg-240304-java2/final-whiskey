@@ -4,6 +4,7 @@ import com.whiskey.rvcom.notice.dto.RestaurantNoticeRequestDTO;
 import com.whiskey.rvcom.notice.dto.RestaurantNoticeResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,11 @@ public class RestaurantNoticeController {
         return noticeService.findNoticeByRestaurantId(restaurantId);
     }
 
-    // TODO: 해당 음식점의 점주가 공지사항 작성
+    /**
+     * 해당 음식점의 점주가 공지사항 작성
+     * @param restaurantId
+     * @param request
+     */
     @PostMapping("/restaurant/{restaurantId}/notice")
     public void save(@PathVariable Long restaurantId, @RequestBody RestaurantNoticeRequestDTO request) {
         noticeService.save(request, restaurantId);
