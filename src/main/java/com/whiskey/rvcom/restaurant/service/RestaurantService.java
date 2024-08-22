@@ -2,6 +2,7 @@ package com.whiskey.rvcom.restaurant.service;
 
 import com.whiskey.rvcom.entity.restaurant.OpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.restaurant.WeeklyOpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.repository.MenuRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
@@ -9,8 +10,11 @@ import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class RestaurantService {
@@ -94,8 +98,93 @@ public class RestaurantService {
         return hours;
     }
 
-    public Restaurant getRestaurantById(Long id) {
-        return restaurantRepository.findById(id).orElse(null);
+    public Map<String, Object> getRestaurantDetailById(Long id) {
+
+        Map<String, Object> restaurantDetail = new HashMap<>();
+
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+        restaurantDetail.put("restaurant", restaurant);
+
+        Map<String, String> todayOpeningHourAndStatus = restaurantTodayOpeningHourAndStatus(restaurant.getWeeklyOpenCloseTime());
+
+        restaurantDetail.put("status", todayOpeningHourAndStatus.get("status"));
+        restaurantDetail.put("hours", todayOpeningHourAndStatus.get("hours"));
+
+        restaurantDetail.put("monday", restaurantWeeklyOpeningHour(restaurant.getWeeklyOpenCloseTime().getMonday()));
+        restaurantDetail.put("tuesday", restaurantWeeklyOpeningHour(restaurant.getWeeklyOpenCloseTime().getTuesday()));
+        restaurantDetail.put("wednesday", restaurantWeeklyOpeningHour(restaurant.getWeeklyOpenCloseTime().getWednesday()));
+        restaurantDetail.put("thursday", restaurantWeeklyOpeningHour(restaurant.getWeeklyOpenCloseTime().getThursday()));
+        restaurantDetail.put("friday", restaurantWeeklyOpeningHour(restaurant.getWeeklyOpenCloseTime().getFriday()));
+        restaurantDetail.put("saturday", restaurantWeeklyOpeningHour(restaurant.getWeeklyOpenCloseTime().getSaturday()));
+        restaurantDetail.put("sunday", restaurantWeeklyOpeningHour(restaurant.getWeeklyOpenCloseTime().getSunday()));
+
+        return restaurantDetail;
+    }
+
+    private Map<String, String> restaurantTodayOpeningHourAndStatus(WeeklyOpenCloseTime weeklyOpenCloseTime) {
+
+        String today = LocalDate.now().getDayOfWeek().toString();
+
+        switch (today) {
+            case "MONDAY":
+                return restaurantTodayStatus(weeklyOpenCloseTime.getMonday());
+            case "TUESDAY":
+                return restaurantTodayStatus(weeklyOpenCloseTime.getTuesday());
+            case "WEDNESDAY":
+                return restaurantTodayStatus(weeklyOpenCloseTime.getWednesday());
+            case "THURSDAY":
+                return restaurantTodayStatus(weeklyOpenCloseTime.getThursday());
+            case "FRIDAY":
+                return restaurantTodayStatus(weeklyOpenCloseTime.getFriday());
+            case "SATURDAY":
+                return restaurantTodayStatus(weeklyOpenCloseTime.getSaturday());
+            case "SUNDAY":
+                return restaurantTodayStatus(weeklyOpenCloseTime.getSunday());
+        }
+        return null;
+    }
+
+    private Map<String, String> restaurantTodayStatus(OpenCloseTime openCloseTime) {
+        Map<String, String> result = new HashMap<>();
+        if (openCloseTime == null) {
+            result.put("status", "미영업");
+            result.put("hours", "");
+        } else if (openCloseTime.isOpen()) {
+            String openTime = openCloseTime.getOpenTime();
+            String closeTime = openCloseTime.getCloseTime();
+            LocalTime open = LocalTime.parse(openTime);
+            LocalTime close = LocalTime.parse(closeTime);
+            LocalTime now = LocalTime.now();
+            if (now.isBefore(open) || now.isAfter(close)) {
+                result.put("status", "영업종료");
+            } else {
+                result.put("status", "영업중");
+            }
+            result.put("hours", openCloseTime.getOpenTime() + " - " + openCloseTime.getCloseTime());
+        } else {
+            result.put("status", "미영업");
+            result.put("hours", "");
+        }
+        return result;
+    }
+
+    private String restaurantWeeklyOpeningHour(OpenCloseTime openCloseTime) {
+        if (openCloseTime != null) {
+            return convert12HourFormat(openCloseTime.getOpenTime()) + " - " + convert12HourFormat(openCloseTime.getCloseTime());
+        } else {
+            return "미영업";
+        }
+    }
+
+    private String convert12HourFormat(String time) {
+        int hour = Integer.parseInt(time.split(":")[0]);
+        String minute = time.split(":")[1];
+
+        if (hour >= 12) {
+            return hour + ":" + minute + " PM";
+        } else {
+            return hour + ":" + minute + " AM";
+        }
     }
 
     public List<Menu> getMenuList(Long restaurantId) {
