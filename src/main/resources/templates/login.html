@@ -17,14 +17,10 @@
         <h1>Foodfolio에 오신 것을 환영합니다</h1>
 
         <!-- 알럿 메시지 표시 -->
-        <div th:if="${param.alert == 'account_deactivated'}">
+        <div th:if="${alertMessage}">
             <script>
-                alert("해당 계정은 비활성화되어 있습니다. 관리자에게 문의하세요.");
+                alert(th:text="${alertMessage}");
             </script>
-        </div>
-
-        <div th:if="${param.error}" class="error-message" style="color: red; margin-bottom: 10px;">
-            <p th:text="${param.error}"></p>
         </div>
 
         <div class="social-login">
@@ -42,10 +38,14 @@
 
             <button type="submit">로그인</button>
 
+            <!-- 에러 메시지를 로그인 버튼 아래에 위치 -->
+            <div th:if="${error}" class="error-message" style="color: red; margin-top: 10px;">
+                <p th:text="${error}"></p>
+            </div>
+
         </form>
 
         <div class="options">
-            <!-- TODO: 회원가입 페이지 연결 확인 필요 -->
             <span>계정이 없으신가요? <a href="/register_basic">회원가입</a></span>
         </div>
     </div>
