@@ -63,7 +63,63 @@ function sortInquiries(sortType) {
 
 function loadInquiries() {
     console.log('문의 목록 로딩');
-    // TODO: 백엔드 API를 호출하여 문의 목록을 가져오는 로직 구현
+    const restaurantId = document.getElementById('restaurantId').value;
+    console.log("음식점 확인!!", restaurantId);
+
+    fetch(`/restaurant/${restaurantId}/inquiries`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            renderInquiry(data);
+        })
+        .catch(error => {
+            alert("Error!");
+            console.log("ERROR: ", error);
+        });
+}
+
+function renderInquiry(data) {
+    const inquiryList = document.querySelector('.recent-inquiries');
+
+    inquiryList.innerHTML = '';
+
+    data.forEach(inquiry => {
+        const inquiryItem = document.createElement('div');
+        inquiryItem.classList.add('inquiry-item');
+
+        inquiryItem.innerHTML = `
+            <div class="inquiry-header">
+            <!-- 이미지 있으면 사용 예정-->
+<!--                <img src="https://via.placeholder.com/40" alt="사용자 프로필" class="user-avatar">-->
+                <div class="inquiry-user-info">
+                    <span class="inquiry-user">${inquiry.writer}</span>
+                </div>
+            </div>
+            <div class="inquiry-content">
+                <p class="inquiry-question">${inquiry.content}</p>
+                <p class="inquiry-date">${new Date(inquiry.createdAt).toLocaleString()} 질문</p>
+            </div>
+            ${inquiry.reply ? `
+            <div class="inquiry-answer">
+                <p class="answer-text">${inquiry.reply.content}</p>
+                <p class="answer-meta">
+                    <span class="answer-date">${new Date(inquiry.reply.createdAt).toLocaleString()} 답변</span>
+                </p>
+            </div>
+            ` : ''}
+        `;
+        inquiryList.appendChild(inquiryItem);
+    });
 }
 
 window.loadComments = function(reviewId) {

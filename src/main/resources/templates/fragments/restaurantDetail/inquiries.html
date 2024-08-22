@@ -11,20 +11,6 @@
         </select>
     </div>
     <div class="recent-inquiries">
-        <!-- TODO: 백엔드 - 문의 목록을 데이터베이스에서 가져와 동적으로 표시 -->
-        <!-- TODO: 백엔드 - 각 문의에 대한 답변 데이터도 함께 가져와 표시 -->
-        <!-- 문의 아이템 fragment 사용 -->
-        <div th:replace="fragments/inquiryItem :: inquiryItem(
-                user='김철수',
-                location='서울시',
-                reviewCount=10,
-                photoCount=5,
-                question='주차 시설이 있나요?',
-                questionDate='2023년 5월 15일 14:30',
-                answer='네, 건물 뒤편에 무료 주차장이 마련되어 있습니다.',
-                answerUser='음식점 관리자',
-                answerDate='2023년 5월 15일 15:45'
-            )"></div>
     </div>
     <div class="inquiry-pagination">
         <!-- TODO: 백엔드 - 페이지네이션 구현 (전체 문의 수에 따라 페이지 수 계산) -->
