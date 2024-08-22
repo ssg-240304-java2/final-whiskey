@@ -1,5 +1,18 @@
 $(document).ready(function() {
-    // 로그인 ID 중복 확인 로직
+    // 로그인 ID 입력 시 이메일 자동 채우기
+    $('#loginId').on('keyup', function() {
+        const loginId = $(this).val();
+
+        // 로그인 ID가 이메일 형식이 아닌 경우 자동으로 이메일 필드에 채우기
+        if (loginId.includes('@')) {
+            $('#email').val(loginId);
+        } else {
+            const domain = '@example.com'; // 기본 도메인 설정
+            $('#email').val(loginId + domain);
+        }
+    });
+
+    // 로그인 ID 중복 확인
     $('#loginIdCheckBtn').on('click', function() {
         const loginId = $('#loginId').val();
 
@@ -9,33 +22,31 @@ $(document).ready(function() {
         }
 
         $.ajax({
-            url: '/checkLoginId', // 서버에서 로그인 ID 중복 확인하는 API 엔드포인트
-            method: 'POST',
-            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            url: '/checkLoginId',
+            type: 'POST',
             data: { loginId: loginId },
             success: function(response) {
                 if (response.exists) {
-                    $('#loginId-check-message').show().text('이미 사용 중인 로그인 ID입니다.');
+                    $('#loginId-check-message').text('이미 사용 중인 로그인 ID입니다.').css('color', 'red').show();
                     $('#submit-btn').prop('disabled', true);
                 } else {
-                    $('#loginId-check-message').show().css('color', 'green').text('사용 가능한 로그인 ID입니다.');
+                    $('#loginId-check-message').text('사용 가능한 로그인 ID입니다.').css('color', 'green').show();
                     $('#submit-btn').prop('disabled', false);
                 }
             },
-            error: function(error) {
-                console.error('에러:', error);
-                alert('로그인 ID 확인 중 오류가 발생했습니다. 다시 시도해주세요.');
+            error: function() {
+                alert('로그인 ID 중복 확인 중 오류가 발생했습니다.');
             }
         });
     });
 
-    // 비밀번호 확인 로직
+    // 비밀번호 확인
     $('#password, #passwordConfirm').on('keyup', function() {
         const password = $('#password').val();
         const passwordConfirm = $('#passwordConfirm').val();
 
-        if (password.length > 0 && password !== passwordConfirm) {
-            $('#password-match-message').show().text('비밀번호가 일치하지 않습니다.');
+        if (password !== passwordConfirm) {
+            $('#password-match-message').show();
             $('#submit-btn').prop('disabled', true);
         } else {
             $('#password-match-message').hide();

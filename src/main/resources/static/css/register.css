@@ -104,6 +104,23 @@ form input {
     transition: all 0.3s ease;
 }
 
+/* 로그인 ID 입력 필드 스타일 */
+#loginId {
+    padding: 14px; /* 패딩을 늘려서 입력 필드를 더 크게 만듦 */
+    font-size: 18px; /* 폰트 크기를 키워서 더 돋보이게 만듦 */
+    width: 100%; /* 전체 너비로 설정 */
+    border: 2px solid #ddd; /* 테두리를 두껍게 만듦 */
+    border-radius: 8px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+/* 로그인 ID 입력 필드 포커스 효과 */
+#loginId:focus {
+    border-color: var(--main-color);
+    box-shadow: 0 0 0 3px rgba(211, 35, 35, 0.1);
+}
+
 /* 입력 필드 포커스 효과 */
 form input:focus {
     border-color: var(--main-color);

@@ -1,94 +1,44 @@
-<div th:fragment="editProfileModalBasic(member,profileImageUrl)" id="editProfileModalBasic" class="modal">
-    <div class="modal-content">
-        <span class="close">×</span>
-        <h2>회원정보 수정</h2>
-        <form id="editProfileFormBasic" class="basic-profile-form" action="/updateProfileBasic" method="post" enctype="multipart/form-data">
-            <label for="basicLoginId">로그인 ID:</label>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodfolio 회원가입</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/register.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="register-page">
+<div class="register-container">
+    <div class="image-section">
+        <img src="https://via.placeholder.com/500" alt="랜덤 음식 이미지">
+    </div>
+    <div class="form-section">
+        <h1>Foodfolio 회원가입</h1>
+        <form action="/register_basic" method="post">
+            <!-- 로그인 ID 입력 및 중복 확인 -->
             <div class="login-id-container">
-                <input type="text" id="basicLoginId" name="loginId" th:value="${member.loginId}" required>
+                <input type="text" id="loginId" name="loginId" placeholder="로그인 ID" required>
                 <button type="button" id="loginIdCheckBtn">중복 확인</button>
             </div>
             <span id="loginId-check-message" style="color:red; display:none;"></span>
 
-            <label for="basicName">이름:</label>
-            <input type="text" id="basicName" name="name" th:value="${member.name}" required>
+            <!-- 이메일 필드 -->
+            <input type="email" id="email" name="email" placeholder="이메일" required>
 
-            <label for="basicNickname">닉네임:</label>
-            <input type="text" id="basicNickname" name="nickname" th:value="${member.nickname}" required>
-
-            <label for="basicEmail">이메일:</label>
-            <input type="email" id="basicEmail" name="email" th:value="${member.email}" required>
-
-            <label for="basicPassword">비밀번호:</label>
-            <input type="password" id="basicPassword" name="password" placeholder="새 비밀번호">
-
-            <label for="basicConfirmPassword">비밀번호 확인:</label>
-            <input type="password" id="basicConfirmPassword" name="confirmPassword" placeholder="비밀번호 확인">
-
-            <label for="basicIntroduction">자기소개:</label>
-            <input type="text" id="basicIntroduction" name="introduction" th:value="${member.introduction != null ? member.introduction : ''}" placeholder="자기소개를 입력하세요">
-
-            <!-- 프로필 사진 업로드 -->
-            <label for="profileImage">프로필 이미지:</label>
-            <input type="file" id="profileImage" name="profileImage" accept="image/*">
-
-            <!-- 이미지 미리보기 -->
-            <img id="profileImagePreview" th:src="${profileImageUrl}" alt="프로필 이미지 미리보기" class="profile-image" style="width: 150px; height: 150px; object-fit: cover; margin-top: 10px;">
-
-            <button type="submit" id="submit-btn">저장</button>
+            <!-- 나머지 필드들 -->
+            <input type="text" name="name" placeholder="이름" required>
+            <input type="text" name="nickname" placeholder="닉네임" required>
+            <input type="password" id="password" name="password" placeholder="비밀번호" required>
+            <input type="password" id="passwordConfirm" placeholder="비밀번호 확인" required>
+            <span id="password-match-message" style="color:red; display:none;">비밀번호가 일치하지 않습니다.</span>
+            <button type="submit" id="submit-btn" disabled>회원가입</button>
         </form>
+        <div class="options">
+            <span>이미 계정이 있으신가요? <a href="/login">로그인</a></span>
+        </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // 로그인 ID 중복 확인 로직
-        document.getElementById('loginIdCheckBtn').addEventListener('click', function() {
-            const loginId = document.getElementById('basicLoginId').value;
-
-            if (!loginId) {
-                alert('로그인 ID를 입력하세요.');
-                return;
-            }
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/checkLoginId', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.exists) {
-                        alert('이미 사용 중인 로그인 ID입니다.');
-                        document.getElementById('loginId-check-message').textContent = '이미 사용 중인 로그인 ID입니다.';
-                        document.getElementById('loginId-check-message').style.color = 'red';
-                        document.getElementById('loginId-check-message').style.display = 'block';
-                        document.getElementById('submit-btn').disabled = true;
-                    } else {
-                        alert('사용 가능한 로그인 ID입니다.');
-                        document.getElementById('loginId-check-message').textContent = '사용 가능한 로그인 ID입니다.';
-                        document.getElementById('loginId-check-message').style.color = 'green';
-                        document.getElementById('loginId-check-message').style.display = 'block';
-                        document.getElementById('submit-btn').disabled = false;
-                    }
-                }
-            };
-            xhr.send('loginId=' + encodeURIComponent(loginId));
-        });
-
-        // 비밀번호 확인 로직
-        document.getElementById('basicPassword').addEventListener('keyup', checkPasswords);
-        document.getElementById('basicConfirmPassword').addEventListener('keyup', checkPasswords);
-
-        function checkPasswords() {
-            const password = document.getElementById('basicPassword').value;
-            const confirmPassword = document.getElementById('basicConfirmPassword').value;
-
-            if (password.length > 0 && password !== confirmPassword) {
-                alert('비밀번호가 일치하지 않습니다.');
-                document.getElementById('submit-btn').disabled = true;
-            } else {
-                document.getElementById('submit-btn').disabled = false;
-            }
-        }
-    });
-</script>
+<script src="/js/register.js"></script> <!-- 분리된 JavaScript 파일을 로드 -->
+</body>
+</html>
