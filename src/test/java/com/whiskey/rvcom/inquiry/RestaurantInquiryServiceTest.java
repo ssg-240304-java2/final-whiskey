@@ -27,10 +27,11 @@ class RestaurantInquiryServiceTest {
     @Test
     void saveInquiry() {
         Long memberId = 5L;
+        Long restaurantId = 2L;
         String content = "오늘의 메뉴 문의 남깁니다~~";
-        RestaurantInquiryRequestDTO request = new RestaurantInquiryRequestDTO(2L, content);
+        RestaurantInquiryRequestDTO request = new RestaurantInquiryRequestDTO(content);
 
-        inquiryService.save(request, memberId);
+        inquiryService.save(restaurantId, request, memberId);
 
         RestaurantInquiry savedInquiry = inquiryRepository.findByContent(content)
                 .orElseThrow(() -> new IllegalArgumentException("문의가 저장되지 않았습니다."));

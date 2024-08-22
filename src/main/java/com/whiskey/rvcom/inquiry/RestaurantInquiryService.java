@@ -37,9 +37,9 @@ public class RestaurantInquiryService {
 
     // TODO: 문의 작성
     @Transactional
-    public void save(RestaurantInquiryRequestDTO request, Long memberId) {
+    public void save(Long restaurantId, RestaurantInquiryRequestDTO request, Long memberId) {
         Member member = memberRepository.getReferenceById(memberId);
-        Restaurant restaurant = restaurantRepository.getReferenceById(request.restaurantId());
+        Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
         inquiryRepository.save(new RestaurantInquiry(member, restaurant, request.content()));
     }
 

@@ -17,16 +17,25 @@ import java.util.List;
 public class RestaurantInquiryRestController {
     private final RestaurantInquiryService inquiryService;
 
-    // TODO: 문의 작성
-    @PostMapping("/restaurants/inquiries")
-    public void save(RestaurantInquiryRequestDTO request, HttpSession session) {
+    /**
+     * 문의 작성
+     * @param restaurantId
+     * @param request
+     * @param session
+     */
+    @PostMapping("/restaurant/{restaurantId}/inquiry")
+    public void save(@PathVariable Long restaurantId, @RequestBody RestaurantInquiryRequestDTO request, HttpSession session) {
 //         TODO: session 에서 memberId 가져오기
          Member memberId = (Member) session.getAttribute("memberId");
 //        inquiryService.save(request, memberId);
-        inquiryService.save(request, 5L);
+        inquiryService.save(restaurantId, request, 5L);
     }
 
-    // TODO: 음식점의 문의글 조회하기(답변 포함)
+    /**
+     * 음식점의 문의글 조회하기(답변 포함)
+     * @param restaurantId
+     * @return 문의글
+     */
     @GetMapping("/restaurant/{restaurantId}/inquiries")
     public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
         return inquiryService.findAllByRestaurantId(restaurantId);
