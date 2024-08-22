@@ -32,12 +32,14 @@ function submitReply(inquiryId, replyText) {
     console.log(`답변 제출: 문의 ID ${inquiryId}, 내용: ${replyText}`);
     // TODO: 백엔드 API를 호출하여 답변을 제출하는 로직 구현
 }
+
 function setupInquiryForm() {
     const submitInquiryBtn = document.getElementById('submitInquiry');
+
     if (submitInquiryBtn) {
         submitInquiryBtn.addEventListener('click', function() {
-            const inquiryText = document.getElementById('inquiryText').value;
-            submitInquiry(inquiryText);
+            const inquiryContent = document.getElementById('inquiryContent').value;
+            submitInquiry(inquiryContent);
         });
     }
 }
@@ -51,9 +53,35 @@ function setupInquirySort() {
     }
 }
 
-function submitInquiry(text) {
-    console.log(`문의 제출: ${text}`);
+function submitInquiry(content) {
+    console.log(`문의 제출: ${content}`);
     // TODO: 백엔드 API를 호출하여 새 문의를 추가하는 로직 구현
+
+    const restaurantId = document.getElementById('restaurantId').value;
+
+    fetch(`/restaurant/${restaurantId}/inquiry`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            content: content
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            console.log("문의 제출 성공!!");
+
+            document.getElementById('inquiryContent').value = '';
+
+            loadInquiries();
+        })
+        .catch(error => {
+            alert("Error!");
+            console.log("ERROR: ", error);
+        });
 }
 
 function sortInquiries(sortType) {
