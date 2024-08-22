@@ -81,24 +81,18 @@
         let currentSortOrder = 'asc';
         let currentPage = 0;
     
-        console.log("Document ready, initializing report management...");
-    
         fetchRestaurantReports(currentPage, currentSortOrder);
     
         function fetchRestaurantReports(page, sortOrder = 'asc') {
-            console.log(`Fetching reports: page=${page}, sortOrder=${sortOrder}`);
             $.ajax({
                 url: /*[[@{/restaurantreport/list}]]*/ '/restaurantreport/list',
                 data: { page: page, sortOrder: sortOrder },
                 type: 'GET',
                 success: function(data) {
-                    console.log("Received data:", data);
                     let tableBody = $('#restaurantReportList');
                     tableBody.empty();
                     if (data && data.content && data.content.length > 0) {
-                        console.log(`Rendering ${data.content.length} reports`);
                         data.content.forEach(function(report) {
-                            console.log("Processing report:", report);
                             let formattedDate = new Date(report.reportedAt).toLocaleDateString();
                             let row = `
                                 <tr data-id="${report.id}">
@@ -113,14 +107,10 @@
                         });
                         updatePaginationControls(data.number, data.totalPages);
                     } else {
-                        console.log("No reports found or invalid data structure");
                         tableBody.append('<tr><td colspan="5">신고된 식당이 없습니다.</td></tr>');
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.error("Error fetching restaurant reports:", error);
-                    console.error("XHR status:", status);
-                    console.error("XHR response:", xhr.responseText);
                     $('#restaurantReportList').html('<tr><td colspan="5">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>');
                 }
             });
