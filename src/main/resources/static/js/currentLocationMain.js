@@ -46,54 +46,6 @@ function getLocationRestaurant(lat, lng) {
             for (let restaurant of restaurantList) {
                 var restaurantGrid = document.getElementById("restaurant-grid");
 
-                var dayOfWeek = new Date().getDay();
-
-                var openCloseTime;
-
-                function avoidNotNull(obj) {
-                    if (obj !== null) {
-                        console.log(obj);
-                        let openTime = obj.openTime !== "" ? obj.openTime : '00:00';
-                        let closeTime = obj.closeTime !== "" ? obj.closeTime : '00:00';
-                        return openTime + " - " + closeTime;
-                    }
-                    return "00:00 - 00:00";
-                }
-
-                if (restaurant.weeklyOpenCloseTime) {
-                    switch (dayOfWeek) {
-                        case 0:
-                            openCloseTime = avoidNotNull(restaurant.weeklyOpenCloseTime.sunday);
-                            break;
-                        case 1:
-                            openCloseTime = avoidNotNull(restaurant.weeklyOpenCloseTime.monday);
-                            break;
-                        case 2:
-                            openCloseTime = avoidNotNull(restaurant.weeklyOpenCloseTime.tuesday);
-                            break;
-                        case 3:
-                            openCloseTime = avoidNotNull(restaurant.weeklyOpenCloseTime.wednesday);
-                            break;
-                        case 4:
-                            openCloseTime = avoidNotNull(restaurant.weeklyOpenCloseTime.thursday);
-                            break;
-                        case 5:
-                            openCloseTime = avoidNotNull(restaurant.weeklyOpenCloseTime.friday);
-                            break;
-                        case 6:
-                            openCloseTime = avoidNotNull(restaurant.weeklyOpenCloseTime.saturday);
-                            break;
-                    }
-                }
-
-                var distance = getDistance(lat, lng, restaurant.address.latitude, restaurant.address.longitude);
-
-                if (distance >= 1) {
-                    distance = distance.toFixed(1) + "km";
-                } else {
-                    distance = (distance * 1000).toFixed(0) + "m";
-                }
-
 
                 var element = document.createElement('div');
                 element.innerHTML = `<div class="restaurant-card">
@@ -103,10 +55,10 @@ function getLocationRestaurant(lat, lng) {
                         <div class="restaurant-info">
                             <h3>${restaurant.name}</h3>
                             <p class="restaurant-details">
-                                <span class="distance">${distance}</span>
+                                <span class="distance">${restaurant.distance}</span>
                                 <span class="category">${restaurant.category}</span>
                             </p>
-                            <p class="hours"><i class="far fa-clock"></i> <span>${openCloseTime}</span></p>
+                            <p class="hours"><i class="far fa-clock"></i> <span>${restaurant.openCloseTime}</span></p>
                             <div class="rating">★★★★★</div>
                             <button class="find-order" onclick="location.href='/restaurant/${restaurant.id}/info'"><i class="fas fa-info-circle"></i> 상세 정보 / 주문</button>
                             
