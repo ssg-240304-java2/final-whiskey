@@ -7,6 +7,9 @@ import com.whiskey.rvcom.entity.member.LoginType;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.member.Role;
 import com.whiskey.rvcom.entity.resource.ImageFile;
+import com.whiskey.rvcom.entity.review.Review;
+import com.whiskey.rvcom.entity.review.ReviewImage;
+import com.whiskey.rvcom.review.ReviewImageService;
 import com.whiskey.rvcom.review.ReviewService;
 import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -36,17 +40,19 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final RestTemplate restTemplate;
     private final ImageFileService imageFileService;
+    private final ReviewImageService reviewImageService;
 
     @Autowired
     public MemberController(ReviewService reviewService, SocialLoginService socialLoginService,
                             MemberManagementService memberManagementService, PasswordEncoder passwordEncoder,
-                            RestTemplate restTemplate, ImageFileService imageFileService) {
+                            RestTemplate restTemplate, ImageFileService imageFileService, ReviewImageService reviewImageService) {
         this.reviewService = reviewService;
         this.socialLoginService = socialLoginService;
         this.memberManagementService = memberManagementService;
         this.passwordEncoder = passwordEncoder;
         this.restTemplate = restTemplate;
         this.imageFileService = imageFileService;
+        this.reviewImageService = reviewImageService;
     }
 
     @GetMapping("/")
@@ -101,7 +107,10 @@ public class MemberController {
     }
 
     @GetMapping("/mypage")
-    public String myPage(HttpSession session, Model model) {
+    public String myPage(HttpSession session, Model model,
+                         @RequestParam(value = "page", defaultValue = "0") int page,
+                         @RequestParam(value = "size", defaultValue = "5") int size) {
+
         Member member = (Member) session.getAttribute("member");
 
         if (member == null) {
@@ -113,15 +122,34 @@ public class MemberController {
             profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
         }
 
-        int reviewCount = reviewService.getReviewsByMember(member).size();
+        // 리뷰 전체 목록을 가져옴
+        List<Review> reviews = reviewService.getReviewsByMember(member);
+
+        // 페이지네이션을 위한 하위 리스트를 만듦
+        int start = Math.min(page * size, reviews.size());
+        int end = Math.min((page + 1) * size, reviews.size());
+        List<Review> paginatedReviews = reviews.subList(start, end);
+
+        // 각 리뷰에 대한 리뷰 이미지 리스트를 가져옴
+        Map<Long, List<ReviewImage>> reviewImagesMap = new HashMap<>();
+        for (Review review : paginatedReviews) {
+            List<ReviewImage> reviewImages = reviewImageService.getReviewImagesByReview(review);
+            reviewImagesMap.put(review.getId(), reviewImages);
+        }
+
+        int totalPages = (int) Math.ceil((double) reviews.size() / size);
 
         model.addAttribute("member", member);
         model.addAttribute("profileImageUrl", profileImageUrl);
         model.addAttribute("isSocialLogin", member.getLoginType() != LoginType.BASIC);
-        model.addAttribute("reviewCount", reviewCount); // 리뷰 갯수 추가
+        model.addAttribute("reviews", paginatedReviews); // 페이지네이션 된 리뷰 목록
+        model.addAttribute("reviewImagesMap", reviewImagesMap); // 리뷰 이미지 맵
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
 
         return "mypage";
     }
+
 
 
     @PostMapping("/checkLoginId")

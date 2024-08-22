@@ -27,24 +27,38 @@
             <section id="reviews" class="content-section">
                 <h2>내가 작성한 리뷰</h2>
                 <div class="review-list">
-                    <div class="review-item">
-                        <img src="https://via.placeholder.com/100" alt="레스토랑 이미지" class="restaurant-image">
+                    <div th:each="review : ${reviews}" class="review-item">
+                        <div class="review-images">
+                            <img th:each="image : ${reviewImagesMap[review.id]}" th:src="@{'/images/' + ${image.imageFile.uuidFileName}}" alt="리뷰 이미지" class="review-image">
+                        </div>
                         <div class="review-content">
-                            <h3>맛있는 파스타</h3>
+                            <h3 th:text="${review.restaurant.name}">음식점 이름</h3>
                             <div class="rating">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <span>4.0</span>
+                                <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, review.rating)}"></i>
+                                <i class="far fa-star" th:each="i : ${#numbers.sequence(review.rating + 1, 5)}"></i>
+                                <span th:text="${review.rating}">4.0</span>
                             </div>
-                            <p class="review-text">파스타가 정말 맛있었어요. 특히 까르보나라가 일품이었습니다.</p>
-                            <span class="review-date">2023년 5월 20일</span>
+                            <p class="review-text" th:text="${review.content}">리뷰 내용</p>
+                            <span class="review-date" th:text="${#dates.format(review.createdAt, 'yyyy년 MM월 dd일')}">2023년 5월 20일</span>
                         </div>
                     </div>
                 </div>
+
+                <div class="pagination">
+                    <ul>
+                        <li th:if="${currentPage > 0}">
+                            <a th:href="@{'/mypage'(page=${currentPage - 1}, size=${size})}">&laquo; Previous</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                            <a th:classappend="${i == currentPage} ? 'active'" th:href="@{'/mypage'(page=${i}, size=${size})}" th:text="${i + 1}">1</a>
+                        </li>
+                        <li th:if="${currentPage < totalPages - 1}">
+                            <a th:href="@{'/mypage'(page=${currentPage + 1}, size=${size})}">Next &raquo;</a>
+                        </li>
+                    </ul>
+                </div>
             </section>
+
 
             <section id="bookmarks" class="content-section">
                 <h2>북마크한 레스토랑</h2>
