@@ -9,3 +9,6 @@ spring:
 
 kakao:
   apikey: ${{ secrets.KAKAOMAP_API }}
+
+register:
+  api: ${{ secrets.BUSINESS_API }}
