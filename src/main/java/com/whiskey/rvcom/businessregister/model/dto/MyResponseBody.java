@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class ResponseBody {
+public class MyResponseBody {
     private int request_cnt;
     private int valid_cnt;
     private String status_code;
