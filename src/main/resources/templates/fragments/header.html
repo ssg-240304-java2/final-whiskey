@@ -26,7 +26,7 @@
 
                 <a th:if="${isAuthenticated} and ${userRole == 'USER'}" href="/register-store">입점 신청</a>
                 <a th:if="${isAuthenticated} and ${userRole == 'OWNER'}" href="/owner-dashboard">점주 페이지</a>
-                <a th:if="${isAuthenticated} and ${userRole == 'ADMIN'}" href="/adminMain">관리자</a>
+                <a th:if="${isAuthenticated} and ${userRole == 'ADMIN'}" href="/admin/adminMain">관리자 페이지</a>
             </nav>
         </div>
     </div>

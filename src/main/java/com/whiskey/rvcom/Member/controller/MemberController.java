@@ -203,8 +203,6 @@ public class MemberController {
     }
 
 
-
-
     @PostMapping("/checkLoginId")
     public ResponseEntity<Map<String, Boolean>> checkLoginId(@RequestParam String loginId) {
         boolean exists = memberManagementService.existsByLoginId(loginId);
@@ -406,27 +404,6 @@ public class MemberController {
 
         return "redirect:/mypage";
     }
-
-    @GetMapping("/owner-dashboard")
-    public String ownerDashboard(HttpSession session, Model model) {
-        Member member = (Member) session.getAttribute("member");
-
-        if (member == null) {
-            return "redirect:/login";
-        }
-
-        String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
-        if (member.getProfileImage() != null) {
-            profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
-        }
-
-        model.addAttribute("profileImageUrl", profileImageUrl);
-        model.addAttribute("memberName", member.getName());
-
-        return "owner/dashboard";
-    }
-
-
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
