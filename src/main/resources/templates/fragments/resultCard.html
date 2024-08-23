@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="resultCard(number, name, rating, reviewCount, priceRange, cuisine, location, comment)">
-    <a th:href="@{/restaurant}" class="result-card-link" th:id="${number}">
+<div th:fragment="resultCard(id, number, name, rating, reviewCount, priceRange, cuisine, location, comment)">
+    <a th:href="@{/restaurant/{id}/info(id=${id})}" class="result-card-link" th:id="${number}">
         <div class="result-card">
             <img src="https://via.placeholder.com/150x150" th:alt="${name}" class="restaurant-image">
             <div class="restaurant-info">
