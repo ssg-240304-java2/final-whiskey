@@ -42,5 +42,34 @@
     <button type="button" id="approve">승인</button>
     <button type="button" id="reject">반려</button>
 </form>
+<script>
+    function updateReport(btnId) {
+        if (confirm("입점처리를 진행하시겠습니까?")) {
+            const id = register.id; // 적절한 id 값을 설정합니다.
+            $.ajax({
+                url: `/businessregister/process/` + id,
+                type: "PUT",
+                data: {btnId: btnId},
+                success() {
+                    alert('입점처리 되었습니다.');
+                    window.location.reload();
+                },
+                error() {
+                    alert('입점처리에 실패했습니다.');
+                }
+            });
+            console.log("입점처리 완료");
+        } else {}
+    }
+
+    $('button').on('click', function() {
+        // 클릭된 버튼의 id 값을 가져옴
+        const btnId = $(this).attr('id');
+        console.log(btnId);
+        if (btnId === 'approve' || btnId === 'reject') {
+            updateReport(btnId);
+        }
+    });
+</script>
 </body>
 </html>

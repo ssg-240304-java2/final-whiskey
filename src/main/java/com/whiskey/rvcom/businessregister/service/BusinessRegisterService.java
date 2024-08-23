@@ -60,4 +60,19 @@ public class BusinessRegisterService {
 
         return restaurantRegistrationRepository.findById(id).orElse(null);
     }
+
+    public void processBusinessRegist(Long registerId, boolean isApprove) {
+
+        RestaurantRegistration registration = restaurantRegistrationRepository.findById(registerId).orElse(null);
+
+        if (registration != null) {
+            if (isApprove) {
+                registration.setRegistrationStatus(RegistrationStatus.APPROVED);
+                restaurantRegistrationRepository.save(registration);
+            } else {
+                registration.setRegistrationStatus(RegistrationStatus.REJECTED);
+                restaurantRegistrationRepository.save(registration);
+            }
+        }
+    }
 }
