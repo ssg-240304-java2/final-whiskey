@@ -12,6 +12,7 @@ import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,9 +85,33 @@ public class BusinessRegisterController {
         return businessRegisterService.getAllBusinessRegister(page, sortOrder);
     }
 
+    @GetMapping("/detail/{registerId}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getRegistrationDetail(@PathVariable("registerId") Long id) {
+        System.out.println("id = " + id + " / 동작 확인");
+
+        Map<String, Object> response = new HashMap<>();
+
+        RestaurantRegistration register = businessRegisterService.getBusinessRegister(id);
+
+        if(register != null) {
+            response.put("register", register);
+        } else {
+            response.put("register", "register not found");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
     // 임시 페이지 이동용
     @GetMapping("/registrestaurant")
     private String moveToPage() {
         return "admin/registrestaurant";
+    }
+
+    // 임시 페이지 이동용
+    @GetMapping("/regist-detail")
+    private String moveToDetailPage() {
+        return "admin/regist-detail";
     }
 }

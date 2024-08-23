@@ -16,7 +16,9 @@
       const data = await response.json();
       if (data && data.content) {
         renderTable(data.content);
-        updatePaginationControls(data.number, data.totalPages);
+        if(data.numberOfElements > 10) {
+          updatePaginationControls(data.number, data.totalPages);
+        }
       } else {
         console.error('Unexpected response format:', data);
       }
@@ -102,7 +104,6 @@
     color: #555555;
   }
 </style>
-</head>
 <body>
 <div class="admin-content">
   <div class="admin-content-title">

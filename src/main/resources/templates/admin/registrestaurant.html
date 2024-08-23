@@ -16,12 +16,14 @@
                 const data = await response.json();
                 if (data && data.content) {
                     renderTable(data.content);
-                    updatePaginationControls(data.number, data.totalPages);
+                    if(data.numberOfElements > 10) {
+                        updatePaginationControls(data.number, data.totalPages);
+                    }
                 } else {
                     console.error('Unexpected response format:', data);
                 }
             } catch (error) {
-                console.error('Error fetching restaurant reports:', error);
+                console.error('Error fetching business registration :', error);
             }
         }
 
@@ -111,7 +113,7 @@
                 <th>신청자</th>
                 <th>전화번호</th>
                 <th>식당 주소</th>
-                <th>신청 날짜</th>
+                <th id="applyDate">신청 날짜</th>
                 <th>진행 현황</th>
             </tr>
             </thead>
@@ -119,6 +121,23 @@
             </tbody>
         </table>
     </div>
+    <script>
+        document.getElementById('tbody').addEventListener('click', function() {
 
+            const clickedElement = event.target.closest('tr');
+
+            if (clickedElement) {
+                const registerId = $(clickedElement).data('id');
+                console.log('register ID :', registerId);
+                window.location.href = `/businessregister/regist-detail?id=${registerId}`;
+            }
+        });
+
+
+        document.getElementById('applyDate').addEventListener('click', function() {
+            currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+            fetchBusinessRegistration(0, currentSortOrder);
+        });
+    </script>
 </body>
 </html>

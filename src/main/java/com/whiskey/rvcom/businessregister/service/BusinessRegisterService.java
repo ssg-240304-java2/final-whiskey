@@ -3,6 +3,7 @@ package com.whiskey.rvcom.businessregister.service;
 
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Address;
+import com.whiskey.rvcom.entity.restaurant.registration.RegistrationStatus;
 import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
 import com.whiskey.rvcom.repository.AddressRepository;
 import com.whiskey.rvcom.repository.MemberRepository;
@@ -53,5 +54,10 @@ public class BusinessRegisterService {
 
         Pageable pageable = PageRequest.of(page, 10, sort);
         return restaurantRegistrationRepository.findAll(pageable);
+    }
+
+    public RestaurantRegistration getBusinessRegister(Long id) {
+
+        return restaurantRegistrationRepository.findById(id).orElse(null);
     }
 }
