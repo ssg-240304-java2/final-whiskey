@@ -75,13 +75,18 @@
                         </div>
                     </div>
                 </div>
-
                 <!-- 콘텐츠 영역 -->
                 <div id="content-area">
                     <!-- 대시보드 콘텐츠 -->
                     <!-- 모든 섹션이 AJAX로 로드됩니다 -->
                 </div>
             </main>
+            <button id="moveToManage">레스토랑 등록하기</button>
+            <script>
+                document.getElementById('moveToManage').addEventListener('click', function() {
+                    window.location.href = '/businessregister/registrestaurant';
+                });
+            </script>
         </div>
     </div>
 </body>
