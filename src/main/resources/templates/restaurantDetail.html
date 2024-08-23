@@ -57,21 +57,21 @@
             <div id="modal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>신고하기</h2>
-                        <span id="closeModalBtn" class="close-btn">X</span>
+                        <h2><i class="fas fa-flag"></i> 신고하기</h2>
+                        <span id="closeModalBtn" class="close-btn">&times;</span>
                     </div>
                     <div class="modal-body">
                         <form id="reportModalForm">
-                            <div>
-                                <label for="reportTile">신고 제목</label>
-                                <input type="text" id="reportTile" name="reportTitle" required>
+                            <div class="form-group">
+                                <label for="reportTitle">신고 제목</label>
+                                <input type="text" id="reportTitle" name="reportTitle" required>
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label for="reportContent">신고 내용</label>
-                                <textarea id="reportContent" name="reportContent" rows="3" required></textarea>
+                                <textarea id="reportContent" name="reportContent" rows="5" required></textarea>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit">신고</button>
+                                <button type="submit" class="submit-btn">신고 제출</button>
                             </div>
                         </form>
                     </div>

@@ -11,16 +11,15 @@ document.addEventListener("DOMContentLoaded", function () {
     setupReports();
     setInitialTab();
 });
-
 function setupReports() {
-
     let idx;
 
     // 모달 열기
-    document.getElementById('restaurantReport').addEventListener('click', function () {
-        document.getElementById('modal').style.display = 'block';
-
-    });
+    document
+        .getElementById("restaurantReport")
+        .addEventListener("click", function () {
+            document.getElementById("modal").style.display = "block";
+        });
 
     // 모달 닫기
     document
@@ -37,44 +36,50 @@ function setupReports() {
     });
 
     // 폼 전송 이벤트
-    document.getElementById('reportModalForm').addEventListener('submit', function (event) {
-        event.preventDefault(); // 폼 기본 전송 방지
+    document
+        .getElementById("reportModalForm")
+        .addEventListener("submit", function (event) {
+            event.preventDefault(); // 폼 기본 전송 방지
 
-        idx = document.getElementById('restaurantId').value;
-        console.log(idx);
+            idx = document.getElementById("restaurantId").value;
+            console.log(idx);
 
-        const formData = new FormData(this);
-        const data = {
-            title: formData.get('reportTitle'),
-            content: formData.get('reportContent'),
-            id: idx
-        };
+            const formData = new FormData(this);
+            const data = {
+                title: formData.get("reportTitle"),
+                content: formData.get("reportContent"),
+                id: idx,
+            };
 
-        // 데이터를 서버로 전송
-        fetch(`/restaurantreport/regist`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),  // 데이터를 JSON 형식으로 변환
-        }).then(response => {
-            if (response.ok) {  // 응답 상태 코드가 200-299일 경우
-                alert('신고가 접수되었습니다.');
-            } else {
-                alert('신고 접수에 실패했습니다.');
-            }
+            // 데이터를 서버로 전송
+            fetch(`/restaurantreport/regist`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        alert("신고가 접수되었습니다.");
+                    } else {
+                        alert("신고 접수에 실패했습니다.");
+                    }
 
-            // 폼 전송 후 모달 닫기
-            document.getElementById("modal").style.display = "none";
+                    // 폼 전송 후 모달 닫기
+                    document.getElementById("modal").style.display = "none";
 
-            // 폼 초기화
-            this.reset();
-        }).catch(error => {
-            console.error("There was a problem with the fetch operation:", error);
+                    // 폼 초기화
+                    this.reset();
+                })
+                .catch((error) => {
+                    console.error(
+                        "There was a problem with the fetch operation:",
+                        error
+                    );
+                });
         });
-    });
 }
-
 
 function setupTabs() {
     const tabs = document.querySelectorAll(".tab");
@@ -105,11 +110,11 @@ function setupTabs() {
             if (
                 RestaurantDetail[
                     `init${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`
-                    ]
+                ]
             ) {
                 RestaurantDetail[
                     `init${tabId.charAt(0).toUpperCase() + tabId.slice(1)}`
-                    ]();
+                ]();
             }
         }
 
