@@ -1,7 +1,7 @@
 <!-- src/main/resources/templates/fragments/reviewItem.html -->
 <div th:fragment="reviewItem(title, content, author, date, rating, images, menus, likes, comments)">
     <div class="review-item">
-        <button class="report-button" style="padding-top: 5px; float: right;" id="reviewReport">신고하기</button>
+        <button class="report-button review-report" style="padding-top: 5px; float: right;">🚨</button>
         <h4 class="review-title" th:text="${title}">리뷰 제목</h4>
         <div class="review-header">
             <div class="review-text">
@@ -102,7 +102,7 @@
                 <!-- 예시 댓글 -->
                 <div class="comment" th:each="comment : ${comments}">
                     <p th:text="${comment.content}"></p>
-                    <button class="report-button" style="float: right;" id="commentReport">신고하기</button>
+                    <button class="report-button comment-report" style="float: right;">🚨</button>
                     <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')} + ' / ' + ${comment.commenter.nickname}"></span>
                 </div>
 <!--                <div class="comment" th:each="comment : ${comments}">-->

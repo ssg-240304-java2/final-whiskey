@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     setupTabs();
     setupModals();
     setupReports();
+    setupReviewAndCommentReports();
     setInitialTab();
 });
 function setupReports() {
@@ -81,7 +82,66 @@ function setupReports() {
         });
 }
 
-function setupTabs() {
+function setupReviewAndCommentReports() {
+    const reportModal = document.getElementById("reportModal");
+    const closeBtn = reportModal.querySelector(".close-btn");
+    const form = document.getElementById("reportForm");
+
+    // 리뷰 및 댓글 신고 버튼 클릭 이벤트
+    document.addEventListener("click", function(e) {
+        if (e.target.classList.contains("review-report")) {
+            openReportModal("review", e.target.closest(".review-item").dataset.reviewId);
+        } else if (e.target.classList.contains("comment-report")) {
+            openReportModal("comment", e.target.closest(".comment").dataset.commentId);
+        }
+    });
+
+    // 모달 닫기
+    closeBtn.onclick = function() {
+        reportModal.style.display = "none";
+    }
+
+    // 모달 외부 클릭 시 닫기
+    window.onclick = function(event) {
+        if (event.target == reportModal) {
+            reportModal.style.display = "none";
+        }
+    }
+
+    // 폼 제출
+    form.onsubmit = function(e) {
+        e.preventDefault();
+        submitReport();
+    }
+}
+
+function openReportModal(type, id) {
+    const reportModal = document.getElementById("reportModal");
+    document.getElementById("reportType").value = type;
+    document.getElementById("reportTargetId").value = id;
+    reportModal.style.display = "block";
+}
+
+function submitReport() {
+    const form = document.getElementById("reportForm");
+    const formData = new FormData(form);
+    
+    // TODO: 백엔드 API 호출하여 신고 데이터 전송
+    fetch('/api/report', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert("신고가 접수되었습니다.");
+        document.getElementById("reportModal").style.display = "none";
+        form.reset();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert("신고 접수 중 오류가 발생했습니다.");
+    });
+}function setupTabs() {
     const tabs = document.querySelectorAll(".tab");
     const tabContents = document.querySelectorAll(".tab-content");
     const restaurantId = document.getElementById("restaurantId").value;
