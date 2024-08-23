@@ -134,22 +134,28 @@
 </div>
 
 <!-- 공지사항 작성 모달 추가 -->
-<div th:replace="~{fragments/modal :: modal('noticeModal', '공지사항 작성')}">
-    <div th:fragment="content">
-        <div class="notice-form">
-            <form id="noticeForm">
-                <div class="form-group">
-                    <label for="noticeTitle">제목</label>
-                    <input type="text" id="noticeTitle" name="noticeTitle" required>
+<div>
+    <div class="modal" id="noticeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>공지사항 작성</h2>
+                <span class="close close-btn">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="notice-form">
+                    <div class="form-group">
+                        <label for="title">제목</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">내용</label>
+                        <textarea id="content" name="content" rows="4" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="save-notice">작성</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="noticeContent">내용</label>
-                    <textarea id="noticeContent" name="noticeContent" rows="4" required></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">작성</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ public class RestaurantNoticeService {
     // TODO: 해당 음식점의 공지사항 전체 조회
     public List<RestaurantNoticeResponseDTO> findNoticeByRestaurantId(Long restaurantId) {
         return noticeRepository.findByRestaurantId(restaurantId).stream()
+                .sorted(Comparator.comparing(RestaurantNotice::getCreatedAt).reversed())
                 .map(it -> new RestaurantNoticeResponseDTO(
                         it.getTitle(),
                         it.getContent(),

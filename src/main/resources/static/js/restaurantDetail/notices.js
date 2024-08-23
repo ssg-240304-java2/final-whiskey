@@ -67,36 +67,52 @@ function loadNotices() {
 
 // 공지사항 작성 폼 제출 처리
 document.addEventListener('DOMContentLoaded', function () {
-    const noticeForm = document.getElementById('noticeForm');
-
-    if (noticeForm) {
-        noticeForm.addEventListener('submit', function (event) {
+    // 이벤트 위임을 통해 동적으로 추가된 모달 요소에 이벤트 연결
+    document.addEventListener('click', function (event) {
+        if (event.target && event.target.id === 'save-notice') {
             event.preventDefault();
-            // TODO: 폼 데이터를 백엔드로 전송하는 로직 구현
+
             // 공지사항 작성 폼 제출 (restaurantId, title, content)
             const restaurantId = document.getElementById('restaurantId').value;
-            const title = document.getElementById('noticeTitle').value;
-            const content = document.getElementById('noticeContent').value;
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
 
+            if (!title) {
+                alert('제목을 입력하세요.');
+                return;
+            }
+
+            if (!content) {
+                alert('내용을 입력하세요.');
+                return;
+            }
+
+            // 공지사항 작성 요청
             fetch(`/restaurant/${restaurantId}/notice`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({title, content}),
+                body: JSON.stringify({ title, content }),
             })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('공지사항 작성 결과', data);
-                    loadNotices();
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    // 성공적으로 처리되었을 경우 처리
+                    console.log('공지사항 작성 성공');
+                    closeNoticeModal(); // 모달 닫기
+                    loadNotices(); // 공지사항 목록 다시 로드
                 })
-                .catch(error => console.error('공지사항 작성 오류', error));
-
-            console.log('공지사항 작성 폼 제출');
-            closeNoticeModal();
-        });
-    }
+                .catch(error => {
+                    console.error('공지사항 작성 오류', error);
+                    alert('공지사항 작성에 실패했습니다.');
+                });
+        }
+    });
 });
+
+
 
 // 모달 닫기 함수
 function closeNoticeModal() {
@@ -104,4 +120,7 @@ function closeNoticeModal() {
     if (modal) {
         modal.style.display = 'none';
     }
+    // 폼 초기화
+    document.getElementById('title').value = '';
+    document.getElementById('content').value = '';
 }
