@@ -85,19 +85,22 @@ public class ReviewReportController {
     @PutMapping("/update/{reportId}")
     public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
 
-        boolean isPunish = btnId.equals("punish");
+        boolean isPunish = btnId.equals("reviewPunish");
 
         reviewReportService.reviewReportPunish(reportId, isPunish);
         ReviewReport reviewReport = reviewReportService.getReviewReport(reportId);
 
         if(isPunish) {
             Review review = reviewReport.getReview();
-            // 리뷰 상태값 변경 (노출 여부)
-            review.setSuspended(isPunish);
+            // 리뷰 상태값 변경 (제재 여부)
+            review.setSuspended(true);
 
             reviewService.saveReview(review);
+            System.out.println(review.isSuspended());
 
             // 메일 발송 코드 예정
+        } else {
+            System.out.println("신고 처리 보류");
         }
         return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
     }
