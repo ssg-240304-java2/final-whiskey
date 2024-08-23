@@ -3,8 +3,8 @@ package com.whiskey.rvcom.inquiry;
 import com.whiskey.rvcom.entity.inquiry.restaurant.RestaurantInquiry;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
-import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryRequestDTO;
 import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryReplyResponseDTO;
+import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryRequestDTO;
 import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryResponseDTO;
 import com.whiskey.rvcom.repository.MemberRepository;
 import com.whiskey.rvcom.repository.RestaurantInquiryRepository;
@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,14 +26,19 @@ public class RestaurantInquiryService {
     // TODO: 음식점의 문의글 조회하기
     public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(Long restaurantId) {
         return inquiryRepository.findAllByRestaurantId(restaurantId).stream()
+                .sorted(Comparator.comparing(RestaurantInquiry::getCreatedAt).reversed())
                 .map(it -> new RestaurantInquiryResponseDTO(
+                        it.getId(),
                         it.getContent(),
                         it.getWriter().getName(),
                         it.getCreatedAt(),
-                        new RestaurantInquiryReplyResponseDTO(
-                                it.getContent(),
-                                it.getCreatedAt()
-                        ))).toList();
+                        it.getReply() != null
+                                ? new RestaurantInquiryReplyResponseDTO(
+                                it.getReply().getContent(),
+                                it.getReply().getCreatedAt()
+                        )
+                                : null
+                )).toList();
     }
 
     // TODO: 문의 작성
