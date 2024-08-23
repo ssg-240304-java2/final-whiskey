@@ -16,7 +16,9 @@
       const data = await response.json();
       if (data && data.content) {
         renderTable(data.content);
-        updatePaginationControls(data.number, data.totalPages);
+        if(data.numberOfElements > 10) { // 한 페이지에 10개 이상의 데이터가 있는 경우에만 페이지네이션 표시 (10개 이하인 경우 에러 메세지 출력됨)
+          updatePaginationControls(data.number, data.totalPages);
+        }
       } else {
         console.error('Unexpected response format:', data);
       }
@@ -130,6 +132,7 @@
   </div>
 </div>
 <script>
+  // 상세보기
   document.getElementById('tbody').addEventListener('click', function() {
 
     const clickedElement = event.target.closest('tr');
@@ -141,7 +144,7 @@
     }
   });
 
-
+  // 신고 날짜 클릭 시 최신순, 오래된순 교차 정렬
   document.getElementById('reportDate').addEventListener('click', function() {
     currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
     fetchReviewCommentReports(0, currentSortOrder);
