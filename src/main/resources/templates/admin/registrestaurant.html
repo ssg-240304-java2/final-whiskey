@@ -34,11 +34,13 @@
                 const row = `
             <tr data-id="${regist.id}">
                 <td>${regist.id}</td>
-                <td>${regist.memberId}</td>
-                <td>${regist.title}</td>
-                <td>${regist.content}</td>
+                <td>${regist.restaurantName}</td>
+                <td>${regist.restaurantCategory}</td>
+                <td>${regist.member.name}</td>
+                <td>${regist.restaurantNumber}</td>
+                <td>${regist.restaurantAddress.name}</td>
                 <td>${formattedDate}</td>
-                <td>${regist.checked ? '처리 완료' : '처리 전'}</td>
+                <td>${regist.registrationStatus}</td>
             </tr>`;
                 tableBody.innerHTML += row;
             });
@@ -103,12 +105,14 @@
         <table>
             <thead>
             <tr>
-                <th>신고 번호</th>
-                <th>대상 식당</th>
-                <th>신고 제목</th>
-                <th>신고 내용</th>
-                <th>신고 날짜</th>
-                <th>처리 여부</th>
+                <th>신청 번호</th>
+                <th>식당명</th>
+                <th>카테고리</th>
+                <th>신청자</th>
+                <th>전화번호</th>
+                <th>식당 주소</th>
+                <th>신청 날짜</th>
+                <th>진행 현황</th>
             </tr>
             </thead>
             <tbody id="tbody">
