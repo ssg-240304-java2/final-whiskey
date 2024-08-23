@@ -1,5 +1,6 @@
 package com.whiskey.rvcom.entity.review;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.receipt.ReceiptData;
@@ -52,6 +53,7 @@ public class Review {
     private Member reviewer;    // 리뷰 작성자
 
     @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<ReviewLike> likes; // 좋아요 리스트
 
     @OneToOne

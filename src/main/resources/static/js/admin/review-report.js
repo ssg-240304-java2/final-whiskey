@@ -17,15 +17,15 @@ $(document).ready(function () {
                 if (data && data.content && data.content.length > 0) {
                     data.content.forEach(function (report) {
                         let formattedDate = new Date(report.reportedAt).toLocaleDateString();
-                        let row = `
-                            <tr data-id="${report.id}">
-                                <td>${report.id}</td>
-                                <td>${report.review ? report.review.title : 'N/A'}</td>
-                                <td>${report.title}</td>
-                                <td>${formattedDate}</td>
-                                <td>${report.checked ? '처리 완료' : '처리 전'}</td>
-                            </tr>
-                        `;
+                        const row = `
+            <tr data-id="${report.id}">
+                <td>${report.id}</td>
+                <td>${report.title}</td>
+                <td>${report.content}</td>
+                <td>${report.review.content}</td>
+                <td>${formattedDate}</td>
+                <td>${report.checked ? '처리 완료' : '처리 전'}</td>
+            </tr>`;
                         tableBody.append(row);
                     });
                     updateReviewPaginationControls(data.number, data.totalPages);
@@ -62,9 +62,9 @@ $(document).ready(function () {
                 let report = data.report;
                 let detailHtml = `
                       <h6>신고 번호: <span id="reviewReportId">${report.id}</span></h6>
-                      <p>리뷰 제목: <span id="reviewTitle">${report.review.title}</span></p>
                       <p>신고 제목: <span id="reviewReportTitle">${report.title}</span></p>
                       <p>신고 내용: <span id="reviewReportContent">${report.content}</span></p>
+                      <p>리뷰 내용: <span id="reviewTitle">${report.review.content}</span></p>
                       <p>신고일: <span id="reviewReportedAt">${new Date(report.reportedAt).toLocaleDateString()}</span></p>
                       <p>처리여부: <span id="reviewReportChecked">${report.checked ? '처리완료' : '처리 전'}</span></p>
                       <button type="button" class="btn btn-danger" id="reviewPunish">처벌</button>
