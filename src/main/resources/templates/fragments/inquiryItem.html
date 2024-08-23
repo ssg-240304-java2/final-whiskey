@@ -11,17 +11,14 @@
         <div class="inquiry-content">
             <p class="inquiry-question" th:text="${inquiry.content}">문의 내용</p>
             <p class="inquiry-date" th:text="${#dates.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}">문의 날짜</p>
+            <button type="button" class="btn btn-danger delete-inquiry" th:data-inquiry-id="${inquiry.id}">삭제</button>
         </div>
-        <div class="inquiry-answer" th:if="${inquiry.reply}">
+        <div class="inquiry-answer" th:if="${inquiry.reply != null}">
             <p class="answer-text" th:text="${inquiry.reply.content}">답변 내용</p>
             <p class="answer-meta">
                 <span class="answer-date"
                       th:text="${#dates.format(inquiry.reply.createdAt, 'yyyy-MM-dd HH:mm')}">답변 날짜</span>
             </p>
-        </div>
-        <div class="inquiry-footer">
-<!--            <button class="like-inquiry">👍 유용해요 5</button>-->
-            <button class="reply-inquiry" th:attr="data-inquiry-id=${inquiryId}">💬 답변하기</button>
         </div>
     </div>
 </div>
