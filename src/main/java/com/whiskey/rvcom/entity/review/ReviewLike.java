@@ -1,5 +1,6 @@
 package com.whiskey.rvcom.entity.review;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.whiskey.rvcom.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,6 +16,7 @@ public class ReviewLike {
     private Long id;    // 리뷰 좋아요 식별자
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "review_id", nullable = false)
     private Review review;  // 리뷰 좋아요 선택한 리뷰
 
