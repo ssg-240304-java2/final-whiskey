@@ -6,7 +6,6 @@ import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryResponseDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +15,16 @@ import java.util.List;
 @RestController
 public class RestaurantInquiryRestController {
     private final RestaurantInquiryService inquiryService;
+
+    /**
+     * 음식점의 문의글 조회하기(답변 포함)
+     * @param restaurantId
+     * @return 문의글
+     */
+    @GetMapping("/restaurant/{restaurantId}/inquiry")
+    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
+        return inquiryService.findAllByRestaurantId(restaurantId);
+    }
 
     /**
      * 문의 작성
@@ -32,18 +41,11 @@ public class RestaurantInquiryRestController {
     }
 
     /**
-     * 음식점의 문의글 조회하기(답변 포함)
-     * @param restaurantId
-     * @return 문의글
+     * 문의 삭제
+     * @param inquiryId
      */
-    @GetMapping("/restaurant/{restaurantId}/inquiries")
-    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
-        return inquiryService.findAllByRestaurantId(restaurantId);
-    }
-
-    // TODO: 문의 삭제
-    @DeleteMapping("/restaurants/inquiries")
-    public void delete(Long inquiryId) {
+    @DeleteMapping("/restaurant/{inquiryId}/inquiry")
+    public void delete(@PathVariable Long inquiryId) {
         inquiryService.delete(inquiryId);
     }
 }
