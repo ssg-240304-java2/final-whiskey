@@ -15,7 +15,6 @@
                 <div class="rating" th:text="${ratingPhase}"></div>
                 <p th:text="${reviews.size() + '개의 리뷰'}">1,234 리뷰</p>
             </div>
-
         </div>
     </div>
     <div class="review-list">
@@ -73,7 +72,8 @@
                         images=${review.reviewImages},
                         menus=${review.receiptData},
                         likes=${review.likes},
-                        comments=${review.reviewComments}
+                        comments=${review.reviewComments},
+                        id=${review.id}
                     )" th:attr="data-review-id=${review.id}"></div>
             </div>
         </div>

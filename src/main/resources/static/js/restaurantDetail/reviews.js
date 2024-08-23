@@ -69,7 +69,7 @@ window.loadComments = function(reviewId) {
     // TODO: 백엔드 API를 호출하여 댓글 목록을 가져오는 로직 구현
 };
 
-window.submitComment = function(reviewId, content) {
+window.submitReviewComment = function(reviewId, content) {
     console.log(`댓글 제출: 리뷰 ID ${reviewId}, 내용: ${content}`);
     // TODO: 백엔드 API를 호출하여 새 댓글을 추가하는 로직 구현
 };
