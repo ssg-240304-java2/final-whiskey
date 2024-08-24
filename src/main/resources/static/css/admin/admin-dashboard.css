@@ -425,3 +425,80 @@ tr:hover .report-completed {
         margin-top: 5px;
     }
 }
+
+/* 신고 관리 스타일 */
+.report-card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.report-table {
+    font-size: 0.9rem;
+}
+
+.report-table th {
+    background-color: #40a0ff;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-top: none;
+}
+
+.report-table td {
+    vertical-align: middle;
+}
+
+.report-table tr:hover {
+    background-color: #40a0ff;
+    cursor: pointer;
+}
+
+.report-status {
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.report-status.pending {
+    background-color: #ffeeba;
+    color: #856404;
+}
+
+.report-status.completed {
+    background-color: #c3e6cb;
+    color: #155724;
+}
+
+.report-detail-card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    height: 100%;
+}
+
+.report-detail {
+    padding: 15px;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.page-link {
+    color: #4fc3f7;
+    border-color: #4fc3f7;
+}
+
+.page-link:hover {
+    background-color: #4fc3f7;
+    color: #fff;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .report-card, .report-detail-card {
+        margin-bottom: 20px;
+    }
+}

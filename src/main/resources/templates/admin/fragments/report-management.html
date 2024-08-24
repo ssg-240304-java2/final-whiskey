@@ -26,18 +26,18 @@
             <div class="tab-pane fade show active" id="restaurant" role="tabpanel" aria-labelledby="restaurant-tab">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card report-card">
                             <div class="card-body">
                                 <h5 class="card-title">식당 신고 목록</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-hover">
+                                    <table class="table table-hover report-table">
                                         <thead>
                                             <tr>
-                                                <th>신고 번호</th>
-                                                <th>대상 식당</th>
-                                                <th>신고 제목</th>
-                                                <th id="reportDate">신고 날짜</th>
-                                                <th>처리 여부</th>
+                                                <th>번호</th>
+                                                <th>식당명</th>
+                                                <th>제목</th>
+                                                <th>날짜</th>
+                                                <th>상태</th>
                                             </tr>
                                         </thead>
                                         <tbody id="restaurantReportList">
@@ -45,18 +45,20 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="pagination">
-                                    <button class="pagebtn" id="pre">◀</button>
-                                    <button class="pagebtn" id="back">▶</button>
-                                </div>
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item"><a class="page-link" href="#" id="pre">이전</a></li>
+                                        <li class="page-item"><a class="page-link" href="#" id="back">다음</a></li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card report-detail-card">
                             <div class="card-body">
                                 <h5 class="card-title">식당 신고 상세 정보</h5>
-                                <div id="restaurantReportDetail">
+                                <div id="restaurantReportDetail" class="report-detail">
                                     <!-- 선택된 식당 신고의 상세 정보가 여기에 표시됩니다 -->
                                 </div>
                             </div>
@@ -68,39 +70,43 @@
             <div class="tab-pane fade" id="review" role="tabpanel" aria-labelledby="review-tab">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card report-card">
                             <div class="card-body">
                                 <h5 class="card-title">리뷰 신고 목록</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-hover">
+                                    <table class="table table-hover report-table">
                                         <thead>
                                             <tr>
-                                                <th>신고 번호</th>
-                                                <th>신고 제목</th>
-                                                <th>신고 내용</th>
-                                                <th>대상 리뷰</th>
-                                                <th>신고 날짜</th>
-                                                <th>처리 여부</th>
+                                                <th>번호</th>
+                                                <th>제목</th>
+                                                <th>리뷰</th>
+                                                <th>상세리뷰</th>
+                                                <th>날짜</th>
+                                                <th>상태</th>
                                             </tr>
                                         </thead>
                                         <tbody id="reviewReportList">
                                             <!-- 리뷰 신고 목록이 여기에 동적으로 추가됩니다 -->
+                                            <!-- TODO: 백엔드에서 데이터를 가져와 동적으로 리스트 생성 -->
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="pagination">
-                                    <button class="pagebtn" id="reviewPre">◀</button>
-                                    <button class="pagebtn" id="reviewBack">▶</button>
-                                </div>
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item"><a class="page-link" href="#" id="reviewPre">이전</a></li>
+                                        <li class="page-item"><a class="page-link" href="#" id="reviewBack">다음</a></li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card report-detail-card">
                             <div class="card-body">
                                 <h5 class="card-title">리뷰 신고 상세 정보</h5>
-                                <div id="reviewReportDetail">
+                                <div id="reviewReportDetail" class="report-detail">
                                     <!-- 선택된 리뷰 신고의 상세 정보가 여기에 표시됩니다 -->
+                                    <!-- TODO: 백엔드에서 선택된 신고의 상세 정보를 가져와 표시 -->
                                 </div>
                             </div>
                         </div>
@@ -112,38 +118,42 @@
             <div class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card report-card">
                             <div class="card-body">
                                 <h5 class="card-title">댓글 신고 목록</h5>
                                 <div class="table-responsive">
-                                    <table class="table table-hover">
+                                    <table class="table table-hover report-table">
                                         <thead>
                                             <tr>
-                                                <th>신고 번호</th>
-                                                <th>신고 제목</th>
-                                                <th>댓글 내용</th>
-                                                <th id="commentReportDate">신고 날짜</th>
-                                                <th>처리 여부</th>
+                                                <th>번호</th>
+                                                <th>제목</th>
+                                                <th>댓글</th>
+                                                <th>날짜</th>
+                                                <th>상태</th>
                                             </tr>
                                         </thead>
                                         <tbody id="commentReportList">
                                             <!-- 댓글 신고 목록이 여기에 동적으로 추가됩니다 -->
+                                            <!-- TODO: 백엔드에서 데이터를 가져와 동적으로 리스트 생성 -->
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="pagination">
-                                    <button class="pagebtn" id="commentPre">◀</button>
-                                    <button class="pagebtn" id="commentBack">▶</button>
-                                </div>
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item"><a class="page-link" href="#" id="commentPre">이전</a></li>
+                                        <li class="page-item"><a class="page-link" href="#" id="commentBack">다음</a></li>
+                                    </ul>
+                                </nav>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="card">
+                        <div class="card report-detail-card">
                             <div class="card-body">
                                 <h5 class="card-title">댓글 신고 상세 정보</h5>
-                                <div id="commentReportDetail">
+                                <div id="commentReportDetail" class="report-detail">
                                     <!-- 선택된 댓글 신고의 상세 정보가 여기에 표시됩니다 -->
+                                    <!-- TODO: 백엔드에서 선택된 신고의 상세 정보를 가져와 표시 -->
                                 </div>
                             </div>
                         </div>
