@@ -63,12 +63,6 @@ public class TestController {
         return "writeReview";
     }
 
-    @GetMapping("/search-results")
-    // 검색 결과 페이지로 이동
-    public String searchResults() {
-        return "searchResults";
-    }
-
     @GetMapping("/register-store")
     // 매장 등록 페이지로 이동
     public String getRegisterStore() {
