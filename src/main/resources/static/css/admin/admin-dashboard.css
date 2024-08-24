@@ -383,3 +383,45 @@ body {
     border-top: 1px solid #2c2c2c;
 }
 
+
+/* 기존 스타일 유지 */
+
+/* 신고 처리 상태 스타일 */
+.report-status {
+    font-weight: bold;
+}
+
+.report-completed {
+    color: #4CAF50; /* 초록색 계열로 처리 완료 강조 */
+    text-decoration: underline;
+}
+
+/* 호버 효과 */
+tr:hover .report-completed {
+    background-color: rgba(76, 175, 80, 0.1); /* 호버 시 배경색 변경 */
+}
+
+/* 접근성을 위한 포커스 스타일 */
+.report-status:focus {
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+/* 애니메이션 효과 */
+@keyframes completedPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.report-completed {
+    animation: completedPulse 2s infinite;
+}
+
+/* 반응형 디자인 개선 */
+@media (max-width: 768px) {
+    .report-status {
+        display: inline-block;
+        margin-top: 5px;
+    }
+}

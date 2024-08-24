@@ -11,34 +11,36 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                console.log('Review reports data:', data); // 로그 추가
+                console.log('Review reports data:', data);
                 let tableBody = $('#reviewReportList');
                 tableBody.empty();
                 if (data && data.content && data.content.length > 0) {
                     data.content.forEach(function (report) {
                         let formattedDate = new Date(report.reportedAt).toLocaleDateString();
+                        let statusClass = report.checked ? 'report-completed' : '';
+                        let statusText = report.checked ? '처리 완료' : '처리 전';
                         const row = `
-            <tr data-id="${report.id}">
-                <td>${report.id}</td>
-                <td>${report.title}</td>
-                <td>${report.content}</td>
-                <td>${report.review.content}</td>
-                <td>${formattedDate}</td>
-                <td>${report.checked ? '처리 완료' : '처리 전'}</td>
-            </tr>`;
+                            <tr data-id="${report.id}">
+                                <td>${report.id}</td>
+                                <td>${report.title}</td>
+                                <td>${report.content}</td>
+                                <td>${report.review.content}</td>
+                                <td>${formattedDate}</td>
+                                <td class="report-status ${statusClass}" aria-label="처리 상태: ${statusText}">${statusText}</td>
+                            </tr>`;
                         tableBody.append(row);
                     });
                     updateReviewPaginationControls(data.number, data.totalPages);
                 } else {
-                    console.log('No review reports found'); // 로그 추가
-                    tableBody.append('<tr><td colspan="5">신고된 리뷰가 없습니다.</td></tr>');
+                    console.log('No review reports found');
+                    tableBody.append('<tr><td colspan="6">신고된 리뷰가 없습니다.</td></tr>');
                 }
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching review reports:', error);
                 console.error('XHR status:', status);
                 console.error('XHR response:', xhr.responseText);
-                $('#reviewReportList').html('<tr><td colspan="5">데이터를 불러오는 중 오류가 발생했습니다. 자세한 내용은 콘솔을 확인해주세요.</td></tr>');
+                $('#reviewReportList').html('<tr><td colspan="6">데이터를 불러오는 중 오류가 발생했습니다. 자세한 내용은 콘솔을 확인해주세요.</td></tr>');
             }
         });
     }
@@ -89,6 +91,11 @@ $(document).ready(function () {
                     alert('리뷰 신고처리가 완료되었습니다.');
                     fetchReviewReports(reviewCurrentPage, reviewCurrentSortOrder);
                     loadReviewReportDetail(reportId);
+                    // UI 업데이트
+                    $(`tr[data-id="${reportId}"] .report-status`)
+                        .addClass('report-completed')
+                        .text('처리 완료')
+                        .attr('aria-label', '처리 상태: 처리 완료');
                 },
                 error: function () {
                     alert('리뷰 신고처리에 실패했습니다.');

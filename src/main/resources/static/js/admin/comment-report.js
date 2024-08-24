@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
     let commentCurrentSortOrder = 'asc';
     let commentCurrentPage = 0;
@@ -16,15 +15,17 @@ $(document).ready(function () {
                 if (data && data.content && data.content.length > 0) {
                     data.content.forEach(function (report) {
                         let formattedDate = new Date(report.reportedAt).toLocaleDateString();
+                        let statusClass = report.checked ? 'report-completed' : '';
+                        let statusText = report.checked ? '처리 완료' : '처리 전';
                         let row = `
-                            <tr data-id="${report.id}">
-                                <td>${report.id}</td>
-                                <td>${report.title}</td>
-                                <td>${report.reviewComment.content}</td>
-                                <td>${formattedDate}</td>
-                                <td>${report.checked ? '처리 완료' : '처리 전'}</td>
-                            </tr>
-                        `;
+                              <tr data-id="${report.id}">
+                                  <td>${report.id}</td>
+                                  <td>${report.title}</td>
+                                  <td>${report.reviewComment.content}</td>
+                                  <td>${formattedDate}</td>
+                                  <td class="report-status ${statusClass}" aria-label="처리 상태: ${statusText}">${statusText}</td>
+                              </tr>
+                          `;
                         tableBody.append(row);
                     });
                     updateCommentPaginationControls(data.number, data.totalPages);
@@ -38,7 +39,6 @@ $(document).ready(function () {
             }
         });
     }
-
     function updateCommentPaginationControls(currentPage, totalPages) {
         $('#commentPre').prop('disabled', currentPage === 0);
         $('#commentBack').prop('disabled', currentPage === totalPages - 1);
@@ -80,11 +80,15 @@ $(document).ready(function () {
                     alert('댓글 신고처리가 완료되었습니다.');
                     fetchCommentReports(commentCurrentPage, commentCurrentSortOrder);
                     loadCommentReportDetail(reportId);
+                    // UI 업데이트
+                    $(`tr[data-id="${reportId}"] .report-status`)
+                        .addClass('report-completed')
+                        .text('처리 완료')
+                        .attr('aria-label', '처리 상태: 처리 완료');
                 },
                 error: function (xhr, status, error) {
-                    console.error('Error fetching comment reports:', error);
-                    console.error('Server response:', xhr.responseText);
-                    $('#commentReportList').html('<tr><td colspan="5">데이터를 불러오는 중 오류가 발생했습니다. 서버 응답을 확인해 주세요.</td></tr>');
+                    console.error('Error updating comment report:', error);
+                    alert('댓글 신고처리에 실패했습니다.');
                 }
             });
         }
