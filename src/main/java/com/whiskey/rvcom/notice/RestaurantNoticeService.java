@@ -24,8 +24,10 @@ public class RestaurantNoticeService {
         return noticeRepository.findByRestaurantId(restaurantId).stream()
                 .sorted(Comparator.comparing(RestaurantNotice::getCreatedAt).reversed())
                 .map(it -> new RestaurantNoticeResponseDTO(
+                        it.getId(),
                         it.getTitle(),
                         it.getContent(),
+                        it.isDeleted(),
                         it.getCreatedAt()
                 )).toList();
     }
