@@ -14,6 +14,12 @@ if (navigator.geolocation) {
             maximumAge: 0
         }
     )
+} else {
+    // geolocation을 사용하지 못하는 경우
+    var location = new kakao.maps.LatLng(37.50973389280427, 127.05598102644028); // 임시 위치 - SAC 아트홀 위치
+    displayMap(location);
+
+    displayMarker(location);
 }
 
 function displayMap(location) {
@@ -32,7 +38,7 @@ function displayMarker(location) {
         markerImageOption = {offset: new kakao.maps.Point(15, 15)}; // 마커이미지 옵션 - 마커와 위치의 중심을 맞춤
 
     var markerImage = new kakao.maps.MarkerImage(markerImageSrc, markerImageSize, markerImageOption); // 마커이미지 생성
-    
+
     // 마커 생성
     var marker = new kakao.maps.Marker({
         map: window.map, // 마커를 표시할 지도

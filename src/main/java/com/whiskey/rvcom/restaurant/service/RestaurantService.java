@@ -7,6 +7,7 @@ import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.repository.MenuRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
+import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -189,5 +190,9 @@ public class RestaurantService {
 
     public List<Menu> getMenuList(Long restaurantId) {
         return menuRepository.findAllByRestaurantId(restaurantId);
+    }
+
+    public List<RestaurantSearchResultDTO> getRestaurantsBySearchText(String searchText) {
+        return restaurantRepository.findAllByNameContaining(searchText);
     }
 }
