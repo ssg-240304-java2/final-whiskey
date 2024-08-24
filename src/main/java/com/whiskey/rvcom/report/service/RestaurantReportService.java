@@ -70,7 +70,6 @@ public class RestaurantReportService {
         // 변경된 상태값 저장
         restaurantReportRepository.save(restaurantReport);
 
-        // 메일 발송 API 추후 추가 예정
     }
 
 
