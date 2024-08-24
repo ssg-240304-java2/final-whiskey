@@ -28,6 +28,11 @@ $(document).ready(function() {
                 $('#content-area').html(response);
                 $('#page-title').text(getPageTitle(target));
                 initializeCharts();
+
+                // 입점 관리 탭을 위한 추가 초기화
+                if (target === 'restaurant-management') {
+                    loadRestaurantRegistrations();
+                }
             },
             error: function(xhr, status, error) {
                 console.error("콘텐츠 로딩 오류:", error);
@@ -46,6 +51,7 @@ $(document).ready(function() {
             case 'user-management': return '사용자 관리';
             case 'report-management': return '신고 관리';
             case 'statistics': return '통계';
+            case 'restaurant-management': return '입점 관리';
             default: return 'FoodFolio 관리자';
         }
     }

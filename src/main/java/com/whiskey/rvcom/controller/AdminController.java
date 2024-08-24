@@ -32,4 +32,9 @@ public class AdminController {
         // 통계 데이터를 모델에 추가
         return "admin/fragments/statistics :: statistics";
     }
+
+    @GetMapping("/restaurant-management")
+    public String getRestaurantManagement(Model model) {
+        return "admin/fragments/restaurant-management :: restaurantManagement";
+    }
 }
