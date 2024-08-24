@@ -2,7 +2,9 @@
      id="info"
      role="tabpanel" aria-labelledby="info-tab">
     <div class="menu-section">
-        <button style="float: right;" id="restaurantReport">신고하기</button>
+        <button id="restaurantReport" class="report-btn">
+            <i class="fas fa-flag"></i> 신고하기
+        </button>
         <h2><i class="fas fa-utensils"></i> 인기 메뉴</h2>
         <div th:if="${!menuList.isEmpty()}" class="menu-items-container">
             <div class="menu-items" th:each="menu: ${menuList}">
