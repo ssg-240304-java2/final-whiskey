@@ -26,6 +26,11 @@ public class RestaurantInquiryRestController {
         return inquiryService.findAllByRestaurantId(restaurantId);
     }
 
+    @GetMapping("/restaurant/inquiry/{inquiryId}")
+    public RestaurantInquiryResponseDTO findById(@PathVariable Long inquiryId) {
+        return inquiryService.findById(inquiryId);
+    }
+
     /**
      * 문의 작성
      * @param restaurantId
