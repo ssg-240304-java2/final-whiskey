@@ -1,13 +1,13 @@
 package com.whiskey.rvcom.notice;
 
-import com.whiskey.rvcom.notice.dto.RestaurantNoticeRequestDTO;
 import com.whiskey.rvcom.notice.dto.RestaurantNoticeResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,23 +21,7 @@ public class RestaurantNoticeController {
      * @return 음식점 공지사항 리스트
      */
     @GetMapping("/restaurant/{restaurantId}/notice")
-    public List<RestaurantNoticeResponseDTO> findNoticeByRestaurantId(@PathVariable Long restaurantId) {
-        return noticeService.findNoticeByRestaurantId(restaurantId);
-    }
-
-    /**
-     * 해당 음식점의 점주가 공지사항 작성
-     * @param restaurantId
-     * @param request
-     */
-    @PostMapping("/restaurant/{restaurantId}/notice")
-    public void save(@PathVariable Long restaurantId, @RequestBody RestaurantNoticeRequestDTO request) {
-        noticeService.save(request, restaurantId);
-    }
-
-    // TODO: 해당 음식점의 점주가 공지사항 삭제
-    @DeleteMapping("/restaurant/notice")
-    public void delete(Long noticeId) {
-        noticeService.delete(noticeId);
+    public Page<RestaurantNoticeResponseDTO> findNoticeByRestaurantIdWithPage(@PathVariable Long restaurantId, Pageable pageable) {
+        return noticeService.getPagedRestaurantNotices(restaurantId, pageable);
     }
 }

@@ -7,6 +7,8 @@ import com.whiskey.rvcom.notice.dto.RestaurantNoticeResponseDTO;
 import com.whiskey.rvcom.repository.RestaurantNoticeRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,11 @@ public class RestaurantNoticeService {
                         it.isDeleted(),
                         it.getCreatedAt()
                 )).toList();
+    }
+
+    // TODO: 해당 음식점의 공지사항 전체 조회 (삭제된 내용 제외)
+    public Page<RestaurantNoticeResponseDTO> getPagedRestaurantNotices(Long restaurantId, Pageable pageable) {
+        return noticeRepository.getPagedRestaurantNotices(restaurantId, pageable);
     }
 
     // TODO: 해당 음식점의 점주가 공지사항 작성
