@@ -1,101 +1,196 @@
+/* ===== 변수 및 기본 설정 ===== */
+:root {
+    --primary-color: #d32323;
+    --secondary-color: #666;
+    --background-color: #f5f5f5;
+    --white: #fff;
+    --light-gray: #f9f9f9;
+    --border-color: #ccc;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* ===== 전역 스타일 ===== */
 body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background-color: #f5f5f5;
+    font-family: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--background-color);
     margin: 0;
     padding: 0;
+    color: var(--secondary-color);
+    line-height: 1.6;
 }
+
+/* ===== 컨테이너 스타일 ===== */
 .container {
     max-width: 800px;
     margin: 40px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 30px;
+    background-color: var(--white);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
+
+/* ===== 헤더 스타일 ===== */
 h1 {
-    color: #d32323;
-    margin-bottom: 20px;
+    color: var(--primary-color);
+    margin-bottom: 30px;
+    font-weight: 600;
 }
+
+/* ===== 레스토랑 정보 스타일 ===== */
+.restaurant-info {
+    background-color: var(--light-gray);
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* ===== 별점 입력 스타일 ===== */
 .rating-input {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
+
 .star {
-    font-size: 30px;
-    color: #ccc;
+    font-size: 36px;
+    color: var(--border-color);
     cursor: pointer;
+    transition: color 0.3s ease;
 }
+
 .star.active {
-    color: #f15c4f;
+    color: var(--primary-color);
 }
+
+.rating-description {
+    font-size: 14px;
+    color: var(--secondary-color);
+    margin-top: 10px;
+}
+
+/* ===== 텍스트 영역 스타일 ===== */
 textarea {
     width: 100%;
     height: 150px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical;
-}
-.photo-upload {
-    margin: 20px 0;
-}
-.submit-btn {
-    background-color: #d32323;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-}
-.submit-btn:hover {
-    background-color: #e03131;
-}
-/* 레스토랑 정보를 표시하는 컨테이너의 스타일 */
-.restaurant-info {
-    background-color: #f9f9f9;
     padding: 15px;
-    border-radius: 4px;
-    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
 }
-/* 별점 설명 텍스트의 스타일 */
-.rating-description {
-    font-size: 14px;
-    color: #666;
+
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(211, 35, 35, 0.1);
 }
-/* 리뷰 길이 표시 텍스트의 스타일 */
+
 .review-length {
     font-size: 14px;
-    color: #666;
+    color: var(--secondary-color);
     text-align: right;
+    margin-top: 5px;
 }
-/* 사진 미리보기 컨테이너의 스타일 */
+
+/* ===== 사진 업로드 스타일 ===== */
+.photo-upload {
+    margin: 30px 0;
+}
+
 .photo-preview {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 15px;
+    margin-top: 15px;
 }
-/* 사진 미리보기 이미지의 스타일 */
+
 .photo-preview img {
     width: 100px;
     height: 100px;
     object-fit: cover;
-    border-radius: 4px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
 }
+
+.photo-preview img:hover {
+    transform: scale(1.05);
+}
+
+/* ===== 버튼 스타일 ===== */
 .button-group {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 30px;
 }
-.cancel-btn {
-    background-color: #ccc;
-    color: #333;
-    padding: 10px 20px;
+
+.submit-btn, .cancel-btn {
+    padding: 12px 25px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
+
+.submit-btn {
+    background-color: var(--primary-color);
+    color: var(--white);
+}
+
+.submit-btn:hover {
+    background-color: #e03131;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(211, 35, 35, 0.2);
+}
+
+.cancel-btn {
+    background-color: var(--border-color);
+    color: var(--secondary-color);
+}
+
 .cancel-btn:hover {
     background-color: #bbb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
+
+/* ===== 접근성 스타일 ===== */
+*:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ===== 반응형 스타일 ===== */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+        margin: 20px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .star {
+        font-size: 30px;
+    }
+
+    .button-group {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .submit-btn, .cancel-btn {
+        width: 100%;
+    }
+}
+
+/* TODO: 백엔드 개발자는 이미지 업로드 제한 및 미리보기 기능을 구현해야 합니다. */
+/* TODO: 백엔드 개발자는 리뷰 제출 시 서버로의 데이터 전송 및 유효성 검사를 구현해야 합니다. */
