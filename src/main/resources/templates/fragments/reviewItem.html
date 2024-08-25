@@ -88,7 +88,7 @@
 <!--            <button class="dislike-button">👎 싫어요 (2)</button>-->
 <!--            <button class="comment-button">💬 댓글 (3)</button>-->
             <button class="comment-button">
-                <span th:id="comment-button-${id}" th:text="'💬 댓글 (' + ${comments.size()} + ')'"></span>
+                <span th:id="'comment-button-' + ${id}" th:text="'💬 댓글 (' + ${comments.size()} + ')'"></span>
             </button>
 
 <!--            <button class="comment-button"><span th:text="💬 댓글${reviewCommentCount}"></span></button>-->
