@@ -117,7 +117,7 @@ window.submitReviewComment = function (reviewId, content) {
     const reportButton = document.createElement('button');
     reportButton.classList.add('report-button');
     reportButton.style.float = 'right';
-    reportButton.innerText = '🔔신고하기';
+    reportButton.innerText = '🚨';
     commentElement.appendChild(reportButton);
 
     const commentInfo = document.createElement('span');
