@@ -27,6 +27,7 @@
 -->
 <div th:replace="fragments/restaurantBanner :: restaurantBanner(
         name=${restaurant.getName()},
+        imageUrl=${restaurantCoverImageUrl != null ? restaurantCoverImageUrl:'https://via.placeholder.com/1200x400'},
         rating='★★★★☆',
         reviewCount='1,234',
         price='₩₩',

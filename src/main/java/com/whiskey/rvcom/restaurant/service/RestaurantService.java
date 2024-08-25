@@ -8,6 +8,7 @@ import com.whiskey.rvcom.repository.MenuRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
+import com.whiskey.rvcom.util.ImagePathParser;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -78,12 +79,18 @@ public class RestaurantService {
                 break;
         }
 
+        String coverImageUrl = null;
+        if (restaurant.getCoverImage() != null) {
+            coverImageUrl = ImagePathParser.parse(restaurant.getCoverImage().getUuidFileName());
+        }
+
         RestaurantCardDTO restaurantCardDTO = new RestaurantCardDTO(
                 restaurant.getId(),
                 restaurant.getName(),
                 restaurant.getCategory().name(),
                 distanceString,
-                openingHour
+                openingHour,
+                coverImageUrl
         );
 
         return restaurantCardDTO;
