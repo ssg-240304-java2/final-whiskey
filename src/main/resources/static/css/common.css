@@ -66,3 +66,9 @@ body {
 .tab-content {
     padding-bottom: 20px;
 }
+
+.review-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

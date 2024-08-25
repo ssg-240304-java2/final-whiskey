@@ -14,4 +14,5 @@ public class RestaurantCardDTO {
     private String category;
     private String distance;
     private String openCloseTime;
+    private String coverImageUrl;
 }

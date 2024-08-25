@@ -88,9 +88,10 @@ function getLocationRestaurant(lat, lng) {
                     var element = document.createElement('div');
                     element.className = 'pop-in';
                     element.innerHTML = `<div class="restaurant-card">
-                            <div class="restaurant-image-placeholder">
-                                음식점 사진
-                            </div>
+                            <div class="restaurant-image-placeholder">` +
+                        (restaurant.coverImageUrl != null ? `<img src="${restaurant.coverImageUrl}" alt="등록된 사진이 없습니다." class="review-image">` : `<img alt="등록된 사진이 없습니다." class="review-image">`)
+                        +
+                        `</div>
                             <div class="restaurant-info">
                                 <h3>${restaurant.name}</h3>
                                 <p class="restaurant-details">
