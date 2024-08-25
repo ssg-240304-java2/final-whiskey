@@ -1,6 +1,6 @@
 <!-- src/main/resources/templates/fragments/restaurantBanner.html -->
-<div th:fragment="restaurantBanner(name, rating, reviewCount, price, category, status, hours)">
-    <div class="restaurant-banner" style="background-image: url('https://via.placeholder.com/1200x400');">
+<div th:fragment="restaurantBanner(name, imageUrl, rating, reviewCount, price, category, status, hours)">
+    <div class="restaurant-banner" th:style="'background-image: url(' + ${imageUrl} + ');'">
         <div class="container">
             <div class="restaurant-info">
                 <h1 class="restaurant-name" th:text="${name}">레스토랑 이름</h1>

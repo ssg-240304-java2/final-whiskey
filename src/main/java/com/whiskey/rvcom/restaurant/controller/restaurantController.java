@@ -4,6 +4,7 @@ import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.review.ReviewService;
+import com.whiskey.rvcom.util.ImagePathParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,10 @@ public class restaurantController {
 
         model.addAttribute("restaurant", restaurant);
         model.addAttribute("restaurantId", restaurantId);
+
+        if (restaurant.getCoverImage() != null) {
+            model.addAttribute("restaurantCoverImageUrl", ImagePathParser.parse(restaurant.getCoverImage().getUuidFileName()));
+        }
 
         model.addAttribute("tab", tab); // 저 탭과 관련한 내용은 PathVariable이 아닌 상수 info 로~
 
