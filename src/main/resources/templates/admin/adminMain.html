@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- 커스텀 JS -->
     <script th:src="@{/js/admin/admin-dashboard.js}"></script>
+    <script th:src="@{/js/admin/restaurant-management.js}"></script>
 </head>
 <body class="bg-dark">
     <div class="container-fluid">
@@ -48,6 +49,11 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#" data-target="statistics">
                                 <i class="fas fa-chart-bar"></i> 통계
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-target="restaurant-management">
+                                <i class="fas fa-utensils"></i> 입점 관리
                             </a>
                         </li>
                     </ul>
