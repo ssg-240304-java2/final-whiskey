@@ -43,7 +43,7 @@ function loadNotices() {
     // TODO: 백엔드 API를 호출하여 공지사항 목록을 가져오는 로직 구현
     const restaurantId = document.getElementById('restaurantId').value;
 
-    fetch(`/restaurant/${restaurantId}/notice`)
+    fetch(`/restaurant/${restaurantId}/user-notice`)
         .then(response => response.json())
         .then(data => {
             const noticeContainer = document.querySelector('.notices-scroll');

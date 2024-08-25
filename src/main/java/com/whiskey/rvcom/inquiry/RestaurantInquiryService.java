@@ -32,12 +32,11 @@ public class RestaurantInquiryService {
                         it.getContent(),
                         it.getWriter().getName(),
                         it.getCreatedAt(),
-                        it.getReply() != null
-                                ? new RestaurantInquiryReplyResponseDTO(
+                        it.getReply() != null ?
+                                new RestaurantInquiryReplyResponseDTO(
                                 it.getReply().getContent(),
                                 it.getReply().getCreatedAt()
-                        )
-                                : null
+                        ) : null
                 )).toList();
     }
 
@@ -56,5 +55,21 @@ public class RestaurantInquiryService {
                 .orElseThrow(() -> new IllegalArgumentException("문의가 존재하지 않습니다."));
         inquiry.delete();
         inquiryRepository.save(inquiry);
+    }
+
+    public RestaurantInquiryResponseDTO findById(Long inquiryId) {
+        inquiryRepository.findById(inquiryId).orElseThrow(() -> new IllegalArgumentException("문의가 존재하지 않습니다."));
+        return inquiryRepository.findById(inquiryId)
+                .map(it -> new RestaurantInquiryResponseDTO(
+                    it.getId(),
+                    it.getContent(),
+                    it.getWriter().getName(),
+                    it.getCreatedAt(),
+                    it.getReply() != null ?
+                            new RestaurantInquiryReplyResponseDTO(
+                                    it.getReply().getContent(),
+                                    it.getReply().getCreatedAt()
+                            ) : null
+        )).orElseThrow();
     }
 }
