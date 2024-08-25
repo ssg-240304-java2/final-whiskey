@@ -17,7 +17,7 @@
                         <th>작업</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="inquiries-table">
                     <!-- 더미 데이터 추가 -->
                     <tr>
                         <td>1</td>
@@ -78,8 +78,7 @@
                     </div>
                     <div class="modal-body">
                         <!-- TODO: 백엔드에서 문의 상세 정보를 가져와 표시 -->
-                        <h6>제목: <span id="inquiryTitle"></span></h6>
-                        <p>작성자: <span id="inquiryAuthor"></span></p>
+                        <p>작성자: <span id="inquiryWriter"></span></p>
                         <p>날짜: <span id="inquiryDate"></span></p>
                         <p>내용: <span id="inquiryContent"></span></p>
                         <hr>
@@ -113,7 +112,7 @@
             </div>
         </div>
         <!-- 문의 내역 관련 JavaScript -->
-        <script th:src="@{/js/owner-inquiries.js}"></script>
+        <script th:src="@{/js/owner/inquiries.js}"></script>
     </div>
 
 </body>
