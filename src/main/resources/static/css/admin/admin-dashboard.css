@@ -496,6 +496,34 @@ tr:hover .report-completed {
     color: #fff;
 }
 
+
+/* 정렬 버튼 스타일 */
+.sort-btn {
+    background: none;
+    border: none;
+    color: #4fc3f7;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0;
+    margin-left: 5px;
+}
+
+.sort-btn:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.sort-btn.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* 정렬 아이콘 스타일 */
+.sort-icon {
+    font-size: 0.8rem;
+    margin-left: 2px;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .report-card, .report-detail-card {

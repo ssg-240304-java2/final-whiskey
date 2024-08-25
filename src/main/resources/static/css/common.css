@@ -13,41 +13,6 @@ body {
     --text-color: #333;
 }
 
-/* 푸터 스타일 */
-.test-footer {
-    background-color: #333;
-    color: white;
-    padding: 20px 0;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
-
-/* 푸터 내용 스타일 */
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-/* 푸터 내비게이션 스타일 */
-.footer-nav {
-    margin-top: 10px;
-}
-
-/* 푸터 내비게이션 링크 스타일 */
-.footer-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 10px;
-    font-size: 14px;
-}
-
-/* 푸터 내비게이션 링크 호버 효과 */
-.footer-nav a:hover {
-    text-decoration: underline;
-}
-
 /* 컨테이너 스타일 */
 .container {
     max-width: 1000px;
