@@ -6,6 +6,8 @@ import com.whiskey.rvcom.repository.ReviewLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewLikeService {
@@ -35,5 +37,12 @@ public class ReviewLikeService {
      */
     public void removeReviewLike(ReviewLike reviewLike) {
         reviewLikeRepository.delete(reviewLike);
+    }
+
+    public Long getReviewLikeCount(Review dest) {
+
+        List<ReviewLike> reviewLikes = reviewLikeRepository.findByReviewId(dest.getId());
+
+        return (long) reviewLikes.size();
     }
 }
