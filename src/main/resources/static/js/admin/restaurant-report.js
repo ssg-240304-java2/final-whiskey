@@ -17,15 +17,17 @@ $(document).ready(function () {
                 if (data && data.content && data.content.length > 0) {
                     data.content.forEach(function (report) {
                         let formattedDate = new Date(report.reportedAt).toLocaleDateString();
+                        let statusClass = report.checked ? 'report-completed' : '';
+                        let statusText = report.checked ? '처리 완료' : '처리 전';
                         let row = `
-                                          <tr data-id="${report.id}">
-                                              <td>${report.id}</td>
-                                              <td>${report.restaurant ? report.restaurant.name : 'N/A'}</td>
-                                              <td>${report.title}</td>
-                                              <td>${formattedDate}</td>
-                                              <td>${report.checked ? '처리 완료' : '처리 전'}</td>
-                                          </tr>
-                                      `;
+                            <tr data-id="${report.id}">
+                                <td>${report.id}</td>
+                                <td>${report.restaurant ? report.restaurant.name : 'N/A'}</td>
+                                <td>${report.title}</td>
+                                <td>${formattedDate}</td>
+                                <td class="report-status ${statusClass}" aria-label="처리 상태">${statusText}</td>
+                            </tr>
+                        `;
                         tableBody.append(row);
                     });
                     updatePaginationControls(data.number, data.totalPages);
@@ -35,6 +37,7 @@ $(document).ready(function () {
             },
             error: function (xhr, status, error) {
                 $('#restaurantReportList').html('<tr><td colspan="5">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>');
+                console.error("Error fetching restaurant reports:", error);
             }
         });
     }
@@ -79,6 +82,11 @@ $(document).ready(function () {
                     alert('신고처리 되었습니다.');
                     fetchRestaurantReports(currentPage, currentSortOrder);
                     loadRestaurantReportDetail(reportId);
+                    // UI 업데이트
+                    $(`tr[data-id="${reportId}"] .report-status`)
+                        .addClass('report-completed')
+                        .text('처리 완료')
+                        .attr('aria-label', '처리 상태: 처리 완료');
                 },
                 error: function () {
                     alert('신고처리에 실패했습니다.');
