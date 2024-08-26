@@ -1,37 +1,18 @@
 $(document).ready(function () {
-    let commentCurrentSortOrder = 'asc';
+    let commentCurrentSortField = 'reportedAt';
+    let commentCurrentSortOrder = 'desc';
     let commentCurrentPage = 0;
     const commentPageSize = 10;
 
-    function fetchCommentReports(page, sortOrder = 'asc') {
+    function fetchCommentReports(page, sortField, sortOrder) {
         $.ajax({
             url: /*[[@{/reviewcommentreport/list}]]*/ '/reviewcommentreport/list',
-            data: { page: page, sortOrder: sortOrder },
+            data: { page: page, sortField: sortField, sortOrder: sortOrder },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                let tableBody = $('#commentReportList');
-                tableBody.empty();
-                if (data && data.content && data.content.length > 0) {
-                    data.content.forEach(function (report) {
-                        let formattedDate = new Date(report.reportedAt).toLocaleDateString();
-                        let statusClass = report.checked ? 'report-completed' : '';
-                        let statusText = report.checked ? '처리 완료' : '처리 전';
-                        let row = `
-                              <tr data-id="${report.id}">
-                                  <td>${report.id}</td>
-                                  <td>${report.title}</td>
-                                  <td>${report.reviewComment.content}</td>
-                                  <td>${formattedDate}</td>
-                                  <td class="report-status ${statusClass}" aria-label="처리 상태: ${statusText}">${statusText}</td>
-                              </tr>
-                          `;
-                        tableBody.append(row);
-                    });
-                    updateCommentPaginationControls(data.number, data.totalPages);
-                } else {
-                    tableBody.append('<tr><td colspan="5">신고된 댓글이 없습니다.</td></tr>');
-                }
+                renderCommentReportTable(data.content);
+                updateCommentPaginationControls(data.number, data.totalPages);
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching comment reports:', error);
@@ -39,10 +20,106 @@ $(document).ready(function () {
             }
         });
     }
-    function updateCommentPaginationControls(currentPage, totalPages) {
-        $('#commentPre').prop('disabled', currentPage === 0);
-        $('#commentBack').prop('disabled', currentPage === totalPages - 1);
+
+    function renderCommentReportTable(reports) {
+        let tableBody = $('#commentReportList');
+        tableBody.empty();
+        if (reports && reports.length > 0) {
+            reports.forEach(function (report) {
+                let row = createCommentReportRow(report);
+                tableBody.append(row);
+            });
+        } else {
+            tableBody.append('<tr><td colspan="5">신고된 댓글이 없습니다.</td></tr>');
+        }
     }
+
+    function createCommentReportRow(report) {
+        let formattedDate = new Date(report.reportedAt).toLocaleDateString();
+        let statusClass = report.checked ? 'report-completed' : '';
+        let statusText = report.checked ? '처리 완료' : '처리 전';
+        return `
+            <tr data-id="${report.id}">
+                <td>${report.id}</td>
+                <td>${report.title}</td>
+                <td>${report.reviewComment.content}</td>
+                <td>${formattedDate}</td>
+                <td class="report-status ${statusClass}" aria-label="처리 상태">${statusText}</td>
+            </tr>
+        `;
+    }
+
+    function updateCommentPaginationControls(currentPage, totalPages) {
+        let paginationElement = $('#commentPagination');
+        paginationElement.empty();
+
+        // 이전 페이지 버튼
+        paginationElement.append(`
+            <li class="page-item ${currentPage === 0 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
+                    <span aria-hidden="true">«</span>
+                </a>
+            </li>
+        `);
+
+        // 페이지 번호
+        let startPage = Math.max(0, currentPage - 2);
+        let endPage = Math.min(totalPages - 1, currentPage + 2);
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationElement.append(`
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
+                </li>
+            `);
+        }
+
+        // 다음 페이지 버튼
+        paginationElement.append(`
+            <li class="page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
+                    <span aria-hidden="true">»</span>
+                </a>
+            </li>
+        `);
+
+        // 페이지 클릭 이벤트 핸들러
+        $('.page-link').click(function(e) {
+            e.preventDefault();
+            let page = $(this).data('page');
+            if (page >= 0 && page < totalPages) {
+                commentCurrentPage = page;
+                fetchCommentReports(commentCurrentPage, commentCurrentSortField, commentCurrentSortOrder);
+            }
+        });
+    }
+
+    // 정렬 버튼 이벤트 리스너
+    $('.sort-btn').click(function () {
+        let newSortField = $(this).data('sort');
+        if (newSortField === commentCurrentSortField) {
+            commentCurrentSortOrder = commentCurrentSortOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+            commentCurrentSortField = newSortField;
+            commentCurrentSortOrder = 'desc';
+        }
+        updateSortButtonsUI();
+        fetchCommentReports(commentCurrentPage, commentCurrentSortField, commentCurrentSortOrder);
+    });
+
+    function updateSortButtonsUI() {
+        $('.sort-btn').removeClass('active');
+        $(`.sort-btn[data-sort="${commentCurrentSortField}"]`).addClass('active');
+        $('.sort-icon').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+        $(`.sort-btn[data-sort="${commentCurrentSortField}"] .sort-icon`)
+            .removeClass('fa-sort')
+            .addClass(commentCurrentSortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
+    }
+
+    // 초기 댓글 신고 목록 로드
+    $('#comment-tab').on('shown.bs.tab', function (e) {
+        fetchCommentReports(commentCurrentPage, commentCurrentSortField, commentCurrentSortOrder);
+    });
 
     function loadCommentReportDetail(reportId) {
         $.ajax({
@@ -78,7 +155,7 @@ $(document).ready(function () {
                 data: { btnId: btnId },
                 success: function () {
                     alert('댓글 신고처리가 완료되었습니다.');
-                    fetchCommentReports(commentCurrentPage, commentCurrentSortOrder);
+                    fetchCommentReports(commentCurrentPage, commentCurrentSortField, commentCurrentSortOrder);
                     loadCommentReportDetail(reportId);
                     // UI 업데이트
                     $(`tr[data-id="${reportId}"] .report-status`)
@@ -100,31 +177,9 @@ $(document).ready(function () {
         loadCommentReportDetail(reportId);
     });
 
-    $(document).on('click', '#commentReportDate', function () {
-        commentCurrentSortOrder = commentCurrentSortOrder === 'asc' ? 'desc' : 'asc';
-        fetchCommentReports(commentCurrentPage, commentCurrentSortOrder);
-    });
-
-    $(document).on('click', '#commentPre', function () {
-        if (commentCurrentPage > 0) {
-            commentCurrentPage--;
-            fetchCommentReports(commentCurrentPage, commentCurrentSortOrder);
-        }
-    });
-
-    $(document).on('click', '#commentBack', function () {
-        commentCurrentPage++;
-        fetchCommentReports(commentCurrentPage, commentCurrentSortOrder);
-    });
-
     $(document).on('click', '#commentPunish, #commentPass', function () {
         let btnId = $(this).attr('id');
         let reportId = $('#commentReportId').text();
         updateCommentReport(reportId, btnId);
-    });
-
-    // 초기 댓글 신고 목록 로드
-    $('#comment-tab').on('shown.bs.tab', function (e) {
-        fetchCommentReports(commentCurrentPage, commentCurrentSortOrder);
     });
 });
