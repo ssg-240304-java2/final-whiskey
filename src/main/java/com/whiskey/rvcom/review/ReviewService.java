@@ -73,6 +73,11 @@ public class ReviewService {
         return attributes;
     }
 
+    // override with params. return type = List<Review>
+    public List<Review> getReviewsByRestaurantAsList(Restaurant restaurant) {
+        return reviewRepository.findByRestaurant(restaurant);
+    }
+
     // TODO. Resource 담당자쪽 service에 구현되도록 업무요청 전달 -> 컨트롤러 모듈에서 받아 처리할 예정
     // DESC. 2024/08/11 19:27 - 업무요청 완료
 

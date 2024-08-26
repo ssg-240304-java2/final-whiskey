@@ -61,10 +61,10 @@ public class MemberController {
         this.favoriteService = favoriteService;
     }
 
-    @GetMapping("/")
-    public String home() {
-        return "mainPage";
-    }
+//    @GetMapping("/")
+//    public String home() {
+//        return "mainPage";
+//    }
 
     @GetMapping("/login")
     public String loginPage(HttpSession session) {
@@ -179,7 +179,7 @@ public class MemberController {
         // 북마크된 레스토랑의 평균 평점을 계산하여 가져옴
         Map<Long, Double> restaurantRatingsMap = new HashMap<>();
         for (Favorite favorite : paginatedFavorites) {
-            double averageRating = reviewService.getAverageRatingForRestaurant(favorite.getRestaurant());
+            double averageRating = reviewService.getAverageRatingForRestaurant(reviewService.getReviewsByRestaurantAsList(favorite.getRestaurant()));
             restaurantRatingsMap.put(favorite.getRestaurant().getId(), averageRating);
         }
 

@@ -30,23 +30,23 @@ public class TestController {
         return "mainPage";
     }
 
-    @GetMapping("/login")
-    // 로그인 페이지로 이동
-    public String getLogin() {
-        return "login";
-    }
+//    @GetMapping("/login")
+//    // 로그인 페이지로 이동
+//    public String getLogin() {
+//        return "login";
+//    }
 
-    @GetMapping("/register")
-    // 회원가입 페이지로 이동
-    public String getRegister() {
-        return "register";
-    }
-
-    @GetMapping("/mypage")
-    // 마이페이지로 이동
-    public String getMypage() {
-        return "mypage";
-    }
+//    @GetMapping("/register")
+//    // 회원가입 페이지로 이동
+//    public String getRegister() {
+//        return "register";
+//    }
+//
+//    @GetMapping("/mypage")
+//    // 마이페이지로 이동
+//    public String getMypage() {
+//        return "mypage";
+//    }
 
     @GetMapping("/restaurant")
     // 레스토랑 상세 페이지로 이동

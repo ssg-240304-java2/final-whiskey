@@ -12,8 +12,8 @@ spring:
       client:
         registration:
           naver:
-            client-id: ${{secrets.NAVER_CLIENT_ID}}
-            client-secret: ${{secrets.NAVER_CLIENT_SECRET}}
+            client-id: ${{ secrets.NAVER_CLIENT_ID }}
+            client-secret: ${{ secrets.NAVER_CLIENT_SECRET }}
             redirect-uri: "{baseUrl}/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
             scope: name, email, profile_image
@@ -32,7 +32,7 @@ spring:
             user-name-attribute: response
 
 kakao:
-  apikey: ${{ secrets.KAKAOMAP_API }}
+  apiKey: ${{ secrets.KAKAOMAP_API }}
 
 register:
   api: ${{ secrets.BUSINESS_API }}
