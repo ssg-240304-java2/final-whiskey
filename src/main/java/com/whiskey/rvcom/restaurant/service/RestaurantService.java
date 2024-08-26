@@ -200,6 +200,6 @@ public class RestaurantService {
     }
 
     public List<RestaurantSearchResultDTO> getRestaurantsBySearchText(String searchText) {
-        return restaurantRepository.findAllByNameContaining(searchText);
+        return restaurantRepository.searchByNameAndMenu(searchText);
     }
 }
