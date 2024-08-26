@@ -1,6 +1,10 @@
+var restaurantId = 2; // 예시로 고정된 값
+
 $(document).ready(function() {
 
-loadInquiries();
+    loadInquiries(1);
+$(document).on('click', '#post', clickPost);
+$(document).on('click', '#forward', clickForward);
     // 문의 삭제
     $('.delete-inquiry').click(function() {
         var inquiryId = $(this).data('id');
@@ -20,25 +24,24 @@ loadInquiries();
     $('#saveReply').click(saveInquiryReply);
 });
 
-
-function loadInquiries() {
-
-    const restaurantId = 2;
-
+function loadInquiries(pageNumber) {
     $.ajax({
         type: 'GET',
-        url: `/restaurant/${restaurantId}/inquiry`,
+        url: `/restaurant/${restaurantId}/allInquiry?pageNumber=${pageNumber}&pageSize=5`,
         content: "application/json",
-        success: function(response) {
-            console.log(response);
+        success: function(inquiries) {
+            //TODO: 삭제해야함
+            console.log(inquiries);
+            console.log(pageNumber);
+
             const $inquiriesTable = $('#inquiries-table');
             $inquiriesTable.empty();
             // 문의 목록을 테이블에 추가
-            response.forEach(function(inquiry, index) {
+            inquiries.content.forEach(function(inquiry, index) {
                 const tr = $('<tr></tr>');
                 tr.append('<td>' + (index + 1) + '</td>');
                 tr.append('<td>' + inquiry.content + '</td>');
-                tr.append('<td>' + inquiry.writer + '</td>');
+                tr.append('<td>' + inquiry.writer.name + '</td>');
                 tr.append('<td>' + inquiry.createdAt + '</td>');
                 tr.append('<td>' + (inquiry.reply ? '답변완료' : '미답변') + '</td>');
                 tr.append('<td>' +
@@ -46,6 +49,11 @@ function loadInquiries() {
                     '</td>');
                 $inquiriesTable.append(tr);
             });
+            renderPageNumber(inquiries.totalPages, pageNumber);
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX 요청 실패:", status, error); // 오류 시 콘솔 출력
+            alert('문의 내역을 불러오는 데 실패했습니다.');
         }
     });
 }
@@ -96,4 +104,50 @@ function saveInquiryReply() {
         }
     )
     $('#inquiryModal').modal('hide');
+}
+
+function renderPageNumber(totalPages, pageNumber) {
+    const pageList = $('#pagination-inquiry');
+    pageList.empty();
+
+    const postButton = `<li class=page-item ${1 === pageNumber ? 'disabled' : ''} id=post>
+                                    <a class="page-link" href="#" tabindex="-1">이전</a>
+                                </li>`;
+    pageList.append(postButton);
+
+    for (let i = 1; i <= totalPages; i++) {
+        pageList.append( `<li class="page-item ${i === pageNumber ? 'active' : ''}" id=${i}>
+                                    <a class="page-link" onclick="clickPage(${i})">${i}</a>
+                                </li>`);
+    }
+
+    const forwardButton = `<li class="page-item ${totalPages === pageNumber ? 'disabled' : ''}" id="forward" data-totalPage="${totalPages}">
+                                    <a class="page-link" href="#">다음</a>
+                                </li>`;
+    pageList.append(forwardButton);
+}
+
+function clickPage(pageNumber) {
+    loadInquiries(pageNumber);
+}
+
+function clickPost() {
+    const currentPageNumber = getCurrentPage();
+    if (currentPageNumber === 1) {
+        return;
+    }
+    loadInquiries(currentPageNumber - 1);
+}
+
+function clickForward() {
+    const currentPageNumber = getCurrentPage();
+    const totalPageNumber = parseInt($(this).attr('data-totalPage'));
+    if (currentPageNumber === totalPageNumber) {
+        return;
+    }
+    loadInquiries(currentPageNumber + 1);
+}
+
+function getCurrentPage() {
+    return $('.page-item-active').attr('id');
 }
