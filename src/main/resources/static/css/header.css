@@ -91,22 +91,43 @@ nav a:hover {
     color: #0073bb;
 }
 
-/* 반응형 디자인 */
-@media (max-width: 1024px) {
-    .search-bar {
-        width: 30%;
-    }
+/* 기존 코드 유지 */
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
 }
 
+.logo-image {
+    height: 60px;
+    margin-right: 10px;
+}
+
+.logo-text {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.logo-link:hover .logo-text {
+    color: #ff1a1a;
+}
+
+/* 반응형 디자인 수정 */
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .logo {
+    .logo-link {
         margin-bottom: 15px;
-        text-align: center;
+        justify-content: center;
+    }
+
+    .logo-image {
+        height: 30px;
     }
 
     .search-bar {

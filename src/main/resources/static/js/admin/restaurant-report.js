@@ -3,6 +3,7 @@ $(document).ready(function () {
     let currentSortOrder = 'desc';
     let currentPage = 0;
     const pageSize = 10;
+    let allReports = []; // 모든 리포트를 저장할 배열
 
     fetchRestaurantReports(currentPage, currentSortField, currentSortOrder);
     initializeSortButtons();
@@ -13,7 +14,8 @@ $(document).ready(function () {
             data: { page: page, sortField: sortField, sortOrder: sortOrder },
             type: 'GET',
             success: function (data) {
-                renderReportTable(data);
+                allReports = data.content; // 모든 리포트 저장
+                renderReportTable(allReports);
                 updatePaginationControls(data.number, data.totalPages);
             },
             error: function (xhr, status, error) {
@@ -22,11 +24,11 @@ $(document).ready(function () {
         });
     }
 
-    function renderReportTable(data) {
+    function renderReportTable(reports) {
         let tableBody = $('#restaurantReportList');
         tableBody.empty();
-        if (data && data.content && data.content.length > 0) {
-            data.content.forEach(function (report) {
+        if (reports && reports.length > 0) {
+            reports.forEach(function (report) {
                 let row = createReportRow(report);
                 tableBody.append(row);
             });
@@ -51,8 +53,48 @@ $(document).ready(function () {
     }
 
     function updatePaginationControls(currentPage, totalPages) {
-        $('#pre').prop('disabled', currentPage === 0);
-        $('#back').prop('disabled', currentPage === totalPages - 1);
+        let paginationElement = $('#pagination');
+        paginationElement.empty();
+
+        // 이전 페이지 버튼
+        paginationElement.append(`
+            <li class="page-item ${currentPage === 0 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        `);
+
+        // 페이지 번호
+        let startPage = Math.max(0, currentPage - 2);
+        let endPage = Math.min(totalPages - 1, currentPage + 2);
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationElement.append(`
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
+                </li>
+            `);
+        }
+
+        // 다음 페이지 버튼
+        paginationElement.append(`
+            <li class="page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        `);
+
+        // 페이지 클릭 이벤트 핸들러
+        $('.page-link').click(function(e) {
+            e.preventDefault();
+            let page = $(this).data('page');
+            if (page >= 0 && page < totalPages) {
+                currentPage = page;
+                fetchRestaurantReports(currentPage, currentSortField, currentSortOrder);
+            }
+        });
     }
 
     function loadRestaurantReportDetail(reportId) {
@@ -124,8 +166,23 @@ $(document).ready(function () {
                 currentSortOrder = 'desc';
             }
             updateSortButtonsUI();
-            fetchRestaurantReports(currentPage, currentSortField, currentSortOrder);
+            sortReports();
         });
+    }
+
+    function sortReports() {
+        allReports.sort((a, b) => {
+            if (currentSortField === 'reportedAt') {
+                return currentSortOrder === 'asc' 
+                    ? new Date(a.reportedAt) - new Date(b.reportedAt)
+                    : new Date(b.reportedAt) - new Date(a.reportedAt);
+            } else if (currentSortField === 'status') {
+                return currentSortOrder === 'asc'
+                    ? (a.checked === b.checked ? 0 : a.checked ? 1 : -1)
+                    : (a.checked === b.checked ? 0 : a.checked ? -1 : 1);
+            }
+        });
+        renderReportTable(allReports);
     }
 
     function updateSortButtonsUI() {
@@ -146,18 +203,6 @@ $(document).ready(function () {
     $(document).on('click', '#restaurantReportList tr', function () {
         let reportId = $(this).data('id');
         loadRestaurantReportDetail(reportId);
-    });
-
-    $(document).on('click', '#pre', function () {
-        if (currentPage > 0) {
-            currentPage--;
-            fetchRestaurantReports(currentPage, currentSortField, currentSortOrder);
-        }
-    });
-
-    $(document).on('click', '#back', function () {
-        currentPage++;
-        fetchRestaurantReports(currentPage, currentSortField, currentSortOrder);
     });
 
     $(document).on('click', '#punish, #pass', function () {

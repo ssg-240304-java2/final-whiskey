@@ -1,54 +1,127 @@
 
 $(document).ready(function () {
-    let reviewCurrentSortOrder = 'asc';
+    let reviewCurrentSortField = 'reportedAt';
+    let reviewCurrentSortOrder = 'desc';
     let reviewCurrentPage = 0;
     const reviewPageSize = 10;
 
-    function fetchReviewReports(page, sortOrder = 'asc') {
+    function fetchReviewReports(page, sortField, sortOrder) {
         $.ajax({
             url: /*[[@{/reviewreport/list}]]*/ '/reviewreport/list',
-            data: { page: page, sortOrder: sortOrder },
+            data: { page: page, sortField: sortField, sortOrder: sortOrder },
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                console.log('Review reports data:', data);
-                let tableBody = $('#reviewReportList');
-                tableBody.empty();
-                if (data && data.content && data.content.length > 0) {
-                    data.content.forEach(function (report) {
-                        let formattedDate = new Date(report.reportedAt).toLocaleDateString();
-                        let statusClass = report.checked ? 'report-completed' : '';
-                        let statusText = report.checked ? '처리 완료' : '처리 전';
-                        const row = `
-                            <tr data-id="${report.id}">
-                                <td>${report.id}</td>
-                                <td>${report.title}</td>
-                                <td>${report.content}</td>
-                                <td>${report.review.content}</td>
-                                <td>${formattedDate}</td>
-                                <td class="report-status ${statusClass}" aria-label="처리 상태: ${statusText}">${statusText}</td>
-                            </tr>`;
-                        tableBody.append(row);
-                    });
-                    updateReviewPaginationControls(data.number, data.totalPages);
-                } else {
-                    console.log('No review reports found');
-                    tableBody.append('<tr><td colspan="6">신고된 리뷰가 없습니다.</td></tr>');
-                }
+                renderReviewReportTable(data.content);
+                updateReviewPaginationControls(data.number, data.totalPages);
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching review reports:', error);
-                console.error('XHR status:', status);
-                console.error('XHR response:', xhr.responseText);
-                $('#reviewReportList').html('<tr><td colspan="6">데이터를 불러오는 중 오류가 발생했습니다. 자세한 내용은 콘솔을 확인해주세요.</td></tr>');
+                $('#reviewReportList').html('<tr><td colspan="6">데이터를 불러오는 중 오류가 발생했습니다.</td></tr>');
             }
         });
     }
 
-    function updateReviewPaginationControls(currentPage, totalPages) {
-        $('#reviewPre').prop('disabled', currentPage === 0);
-        $('#reviewBack').prop('disabled', currentPage === totalPages - 1);
+    function renderReviewReportTable(reports) {
+        let tableBody = $('#reviewReportList');
+        tableBody.empty();
+        if (reports && reports.length > 0) {
+            reports.forEach(function (report) {
+                let row = createReviewReportRow(report);
+                tableBody.append(row);
+            });
+        } else {
+            tableBody.append('<tr><td colspan="6">신고된 리뷰가 없습니다.</td></tr>');
+        }
     }
+
+    function createReviewReportRow(report) {
+        let formattedDate = new Date(report.reportedAt).toLocaleDateString();
+        let statusClass = report.checked ? 'report-completed' : '';
+        let statusText = report.checked ? '처리 완료' : '처리 전';
+        return `
+            <tr data-id="${report.id}">
+                <td>${report.id}</td>
+                <td>${report.title}</td>
+                <td>${report.content}</td>
+                <td>${report.review.content}</td>
+                <td>${formattedDate}</td>
+                <td class="report-status ${statusClass}" aria-label="처리 상태">${statusText}</td>
+            </tr>
+        `;
+    }
+
+    function updateReviewPaginationControls(currentPage, totalPages) {
+        let paginationElement = $('#reviewPagination');
+        paginationElement.empty();
+
+        // 이전 페이지 버튼
+        paginationElement.append(`
+            <li class="page-item ${currentPage === 0 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
+                    <span aria-hidden="true">«</span>
+                </a>
+            </li>
+        `);
+
+        // 페이지 번호
+        let startPage = Math.max(0, currentPage - 2);
+        let endPage = Math.min(totalPages - 1, currentPage + 2);
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationElement.append(`
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
+                </li>
+            `);
+        }
+
+        // 다음 페이지 버튼
+        paginationElement.append(`
+            <li class="page-item ${currentPage === totalPages - 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
+                    <span aria-hidden="true">»</span>
+                </a>
+            </li>
+        `);
+
+        // 페이지 클릭 이벤트 핸들러
+        $('.page-link').click(function(e) {
+            e.preventDefault();
+            let page = $(this).data('page');
+            if (page >= 0 && page < totalPages) {
+                reviewCurrentPage = page;
+                fetchReviewReports(reviewCurrentPage, reviewCurrentSortField, reviewCurrentSortOrder);
+            }
+        });
+    }
+
+    // 정렬 버튼 이벤트 리스너
+    $('.sort-btn').click(function () {
+        let newSortField = $(this).data('sort');
+        if (newSortField === reviewCurrentSortField) {
+            reviewCurrentSortOrder = reviewCurrentSortOrder === 'asc' ? 'desc' : 'asc';
+        } else {
+            reviewCurrentSortField = newSortField;
+            reviewCurrentSortOrder = 'desc';
+        }
+        updateSortButtonsUI();
+        fetchReviewReports(reviewCurrentPage, reviewCurrentSortField, reviewCurrentSortOrder);
+    });
+
+    function updateSortButtonsUI() {
+        $('.sort-btn').removeClass('active');
+        $(`.sort-btn[data-sort="${reviewCurrentSortField}"]`).addClass('active');
+        $('.sort-icon').removeClass('fa-sort-up fa-sort-down').addClass('fa-sort');
+        $(`.sort-btn[data-sort="${reviewCurrentSortField}"] .sort-icon`)
+            .removeClass('fa-sort')
+            .addClass(reviewCurrentSortOrder === 'asc' ? 'fa-sort-up' : 'fa-sort-down');
+    }
+
+    // 초기 리뷰 신고 목록 로드
+    $('#review-tab').on('shown.bs.tab', function (e) {
+        fetchReviewReports(reviewCurrentPage, reviewCurrentSortField, reviewCurrentSortOrder);
+    });
 
     function loadReviewReportDetail(reportId) {
         if (reportId === undefined || reportId === null) {
@@ -89,7 +162,7 @@ $(document).ready(function () {
                 data: { btnId: btnId },
                 success: function () {
                     alert('리뷰 신고처리가 완료되었습니다.');
-                    fetchReviewReports(reviewCurrentPage, reviewCurrentSortOrder);
+                    fetchReviewReports(reviewCurrentPage, reviewCurrentSortField, reviewCurrentSortOrder);
                     loadReviewReportDetail(reportId);
                     // UI 업데이트
                     $(`tr[data-id="${reportId}"] .report-status`)
@@ -110,31 +183,9 @@ $(document).ready(function () {
         loadReviewReportDetail(reportId);
     });
 
-    $(document).on('click', '#reviewReportDate', function () {
-        reviewCurrentSortOrder = reviewCurrentSortOrder === 'asc' ? 'desc' : 'asc';
-        fetchReviewReports(reviewCurrentPage, reviewCurrentSortOrder);
-    });
-
-    $(document).on('click', '#reviewPre', function () {
-        if (reviewCurrentPage > 0) {
-            reviewCurrentPage--;
-            fetchReviewReports(reviewCurrentPage, reviewCurrentSortOrder);
-        }
-    });
-
-    $(document).on('click', '#reviewBack', function () {
-        reviewCurrentPage++;
-        fetchReviewReports(reviewCurrentPage, reviewCurrentSortOrder);
-    });
-
     $(document).on('click', '#reviewPunish, #reviewPass', function () {
         let btnId = $(this).attr('id');
         let reportId = $('#reviewReportId').text();
         updateReviewReport(reportId, btnId);
-    });
-
-    // 초기 리뷰 신고 목록 로드
-    $('#review-tab').on('shown.bs.tab', function (e) {
-        fetchReviewReports(reviewCurrentPage, reviewCurrentSortOrder);
     });
 });
