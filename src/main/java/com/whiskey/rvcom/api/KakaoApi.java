@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class KakaoApi {
 
 //    private static final Logger log = LoggerFactory.getLogger(KakaoApi.class);
-    @Value("${kakao.apiKey}")
+    @Value("${kakao.apikey}")
     private String apiKey;
 
     @GetMapping("/apiKey")
