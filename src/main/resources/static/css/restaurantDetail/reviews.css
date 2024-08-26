@@ -236,3 +236,18 @@
         margin-top: 10px;
     }
 }
+
+
+/* 신고 버튼 스타일 */
+.report-button {
+    background: none;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    padding: 5px;
+    transition: transform 0.2s;
+}
+
+.report-button:hover {
+    transform: scale(1.1);
+}

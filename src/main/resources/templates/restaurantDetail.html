@@ -27,10 +27,11 @@
 -->
 <div th:replace="fragments/restaurantBanner :: restaurantBanner(
         name=${restaurant.getName()},
+        imageUrl=${restaurantCoverImageUrl != null ? restaurantCoverImageUrl:'https://via.placeholder.com/1200x400'},
         rating='★★★★☆',
         reviewCount='1,234',
         price='₩₩',
-        category=${restaurant.getCategory()},
+        category=${restaurant.getCategory().getTitle()},
         status=${status},
         hours=${hours}
     )"></div>
@@ -57,21 +58,21 @@
             <div id="modal" class="modal">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2>신고하기</h2>
-                        <span id="closeModalBtn" class="close-btn">X</span>
+                        <h2><i class="fas fa-flag"></i> 신고하기</h2>
+                        <span id="closeModalBtn" class="close-btn">&times;</span>
                     </div>
                     <div class="modal-body">
                         <form id="reportModalForm">
-                            <div>
-                                <label for="reportTile">신고 제목</label>
-                                <input type="text" id="reportTile" name="reportTitle" required>
+                            <div class="form-group">
+                                <label for="reportTitle">신고 제목</label>
+                                <input type="text" id="reportTitle2" name="reportTitle" required>
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label for="reportContent">신고 내용</label>
-                                <textarea id="reportContent" name="reportContent" rows="3" required></textarea>
+                                <textarea id="reportContent2" name="reportContent" rows="5" required></textarea>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit">신고</button>
+                                <button type="submit" class="submit-btn">신고 제출</button>
                             </div>
                         </form>
                     </div>
@@ -80,11 +81,47 @@
         </div>
         <!-- 신고 폼 끝 -->
 
+        <!-- 리뷰 및 댓글 신고 모달 추가 -->
+        <div id="reportModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-flag"></i> 신고하기</h2>
+                    <span class="close-btn">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <input type="hidden" id="reportType" name="reportType">
+                        <input type="hidden" id="reportTargetId" name="reportTargetId">
+                        <div class="form-group">
+                            <label for="reportTitle">신고 제목</label>
+                            <input type="text" id="reportTitle" name="reportTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reportContent">신고 내용</label>
+                            <textarea id="reportContent" name="reportContent" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">신고 제출</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
         <!-- 각 탭 콘텐츠 영역 -->
         <div class="content-area">
             <div class="flex-container">
-                <div class="tab-content active" id="info" th:replace="fragments/restaurantDetail/info :: info"></div>
-                <div class="tab-content" id="reviews" th:replace="fragments/restaurantDetail/reviews :: reviews"></div>
+                <div class="tab-content active" id="info" th:replace="fragments/restaurantDetail/info :: info(
+                    monday=${monday},
+                    tuesday=${tuesday},
+                    wednesday=${wednesday},
+                    thursday=${thursday},
+                    friday=${friday},
+                    saturday=${saturday},
+                    sunday=${sunday},
+                    menuList=${menuList}
+                )"></div>
+                <div></div>
+                <div class="tab-content" id="reviews"
+                     th:replace="fragments/restaurantDetail/reviews :: reviews(ratingPhase=${ratingPhase}, reviews=${reviews})"></div>
                 <div class="tab-content" id="inquiries"
                      th:replace="fragments/restaurantDetail/inquiries :: inquiries"></div>
                 <div class="tab-content" id="notices" th:replace="fragments/restaurantDetail/notices :: notices"></div>
@@ -123,22 +160,28 @@
 </div>
 
 <!-- 공지사항 작성 모달 추가 -->
-<div th:replace="~{fragments/modal :: modal('noticeModal', '공지사항 작성')}">
-    <div th:fragment="content">
-        <div class="notice-form">
-            <form id="noticeForm">
-                <div class="form-group">
-                    <label for="noticeTitle">제목</label>
-                    <input type="text" id="noticeTitle" name="title" required>
+<div>
+    <div class="modal" id="noticeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>공지사항 작성</h2>
+                <span class="close close-btn">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="notice-form">
+                    <div class="form-group">
+                        <label for="title">제목</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">내용</label>
+                        <textarea id="content" name="content" rows="4" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="save-notice">작성</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="noticeContent">내용</label>
-                    <textarea id="noticeContent" name="content" rows="4" required></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">작성</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

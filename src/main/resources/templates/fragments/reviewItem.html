@@ -1,7 +1,7 @@
 <!-- src/main/resources/templates/fragments/reviewItem.html -->
-<div th:fragment="reviewItem(title, content, author, date, rating, images, menus, likes, comments)">
+<div th:fragment="reviewItem(title, content, author, date, rating, images, menus, likes, comments, id)">
     <div class="review-item">
-        <button class="report-button" style="padding-top: 5px; float: right;" id="reviewReport">신고하기</button>
+        <button class="report-button review-report" style="padding-top: 5px; float: right;" th:id="'reviewReport' + ${review.id}">🚨</button>
         <h4 class="review-title" th:text="${title}">리뷰 제목</h4>
         <div class="review-header">
             <div class="review-text">
@@ -13,37 +13,6 @@
                 <div class="rating" th:text="${rating}">평점</div>
             </div>
         </div>
-<!--        <div class="review-images">-->
-<!--            &lt;!&ndash; TODO: 이미지 표시 로직 구현-->
-<!--                 - 이미지 목록을 순회하며 표시-->
-<!--                 - 이미지 크기 조정 및 레이아웃 최적화-->
-<!--                 - 이미지 클릭 시 확대 기능 추가 &ndash;&gt;-->
-<!--&lt;!&ndash;            <img th:src=@{${images.filePath}} src="https://via.placeholder.com/150" alt="Review Image 1" class="review-image">&ndash;&gt;-->
-<!--&lt;!&ndash;            <img src="https://via.placeholder.com/150" alt="Review Image 2" class="review-image">&ndash;&gt;-->
-<!--&lt;!&ndash;            <img src="https://via.placeholder.com/150" alt="Review Image 3" class="review-image">&ndash;&gt;-->
-
-<!--            <img th:each="image : ${images}" th:src="@{|https://kr.object.ncloudstorage.com/whiskey-file/${image.imageFile.uuidFileName}|}" alt="Review Image" class="review-image">-->
-<!--&lt;!&ndash;            <img src="https://kr.object.ncloudstorage.com/whiskey-file/279278f9-41d5-408c-b477-0850bd1a8c41.jpg" alt="Review Image 3" class="review-image">&ndash;&gt;-->
-<!--            <div class="more-images">-->
-<!--                <span>+ 더보기</span>-->
-<!--            </div>-->
-<!--        </div>-->
-
-<!--        <div class="review-images" th:if="${images.size() > 0}">-->
-<!--            <div class="image-container">-->
-<!--                <img th:each="image, iterStat : ${images}"-->
-<!--                     th:if="${iterStat.index < 4}"-->
-<!--                     th:src="@{|https://kr.object.ncloudstorage.com/whiskey-file/${image.imageFile.uuidFileName}|}"-->
-<!--                     alt="Review Image"-->
-<!--                     class="review-image">-->
-
-<!--                &lt;!&ndash; 더보기 버튼 조건 &ndash;&gt;-->
-<!--                <div th:if="${images.size() > 4}" class="more-images">-->
-<!--                    <span>+ 더보기</span>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-
         <div class="review-images" th:if="${images.size() > 0}">
             <div class="image-container" style="display: flex; gap: 10px; flex-wrap: wrap;">
                 <div th:each="image, iterStat : ${images}" th:if="${iterStat.index < 4}">
@@ -61,78 +30,41 @@
 
 
         <div class="menu-info">
-<!--            <span class="menu-name">메뉴 이름</span>-->
-<!--            <span class="menu-price">메뉴 가격</span>-->
-
-<!--            <span class="menu-name"><p th:text="${menu.itemName}"></p></span>-->
-<!--            <span class="menu-price">메뉴 가격</span>-->
-
             <div th:each="menu : ${menus.paidItems}">
                 <span th:text="${'메뉴 이름: ' + menu.itemName + ' / '}">메뉴 이름</span>
                 <span th:text="${'단가: ' + menu.price + '원 / '}">메뉴 가격</span>
-<!--                <span th:text="${'단가: ' + #numbers.formatDecimal(menu.price, 0, '###,###') + '원 / '}">메뉴 가격</span>-->
                 <span th:text="${'수량: ' + menu.quantity}">메뉴 이름</span>
             </div>
-
-<!--            <p class="menu-name" th:text="${'메뉴 이름: ' + menu.itemName}">메뉴 이름</p>-->
-<!--            <p class="menu-price" th:text="${'단가: ' + menu.price + '원'}">메뉴 가격</p>-->
-<!--            <p class="menu-name" th:text="${'수량: ' + menu.quantity}">메뉴 이름</p>-->
-
-<!--            <p th:text="${'총 금액: ' + menus.totalPrice}"}></p>-->
         </div>
         <div class="review-actions">
-<!--            <button class="like-button">👍 좋아요 (15)</button>-->
-            <button class="like-button">
+            <button th:id="${'review-like-button-' + id}" class="like-button" >
                 <span th:text="'👍 좋아요 (' + ${likes.size()} + ')'"></span>
             </button>
-<!--            <button class="dislike-button">👎 싫어요 (2)</button>-->
-<!--            <button class="comment-button">💬 댓글 (3)</button>-->
             <button class="comment-button">
-                <span th:text="'💬 댓글 (' + ${comments.size()} + ')'"></span>
+                <span th:id="'comment-button-' + ${id}" th:text="'💬 댓글 (' + ${comments.size()} + ')'"></span>
             </button>
 
-<!--            <button class="comment-button"><span th:text="💬 댓글${reviewCommentCount}"></span></button>-->
         </div>
         <div class="comments-section" style="display: none;">
-            <div class="comments-list">
-                <!-- TODO: 댓글 목록 표시 로직 구현
-                     - 댓글 데이터를 서버에서 가져와 동적으로 표시
-                     - 페이지네이션 구현
+            <div class="comments-list" th:id="'commentsBox' + ${id}">
+                     <!-- - 페이지네이션 구현
                      - 댓글 정렬 기능 추가 (최신순, 추천순 등) -->
                 <!-- 예시 댓글 -->
                 <div class="comment" th:each="comment : ${comments}">
                     <p th:text="${comment.content}"></p>
-                    <button class="report-button" style="float: right;" id="commentReport">신고하기</button>
+                    <button class="report-button comment-report" style="float: right;" th:id="'commentReport' + ${comment.id}" >🚨</button>
                     <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')} + ' / ' + ${comment.commenter.nickname}"></span>
                 </div>
-<!--                <div class="comment" th:each="comment : ${comments}">-->
-<!--                    <p th:text="${comment.content}"></p>-->
-<!--&lt;!&ndash;                    <a th:href="/report/${comment.id}"></a>&ndash;&gt;-->
-<!--&lt;!&ndash;                    <span th:text="${comment.formated}"></span>&ndash;&gt;-->
-<!--                </div>-->
-<!--                <div class="comment">-->
-<!--                    <p>정말 맛있어 보이네요! 꼭 가보고 싶습니다.</p>-->
-<!--                    <button style="float: right;" id="commentReport">신고하기</button> &lt;!&ndash; 이 버튼도 같이 부탁드릴게용 &ndash;&gt;-->
-<!--                    <span>김철수 - 2024-05-20</span>-->
-<!--                </div>-->
-<!--                <div class="comment">-->
-<!--                    <p>트러플 크림 파스타 저도 먹어봤는데 정말 맛있었어요!</p>-->
-<!--                    <span>이영희 - 2024-05-21</span>-->
-<!--                </div>-->
-<!--                <div class="comment">-->
-<!--                    <p>가격대비 양은 어떤가요?</p>-->
-<!--                    <span>박지성 - 2024-05-22</span>-->
-
-<!--                </div>-->
             </div>
             <div class="comment-form">
-                <textarea class="comment-input" placeholder="댓글을 입력하세요"></textarea>
-                <button class="submit-comment">댓글 작성</button>
-                <!-- TODO: 댓글 작성 기능 구현
-                     - 댓글 내용 유효성 검사
-                     - 댓글 작성 API 연동
-                     - 작성 완료 후 댓글 목록 갱신 -->
+                <textarea th:id="'comment' + ${id}" class="comment-input" placeholder="댓글을 입력하세요"></textarea>
+                <button class="submit-comment"
+                        th:onclick="'submitCommentAsync(' + ${id} + ')'">
+                    댓글 작성
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+

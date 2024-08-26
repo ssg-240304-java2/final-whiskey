@@ -1,14 +1,22 @@
-<div th:fragment="info" class="tab-content" id="info" role="tabpanel" aria-labelledby="info-tab">
+<div th:fragment="info(monday, tuesday, wednesday, thursday, friday, saturday, sunday, menuList)" class="tab-content"
+     id="info"
+     role="tabpanel" aria-labelledby="info-tab">
     <div class="menu-section">
-        <button style="float: right;" id="restaurantReport">신고하기</button>
+        <button id="restaurantReport" class="report-btn">
+            <i class="fas fa-flag"></i> 신고하기
+        </button>
         <h2><i class="fas fa-utensils"></i> 인기 메뉴</h2>
-        <div class="menu-items-container">
-            <div class="menu-items">
-                <div th:replace="fragments/menuItem :: menuItem('트러플 크림 파스타', '18,000')"></div>
-                <div th:replace="fragments/menuItem :: menuItem('마르게리타 피자', '22,000')"></div>
+        <div th:if="${!menuList.isEmpty()}" class="menu-items-container">
+            <div class="menu-items" th:each="menu: ${menuList}">
+                <div th:replace="fragments/menuItem :: menuItem(${menu.getName()}, ${menu.getPrice()})"></div>
             </div>
         </div>
-        <button class="view-full-menu"><i class="fas fa-list"></i> 전체 메뉴 보기</button>
+        <div th:if="${menuList.isEmpty()}" class="menu-items-container">
+            <div class="menu-items">
+                <p>영업점에서 등록한 메뉴가 없습니다.</p>
+            </div>
+        </div>
+        <button th:if="${!menuList.isEmpty()}" class="view-full-menu"><i class="fas fa-list"></i> 전체 메뉴 보기</button>
     </div>
 
     <div class="tab-divider"></div>
@@ -20,31 +28,31 @@
     <table class="hours-table">
         <tr>
             <td><i class="far fa-clock"></i> 월요일</td>
-            <td>11:00 AM - 11:00 PM</td>
+            <td th:text="${monday}">11:00 AM - 11:00 PM</td>
         </tr>
         <tr>
             <td><i class="far fa-clock"></i> 화요일</td>
-            <td>11:00 AM - 11:00 PM</td>
+            <td th:text="${tuesday}">11:00 AM - 11:00 PM</td>
         </tr>
         <tr>
             <td><i class="far fa-clock"></i> 수요일</td>
-            <td>11:00 AM - 11:00 PM</td>
+            <td th:text="${wednesday}">11:00 AM - 11:00 PM</td>
         </tr>
         <tr>
             <td><i class="far fa-clock"></i> 목요일</td>
-            <td>11:00 AM - 11:00 PM</td>
+            <td th:text="${thursday}">11:00 AM - 11:00 PM</td>
         </tr>
         <tr>
             <td><i class="far fa-clock"></i> 금요일</td>
-            <td>11:00 AM - 12:00 AM (다음날)</td>
+            <td th:text="${friday}">11:00 AM - 12:00 AM (다음날)</td>
         </tr>
         <tr>
             <td><i class="far fa-clock"></i> 토요일</td>
-            <td>11:00 AM - 12:00 AM (다음날)</td>
+            <td th:text="${saturday}">11:00 AM - 12:00 AM (다음날)</td>
         </tr>
         <tr>
             <td><i class="far fa-clock"></i> 일요일</td>
-            <td>11:00 AM - 11:00 PM</td>
+            <td th:text="${sunday}">11:00 AM - 11:00 PM</td>
         </tr>
     </table>
 

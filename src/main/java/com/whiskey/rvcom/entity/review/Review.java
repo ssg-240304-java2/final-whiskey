@@ -1,5 +1,7 @@
 package com.whiskey.rvcom.entity.review;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.receipt.ReceiptData;
 import com.whiskey.rvcom.entity.resource.ImageFile;
@@ -43,6 +45,7 @@ public class Review {
     private Restaurant restaurant;  // 음식점 객체의 정보
 
     @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<ReviewImage> reviewImages; // 리뷰 이미지 리스트
 
     @ManyToOne
@@ -50,6 +53,7 @@ public class Review {
     private Member reviewer;    // 리뷰 작성자
 
     @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<ReviewLike> likes; // 좋아요 리스트
 
     @OneToOne
@@ -57,5 +61,6 @@ public class Review {
     private ReceiptData receiptData;    // 영수증 정보
 
     @OneToMany(mappedBy = "review", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<ReviewComment> reviewComments; // 리뷰 댓글 리스트
 }

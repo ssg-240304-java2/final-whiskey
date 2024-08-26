@@ -117,6 +117,12 @@ body {
     margin-right: 10px;
 }
 
+.close-now {
+    color: #931e1e;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
 /* 탭 스타일 */
 .tabs {
     display: flex;
@@ -208,13 +214,25 @@ body {
     transition: color 0.3s ease;
 }
 
-.report-button {
-    background: none;
+/* 신고 버튼 스타일 */
+.report-btn {
+    float: right;
+    background-color: #d32323;
+    color: white;
     border: none;
-    color: #f15c4f;
-    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: color 0.3s ease;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.report-btn:hover {
+    background-color: #f15c4f;
+}
+
+.report-btn i {
+    margin-right: 5px;
 }
 
 .comment-button:hover {
@@ -303,12 +321,12 @@ body {
 .modal-content {
     background-color: #fff;
     margin: 10% auto;
-    padding: 24px;
+    padding: 30px;
     border: none;
     width: 90%;
     max-width: 500px;
-    border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     animation: slideIn 0.3s ease;
 }
 
@@ -317,18 +335,20 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    padding-bottom: 15px;
 }
 
 .modal-header h2 {
     margin: 0;
-    font-size: 21px;
+    font-size: 24px;
     font-weight: 700;
     color: #d32323;
 }
 
 .close-btn {
     color: #999;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: normal;
     cursor: pointer;
     transition: color 0.2s ease;
@@ -337,7 +357,6 @@ body {
 .close-btn:hover,
 .close-btn:focus {
     color: #666;
-    text-decoration: none;
 }
 
 .modal-body {
@@ -345,48 +364,49 @@ body {
 }
 
 .form-group {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-weight: 600;
     color: #333;
 }
 
 .form-group input,
 .form-group textarea {
-    width: 96%;
-    padding: 10px;
+    width: 100%;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 3px;
-    font-size: 14px;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
-    border-color: #0073bb;
+    border-color: #d32323;
     outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 115, 187, 0.2);
+    box-shadow: 0 0 0 2px rgba(211, 35, 35, 0.1);
 }
 
-.btn-primary {
+.submit-btn {
     background-color: #d32323;
     color: white;
     border: none;
-    padding: 12px 18px;
-    border-radius: 3px;
+    padding: 12px 20px;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.3s ease;
+    width: 100%;
 }
 
-.btn-primary:hover {
+.submit-btn:hover {
     background-color: #f15c4f;
 }
-
 
 @keyframes slideIn {
     from {
@@ -440,6 +460,11 @@ body {
 
     .tab {
         flex: 1 0 33.33%;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
     }
 }
 

@@ -22,24 +22,19 @@
     <div th:replace="~{fragments/banner :: banner('주변 맛집', '인천시, ...')}"></div>
 
     <div class="filter-section">
-        <!-- TODO: 백엔드 개발자님들께,
-             1. 정렬 기준과 음식 종류에 따른 필터링 로직을 구현해주세요.
-             2. 선택된 옵션에 따라 데이터베이스 쿼리를 동적으로 생성하고 실행해주세요.
-             3. 필터링된 결과를 프론트엔드로 반환하는 API 엔드포인트를 만들어주세요.(가능?)
-             4. 성능 최적화를 위해 필요한 경우 인덱싱을 고려해주세요.
-        -->
-        <!-- 필터 옵션 추가 -->
         <select class="filter-dropdown">
             <option value="">정렬 기준</option>
             <option value="rating">평점순</option>
             <option value="distance">거리순</option>
         </select>
         <select class="filter-dropdown">
-            <option value="">음식 종류</option>
-            <option value="korean">한식</option>
-            <option value="japanese">일식</option>
-            <option value="chinese">중식</option>
-            <option value="western">양식</option>
+            <option disabled, hidden selected value="">음식 종류</option>
+            <option value="ALL">전체</option>
+            <option th:each="category: ${categoryList}" value="${category}">[[${category.getTitle()}]]</option>
+            <!--            <option value="korean">한식</option>-->
+            <!--            <option value="japanese">일식</option>-->
+            <!--            <option value="chinese">중식</option>-->
+            <!--            <option value="western">양식</option>-->
         </select>
     </div>
 
@@ -53,9 +48,20 @@
         <!-- TODO: 레스토랑 데이터는 이름, 거리, 음식 종류, 영업 시간, 평점을 포함해야 함 -->
         <!-- DONE: Thymeleaf를 사용하여 서버에서 전달받은 레스토랑 목록을 반복하여 카드 생성 -->
         <!-- DONE: 예시: <div th:each="restaurant : ${restaurants}" th:replace="fragments/restaurantCard :: restaurantCard(${restaurant.name}, ${restaurant.distance}, ${restaurant.cuisine}, ${restaurant.hours}, ${restaurant.rating})"></div> -->
+
+        <!-- 스켈레톤 UI를 위한 플레이스홀더 -->
+        <div class="restaurant-card skeleton" th:each="i : ${#numbers.sequence(1, 6)}">
+            <div class="restaurant-image-placeholder skeleton-image"></div>
+            <div class="restaurant-info">
+                <div class="skeleton-text skeleton-title"></div>
+                <div class="skeleton-text skeleton-details"></div>
+                <div class="skeleton-text skeleton-hours"></div>
+                <div class="skeleton-text skeleton-rating"></div>
+            </div>
+        </div>
     </div>
 </div>
-<!-- <div th:replace="fragments/footer :: footer"></div> -->
+
 <script>
     window.onload = function () {
         kakao.maps.load(function () {
