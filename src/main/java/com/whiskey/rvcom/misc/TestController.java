@@ -53,13 +53,11 @@ public class TestController {
     public String getRestaurantDetail() {
         return "restaurantDetail";
     }
-
 //    @GetMapping("/receipt-verification")
 //    // 영수증 인증 페이지로 이동
 //    public String getReceiptVerification() {
 //        return "receiptVerification";
 //    }
-
     @GetMapping("/write-review")
     // 리뷰 작성 페이지로 이동
     public String getWriteReview() {
@@ -72,11 +70,11 @@ public class TestController {
         return "register-store";
     }
 
-    @GetMapping("/owner-dashboard")
-    // 점주 관리자 대시보드 페이지로 이동
-    public String getOwnerDashboard() {
-        return "owner/dashboard";
-    }
+//    @GetMapping("/owner-dashboard")
+//    // 점주 관리자 대시보드 페이지로 이동
+//    public String getOwnerDashboard() {
+//        return "owner/dashboard";
+//    }
 
     @GetMapping("/adminMain")
     // 관리자-신고 페이지로 이동
