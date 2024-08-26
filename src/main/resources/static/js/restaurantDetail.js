@@ -89,23 +89,26 @@ function setupReviewAndCommentReports() {
 
     // 리뷰 및 댓글 신고 버튼 클릭 이벤트
     document.addEventListener("click", function(e) {
-        if (e.target.classList.contains("review-report")) {
-            openReportModal("review", e.target.closest(".review-item").dataset.reviewId);
-        } else if (e.target.classList.contains("comment-report")) {
-            openReportModal("comment", e.target.closest(".comment").dataset.commentId);
+        if (e.target.classList.contains("review-report") || e.target.classList.contains("comment-report")) {
+            e.stopPropagation();  // 이벤트 전파를 막음
+
+            // 버튼의 id 값을 가져옴 (예: "commentReport123", "reviewReport45")
+            const fullId = e.target.id;
+
+            // 정규 표현식을 사용하여 "reviewReport" 또는 "commentReport" 접두사 제거 후 숫자만 추출
+            const id = fullId.replace(/^(reviewReport|commentReport)/, "");
+
+            // 타입을 결정 (commentReport 또는 reviewReport 접두사에 따라)
+            const type = fullId.startsWith("reviewReport") ? "review" : "comment";
+
+            // 모달 열기 함수 호출
+            openReportModal(type, id);
         }
     });
 
     // 모달 닫기
     closeBtn.onclick = function() {
         reportModal.style.display = "none";
-    }
-
-    // 모달 외부 클릭 시 닫기
-    window.onclick = function(event) {
-        if (event.target == reportModal) {
-            reportModal.style.display = "none";
-        }
     }
 
     // 폼 제출
@@ -117,31 +120,68 @@ function setupReviewAndCommentReports() {
 
 function openReportModal(type, id) {
     const reportModal = document.getElementById("reportModal");
-    document.getElementById("reportType").value = type;
-    document.getElementById("reportTargetId").value = id;
-    reportModal.style.display = "block";
+    if (id) {
+        document.getElementById("reportType").value = type;
+        document.getElementById("reportTargetId").value = id; // 모달에 ID 설정
+        reportModal.style.display = "block";
+
+    } else {
+        console.error("No target ID found for reporting");
+    }
 }
 
 function submitReport() {
-    const form = document.getElementById("reportForm");
-    const formData = new FormData(form);
-    
-    // TODO: 백엔드 API 호출하여 신고 데이터 전송
-    fetch('/api/report', {
+    // 폼에서 타입과 ID 가져오기
+    const type = document.getElementById("reportType").value;
+    const targetId = document.getElementById("reportTargetId").value;
+    const reportTitile = document.getElementById("reportTitle").value;
+    const reportContent = document.getElementById("reportContent").value;
+
+    // 타입에 따라 URL 설정
+    const url = type === "review" ? "/reviewreport/regist" : "/reviewcommentreport/regist";
+
+    // JSON 데이터를 생성
+    const data = {
+        title: reportTitile,  // 여기에 적절한 제목을 설정합니다.
+        content: reportContent,  // 여기에 적절한 내용 입력
+        reportedAt: new Date().toISOString(), // ISO 형식의 현재 시간
+        isChecked: false,  // 초기 상태로 설정
+        isVisible: true,  // 초기 상태로 설정
+        id: targetId
+    };
+
+    // 신고 데이터 전송
+    fetch(url, {
         method: 'POST',
-        body: formData
+        headers: {
+            'Content-Type': 'application/json'  // JSON 형식으로 보낸다는 것을 서버에 알림
+        },
+        body: JSON.stringify(data)  // 데이터를 JSON 문자열로 변환하여 전송
     })
-    .then(response => response.json())
-    .then(data => {
-        alert("신고가 접수되었습니다.");
-        document.getElementById("reportModal").style.display = "none";
-        form.reset();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert("신고 접수 중 오류가 발생했습니다.");
-    });
-}function setupTabs() {
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        })
+        .then(data => {
+            alert("신고가 접수되었습니다.");
+            document.getElementById("reportModal").style.display = "none";
+            document.getElementById("reportForm").reset();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("신고 접수 중 오류가 발생했습니다.");
+        });
+}
+
+// 초기화 함수 호출
+setupReviewAndCommentReports();
+
+//////////////////////////////
+
+
+
+function setupTabs() {
     const tabs = document.querySelectorAll(".tab");
     const tabContents = document.querySelectorAll(".tab-content");
     const restaurantId = document.getElementById("restaurantId").value;
