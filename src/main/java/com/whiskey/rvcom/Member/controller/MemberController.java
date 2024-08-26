@@ -178,7 +178,7 @@ public class MemberController {
 
         // 북마크된 레스토랑의 평균 평점을 계산하여 가져옴
         Map<Long, Double> restaurantRatingsMap = new HashMap<>();
-        for (Favorite favorite : favorites) {
+        for (Favorite favorite : paginatedFavorites) {
             double averageRating = reviewService.getAverageRatingForRestaurant(favorite.getRestaurant());
             restaurantRatingsMap.put(favorite.getRestaurant().getId(), averageRating);
         }
@@ -201,6 +201,7 @@ public class MemberController {
 
         return "mypage";
     }
+
 
 
     @PostMapping("/checkLoginId")

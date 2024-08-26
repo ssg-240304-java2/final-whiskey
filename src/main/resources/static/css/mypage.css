@@ -201,6 +201,25 @@ body {
     background-color: var(--hover-color); /* 호버 색상 변경 */
 }
 
+.remove-favorite-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    font-weight: 500;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+}
+
+.remove-favorite-btn:hover {
+    background-color: var(--hover-color); /* 호버 색상 변경 */
+}
+
 .pagination {
     text-align: center;
     margin-top: 20px;
@@ -280,6 +299,7 @@ body {
     margin-bottom: 25px;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 25px;
+    position: relative;
     transition: transform 0.3s ease;
 }
 
@@ -457,5 +477,4 @@ body {
         padding: 12px;
         font-size: 1.1em;
     }
-    
 }

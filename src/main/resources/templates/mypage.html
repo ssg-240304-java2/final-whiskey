@@ -33,7 +33,7 @@
                         <p>작성한 리뷰가 존재하지 않습니다.</p>
                     </div>
                     <!-- 리뷰가 있는 경우 -->
-                    <div th:each="review : ${reviews}" class="review-item">
+                    <div th:each="review : ${reviews}" class="review-item" th:attr="data-restaurant-id=${review.restaurant.id}">
                         <!-- 이미지 갤러리 -->
                         <div class="review-images">
                             <img th:each="image : ${reviewImagesMap[review.id]}" th:src="${image}" alt="리뷰 이미지" class="restaurant-image">
@@ -85,27 +85,31 @@
                         <p>북마크한 레스토랑이 존재하지 않습니다.</p>
                     </div>
                     <!-- 북마크가 있는 경우 -->
-                    <div th:each="favorite : ${favorites}" class="bookmark-item">
+                    <div th:each="favorite : ${favorites}" class="bookmark-item" th:attr="data-restaurant-id=${favorite.restaurant.id}">
                         <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : 'https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg'}" alt="레스토랑 이미지" class="restaurant-image">
                         <div class="bookmark-content">
                             <h3 th:text="${favorite.restaurant.name}">레스토랑 이름</h3>
                             <p th:text="${favorite.restaurant.address.name}">레스토랑 주소</p>
                             <div class="rating">
-                                <!-- Filled stars -->
-                                <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, T(java.lang.Math).round(restaurantRatingsMap[favorite.restaurant.id]))}"></i>
-                                <!-- Empty stars -->
-                                <i class="far fa-star" th:each="i : ${#numbers.sequence(T(java.lang.Math).round(restaurantRatingsMap[favorite.restaurant.id]) + 1, 5)}"></i>
-                                <span th:text="${restaurantRatingsMap[favorite.restaurant.id]}">5.0</span>
-                            </div>
+                                <!-- 식당의 평점 값 -->
+                                <span th:text="${restaurantRatingsMap[favorite.restaurant.id] != null ? T(java.lang.String).format('%.1f', restaurantRatingsMap[favorite.restaurant.id]) : '0.0'}">0.0</span>
 
-                            <!-- 북마크 해제 폼 -->
-                            <form th:action="@{/mypage/remove-favorite}" method="post">
-                                <input type="hidden" name="restaurantId" th:value="${favorite.restaurant.id}" />
-                                <input type="hidden" name="bookmarkPage" th:value="${bookmarkCurrentPage}" />
-                                <input type="hidden" name="bookmarkSize" th:value="${bookmarkSize}" />
-                                <button type="submit" class="remove-favorite-btn">북마크 해제</button>
-                            </form>
+                                <!-- 별표 계산 -->
+                                <div th:if="${restaurantRatingsMap[favorite.restaurant.id] != null}">
+                                    <!-- Filled stars (평점이 1점 이상일 때만 표시) -->
+                                    <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, restaurantRatingsMap[favorite.restaurant.id].intValue())}" th:if="${restaurantRatingsMap[favorite.restaurant.id] > 0}"></i>
+                                    <!-- Empty stars -->
+                                    <i class="far fa-star" th:each="i : ${#numbers.sequence(restaurantRatingsMap[favorite.restaurant.id].intValue() + 1, 5)}"></i>
+                                </div>
+                            </div>
                         </div>
+                        <!-- 북마크 해제 폼 -->
+                        <form th:action="@{/mypage/remove-favorite}" method="post">
+                            <input type="hidden" name="restaurantId" th:value="${favorite.restaurant.id}" />
+                            <input type="hidden" name="bookmarkPage" th:value="${bookmarkCurrentPage}" />
+                            <input type="hidden" name="bookmarkSize" th:value="${bookmarkSize}" />
+                            <button type="submit" class="remove-favorite-btn">북마크 해제</button>
+                        </form>
                     </div>
                 </div>
 
@@ -141,196 +145,7 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const navItems = document.querySelectorAll('.profile-nav li');
-        const contentSections = document.querySelectorAll('.content-section');
-
-        navItems.forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const tab = this.getAttribute('data-tab');
-
-                navItems.forEach(navItem => navItem.classList.remove('active'));
-                this.classList.add('active');
-
-                contentSections.forEach(section => {
-                    section.classList.remove('active');
-                    if (section.id === tab) {
-                        section.classList.add('active');
-                    }
-                });
-            });
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const modalBasic = document.getElementById('editProfileModalBasic');
-        const modalSocial = document.getElementById('editProfileModalSocial');
-        const btn = document.querySelector('.edit-profile-btn');
-        const spanBasic = modalBasic ? modalBasic.getElementsByClassName('close')[0] : null;
-        const spanSocial = modalSocial ? modalSocial.getElementsByClassName('close')[0] : null;
-        const formBasic = document.getElementById('editProfileFormBasic');
-        const formSocial = document.getElementById('editProfileFormSocial');
-
-        if (btn) {
-            btn.onclick = function() {
-                if (modalBasic) {
-                    modalBasic.style.display = "block";
-                    setTimeout(() => modalBasic.classList.add('show'), 10);
-                } else if (modalSocial) {
-                    modalSocial.style.display = "block";
-                    setTimeout(() => modalSocial.classList.add('show'), 10);
-                }
-            };
-        }
-
-        if (spanBasic) {
-            spanBasic.onclick = function() {
-                modalBasic.classList.remove('show');
-                setTimeout(() => modalBasic.style.display = "none", 300);
-            };
-        }
-
-        if (spanSocial) {
-            spanSocial.onclick = function() {
-                modalSocial.classList.remove('show');
-                setTimeout(() => modalSocial.style.display = "none", 300);
-            };
-        }
-
-        if (formBasic) {
-            formBasic.onsubmit = function(e) {
-                modalBasic.classList.remove('show');
-                setTimeout(() => modalBasic.style.display = "none", 300);
-            };
-        }
-
-        if (formSocial) {
-            formSocial.onsubmit = function(e) {
-                modalSocial.classList.remove('show');
-                setTimeout(() => modalSocial.style.display = "none", 300);
-            };
-        }
-
-        window.onclick = function(event) {
-            if (modalBasic && event.target == modalBasic) {
-                modalBasic.classList.remove('show');
-                setTimeout(() => modalBasic.style.display = "none", 300);
-            } else if (modalSocial && event.target == modalSocial) {
-                modalSocial.classList.remove('show');
-                setTimeout(() => modalSocial.style.display = "none", 300);
-            }
-        };
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Script loaded and ready.');
-
-        // 로그인 ID 중복 확인 로직
-        document.getElementById('loginIdCheckBtn').addEventListener('click', function() {
-            const loginId = document.getElementById('basicLoginId').value;
-
-            if (!loginId) {
-                document.getElementById('loginId-check-message').textContent = '로그인 ID를 입력하세요.';
-                document.getElementById('loginId-check-message').style.color = 'red';
-                document.getElementById('loginId-check-message').style.display = 'block';
-                return;
-            }
-
-            console.log('Checking login ID:', loginId);
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/checkLoginId', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === 4) {
-                    console.log('XHR Ready State:', xhr.readyState, 'Status:', xhr.status);
-                    if (xhr.status === 200) {
-                        const response = JSON.parse(xhr.responseText);
-                        console.log('Response from server:', response);
-                        if (response.exists) {
-                            document.getElementById('loginId-check-message').textContent = '이미 사용 중인 로그인 ID입니다.';
-                            document.getElementById('loginId-check-message').style.color = 'red';
-                            document.getElementById('loginId-check-message').style.display = 'block';
-                            document.getElementById('submit-btn').disabled = true;
-                        } else {
-                            document.getElementById('loginId-check-message').textContent = '사용할 수 있는 로그인 ID입니다.';
-                            document.getElementById('loginId-check-message').style.color = 'green';
-                            document.getElementById('loginId-check-message').style.display = 'block';
-                            document.getElementById('submit-btn').disabled = false;
-                        }
-                    } else {
-                        console.error('Server error or other issue.', xhr.status, xhr.statusText);
-                    }
-                }
-            };
-            xhr.send('loginId=' + encodeURIComponent(loginId));
-        });
-
-        // 비밀번호 확인 로직
-        document.getElementById('basicPassword').addEventListener('keyup', checkPasswords);
-        document.getElementById('basicConfirmPassword').addEventListener('keyup', checkPasswords);
-
-        function checkPasswords() {
-            const password = document.getElementById('basicPassword').value;
-            const confirmPassword = document.getElementById('basicConfirmPassword').value;
-
-            if (password.length > 0 && password !== confirmPassword) {
-                document.getElementById('password-match-message').textContent = '비밀번호가 일치하지 않습니다.';
-                document.getElementById('password-match-message').style.display = 'block';
-                document.getElementById('submit-btn').disabled = true;
-            } else {
-                document.getElementById('password-match-message').style.display = 'none';
-                document.getElementById('submit-btn').disabled = false;
-            }
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        const removeFavoriteButtons = document.querySelectorAll('.remove-favorite-btn');
-
-        removeFavoriteButtons.forEach(button => {
-            button.addEventListener('click', function(e) {
-                e.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
-
-                const restaurantId = this.closest('form').querySelector('input[name="restaurantId"]').value;
-                const bookmarkPage = this.closest('form').querySelector('input[name="bookmarkPage"]').value;
-                const bookmarkSize = this.closest('form').querySelector('input[name="bookmarkSize"]').value;
-
-                if (!restaurantId) {
-                    alert('레스토랑 ID가 유효하지 않습니다.');
-                    return;
-                }
-
-                fetch('/mypage/remove-favorite', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: new URLSearchParams({
-                        'restaurantId': restaurantId,
-                        'bookmarkPage': bookmarkPage,
-                        'bookmarkSize': bookmarkSize
-                    })
-                })
-                    .then(response => {
-                        return response.text().then(text => {
-                            if (response.ok) {
-                                alert('북마크가 해제되었습니다.');
-                                window.location.reload(); // 페이지 새로고침
-                            } else {
-                                alert(`북마크 해제에 실패했습니다: ${text}`);
-                            }
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        alert('북마크 해제 중 오류가 발생했습니다.');
-                    });
-            });
-        });
-    });
-</script>
+<!-- 분리된 JavaScript 파일을 추가 -->
+<script src="/js/mypage.js"></script>
 </body>
 </html>
