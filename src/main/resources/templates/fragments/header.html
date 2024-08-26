@@ -12,10 +12,11 @@
 <header th:fragment="header">
     <div class="header-wrapper">
         <div class="header-content">
-            <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">FoodFolio</a></div>
+            <a href="/" class="logo-link">
+                <img src="/static/images/logo.png" alt="FoodFolio 로고" class="logo-image">
+                <span class="logo-text">FoodFolio</span>
+            </a>
             <div class="search-bar">
-<!--                <input type="text" placeholder="맛집 또는 음식을 검색해보세요">-->
-<!--                <button><i class="fas fa-search"></i> 검색</button>-->
                 <input id="search-text" type="text" placeholder="맛집 또는 음식을 검색해보세요">
                 <button id="search-btn" onclick="searchRestaurant()"><i class="fas fa-search"></i> 검색</button>
             </div>
@@ -32,24 +33,6 @@
             </nav>
         </div>
     </div>
-            <!-- <div class="logo">
-                <a href="/" class="logo-link">
-                    <img src="/static/images/logo.png" alt="FoodFolio 로고" class="logo-image">
-                    <span class="logo-text">FoodFolio</span>
-                </a>
-            </div>            
-            <div class="search-bar">
-                <input id="search-text" type="text" placeholder="맛집 또는 음식을 검색해보세요">
-                <button id="search-btn" onclick="searchRestaurant()"><i class="fas fa-search"></i> 검색</button>
-            </div>
-            <nav>
-                <a href="/login">로그인</a>
-                <a href="/register">회원가입</a>
-                <a href="/mypage">마이페이지</a>
-                <a href="/register-store">입점 신청</a>
-            </nav>
-        </div>
-    </div> -->
     <script>
         function searchRestaurant() {
             const searchText = document.getElementById('search-text').value;
