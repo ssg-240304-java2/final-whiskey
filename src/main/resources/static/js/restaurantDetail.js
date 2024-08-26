@@ -11,7 +11,62 @@ document.addEventListener("DOMContentLoaded", function () {
     setupReports();
     setupReviewAndCommentReports();
     setInitialTab();
+    RestaurantDetail.favorite.init();
 });
+// 즐겨찾기 관련 함수들
+window.RestaurantDetail.favorite = {
+    init: function() {
+        this.bookmarkButton = document.getElementById('bookmarkButton');
+        this.restaurantId = this.bookmarkButton.getAttribute('data-restaurant-id');
+        this.isFavorite = false;
+        this.checkFavoriteStatus();
+        this.addEventListeners();
+    },
+
+    checkFavoriteStatus: function() {
+        fetch(`/api/favorites/check?restaurantId=${this.restaurantId}`)
+            .then(response => response.json())
+            .then(data => {
+                this.isFavorite = data;
+                this.updateButtonUI();
+            })
+            .catch(error => console.error('Error:', error));
+    },
+
+    addEventListeners: function() {
+        this.bookmarkButton.addEventListener('click', () => this.toggleFavorite());
+    },
+
+    toggleFavorite: function() {
+        const url = this.isFavorite ? '/api/favorites/remove' : '/api/favorites';
+        const method = this.isFavorite ? 'POST' : 'POST';
+        
+        fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: `restaurantId=${this.restaurantId}`
+        })
+        .then(response => {
+            if (response.ok) {
+                this.isFavorite = !this.isFavorite;
+                this.updateButtonUI();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    },
+
+    updateButtonUI: function() {
+        if (this.isFavorite) {
+            this.bookmarkButton.innerHTML = '<i class="fas fa-bookmark"></i> 즐겨찾기 완료';
+            this.bookmarkButton.classList.add('active');
+        } else {
+            this.bookmarkButton.innerHTML = '<i class="far fa-bookmark"></i> 즐겨찾기';
+            this.bookmarkButton.classList.remove('active');
+        }
+    }
+};
 function setupReports() {
     let idx;
 
