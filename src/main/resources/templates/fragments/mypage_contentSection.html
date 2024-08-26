@@ -1,19 +1,50 @@
-<!-- src/main/resources/templates/fragments/mypage_contentSection.html -->
 <section th:fragment="contentSection(type)" th:id="${type}" class="content-section">
     <div th:if="${type == 'profile'}" class="profile-content">
-        <h2>About <span th:text="${name ?: '김철수'}">김철수</span></h2>
+        <h2>About <span th:text="${member.nickname}"></span></h2>
         <div class="profile-details">
-            <p><i class="fas fa-map-marker-alt"></i> <span th:text="${location ?: '서울시 강남구'}">서울시 강남구</span></p>
-            <p><i class="fas fa-calendar-alt"></i> <span th:text="${joinDate ?: '2023년 6월 1일'}">2023년 6월 1일</span>에 가입</p>
-            <p><i class="fas fa-heart"></i> 관심사: <span th:text="${interests ?: '맛집 탐방, 요리'}">맛집 탐방, 요리</span></p>
+            <p><i class="fas fa-envelope"></i> 이메일: <span th:text="${member.email}"></span></p>
+            <p><i class="fas fa-user"></i> 이름: <span th:text="${member.name}"></span></p>
+            <p><i class="fas fa-id-card"></i> 닉네임: <span th:text="${member.nickname}"></span></p>
+            <p><i class="fas fa-calendar-alt"></i> <span th:text="${#temporals.format(member.createdAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></span>에 가입</p>
         </div>
         <div class="user-bio">
             <h3>자기소개</h3>
-            <p th:text="${bio ?: '안녕하세요. 맛집을 좋아하는 평범한 직장인입니다. 주말마다 새로운 맛집을 찾아다니는 것이 취미입니다.'}">안녕하세요. 맛집을 좋아하는 평범한 직장인입니다. 주말마다 새로운 맛집을 찾아다니는 것이 취미입니다.</p>
+            <p th:text="${member.introduction != null && !member.introduction.isEmpty() ? member.introduction : '안녕하세요 저는 ' + member.nickname + ' 입니다!  만나서 반갑습니다.'}">
+                <!-- 기본 자기소개 텍스트 -->
+                안녕하세요. 만나서 반갑습니다.
+            </p>
         </div>
-        <button class="edit-profile-btn">프로필 수정</button>
+        <button class="edit-profile-btn">회원정보 수정</button>
+        <button class="unsubscribe-btn" onclick="confirmDeactivation()">회원 탈퇴 신청</button>
     </div>
 
+    <script>
+        function confirmDeactivation() {
+            if (confirm("회원 탈퇴 하시겠습니까?")) {
+                fetch('/deactivateAccount', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // 세션 정보를 이용해 서버에서 직접 처리하므로 별도 요청 바디는 필요 없습니다.
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            alert("회원 탈퇴가 완료되었습니다.");
+                            window.location.href = "/mainPage"; // 탈퇴 후 메인 페이지로 리다이렉트
+                        } else {
+                            alert("회원 탈퇴 중 오류가 발생했습니다.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("회원 탈퇴 중 오류가 발생했습니다.");
+                    });
+            }
+        }
+    </script>
+
+    <!-- 리뷰 섹션 및 북마크 섹션은 원래 코드 그대로 유지 -->
     <div th:if="${type == 'reviews'}" class="reviews-content">
         <h2>내가 작성한 리뷰</h2>
         <div class="review-list">
