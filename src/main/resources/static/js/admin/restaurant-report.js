@@ -3,6 +3,7 @@ $(document).ready(function () {
     let currentSortOrder = 'desc';
     let currentPage = 0;
     const pageSize = 10;
+    let allReports = []; // 모든 리포트를 저장할 배열
 
     fetchRestaurantReports(currentPage, currentSortField, currentSortOrder);
     initializeSortButtons();
@@ -13,7 +14,8 @@ $(document).ready(function () {
             data: { page: page, sortField: sortField, sortOrder: sortOrder },
             type: 'GET',
             success: function (data) {
-                renderReportTable(data);
+                allReports = data.content; // 모든 리포트 저장
+                renderReportTable(allReports);
                 updatePaginationControls(data.number, data.totalPages);
             },
             error: function (xhr, status, error) {
@@ -22,11 +24,11 @@ $(document).ready(function () {
         });
     }
 
-    function renderReportTable(data) {
+    function renderReportTable(reports) {
         let tableBody = $('#restaurantReportList');
         tableBody.empty();
-        if (data && data.content && data.content.length > 0) {
-            data.content.forEach(function (report) {
+        if (reports && reports.length > 0) {
+            reports.forEach(function (report) {
                 let row = createReportRow(report);
                 tableBody.append(row);
             });
@@ -164,8 +166,23 @@ $(document).ready(function () {
                 currentSortOrder = 'desc';
             }
             updateSortButtonsUI();
-            fetchRestaurantReports(currentPage, currentSortField, currentSortOrder);
+            sortReports();
         });
+    }
+
+    function sortReports() {
+        allReports.sort((a, b) => {
+            if (currentSortField === 'reportedAt') {
+                return currentSortOrder === 'asc' 
+                    ? new Date(a.reportedAt) - new Date(b.reportedAt)
+                    : new Date(b.reportedAt) - new Date(a.reportedAt);
+            } else if (currentSortField === 'status') {
+                return currentSortOrder === 'asc'
+                    ? (a.checked === b.checked ? 0 : a.checked ? 1 : -1)
+                    : (a.checked === b.checked ? 0 : a.checked ? -1 : 1);
+            }
+        });
+        renderReportTable(allReports);
     }
 
     function updateSortButtonsUI() {
