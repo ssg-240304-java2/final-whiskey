@@ -1,4 +1,5 @@
-<div th:fragment="reviews" class="tab-content" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+<div th:fragment="reviews(reviews, ratingPhase)" class="tab-content" id="reviews" role="tabpanel"
+     aria-labelledby="reviews-tab">
     <div class="review-header">
         <h2><i class="fas fa-star"></i> 리뷰</h2>
         <a href="/receipt-verification" class="write-review-button"><i class="fas fa-pen"></i> 리뷰 작성하기</a>
@@ -8,8 +9,11 @@
             <!-- TODO: 백엔드 - 전체 평점 및 리뷰 수를 계산하여 동적으로 표시 -->
             <div class="review-card">
                 <h3>전체 평점</h3>
-                <div class="rating">★★★★☆ 4</div>
-                <p>1,234 리뷰</p>
+                <!--                // rating값이 바인딩된다. rating은 java의 double 타입이며-->
+                <!--                // 화면에는 소수점 첫째자리까지만 표시되어야 한다.  ★★★★☆ 4-->
+                <!--                // 그리고 별의 개수를 1~5개로 표시하되, 소수점은 버린다.-->
+                <div class="rating" th:text="${ratingPhase}"></div>
+                <p th:text="${reviews.size() + '개의 리뷰'}">1,234 리뷰</p>
             </div>
         </div>
     </div>
@@ -45,19 +49,19 @@
         <div class="recent-reviews">
             <h3><i class="fas fa-clock"></i> 최근 리뷰</h3>
             <!-- TODO: 백엔드 - 최근 리뷰를 날짜순으로 정렬하여 가져와 동적으로 표시 -->
-            <div class="review-items">
-                <!-- 리뷰 카드 fragment 사용 -->
+            <div class="review-items" th:each="review : ${reviews}">
                 <div th:replace="fragments/reviewItem :: reviewItem(
-                        title='맛있는 파스타와 분위기 좋은 레스토랑',
-                        content='파스타가 정말 맛있었어요. 특히 트러플 크림 파스타는 꼭 드셔보세요!',
-                        author='홍길동',
-                        date='2024-05-01',
-                        rating='★★★★☆ 4',
-                        images='',
-                        menuName='트러플 크림 파스타',
-                        menuPrice='18,000'
-                    )" th:attr="data-review-id=${reviewId}"></div>
-                <!-- 추가 리뷰 카드들... -->
+                        title=${review.content},
+                        content=${review.content},
+                        author=${review.reviewer.nickname},
+                        date=${#temporals.format(review.createdAt, 'yyyy-MM-dd')},
+                        rating=${#strings.repeat('★', review.rating.value) + #strings.repeat('☆', 5 - review.rating.value)},
+                        images=${review.reviewImages},
+                        menus=${review.receiptData},
+                        likes=${review.likes},
+                        comments=${review.reviewComments},
+                        id=${review.id}
+                    )" th:attr="data-review-id=${review.id}"></div>
             </div>
         </div>
         <button id="loadMoreReviews" class="load-more">더 보기</button>

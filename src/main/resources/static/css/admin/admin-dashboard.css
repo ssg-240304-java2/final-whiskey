@@ -1,0 +1,532 @@
+/* 전체 페이지 스타일 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    background-color: #252526;
+    box-shadow: inset -1px 0 0 rgba(255,255,255,.1);
+    transition: all 0.3s;
+}
+
+/* 사이드바 내부 스티키 컨테이너 */
+.sidebar-sticky {
+    position: relative;
+    top: 0;
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* 사이드바 네비게이션 링크 스타일 */
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #e0e0e0;
+    padding: 0.5rem 1rem;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.sidebar .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255,255,255,0.1);
+    border-left-color: #4fc3f7;
+}
+
+.sidebar .nav-link.active {
+    color: #4fc3f7;
+    background-color: rgba(79,195,247,0.1);
+    border-left-color: #4fc3f7;
+}
+
+.sidebar .nav-link i {
+    margin-right: 0.5rem;
+}
+
+/* 사이드바 헤딩 스타일 */
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+    padding: 1rem;
+    color: #a0a0a0;
+}
+
+/* 로고 스타일 */
+.foodfolio-logo {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #4fc3f7;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    letter-spacing: -1px;
+    padding: 1rem;
+    text-align: center;
+}
+
+/* 메인 콘텐츠 영역 스타일 */
+.content-wrapper {
+    margin-left: 250px;
+    padding: 20px;
+    transition: all 0.3s;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 767.98px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+    }
+    .content-wrapper {
+        margin-left: 0;
+    }
+}
+
+/* 다크 테마 스타일 */
+body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+.card {
+    background-color: #252526;
+    border-color: #444;
+}
+
+.table {
+    color: #e0e0e0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(255,255,255,0.1);
+}
+
+.modal-content {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+.modal-header, .modal-footer {
+    border-color: #444;
+}
+
+.form-control {
+    background-color: #383838;
+    color: #e0e0e0;
+    border-color: #555;
+}
+
+.form-control:focus {
+    background-color: #404040;
+    color: #ffffff;
+    border-color: #4fc3f7;
+    box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+    background-color: #4fc3f7;
+    border-color: #4fc3f7;
+}
+
+.btn-primary:hover {
+    background-color: #3ab1e8;
+    border-color: #3ab1e8;
+}
+
+.btn-outline-primary {
+    color: #4fc3f7;
+    border-color: #4fc3f7;
+}
+
+.btn-outline-primary:hover {
+    background-color: #4fc3f7;
+    color: #ffffff;
+}
+
+/* 카드 스타일 */
+.card {
+    border: 1px solid #333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    background-color: #252526;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.card-title {
+    color: #e0e0e0;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4fc3f7;
+}
+
+/* 네비게이션 바 스타일 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.08);
+}
+
+.dropdown-toggle::after {
+    display: none;
+}
+
+.sidebar-header {
+    padding: 0.875rem 1.25rem;
+    font-size: 1.2rem;
+}
+
+/* 테이블 스타일 */
+.table {
+    color: #e0e0e0;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #333;
+}
+
+/* 페이지네이션 스타일 */
+.pagination .page-link {
+    background-color: #2c2c2c;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #4fc3f7;
+    border-color: #4fc3f7;
+}
+
+.pagination .page-link:hover {
+    background-color: #3c3c3c;
+    border-color: #555;
+    color: #ffffff;
+}
+
+/* 대시보드 특정 스타일 */
+#dashboard .card {
+    height: 100%;
+}
+
+#dashboard .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#dashboard .card-title {
+    margin-bottom: 0.5rem;
+}
+
+#dashboard .card-text {
+    margin-bottom: 0;
+}
+
+/* 빠른 링크 버튼 스타일 */
+#dashboard .btn {
+    margin: 0.25rem;
+}
+
+/* 리스트 그룹 스타일 */
+.list-group-item {
+    background-color: #2c2c2c;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.list-group-item:hover {
+    background-color: #3c3c3c;
+}
+
+/* 기존 스타일 유지 */
+
+/* 차트 컨테이너 스타일 */
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 300px;
+    width: 100%;
+}
+
+/* 테이블 반응형 스타일 */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* 로딩 인디케이터 스타일 */
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+.loading::after {
+    content: "로딩 중...";
+    font-size: 20px;
+    color: #4fc3f7;
+}
+
+/* 에러 메시지 스타일 */
+.error-message {
+    color: #ff6b6b;
+    text-align: center;
+    padding: 20px;
+}
+
+/* 통계 카드 스타일 */
+.statistics-card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.statistics-card .card-body {
+    flex: 1;
+}
+
+.statistics-card canvas {
+    max-height: 250px;
+}
+
+/* 페이지네이션 스타일 개선 */
+.pagination {
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.page-item.active .page-link {
+    background-color: #4fc3f7;
+    border-color: #4fc3f7;
+}
+
+.page-link {
+    color: #4fc3f7;
+}
+
+.page-link:hover {
+    color: #0056b3;
+}
+
+/* 반응형 디자인 개선 */
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -100%;
+        z-index: 100;
+        padding: 48px 0 0;
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        transition: all .3s;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    .content-wrapper {
+        margin-left: 0;
+    }
+
+    .navbar-toggler {
+        display: block;
+    }
+}
+
+/* 액션 버튼 스타일 */
+.btn-action {
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+    border-radius: .2rem;
+}
+
+/* 뱃지 스타일 개선 */
+.badge {
+    font-size: 0.8em;
+    padding: 0.35em 0.65em;
+}
+
+/* 툴팁 스타일 */
+.tooltip {
+    font-size: 0.875rem;
+}
+
+/* 모달 스타일 개선 */
+.modal-content {
+    border-radius: 0.5rem;
+}
+
+.modal-header {
+    border-bottom: 1px solid #2c2c2c;
+}
+
+.modal-footer {
+    border-top: 1px solid #2c2c2c;
+}
+
+
+/* 기존 스타일 유지 */
+
+/* 신고 처리 상태 스타일 */
+.report-status {
+    font-weight: bold;
+}
+
+.report-completed {
+    color: #4CAF50; /* 초록색 계열로 처리 완료 강조 */
+    text-decoration: underline;
+}
+
+/* 호버 효과 */
+tr:hover .report-completed {
+    background-color: rgba(76, 175, 80, 0.1); /* 호버 시 배경색 변경 */
+}
+
+/* 접근성을 위한 포커스 스타일 */
+.report-status:focus {
+    outline: 2px solid #4CAF50;
+    outline-offset: 2px;
+}
+
+/* 애니메이션 효과 */
+@keyframes completedPulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
+}
+
+.report-completed {
+    animation: completedPulse 2s infinite;
+}
+
+/* 반응형 디자인 개선 */
+@media (max-width: 768px) {
+    .report-status {
+        display: inline-block;
+        margin-top: 5px;
+    }
+}
+
+/* 신고 관리 스타일 */
+.report-card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.report-table {
+    font-size: 0.9rem;
+}
+
+.report-table th {
+    background-color: #40a0ff;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-top: none;
+}
+
+.report-table td {
+    vertical-align: middle;
+}
+
+.report-table tr:hover {
+    background-color: #40a0ff;
+    cursor: pointer;
+}
+
+.report-status {
+    font-weight: bold;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.report-status.pending {
+    background-color: #ffeeba;
+    color: #856404;
+}
+
+.report-status.completed {
+    background-color: #c3e6cb;
+    color: #155724;
+}
+
+.report-detail-card {
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    height: 100%;
+}
+
+.report-detail {
+    padding: 15px;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.page-link {
+    color: #4fc3f7;
+    border-color: #4fc3f7;
+}
+
+.page-link:hover {
+    background-color: #4fc3f7;
+    color: #fff;
+}
+
+
+/* 정렬 버튼 스타일 */
+.sort-btn {
+    background: none;
+    border: none;
+    color: #4fc3f7;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0;
+    margin-left: 5px;
+}
+
+.sort-btn:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.sort-btn.active {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* 정렬 아이콘 스타일 */
+.sort-icon {
+    font-size: 0.8rem;
+    margin-left: 2px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .report-card, .report-detail-card {
+        margin-bottom: 20px;
+    }
+}

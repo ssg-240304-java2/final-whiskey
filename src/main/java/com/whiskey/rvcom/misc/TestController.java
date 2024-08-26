@@ -1,65 +1,67 @@
 package com.whiskey.rvcom.misc;
 
+import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
+import com.whiskey.rvcom.restaurant.service.RestaurantService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
 
 @Controller
+@Slf4j
 public class TestController {
 
-    @GetMapping("/")
+    RestaurantService restaurantService;
+
+    public TestController(RestaurantService restaurantService) {
+        this.restaurantService = restaurantService;
+    }
+
+    @GetMapping("/test")
     // 테스트 메인 페이지로 이동(로컬호스트 홈)
     public String getMain() {
         return "main";
     }
 
-    @GetMapping("/mainPage")
+    @GetMapping("/")
     // 메인 페이지로 이동
-    public String getMainPage() {
+    public String getMainPage(Model model) {
+        model.addAttribute("categoryList", RestaurantCategory.values());
         return "mainPage";
     }
 
-    @GetMapping("/login")
-    // 로그인 페이지로 이동
-    public String getLogin() {
-        return "login";
-    }
+//    @GetMapping("/login")
+//    // 로그인 페이지로 이동
+//    public String getLogin() {
+//        return "login";
+//    }
 
-    @GetMapping("/register")
-    // 회원가입 페이지로 이동
-    public String getRegister() {
-        return "register";
-    }
-
-    @GetMapping("/mypage")
-    // 마이페이지로 이동
-    public String getMypage() {
-        return "mypage";
-    }
+//    @GetMapping("/register")
+//    // 회원가입 페이지로 이동
+//    public String getRegister() {
+//        return "register";
+//    }
+//
+//    @GetMapping("/mypage")
+//    // 마이페이지로 이동
+//    public String getMypage() {
+//        return "mypage";
+//    }
 
     @GetMapping("/restaurant")
     // 레스토랑 상세 페이지로 이동
     public String getRestaurantDetail() {
         return "restaurantDetail";
     }
-
-    @GetMapping("/receipt-verification")
-    // 영수증 인증 페이지로 이동
-    public String getReceiptVerification() {
-        return "receiptVerification";
-    }
-    
+//    @GetMapping("/receipt-verification")
+//    // 영수증 인증 페이지로 이동
+//    public String getReceiptVerification() {
+//        return "receiptVerification";
+//    }
     @GetMapping("/write-review")
     // 리뷰 작성 페이지로 이동
     public String getWriteReview() {
         return "writeReview";
-    }
-    
-    @GetMapping("/search-results")
-    // 검색 결과 페이지로 이동
-    public String searchResults() {
-        return "searchResults";
     }
 
     @GetMapping("/register-store")
@@ -68,27 +70,19 @@ public class TestController {
         return "register-store";
     }
 
-    @GetMapping("/owner-dashboard")
-    // 점주 관리자 대시보드 페이지로 이동
-    public String getOwnerDashboard() {
-        return "owner/dashboard";
-    }
-    
+//    @GetMapping("/owner-dashboard")
+//    // 점주 관리자 대시보드 페이지로 이동
+//    public String getOwnerDashboard() {
+//        return "owner/dashboard";
+//    }
+
     @GetMapping("/adminMain")
     // 관리자-신고 페이지로 이동
     public String getAdminReport() {
-        return "adminMain";
+        return "admin/adminMain";
     }
-
 
     @GetMapping("/adminReport")
     public void adminReport() {
-    }
-
-    @GetMapping("/restaurant/{restaurantId}/{tab}")
-    public String getRestaurantDetailWithTab(@PathVariable Long restaurantId, @PathVariable String tab) {
-        // TODO: restaurantId와 tab에 따른 데이터 로딩 로직 구현
-        // TODO: 모델에 restaurantId와 tab 정보 추가
-        return "restaurantDetail";
     }
 }

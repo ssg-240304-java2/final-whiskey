@@ -17,8 +17,8 @@ public class RestaurantInquiryReplyService {
 
     // TODO: 문의글에 답변 작성
     @Transactional
-    public void save(RestaurantInquiryReplyRequestDTO request) {
-        RestaurantInquiry inquiry = inquiryRepository.findById(request.inquiryId())
+    public void save(Long inquiryId, RestaurantInquiryReplyRequestDTO request) {
+        RestaurantInquiry inquiry = inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 문의글이 존재하지 않습니다."));
 
         RestaurantInquiryReply reply = new RestaurantInquiryReply(request.content());

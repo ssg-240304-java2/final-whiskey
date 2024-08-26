@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foodfolio 회원가입</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/register.css">
+</head>
+<body class="register-page">
+<div class="register-container">
+    <div class="image-section">
+        <img src="https://via.placeholder.com/500" alt="랜덤 음식 이미지">
+    </div>
+    <div class="form-section">
+        <h1>Foodfolio 소셜 회원가입</h1>
+        <form th:action="@{/register_social}" method="post">
+            <input type="text" name="name" placeholder="이름" required
+                   th:value="${userAttributes['name']}" readonly>
+            <input type="text" name="nickname" placeholder="닉네임" required>
+            <input type="text" name="loginId" placeholder="로그인 ID (이메일)" required
+                   th:value="${userAttributes['email']}"
+                   readonly>
+            <input type="email" name="email" placeholder="이메일" required
+                   th:value="${userAttributes['email']}"
+                   readonly>
+            <button type="submit">회원가입</button>
+        </form>
+        <div class="options">
+            <span>이미 계정이 있으신가요? <a href="/login">로그인</a></span>
+        </div>
+    </div>
+</div>
+</body>
+</html>

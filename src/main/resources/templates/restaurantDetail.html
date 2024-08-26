@@ -26,13 +26,14 @@
 4. 레스토랑 배너 이미지 URL을 데이터베이스에서 가져와 동적으로 설정하는 기능 추가
 -->
 <div th:replace="fragments/restaurantBanner :: restaurantBanner(
-        name='추형진의 양식집',
+        name=${restaurant.getName()},
+        imageUrl=${restaurantCoverImageUrl != null ? restaurantCoverImageUrl:'https://via.placeholder.com/1200x400'},
         rating='★★★★☆',
         reviewCount='1,234',
         price='₩₩',
-        category='이탈리안 • 파스타 • 피자',
-        status='영업중',
-        hours='11:00 - 21:00'
+        category=${restaurant.getCategory().getTitle()},
+        status=${status},
+        hours=${hours}
     )"></div>
 
 <div class="container">
@@ -55,37 +56,74 @@
         <!-- 신고 폼 -->
         <div class="report-modal-form">
             <div id="modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2><i class="fas fa-flag"></i> 신고하기</h2>
+                        <span id="closeModalBtn" class="close-btn">&times;</span>
+                    </div>
+                    <div class="modal-body">
+                        <form id="reportModalForm">
+                            <div class="form-group">
+                                <label for="reportTitle">신고 제목</label>
+                                <input type="text" id="reportTitle2" name="reportTitle" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="reportContent">신고 내용</label>
+                                <textarea id="reportContent2" name="reportContent" rows="5" required></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="submit-btn">신고 제출</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 신고 폼 끝 -->
+
+        <!-- 리뷰 및 댓글 신고 모달 추가 -->
+        <div id="reportModal" class="modal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <span id="closeModalBtn" class="close-btn">X</span>
-                    <h2>신고하기</h2>
+                    <h2><i class="fas fa-flag"></i> 신고하기</h2>
+                    <span class="close-btn">&times;</span>
                 </div>
                 <div class="modal-body">
-                    <form id="reportModalForm">
-                        <div>
-                            <label for="reportTile">신고 제목</label>
-                            <input type="text" id="reportTile" name="reportTitle" required>
+                    <form id="reportForm">
+                        <input type="hidden" id="reportType" name="reportType">
+                        <input type="hidden" id="reportTargetId" name="reportTargetId">
+                        <div class="form-group">
+                            <label for="reportTitle">신고 제목</label>
+                            <input type="text" id="reportTitle" name="reportTitle" required>
                         </div>
-                        <div>
+                        <div class="form-group">
                             <label for="reportContent">신고 내용</label>
-                            <textarea id="reportContent" name="reportContent" rows="3" required></textarea>
+                            <textarea id="reportContent" name="reportContent" rows="5" required></textarea>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit">신고</button>
-                        </div>
+                        <button type="submit" class="submit-btn">신고 제출</button>
                     </form>
                 </div>
             </div>
         </div>
-        </div>
-        <!-- 신고 폼 끝 -->
 
         <!-- 각 탭 콘텐츠 영역 -->
         <div class="content-area">
             <div class="flex-container">
-                <div class="tab-content active" id="info" th:replace="fragments/restaurantDetail/info :: info"></div>
-                <div class="tab-content" id="reviews" th:replace="fragments/restaurantDetail/reviews :: reviews"></div>
-                <div class="tab-content" id="inquiries" th:replace="fragments/restaurantDetail/inquiries :: inquiries"></div>
+                <div class="tab-content active" id="info" th:replace="fragments/restaurantDetail/info :: info(
+                    monday=${monday},
+                    tuesday=${tuesday},
+                    wednesday=${wednesday},
+                    thursday=${thursday},
+                    friday=${friday},
+                    saturday=${saturday},
+                    sunday=${sunday},
+                    menuList=${menuList}
+                )"></div>
+                <div></div>
+                <div class="tab-content" id="reviews"
+                     th:replace="fragments/restaurantDetail/reviews :: reviews(ratingPhase=${ratingPhase}, reviews=${reviews})"></div>
+                <div class="tab-content" id="inquiries"
+                     th:replace="fragments/restaurantDetail/inquiries :: inquiries"></div>
                 <div class="tab-content" id="notices" th:replace="fragments/restaurantDetail/notices :: notices"></div>
             </div>
         </div>
@@ -96,8 +134,8 @@
             <!-- TODO: 백엔드 - 식당 정보를 데이터베이스에서 가져와 동적으로 표시 -->
             <p><strong><i class="fas fa-globe"></i> 홈페이지:</strong> <a href="http://www.example.com">www.example.com</a>
             </p>
-            <p><strong><i class="fas fa-phone"></i> 전화번호:</strong> 02-1234-5678</p>
-            <p><strong><i class="fas fa-map-marker-alt"></i> 주소:</strong> 서울시 강남구 테헤란로 123</p>
+            <p><strong><i class="fas fa-phone"></i> 전화번호: </strong>[[${restaurant.getNumber()}]]</p>
+            <p><strong><i class="fas fa-map-marker-alt"></i> 주소: </strong>[[${restaurant.getAddress().getName()}]]</p>
         </div>
     </div>
 </div>
@@ -122,22 +160,28 @@
 </div>
 
 <!-- 공지사항 작성 모달 추가 -->
-<div th:replace="~{fragments/modal :: modal('noticeModal', '공지사항 작성')}">
-    <div th:fragment="content">
-        <div class="notice-form">
-            <form id="noticeForm">
-                <div class="form-group">
-                    <label for="noticeTitle">제목</label>
-                    <input type="text" id="noticeTitle" name="title" required>
+<div>
+    <div class="modal" id="noticeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>공지사항 작성</h2>
+                <span class="close close-btn">×</span>
+            </div>
+            <div class="modal-body">
+                <div class="notice-form">
+                    <div class="form-group">
+                        <label for="title">제목</label>
+                        <input type="text" id="title" name="title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">내용</label>
+                        <textarea id="content" name="content" rows="4" required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="save-notice">작성</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="noticeContent">내용</label>
-                    <textarea id="noticeContent" name="content" rows="4" required></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">작성</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -155,18 +199,18 @@
                 document.head.appendChild(script);
             }
         });
-
-
     }
 </script>
 
 <!-- restaurantId를 JavaScript에서 사용할 수 있도록 hidden input 추가 -->
 <input type="hidden" id="restaurantId" th:value="${restaurantId}">
+<input type="hidden" id="latitude" th:value="${restaurant.getAddress().getLatitude()}">
+<input type="hidden" id="longitude" th:value="${restaurant.getAddress().getLongitude()}">
 
-    <script th:src="@{/js/restaurantDetail.js}"></script>
-    <script th:src="@{/js/restaurantDetail/reviews.js}"></script>
-    <script th:src="@{/js/restaurantDetail/info.js}"></script>
-    <script th:src="@{/js/restaurantDetail/inquiries.js}"></script>
-    <script th:src="@{/js/restaurantDetail/notices.js}"></script>
+<script th:src="@{/js/restaurantDetail.js}"></script>
+<script th:src="@{/js/restaurantDetail/reviews.js}"></script>
+<script th:src="@{/js/restaurantDetail/info.js}"></script>
+<script th:src="@{/js/restaurantDetail/inquiries.js}"></script>
+<script th:src="@{/js/restaurantDetail/notices.js}"></script>
 </body>
 </html>

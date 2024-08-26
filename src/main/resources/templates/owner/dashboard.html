@@ -19,93 +19,135 @@
     <script th:src="@{/js/owner-dashboard.js}"></script>
     <script th:src="@{/js/restaurant-info.js}"></script>
     <script th:src="@{/js/menu-management.js}"></script>
+    <script th:src="@{/js/owner/inquiries.js}"></script>
 </head>
 <body class="bg-dark">
-    <div class="container-fluid">
-        <div class="row">
-            <!-- 사이드바 -->
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
-                <div class="position-sticky pt-3">
-                    <div class="sidebar-header mb-3">
-                        <h3 class="text-center foodfolio-logo">FoodFolio</h3>
-                    </div>
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-bs-target="#dashboard">
-                                <i class="fas fa-home"></i> 대시보드
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-bs-target="#restaurant-info">
-                                <i class="fas fa-utensils"></i> 음식점 정보
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-bs-target="#inquiries">
-                                <i class="fas fa-question-circle"></i> 문의 내역
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-bs-target="#notices">
-                                <i class="fas fa-bullhorn"></i> 공지사항
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-bs-target="#menu-management">
-                                <i class="fas fa-list"></i> 메뉴 관리
-                            </a>
-                        </li>
-                    </ul>
+<div class="container-fluid">
+    <div class="row">
+        <!-- 사이드바 -->
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+            <div class="position-sticky pt-3">
+                <div class="sidebar-header mb-3">
+                    <h3 class="text-center foodfolio-logo">FoodFolio</h3>
                 </div>
-            </nav>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#dashboard">
+                            <i class="fas fa-home"></i> 대시보드
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#restaurant-info">
+                            <i class="fas fa-utensils"></i> 음식점 정보
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#inquiries">
+                            <i class="fas fa-question-circle"></i> 문의 내역
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#notices">
+                            <i class="fas fa-bullhorn"></i> 공지사항
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-target="#menu-management">
+                            <i class="fas fa-list"></i> 메뉴 관리
+                        </a>
+                    </li>
+                </ul>
 
-            <!-- 메인 콘텐츠 -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <!-- 상단 바 -->
-                <div class="navbar navbar-dark bg-dark p-3 border-bottom">
-                    <div class="d-flex justify-content-between w-100">
-                        <h1 class="h2" id="page-title">대시보드</h1>
-                        <div class="d-flex align-items-center">
-                            <div class="me-3">
-                                <i class="fas fa-bell"></i>
-                            </div>
-                            <div class="dropdown">
-                                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-                                    <strong>관리자명</strong>
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser1">
-                                    <li><a class="dropdown-item" href="#">프로필</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
-                                </ul>
-                            </div>
+            </div>
+        </nav>
+
+        <!-- 메인 콘텐츠 -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- 상단 바 -->
+            <div class="navbar navbar-dark bg-dark p-3 border-bottom">
+                <div class="d-flex justify-content-between w-100">
+                    <h1 class="h2" id="page-title">대시보드</h1>
+                    <div class="d-flex align-items-center">
+                        <div class="me-3">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="dropdown">
+                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <!-- 여기에서 전달된 프로필 이미지와 이름 사용 -->
+                                <img th:src="${profileImageUrl}" alt="Profile Image" width="32" height="32" class="rounded-circle me-2">
+                                <strong th:text="${memberName}">관리자명</strong>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser1">
+                                <li><a class="dropdown-item" href="/mypage">프로필</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 콘텐츠 영역 -->
-                <div id="content-area">
-                    <!-- 대시보드 콘텐츠 -->
-                    <div id="dashboard" class="content-section" th:replace="fragments/owner/dashboard :: dashboard"></div>
+            <!-- 콘텐츠 영역 -->
+            <div id="content-area">
+                <!-- 대시보드 콘텐츠 -->
+                <div id="dashboard" class="content-section" th:replace="fragments/owner/dashboard :: dashboard"></div>
 
-                    <!-- 음식점 정보 콘텐츠 -->
-                    <div id="restaurant-info" class="content-section" th:replace="fragments/owner/restaurant-info :: restaurant-info"></div>
+                <!-- 음식점 정보 콘텐츠 -->
+                <div id="restaurant-info" class="content-section" th:replace="fragments/owner/restaurant-info :: restaurant-info"></div>
 
-                    <!-- 문의 내역 콘텐츠 -->
-                    <div id="inquiries" class="content-section" th:replace="fragments/owner/inquiries :: inquiries"></div>
+                <!-- 문의 내역 콘텐츠 -->
+                <div id="inquiries" class="content-section" th:replace="fragments/owner/inquiries :: inquiries"></div>
 
-                    <!-- 공지사항 콘텐츠 -->
-                    <div id="notices" class="content-section" th:replace="fragments/owner/notices :: notices"></div>
+                <!-- 공지사항 콘텐츠 -->
+                <div id="notices" class="content-section" th:replace="fragments/owner/notices :: notices"></div>
 
-                    <!-- 메뉴 관리 콘텐츠 -->
-                    <div id="menu-management" class="content-section" th:replace="fragments/owner/menu-management :: menu-management"></div>
-                </div>
-            </main>
-        </div>
+                <!-- 메뉴 관리 콘텐츠 -->
+                <div id="menu-management" class="content-section" th:replace="fragments/owner/menu-management :: menu-management"></div>
+            </div>
+        </main>
     </div>
-
-    <!-- 부트스트랩 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</div>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sidebarLinks = document.querySelectorAll("#sidebar .nav-link");
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener("click", function (event) {
+                event.preventDefault(); // 기본 링크 클릭 동작을 막습니다.
+
+                const targetFragment = this.getAttribute("data-bs-target").substring(1); // #dashboard 같은 id에서 #을 제거합니다.
+
+                // 모든 링크에서 'active' 클래스를 제거합니다.
+                sidebarLinks.forEach(link => link.classList.remove("active"));
+
+                // 클릭된 링크에 'active' 클래스를 추가합니다.
+                this.classList.add("active");
+
+                // AJAX 요청을 통해 프래그먼트 내용을 가져옵니다.
+                fetch(`/fragments/owner/${targetFragment}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        // 메인 콘텐츠 영역을 업데이트합니다.
+                        document.querySelector("#content-area").innerHTML = html;
+
+                        // 필요한 경우 새로 로드된 HTML에 대해 추가 스크립트를 실행할 수 있습니다.
+                        console.log(`Fragment ${targetFragment} loaded.`);
+                    })
+                    .catch(error => console.error('Error loading fragment:', error));
+            });
+        });
+
+        // 페이지가 로드될 때 기본적으로 첫 번째 프래그먼트를 로드하고, 해당 탭을 활성화합니다.
+        const defaultFragment = sidebarLinks[0].getAttribute("data-bs-target").substring(1);
+        sidebarLinks[0].classList.add("active");
+        fetch(`/fragments/owner/${defaultFragment}`)
+            .then(response => response.text())
+            .then(html => {
+                document.querySelector("#content-area").innerHTML = html;
+            })
+            .catch(error => console.error('Error loading fragment:', error));
+    });
+
+</script>
 </html>

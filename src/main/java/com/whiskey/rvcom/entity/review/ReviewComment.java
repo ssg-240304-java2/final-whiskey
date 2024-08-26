@@ -1,5 +1,6 @@
 package com.whiskey.rvcom.entity.review;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.whiskey.rvcom.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,7 @@ public class ReviewComment {
 
     @ManyToOne
     @JoinColumn(name = "review_id", nullable = false)
+    @JsonBackReference
     private Review review;  // 리뷰 객체의 정보
 
     @ManyToOne

@@ -23,7 +23,7 @@
 <div class="search-banner" style="background-image: url('https://placehold.co/1200x200');">
     <div class="container">
         <div class="search-info">
-            <h1 class="search-title">검색 결과: "파스타"</h1>
+            <h1 class="search-title" th:text="'검색 결과:' + ${searchText}">검색 결과: 없음</h1>
             <div class="search-meta">
                 <div class="result-count">
                     <span class="count">300개의 결과</span>
@@ -51,15 +51,20 @@
 
             <!-- TODO: 검색 결과를 동적으로 생성하고 페이징 처리 -->
             <div class="results-container">
-
+                <!--                th:each="restaurant: ${restaurantSearchResult}"-->
+                <!--                <div th:replace="fragments/resultCard :: resultCard(${restaurant.getId()}, ${restaurant.getName()}, '★★★★☆ 4', 302, '₩₩', ${restaurant.getCategory().name()}, ${restaurant.getAddress().getName()}, '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>-->
+                <div style="display: inline;" th:each="restaurant: ${restaurantSearchResult}">
+                    <div th:each="restaurant: ${restaurantSearchResult}"
+                         th:replace="fragments/resultCard :: resultCard(${restaurant.getId()}, ${restaurantSearchResult.indexOf(restaurant)}, ${restaurant.getName()}, '★★★★☆ 4', 302, '₩₩', ${restaurant.getCategory().name()}, ${restaurant.getAddress().getName()}, '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>
+                </div>
                 <!-- 검색 결과 카드 사용 예시 -->
-                <div th:replace="fragments/resultCard :: resultCard(1, '맛있는 파스타', '★★★★☆ 4', 302, '₩₩', '이탈리안, 파스타', '인천시 남동구 구월동', '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>
+                <!--                <div th:replace="fragments/resultCard :: resultCard(1, '맛있는 파스타', '★★★★☆ 4', 302, '₩₩', '이탈리안, 파스타', '인천시 남동구 구월동', '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>-->
                 <!-- 추가 결과 카드들... -->
-                <div th:replace="fragments/resultCard :: resultCard(2, '로마의 맛', '★★★★★ 5', 456, '₩₩₩', '이탈리안, 피자', '인천시 연수구 송도동', '정통 이탈리안 요리를 맛볼 수 있는 곳. 피자가 특히 맛있어요.')"></div>
-                <div th:replace="fragments/resultCard :: resultCard(3, '파스타 천국', '★★★☆☆ 3', 178, '₩', '파스타, 샐러드', '인천시 부평구 부평동', '저렴한 가격에 즐길 수 있는 다양한 파스타 메뉴.')"></div>
-                <div th:replace="fragments/resultCard :: resultCard(4, '미켈란젤로', '★★★★☆ 4', 289, '₩₩₩', '이탈리안, 와인', '인천시 중구 운서동', '고급스러운 분위기에서 즐기는 이탈리안 요리와 와인.')"></div>
-                <div th:replace="fragments/resultCard :: resultCard(5, '나폴리 오븐', '★★★★☆ 4', 201, '₩₩', '피자, 파스타', '인천시 서구 청라동', '화덕에서 구운 정통 나폴리 피자를 맛볼 수 있는 곳.')"></div>
-                <div th:replace="fragments/resultCard :: resultCard(6, '트라토리아', '★★★☆☆ 3', 132, '₩₩', '이탈리안, 리조또', '인천시 미추홀구 주안동', '가족 단위로 즐기기 좋은 캐주얼한 이탈리안 레스토랑.')"></div>
+                <!--                <div th:replace="fragments/resultCard :: resultCard(2, '로마의 맛', '★★★★★ 5', 456, '₩₩₩', '이탈리안, 피자', '인천시 연수구 송도동', '정통 이탈리안 요리를 맛볼 수 있는 곳. 피자가 특히 맛있어요.')"></div>-->
+                <!--                <div th:replace="fragments/resultCard :: resultCard(3, '파스타 천국', '★★★☆☆ 3', 178, '₩', '파스타, 샐러드', '인천시 부평구 부평동', '저렴한 가격에 즐길 수 있는 다양한 파스타 메뉴.')"></div>-->
+                <!--                <div th:replace="fragments/resultCard :: resultCard(4, '미켈란젤로', '★★★★☆ 4', 289, '₩₩₩', '이탈리안, 와인', '인천시 중구 운서동', '고급스러운 분위기에서 즐기는 이탈리안 요리와 와인.')"></div>-->
+                <!--                <div th:replace="fragments/resultCard :: resultCard(5, '나폴리 오븐', '★★★★☆ 4', 201, '₩₩', '피자, 파스타', '인천시 서구 청라동', '화덕에서 구운 정통 나폴리 피자를 맛볼 수 있는 곳.')"></div>-->
+                <!--                <div th:replace="fragments/resultCard :: resultCard(6, '트라토리아', '★★★☆☆ 3', 132, '₩₩', '이탈리안, 리조또', '인천시 미추홀구 주안동', '가족 단위로 즐기기 좋은 캐주얼한 이탈리안 레스토랑.')"></div>-->
             </div>
 
             <!-- TODO: 카테고리 필터링 기능 구현 및 동적 카테고리 목록 생성 -->
@@ -68,6 +73,16 @@
         </div>
     </div>
 </div>
+
+<li style="display: none" id="latitude">
+    <ul th:each="restaurant: ${restaurantSearchResult}" th:text="${restaurant.getAddress().getLatitude()}"></ul>
+</li>
+<li style="display: none" id="longitude">
+    <ul th:each="restaurant: ${restaurantSearchResult}" th:text="${restaurant.getAddress().getLongitude()}"></ul>
+</li>
+
+
+<input type="hidden" id="restaurantSearchResult" th:value="${restaurantSearchResult}">
 
 <!-- TODO: 모달 내용을 동적으로 생성하고 카테고리 데이터 연동 -->
 <!-- 카테고리 모달 사용 -->
@@ -80,7 +95,7 @@
         kakao.maps.load(function () {
             let src = [];
             // 카카오맵 지도 렌더링을 위한 js파일 추가 - 현재 위치를 중앙으로
-            src.push("/js/kakaoMapView.js");
+            src.push("/js/kakaoMapSearchResultView.js");
 
             for (let i = 0; i < src.length; i++) {
                 let script = document.createElement("script");

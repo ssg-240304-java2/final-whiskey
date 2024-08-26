@@ -1,9 +1,13 @@
 package com.whiskey.rvcom.favorite;
 
+import com.whiskey.rvcom.ImageFile.ImageFileService;
 import com.whiskey.rvcom.entity.favorite.Favorite;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.review.Review;
+import com.whiskey.rvcom.entity.review.ReviewImage;
 import com.whiskey.rvcom.repository.FavoriteRepository;
+import com.whiskey.rvcom.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +19,11 @@ import java.util.Optional;
 public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public FavoriteService(FavoriteRepository favoriteRepository) {
+    public FavoriteService(FavoriteRepository favoriteRepository, RestaurantRepository restaurantRepository) {
         this.favoriteRepository = favoriteRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     /**
@@ -30,6 +36,7 @@ public class FavoriteService {
     public List<Favorite> getFavoritesByMember(Member member) {
         return favoriteRepository.findByMember(member); 
     }
+
 
     /**
      * 새로운 즐겨찾기를 추가.
@@ -65,6 +72,18 @@ public class FavoriteService {
     @Transactional
     public void removeFavorite(Member member, Restaurant restaurant) {
         favoriteRepository.deleteByMemberAndRestaurant(member, restaurant);
+    }
+
+    /**
+     * ID로 레스토랑을 찾는 메서드.
+     *
+     * @param restaurantId 찾고자 하는 레스토랑의 ID
+     * @return 해당 ID의 레스토랑 객체
+     * @throws IllegalArgumentException 해당 ID의 레스토랑이 존재하지 않을 때 발생
+     */
+    public Restaurant findRestaurantById(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID로 레스토랑을 찾을 수 없습니다: " + restaurantId));
     }
 
     /**
