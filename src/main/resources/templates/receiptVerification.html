@@ -12,6 +12,9 @@
     </style>
 </head>
 <body>
+    <!-- hiddeninput 영역 -->
+    <input type="hidden" id="restaurantId" th:value="${restaurantId}">
+
     <div class="container">
         <h1>영수증 인증</h1>
         <div class="verification-grid">
@@ -50,6 +53,8 @@
         const preview = document.getElementById('preview');
         const verifyBtn = document.getElementById('verifyBtn');
         const nextStepBtn = document.getElementById('nextStepBtn');
+        let ocrResponseObject = {};
+
 
         // 드래그 앤 드롭 이벤트를 처리합니다.
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -127,25 +132,49 @@
             // receipt/verification - post요청 전달
             // 이미지 경로를 전달해야 함
             await verifyReceipt();
-
         })
         // alert('영수증 인증이 완료되었습니다.');
         //     nextStepBtn.style.display = 'block';
         // });
 
-        async function verifyReceipt() {
+        async function verifyReceipt() {            // 영수증인증 버튼 누른 경우 동작하는 함수
             // const uploadedFileName = await uploadFileToServer(preview.src);
             // console.log('uploadedFileName', uploadedFileName);
             
             console.log('verifyReceipt', preview.src);
             
-            const ocrResponseObject = await ocrProcess(preview.src);
+            ocrResponseObject = await ocrProcess(preview.src);
 
+            // todo. 올바른 영수증인지 확인하는 프로세스 필요
             alert('영수증 인증이 완료되었습니다.');
 
+            // await sendReceiptData(ocrResponseObject);
+
+            // 여기서 객체를 통해 받아온 정보를 다음 페이지에 넘길 수 있도록 해야 함.
             // receiptInfo.style.display = 'block';    // 영수증 인식정보 페이지 노출
             // verifyBtn.style.display = 'none';       // 인증 버튼 숨김
             // nextStepBtn.style.display = 'block';    // 다음 단계 버튼 노출
+        }
+
+        async function sendReceiptData(receiptDataObject) {
+            const restaurantId = document.getElementById('restaurantId').value;
+
+            // /review/{restaurantId}/{receiptId}
+            fetch(`/review/${restaurantId}/1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(receiptDataObject),
+            }).then(response => {
+                if(response.ok) return response.text();
+                throw new Error('Network response was not ok.');
+            }).then(html => {
+                // 새로운 페이지의 콘텐츠로 교체
+                document.documentElement.innerHTML = html;
+            }).catch(error => {
+                console.error('Error: ', error);
+            })
         }
         
         async function ocrProcess(filePath) {
@@ -187,6 +216,7 @@
 
                         document.getElementById('preview').style.display = 'none';
                         document.getElementById('receiptInfo').style.display = 'block';
+                        document.getElementById('verifyBtn').style.display = 'none';
                         nextStepBtn.style.display = 'block';
 
                         resolve(response);
@@ -197,6 +227,7 @@
             });
         }
 
+        // need. 파일업로드 요청 로직으로 업무요청예정
         async function uploadFileToServer(file) {
             const formData = new FormData();
             formData.append('file', file);
@@ -221,10 +252,12 @@
             })
         }
 
-        nextStepBtn.addEventListener('click', function() {
+        nextStepBtn.addEventListener('click', async function() {
             // TODO: 리뷰 작성 페이지로 이동하는 로직을 구현해야 합니다.
             // TODO: 필요한 경우, 영수증 정보를 세션 스토리지나 로컬 스토리지에 저장하여 다음 페이지로 전달해야 합니다.
-            window.location.href = '/write-review';
+            // window.location.href = '/write-review';
+
+            await sendReceiptData(ocrResponseObject);
         });
 
         // 웹캠 관련 요소들을 선택합니다.
@@ -255,6 +288,12 @@
 
             // TODO: 
             verifyBtn.style.display = 'block';
+
+            // 촬영 버튼 클릭 시 '촬영하기' 버튼을 숨김 처리 후
+            // '다시 찍기' 버튼을 노출 처리
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'inline-block';
+
             // receiptInfo.style.display = 'block'; // TODO: 이 버튼은 영수증 인증하기 버튼 클릭 시 노출되어야 함
             // TODO: 캡처된 이미지를 서버로 전송하여 OCR 처리를 수행하는 API를 호출해야 합니다.
             // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
@@ -267,6 +306,9 @@
             receiptInfo.style.display = 'none';
             verifyBtn.style.display = 'block';
             nextStepBtn.style.display = 'none';
+            captureBtn.style.display = 'inline-block';
+
+            // 캡처된 이미지를 미리보기에서 숨김 처리
         });
     </script>
 </body>
