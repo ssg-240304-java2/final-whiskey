@@ -87,7 +87,7 @@ public class RestaurantService {
         RestaurantCardDTO restaurantCardDTO = new RestaurantCardDTO(
                 restaurant.getId(),
                 restaurant.getName(),
-                restaurant.getCategory().name(),
+                restaurant.getCategory().getTitle(),
                 distanceString,
                 openingHour,
                 coverImageUrl

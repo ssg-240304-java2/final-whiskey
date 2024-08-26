@@ -1,8 +1,10 @@
 package com.whiskey.rvcom.entity.restaurant;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Getter
 public enum RestaurantCategory {
     KOREAN("한식"),
     CHINESE("중식"),
