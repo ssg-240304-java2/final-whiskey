@@ -12,7 +12,12 @@
 <header th:fragment="header">
     <div class="header-wrapper">
         <div class="header-content">
-            <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">FoodFolio</a></div>
+            <div class="logo">
+                <a href="/" class="logo-link">
+                    <img src="/static/images/logo.png" alt="FoodFolio 로고" class="logo-image">
+                    <span class="logo-text">FoodFolio</span>
+                </a>
+            </div>            
             <div class="search-bar">
                 <input id="search-text" type="text" placeholder="맛집 또는 음식을 검색해보세요">
                 <button id="search-btn" onclick="searchRestaurant()"><i class="fas fa-search"></i> 검색</button>
