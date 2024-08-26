@@ -11,41 +11,23 @@
 <div class="login-container">
     <div class="image-section">
         <!-- TODO: 실제 로고 이미지로 교체 필요 -->
-        <!-- <img src="https://via.placeholder.com/500" alt="Placeholder Image"> -->
-        <img src="/static/images/logo.png" alt="Foodfolio 로고" class="logo">        </div>
+        <img src="/static/images/logo.png" alt="Foodfolio 로고" class="logo">
     </div>
+
     <div class="form-section">
         <h1>Foodfolio에 오신 것을 환영합니다</h1>
 
-        <!-- 알럿 메시지 표시 -->
-        <div th:if="${alertMessage}">
-            <script>
-                alert(th:text="${alertMessage}");
-            </script>
-        </div>
-<!-- 충돌 해결 전(원본 시작)-->
-    <div class="login-container">
-        <div class="image-section">
-            <!-- TODO: 실제 로고 이미지로 교체 필요 -->
-            <img src="/static/images/logo.png" alt="Foodfolio 로고" class="logo">        </div>
-        <div class="form-section">
-            <h1>Foodfolio에 오신 것을 환영합니다</h1>
-            <div class="social-login">
-                <!-- TODO: 구글 로그인 기능 구현 필요 -->
-                <button class="google">구글 로그인</button>
-                <!-- TODO: 네이버 로그인 기능 구현 필요 -->
-                <button class="naver">네이버 로그인</button>
-            </div>
-            <div class="divider">또는</div>
-            <!-- TODO: 폼 제출 처리 로직 구현 필요 -->
-<!-- 충돌 해결 전(원본 끝)-->
 
         <div class="social-login">
-            <a href="/oauth2/authorization/naver" class="naver"></a>
+            <!-- TODO: 구글 로그인 기능 구현 필요 -->
             <a href="/oauth2/authorization/google" class="google"></a>
+            <!-- TODO: 네이버 로그인 기능 구현 필요 -->
+            <a href="/oauth2/authorization/naver" class="naver"></a>
         </div>
+
         <div class="divider">또는</div>
 
+        <!-- 로그인 폼 -->
         <form action="/login" method="post">
             <input type="text" id="loginId" name="loginId" placeholder="아이디" required />
             <input type="password" id="password" name="password" placeholder="비밀번호" required />
@@ -59,7 +41,6 @@
             <div th:if="${error}" class="error-message" style="color: red; margin-top: 10px;">
                 <p th:text="${error}"></p>
             </div>
-
         </form>
 
         <div class="options">
