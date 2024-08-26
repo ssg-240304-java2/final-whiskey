@@ -88,6 +88,12 @@
                     <div th:each="favorite : ${favorites}" class="bookmark-item" th:attr="data-restaurant-id=${favorite.restaurant.id}">
                         <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : 'https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg'}" alt="레스토랑 이미지" class="restaurant-image">
                         <div class="bookmark-content">
+                            <form th:action="@{/mypage/remove-favorite}" method="post" class="remove-favorite-form">
+                                <input type="hidden" name="restaurantId" th:value="${favorite.restaurant.id}" />
+                                <input type="hidden" name="bookmarkPage" th:value="${bookmarkCurrentPage}" />
+                                <input type="hidden" name="bookmarkSize" th:value="${bookmarkSize}" />
+                                <button type="submit" class="remove-favorite-btn">북마크 해제</button>
+                            </form>
                             <h3 th:text="${favorite.restaurant.name}">레스토랑 이름</h3>
                             <p th:text="${favorite.restaurant.address.name}">레스토랑 주소</p>
                             <div class="rating">
@@ -103,13 +109,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- 북마크 해제 폼 -->
-                        <form th:action="@{/mypage/remove-favorite}" method="post">
-                            <input type="hidden" name="restaurantId" th:value="${favorite.restaurant.id}" />
-                            <input type="hidden" name="bookmarkPage" th:value="${bookmarkCurrentPage}" />
-                            <input type="hidden" name="bookmarkSize" th:value="${bookmarkSize}" />
-                            <button type="submit" class="remove-favorite-btn">북마크 해제</button>
-                        </form>
                     </div>
                 </div>
 

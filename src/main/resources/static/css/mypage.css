@@ -212,8 +212,8 @@ body {
     font-size: 1em;
     font-weight: 500;
     position: absolute;
-    bottom: 15px;
-    right: 15px;
+    top: 15px; /* 맨 위로 위치 */
+    right: 15px; /* 오른쪽으로 위치 */
 }
 
 .remove-favorite-btn:hover {
