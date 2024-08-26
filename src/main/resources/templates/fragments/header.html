@@ -14,8 +14,10 @@
         <div class="header-content">
             <div class="logo"><a href="/" style="text-decoration: none; color: inherit;">FoodFolio</a></div>
             <div class="search-bar">
-                <input type="text" placeholder="맛집 또는 음식을 검색해보세요">
-                <button><i class="fas fa-search"></i> 검색</button>
+<!--                <input type="text" placeholder="맛집 또는 음식을 검색해보세요">-->
+<!--                <button><i class="fas fa-search"></i> 검색</button>-->
+                <input id="search-text" type="text" placeholder="맛집 또는 음식을 검색해보세요">
+                <button id="search-btn" onclick="searchRestaurant()"><i class="fas fa-search"></i> 검색</button>
             </div>
             <nav>
                 <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/login">로그인</a>
@@ -47,14 +49,14 @@
                 <a href="/register-store">입점 신청</a>
             </nav>
         </div>
-    </div>
+    </div> -->
     <script>
         function searchRestaurant() {
             const searchText = document.getElementById('search-text').value;
 
             window.location.href = "/search-results?search=" + encodeURIComponent(searchText);
         }
-    </script> -->
+    </script>
 </header>
 </body>
 </html>

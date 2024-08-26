@@ -28,7 +28,7 @@
             <option value="distance">거리순</option>
         </select>
         <select class="filter-dropdown">
-            <option disabled, hidden selected value="">음식 종류</option>
+            <option disabled hidden selected value="">음식 종류</option>
             <option value="ALL">전체</option>
             <option th:each="category: ${categoryList}" value="${category}">[[${category.getTitle()}]]</option>
             <!--            <option value="korean">한식</option>-->

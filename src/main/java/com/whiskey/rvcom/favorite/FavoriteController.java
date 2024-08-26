@@ -6,11 +6,12 @@ import com.whiskey.rvcom.entity.favorite.Favorite;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
-import com.whiskey.rvcom.repository.ImageFileRepository;
+import com.whiskey.rvcom.repository.*;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +26,14 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/favorites")
+@RequiredArgsConstructor
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
     private final RestaurantService restaurantService;
 
-    @Autowired
-    public FavoriteController(FavoriteService favoriteService, RestaurantService restaurantService) {
-        this.favoriteService = favoriteService;
-        this.restaurantService = restaurantService;
-    }
+    private final RestaurantRepository restaurantRepository;
+
 
     /**
      * 회원의 즐겨찾기 목록을 조회합니다.
@@ -107,7 +106,8 @@ public class FavoriteController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
         }
 
-        Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow();
+//        Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
         favoriteService.removeFavorite(member, restaurant);
 
         return ResponseEntity.ok("Favorite removed");

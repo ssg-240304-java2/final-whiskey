@@ -17,15 +17,15 @@ public class AppConfig {
     }
 
     // 네이버 client ID
-    @Value("${{secrets.NAVER_CLIENT_ID}}")
+    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
     private String naverClientId;
 
     // 네이버 client secret
-    @Value("${{secrets.NAVER_CLIENT_SECRET}}")
+    @Value("${spring.security.oauth2.client.registration.naver.client-secret}")
     private String naverClientSecret;
 
     // 구글 client ID
-    @Value("${{secrets.GOOGLE_CLIENT_ID}}")
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
     @Bean
