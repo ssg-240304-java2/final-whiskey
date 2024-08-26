@@ -24,9 +24,15 @@
         <div class="main-content">
             <div th:replace="fragments/mypage_contentSection :: contentSection('profile')"></div>
 
+            <!-- 리뷰 섹션 -->
             <section id="reviews" class="content-section">
                 <h2>내가 작성한 리뷰</h2>
                 <div class="review-list">
+                    <!-- 리뷰가 없는 경우 메시지 표시 -->
+                    <div th:if="${#lists.isEmpty(reviews)}">
+                        <p>작성한 리뷰가 존재하지 않습니다.</p>
+                    </div>
+                    <!-- 리뷰가 있는 경우 -->
                     <div th:each="review : ${reviews}" class="review-item">
                         <!-- 이미지 갤러리 -->
                         <div class="review-images">
@@ -48,8 +54,8 @@
                     </div>
                 </div>
 
-                <!-- Pagination -->
-                <div class="pagination">
+                <!-- 리뷰가 있을 때만 페이지 네이션 표시 -->
+                <div th:if="${!#lists.isEmpty(reviews)}" class="pagination">
                     <ul>
                         <li th:if="${currentPage > 0}">
                             <a th:href="@{'/mypage'(page=0, size=${size})}">&laquo; 맨 처음</a>
@@ -70,9 +76,15 @@
                 </div>
             </section>
 
+            <!-- 북마크 섹션 -->
             <section id="bookmarks" class="content-section">
                 <h2>북마크한 레스토랑</h2>
                 <div class="bookmark-list">
+                    <!-- 북마크가 없는 경우 메시지 표시 -->
+                    <div th:if="${#lists.isEmpty(favorites)}">
+                        <p>북마크한 레스토랑이 존재하지 않습니다.</p>
+                    </div>
+                    <!-- 북마크가 있는 경우 -->
                     <div th:each="favorite : ${favorites}" class="bookmark-item">
                         <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : 'https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg'}" alt="레스토랑 이미지" class="restaurant-image">
                         <div class="bookmark-content">
@@ -97,8 +109,8 @@
                     </div>
                 </div>
 
-                <!-- 페이지네이션 -->
-                <div class="pagination">
+                <!-- 북마크가 있을 때만 페이지 네이션 표시 -->
+                <div th:if="${!#lists.isEmpty(favorites)}" class="pagination">
                     <ul>
                         <li th:if="${bookmarkCurrentPage > 0}">
                             <a th:href="@{'/mypage'(bookmarkPage=0, bookmarkSize=${bookmarkSize})}">&laquo; 맨 처음</a>
@@ -118,7 +130,6 @@
                     </ul>
                 </div>
             </section>
-
 
             <!-- 일반 회원 수정 모달 -->
             <div th:if="${isSocialLogin == false}" th:insert="~{fragments/mypage_editProfileModal_basic :: editProfileModalBasic(${member}, ${profileImageUrl})}"></div>
