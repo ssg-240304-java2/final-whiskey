@@ -5,6 +5,8 @@
     --text-color: #333;
     --border-color: #e6e6e6;
     --hover-color: #af1d1d;
+    --link-color: #0073bb; /* 링크 색상 추가 */
+    --link-hover-color: #0056b3; /* 링크 호버 색상 추가 */
 }
 
 body {
@@ -137,6 +139,17 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     border: 1px solid var(--border-color);
+}
+
+/* 음식점 이름을 링크처럼 보이게 하는 스타일 추가 */
+.restaurant-name {
+    color: var(--link-color); /* 링크 색상 */
+    text-decoration: underline; /* 밑줄 추가 */
+    cursor: pointer; /* 커서를 손가락 모양으로 변경 */
+}
+
+.restaurant-name:hover {
+    color: var(--link-hover-color); /* 마우스 오버 시 색상 변경 */
 }
 
 .review-item {

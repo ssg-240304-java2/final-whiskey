@@ -40,7 +40,7 @@
                         </div>
                         <!-- 리뷰 내용 -->
                         <div class="review-content">
-                            <h3 th:text="${review.restaurant.name}">음식점 이름</h3>
+                            <h3 class="restaurant-name" th:text="${review.restaurant.name}">음식점 이름</h3>
                             <div class="rating">
                                 <!-- Filled stars -->
                                 <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, review.rating.value)}"></i>
@@ -57,19 +57,24 @@
                 <!-- 리뷰가 있을 때만 페이지 네이션 표시 -->
                 <div th:if="${!#lists.isEmpty(reviews)}" class="pagination">
                     <ul>
-                        <li th:if="${currentPage > 0}">
+                        <!-- 맨 처음 버튼 -->
+                        <li>
                             <a th:href="@{'/mypage'(page=0, size=${size})}">&laquo; 맨 처음</a>
                         </li>
-                        <li th:if="${currentPage > 0}">
-                            <a th:href="@{'/mypage'(page=${currentPage - 1}, size=${size})}">&laquo; 이전</a>
+                        <!-- 이전 버튼 -->
+                        <li>
+                            <a th:href="@{'/mypage'(page=${currentPage > 0 ? currentPage - 1 : 0}, size=${size})}">&laquo; 이전</a>
                         </li>
+                        <!-- 페이지 번호 -->
                         <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
                             <a th:classappend="${i == currentPage} ? 'active'" th:href="@{'/mypage'(page=${i}, size=${size})}" th:text="${i + 1}">1</a>
                         </li>
-                        <li th:if="${currentPage < totalPages - 1}">
-                            <a th:href="@{'/mypage'(page=${currentPage + 1}, size=${size})}">다음 &raquo;</a>
+                        <!-- 다음 버튼 -->
+                        <li>
+                            <a th:href="@{'/mypage'(page=${currentPage < totalPages - 1 ? currentPage + 1 : totalPages - 1}, size=${size})}">다음 &raquo;</a>
                         </li>
-                        <li th:if="${currentPage < totalPages - 1}">
+                        <!-- 맨 마지막 버튼 -->
+                        <li>
                             <a th:href="@{'/mypage'(page=${totalPages - 1}, size=${size})}">맨 마지막 &raquo;</a>
                         </li>
                     </ul>
@@ -78,11 +83,11 @@
 
             <!-- 북마크 섹션 -->
             <section id="bookmarks" class="content-section">
-                <h2>북마크한 레스토랑</h2>
+                <h2>즐겨찾기한 레스토랑</h2>
                 <div class="bookmark-list">
                     <!-- 북마크가 없는 경우 메시지 표시 -->
                     <div th:if="${#lists.isEmpty(favorites)}">
-                        <p>북마크한 레스토랑이 존재하지 않습니다.</p>
+                        <p>즐겨찾기한 레스토랑이 존재하지 않습니다.</p>
                     </div>
                     <!-- 북마크가 있는 경우 -->
                     <div th:each="favorite : ${favorites}" class="bookmark-item" th:attr="data-restaurant-id=${favorite.restaurant.id}">
@@ -92,9 +97,9 @@
                                 <input type="hidden" name="restaurantId" th:value="${favorite.restaurant.id}" />
                                 <input type="hidden" name="bookmarkPage" th:value="${bookmarkCurrentPage}" />
                                 <input type="hidden" name="bookmarkSize" th:value="${bookmarkSize}" />
-                                <button type="submit" class="remove-favorite-btn">북마크 해제</button>
+                                <button type="submit" class="remove-favorite-btn">즐겨찾기 해제</button>
                             </form>
-                            <h3 th:text="${favorite.restaurant.name}">레스토랑 이름</h3>
+                            <h3 class="restaurant-name" th:text="${favorite.restaurant.name}">레스토랑 이름</h3>
                             <p th:text="${favorite.restaurant.address.name}">레스토랑 주소</p>
                             <div class="rating">
                                 <!-- 식당의 평점 값 -->
@@ -115,19 +120,24 @@
                 <!-- 북마크가 있을 때만 페이지 네이션 표시 -->
                 <div th:if="${!#lists.isEmpty(favorites)}" class="pagination">
                     <ul>
-                        <li th:if="${bookmarkCurrentPage > 0}">
+                        <!-- 맨 처음 버튼 -->
+                        <li>
                             <a th:href="@{'/mypage'(bookmarkPage=0, bookmarkSize=${bookmarkSize})}">&laquo; 맨 처음</a>
                         </li>
-                        <li th:if="${bookmarkCurrentPage > 0}">
-                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkCurrentPage - 1}, bookmarkSize=${bookmarkSize})}">&laquo; 이전</a>
+                        <!-- 이전 버튼 -->
+                        <li>
+                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkCurrentPage > 0 ? bookmarkCurrentPage - 1 : 0}, bookmarkSize=${bookmarkSize})}">&laquo; 이전</a>
                         </li>
+                        <!-- 페이지 번호 -->
                         <li th:each="i : ${#numbers.sequence(0, bookmarkTotalPages - 1)}">
                             <a th:classappend="${i == bookmarkCurrentPage} ? 'active'" th:href="@{'/mypage'(bookmarkPage=${i}, bookmarkSize=${bookmarkSize})}" th:text="${i + 1}">1</a>
                         </li>
-                        <li th:if="${bookmarkCurrentPage < bookmarkTotalPages - 1}">
-                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkCurrentPage + 1}, bookmarkSize=${bookmarkSize})}">다음 &raquo;</a>
+                        <!-- 다음 버튼 -->
+                        <li>
+                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkCurrentPage < bookmarkTotalPages - 1 ? bookmarkCurrentPage + 1 : bookmarkTotalPages - 1}, bookmarkSize=${bookmarkSize})}">다음 &raquo;</a>
                         </li>
-                        <li th:if="${bookmarkCurrentPage < bookmarkTotalPages - 1}">
+                        <!-- 맨 마지막 버튼 -->
+                        <li>
                             <a th:href="@{'/mypage'(bookmarkPage=${bookmarkTotalPages - 1}, bookmarkSize=${bookmarkSize})}">맨 마지막 &raquo;</a>
                         </li>
                     </ul>
