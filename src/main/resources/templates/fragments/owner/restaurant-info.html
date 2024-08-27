@@ -1,125 +1,128 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="restaurant-info">
-        <div class="container mt-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">음식점 정보</h5>
-                    <div id="restaurantInfoDisplay">
-                        <img id="restaurantImage" src="https://via.placeholder.com/300x200" alt="Restaurant Image" class="img-fluid mb-3">
-                        <p><strong>음식점 이름:</strong> <span id="displayRestaurantName"></span></p>
-                        <p><strong>음식점 번호:</strong> <span id="displayRestaurantNumber"></span></p>
-                        <p><strong>주소:</strong> <span id="displayRestaurantAddress"></span></p>
-                        <p><strong>사업자등록번호:</strong> <span id="displayBusinessNumber"></span></p>
-                        <p><strong>대표자:</strong> <span id="displayOwnerName"></span></p>
-                        <p><strong>카테고리:</strong> <span id="displayCategory"></span></p>
-                        <p><strong>영업시간:</strong></p>
-                        <ul id="displayOperatingHours"></ul>
-                    </div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <button type="button" class="btn btn-primary me-2" id="requestModification">수정 요청</button>
-                        <button type="button" class="btn btn-warning" id="requestDeletion">삭제 요청</button>
-                    </div>
+<div th:fragment="restaurant-info">
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">음식점 정보</h5>
+                <div id="restaurantInfoDisplay">
+                    <img id="restaurantImage" src="https://via.placeholder.com/300x200" alt="Restaurant Image"
+                         class="img-fluid mb-3">
+                    <p><strong>음식점 이름:</strong> <span id="displayRestaurantName"></span></p>
+                    <p><strong>음식점 번호:</strong> <span id="displayRestaurantNumber"></span></p>
+                    <p><strong>주소:</strong> <span id="displayRestaurantAddress"></span></p>
+                    <p><strong>대표자:</strong> <span id="displayOwnerName"></span></p>
+                    <p><strong>카테고리:</strong> <span id="displayCategory"></span></p>
+                    <p><strong>영업시간:</strong></p>
+                    <ul id="displayOperatingHours"></ul>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="button" class="btn btn-primary me-2" id="requestModification">수정 요청</button>
+                    <button type="button" class="btn btn-warning" id="requestDeletion">삭제 요청</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 음식점 정보 수정 요청 모달 -->
-    <div class="modal fade" id="modificationRequestModal" tabindex="-1" aria-labelledby="modificationRequestModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modificationRequestModalLabel">음식점 정보 수정 요청</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="restaurantInfoForm">
-                        <div class="mb-3">
-                            <label for="restaurantName" class="form-label">음식점 이름</label>
-                            <input type="text" class="form-control" id="restaurantName" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="restaurantNumber" class="form-label">음식점 번호</label>
-                            <input type="text" class="form-control" id="restaurantNumber" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="restaurantAddress" class="form-label">주소</label>
-                            <input type="text" class="form-control" id="restaurantAddress">
-                        </div>
-                        <div class="mb-3">
-                            <label for="businessNumber" class="form-label">사업자등록번호</label>
-                            <input type="text" class="form-control" id="businessNumber" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="ownerName" class="form-label">대표자</label>
-                            <input type="text" class="form-control" id="ownerName" readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="category" class="form-label">카테고리</label>
-                            <select class="form-select" id="category">
-                                <option value="">카테고리 선택</option>
-                                <!-- TODO: 백엔드에서 카테고리 목록을 동적으로 가져와 옵션 생성 -->
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">영업시간</label>
-                            <div class="row mb-2" th:each="day : ${#strings.arraySplit('월,화,수,목,금,토,일', ',')}">
-                                <div class="col-md-2">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" th:id="${'operate' + day}" th:name="${'operate' + day}">
-                                        <label class="form-check-label" th:for="${'operate' + day}" th:text="${day}">요일</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <select class="form-select" th:id="${'openTime' + day}" th:name="${'openTime' + day}">
-                                        <option value="">영업 시작 시간</option>
-                                        <option th:each="hour : ${#numbers.sequence(0, 23)}" th:value="${hour}" th:text="${#strings.length(hour) == 1 ? '0' + hour : hour} + ':00'"></option>
-                                    </select>
-                                </div>
-                                <div class="col-md-5">
-                                    <select class="form-select" th:id="${'closeTime' + day}" th:name="${'closeTime' + day}">
-                                        <option value="">영업 종료 시간</option>
-                                        <option th:each="hour : ${#numbers.sequence(0, 23)}" th:value="${hour}" th:text="${#strings.length(hour) == 1 ? '0' + hour : hour} + ':00'"></option>
-                                    </select>
+<!-- 음식점 정보 수정 요청 모달 -->
+<div class="modal fade" id="modificationRequestModal" tabindex="-1" aria-labelledby="modificationRequestModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modificationRequestModalLabel">음식점 정보 수정 요청</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="restaurantInfoForm">
+                    <div class="mb-3">
+                        <label for="restaurantName" class="form-label">음식점 이름</label>
+                        <input type="text" class="form-control" id="restaurantName" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="restaurantNumber" class="form-label">음식점 번호</label>
+                        <input type="text" class="form-control" id="restaurantNumber" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="restaurantAddress" class="form-label">주소</label>
+                        <input type="text" class="form-control" id="restaurantAddress">
+                    </div>
+                    <div class="mb-3">
+                        <label for="ownerName" class="form-label">대표자</label>
+                        <input type="text" class="form-control" id="ownerName" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">카테고리</label>
+                        <select class="form-select" id="category">
+                            <option value="">카테고리 선택</option>
+                            <!-- TODO: 백엔드에서 카테고리 목록을 동적으로 가져와 옵션 생성 -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">영업시간</label>
+                        <div class="row mb-2" th:each="day : ${#strings.arraySplit('월,화,수,목,금,토,일', ',')}">
+                            <div class="col-md-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:id="${'operate' + day}"
+                                           th:name="${'operate' + day}">
+                                    <label class="form-check-label" th:for="${'operate' + day}"
+                                           th:text="${day}">요일</label>
                                 </div>
                             </div>
+                            <div class="col-md-5">
+                                <select class="form-select" th:id="${'openTime' + day}" th:name="${'openTime' + day}">
+                                    <option value="">영업 시작 시간</option>
+                                    <option th:each="hour : ${#numbers.sequence(0, 23)}" th:value="${hour}"
+                                            th:text="${#strings.length(hour) == 1 ? '0' + hour : hour} + ':00'"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-5">
+                                <select class="form-select" th:id="${'closeTime' + day}" th:name="${'closeTime' + day}">
+                                    <option value="">영업 종료 시간</option>
+                                    <option th:each="hour : ${#numbers.sequence(0, 23)}" th:value="${hour}"
+                                            th:text="${#strings.length(hour) == 1 ? '0' + hour : hour} + ':00'"></option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="modificationReason" class="form-label">수정 요청 사유</label>
-                            <textarea class="form-control" id="modificationReason" rows="3" placeholder="수정 요청 사유를 입력해주세요."></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="sendModificationRequest">수정 요청 보내기</button>
-                </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modificationReason" class="form-label">수정 요청 사유</label>
+                        <textarea class="form-control" id="modificationReason" rows="3"
+                                  placeholder="수정 요청 사유를 입력해주세요."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" id="sendModificationRequest">수정 요청 보내기</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- 삭제 요청 확인 모달 -->
-    <div class="modal fade" id="deletionRequestModal" tabindex="-1" aria-labelledby="deletionRequestModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deletionRequestModalLabel">음식점 삭제 요청 확인</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>음식점 제거 요청 수락은 수일이 걸릴 수 있으며, 수락이 된 이후에는 요청 취소가 불가하며 해당 음식점에 대한 점주의 권한이 소멸됩니다.
-                        신중한 선택 바랍니다.</p>
-                    <textarea class="form-control" id="deletionReason" rows="3" placeholder="삭제 요청 사유를 입력해주세요."></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-warning" id="confirmDeletionRequest">삭제 요청</button>
-                </div>
+<!-- 삭제 요청 확인 모달 -->
+<div class="modal fade" id="deletionRequestModal" tabindex="-1" aria-labelledby="deletionRequestModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deletionRequestModalLabel">음식점 삭제 요청 확인</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>음식점 제거 요청 수락은 수일이 걸릴 수 있으며, 수락이 된 이후에는 요청 취소가 불가하며 해당 음식점에 대한 점주의 권한이 소멸됩니다.
+                    신중한 선택 바랍니다.</p>
+                <textarea class="form-control" id="deletionReason" rows="3" placeholder="삭제 요청 사유를 입력해주세요."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-warning" id="confirmDeletionRequest">삭제 요청</button>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>
 
