@@ -136,9 +136,10 @@ public class MemberController {
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model,
                          @RequestParam(value = "page", defaultValue = "0") int page,
-                         @RequestParam(value = "size", defaultValue = "2") int size,
+                         @RequestParam(value = "size", defaultValue = "10") int size,
                          @RequestParam(value = "bookmarkPage", defaultValue = "0") int bookmarkPage,
-                         @RequestParam(value = "bookmarkSize", defaultValue = "2") int bookmarkSize) {
+                         @RequestParam(value = "bookmarkSize", defaultValue = "10") int bookmarkSize,
+                         @RequestParam(value = "activeTab", defaultValue = "profile") String activeTab) {
 
         Member member = (Member) session.getAttribute("member");
 
@@ -198,6 +199,7 @@ public class MemberController {
         model.addAttribute("bookmarkCurrentPage", bookmarkPage);
         model.addAttribute("bookmarkTotalPages", bookmarkTotalPages);
         model.addAttribute("bookmarkSize", bookmarkSize);
+        model.addAttribute("activeTab", activeTab); // 활성화된 탭 정보 전달
 
         return "mypage";
     }
@@ -269,7 +271,7 @@ public class MemberController {
             member.setPassword(null);
 
             // 사용자에게 환영 메시지를 설정
-            member.setIntroduction("안녕하세요 " + nickname + " 만나서 반갑습니다");
+            member.setIntroduction("안녕하세요 " + nickname + "입니다!! 만나서 반갑습니다");
 
             socialLoginService.save(member);
             setSessionAttributes(session, member);
@@ -442,6 +444,8 @@ public class MemberController {
         session.setAttribute("isAuthenticated", true);
         session.setAttribute("userRole", member.getRole().toString());
         session.setAttribute("loginType", member.getLoginType().toString());
+        session.setAttribute("memberId", member.getId());
         log.info("Session loginType set to: {}", member.getLoginType().toString());
+        log.info("Session memberId set to: {}", member.getId());
     }
 }

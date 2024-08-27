@@ -1,9 +1,37 @@
+let loginMember = null;
+
 RestaurantDetail.initInquiries = function() {
+    loadCurrentMemberAndInquiries();
     setupInquiryForm();
     // setupInquirySort();
-    loadInquiries();
     // setupReplyButtons();
 };
+
+function loadCurrentMemberAndInquiries() {
+
+    fetch(`/restaurant/inquiry/member`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('멤버 정보를 가져오지 못했습니다.');
+            }
+            console.log(response);
+            return response.json();
+        })
+        .then(member => {
+            loginMember = member;
+            console.log('로그인한 사용자:', loginMember);
+
+            loadInquiries();
+        })
+        .catch(error => {
+            console.error('멤버 정보를 가져오는 중 오류 발생:', error);
+        });
+}
 
 // function setupReplyButtons() {
 //     const replyButtons = document.querySelectorAll('.reply-inquiry');
@@ -54,10 +82,10 @@ function setupInquiryForm() {
 // }
 
 function submitInquiry(content) {
-    console.log(`문의 제출: ${content}`);
-    // TODO: 백엔드 API를 호출하여 새 문의를 추가하는 로직 구현
-
     const restaurantId = document.getElementById('restaurantId').value;
+    const confirmed = confirm("문의를 제출하시겠습니까?");
+
+    if (confirmed) {
 
     fetch(`/restaurant/${restaurantId}/inquiry`, {
         method: 'POST',
@@ -70,18 +98,19 @@ function submitInquiry(content) {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('문의를 제출할 수 없습니다.');
             }
+            alert("문의 제출 성공!!");
             console.log("문의 제출 성공!!");
-
             document.getElementById('inquiryContent').value = '';
 
             loadInquiries();
         })
         .catch(error => {
-            alert("Error!");
-            console.log("ERROR: ", error);
+            alert("문의 제출 실패!");
+            console.log("문의 제출 실패!", error);
         });
+    }
 }
 
 // function sortInquiries(sortType) {
@@ -90,9 +119,7 @@ function submitInquiry(content) {
 // }
 
 function loadInquiries() {
-    console.log('문의 목록 로딩');
     const restaurantId = document.getElementById('restaurantId').value;
-    console.log("음식점 확인!!", restaurantId);
 
     fetch(`/restaurant/${restaurantId}/inquiry`, {
         method: 'GET',
@@ -102,7 +129,7 @@ function loadInquiries() {
     })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('문의 목록을 가져올 수 없습니다.');
             }
             return response.json();
         })
@@ -111,7 +138,7 @@ function loadInquiries() {
             renderInquiry(data);
         })
         .catch(error => {
-            alert("Error!");
+            alert("문의 목록을 가져오는데 실패했습니다.");
             console.log("ERROR: ", error);
         });
 }
@@ -125,6 +152,11 @@ function renderInquiry(data) {
         const inquiryItem = document.createElement('div');
         inquiryItem.classList.add('inquiry-item');
 
+        //작성자와 로그인한 사용자가 같으면 삭제 버튼 추가
+        let deleteButtonHtml = '';
+        if (inquiry.writerId === loginMember.id) {
+            deleteButtonHtml = `<button type="button" class="btn btn-danger delete-inquiry" data-inquiry-id="${inquiry.id}">삭제</button>`;
+        }
         inquiryItem.innerHTML = `
             <div class="inquiry-header">
             <!-- 이미지 있으면 사용 예정-->
@@ -136,7 +168,7 @@ function renderInquiry(data) {
             <div class="inquiry-content">
                 <p class="inquiry-question">${inquiry.content}</p>
                 <p class="inquiry-date">${new Date(inquiry.createdAt).toLocaleString()} 질문</p>
-                 <button type="button" class="btn btn-danger delete-inquiry" data-inquiry-id="${inquiry.id}">삭제</button>                
+                ${deleteButtonHtml}
             </div>
             ${inquiry.reply ? `
             <div class="inquiry-answer">
