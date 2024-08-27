@@ -2,11 +2,10 @@ var restaurantId = 2; // 예시로 고정된 값
 
 $(document).ready(function () {
 
-    const pageNumber = 1;
     loadInquiries(1);
 
-    $(document).on('click', '#post', clickPost);
-    $(document).on('click', '#forward', clickForward);
+    $(document).on('click', '#post-inquiry', clickInquiryPost);
+    $(document).on('click', '#forward-inquiry', clickInquiryForward);
 
     $('#saveReply').click(saveInquiryReply);
 });
@@ -15,7 +14,7 @@ $(document).ready(function () {
 function loadInquiries(pageNumber) {
     $.ajax({
         type: 'GET',
-        url: `/restaurant/${restaurantId}/allInquiry?pageNumber=${pageNumber}&pageSize=5`,
+        url: `/restaurant/${restaurantId}/inquiries?pageNumber=${pageNumber}&pageSize=5`,
         content: "application/json",
         success: function (inquiries) {
             const $inquiriesTable = $('#inquiries-table');
@@ -69,15 +68,15 @@ function saveInquiryReply() {
     const reply = $('#inquiryReply').val();
     const inquiryId = $('#inquiryModal').data('id');
 
-    alert('답변이 저장되었습니다: ' + reply);
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
         url: `/restaurant/inquiry/reply/${inquiryId}`,
         data: JSON.stringify({content: reply}),
         success: function (response) {
-            $('#inquiryModal').modal('hide');   // 모달 닫기
-            loadInquiries(getCurrentPage());    // 답변 저장 후 현재 페이지 목록 다시 불러오기
+            alert('답변이 저장되었습니다: ' + reply);
+            $('#inquiryModal').modal('hide');
+            loadInquiries(getCurrentPage());
         },
         error: function (xhr, status, error) {
             console.error("AJAX 요청 실패:", status, error);
@@ -90,37 +89,39 @@ function renderPageNumber(totalPages, pageNumber) {
     const pageList = $('#pagination-inquiry');
     pageList.empty();
 
-    const postButton = `<li class=page-item ${pageNumber === 1 ? 'disabled' : ''} id="post">
-                                    <a class="page-link" href="#" tabindex="-1">이전</a>
-                                </li>`;
+    const postButton = `<li class="page-item ${pageNumber === 1 ? 'disabled' : ''}" id="post-inquiry">
+                                 <a class="page-link" href="#" tabindex="-1">이전</a>
+                               </li>`;
     pageList.append(postButton);
 
     for (let index = 1; index <= totalPages; index++) {
-        pageList.append(`<li class="page-item ${pageNumber === index ? 'active' : ''}" id=${index}>
-                                    <a class="page-link" href="#" onclick="clickPage(${index})">${index}</a>
-                                </li>`);
+        pageList.append(`<li class="page-item ${pageNumber === index ? 'active' : ''}" id="${index}">
+                             <a class="page-link" href="#" onclick="clickInquiryPage(${index})">${index}</a>
+                         </li>`);
     }
 
-    const forwardButton = `<li class="page-item ${pageNumber === totalPages ? 'disabled' : ''}" id="forward" data-totalPage="${totalPages}">
-                                    <a class="page-link" href="#" onclick="clickForward()">다음</a>
+    const forwardButton = `<li class="page-item ${pageNumber === totalPages ? 'disabled' : ''}" id="forward-inquiry" data-totalPage="${totalPages}">
+                                    <a class="page-link" href="#" onclick="clickInquiryForward()">다음</a>
                                 </li>`;
     pageList.append(forwardButton);
 }
 
-function clickPage(pageNumber) {
+function clickInquiryPage(pageNumber) {
     loadInquiries(pageNumber);
 }
 
-function clickPost() {
+function clickInquiryPost() {
     const currentPageNumber = getCurrentPage();
+
     if (currentPageNumber > 1) {
         loadInquiries(currentPageNumber - 1);
     }
 }
 
-function clickForward() {
+function clickInquiryForward() {
     const currentPageNumber = getCurrentPage();
     const totalPageNumber = parseInt($(this).attr('data-totalPage'));
+
     if (currentPageNumber < totalPageNumber) {
         loadInquiries(currentPageNumber + 1);
     }
