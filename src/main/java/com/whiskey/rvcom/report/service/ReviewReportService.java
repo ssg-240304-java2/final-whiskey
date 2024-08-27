@@ -51,7 +51,7 @@ public class ReviewReportService {
 
     // 리뷰 신고 상태값 변경
     @Transactional
-    public void reviewReportPunish(Long id, boolean isPunish) {
+    public String reviewReportPunish(Long id, boolean isPunish) {
 
         ReviewReport reviewReport = reviewReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewReport not found with ID: " + id));
@@ -64,7 +64,7 @@ public class ReviewReportService {
 
         reviewReportRepository.save(reviewReport);
 
-        // 메일 발송 API 추후 추가 예정
+        return reviewReport.getReview().getReviewer().getEmail();
     }
 
 
@@ -91,5 +91,13 @@ public class ReviewReportService {
 
         return reviewRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Review not found with ID: " + id));
+    }
+
+    public String getMailText(Long reportId) {
+
+        ReviewReport report = getReviewReport(reportId);
+
+        return "다음 리뷰가 신고 확인결과 비공개 처리 되었습니다. \n" +
+                "신고 내용 : " + report.getContent();
     }
 }

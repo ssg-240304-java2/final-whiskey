@@ -1,7 +1,10 @@
 package com.whiskey.rvcom.report.controller;
 
+import com.whiskey.libs.rest.request.RequestMethod;
+import com.whiskey.libs.rest.request.RestInvoker;
 import com.whiskey.rvcom.entity.report.ReviewCommentReport;
 import com.whiskey.rvcom.entity.review.ReviewComment;
+import com.whiskey.rvcom.report.model.dto.MailInfo;
 import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.service.ReviewCommentReportService;
 import com.whiskey.rvcom.review.ReviewCommentService;
@@ -14,6 +17,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.whiskey.rvcom.report.model.dto.MailConst.COMMENT_SUBJECT;
+import static com.whiskey.rvcom.report.model.dto.MailConst.MAIL_URL;
+
 @RestController
 @RequestMapping("/reviewcommentreport")
 @RequiredArgsConstructor
@@ -21,6 +27,7 @@ public class CommentReportController {
 
     private final ReviewCommentReportService reviewCommentReportService;
     private final ReviewCommentService reviewCommentService;
+
 
     /***
      * 댓글 신고 등록
@@ -79,11 +86,11 @@ public class CommentReportController {
     }
 
     @PutMapping("/update/{reportId}")
-    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
+    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) throws Exception {
 
         boolean isPunish = btnId.equals("commentPunish");
 
-        reviewCommentReportService.reviewCommentReportPunish(reportId, isPunish);
+        String owenerEmail = reviewCommentReportService.reviewCommentReportPunish(reportId, isPunish);
 
         ReviewCommentReport reviewCommentReport = reviewCommentReportService.getReviewCommentReport(reportId);
 
@@ -93,9 +100,14 @@ public class CommentReportController {
             reviewComment.setSuspended(true);
 
             reviewCommentService.saveComment(reviewComment);
-            System.out.println(reviewComment.isSuspended());
 
-            // 메일 발송 코드 예정
+            // 메일 발송 코드
+            MailInfo mailInfo =
+                    new MailInfo(owenerEmail, COMMENT_SUBJECT, reviewCommentReportService.getMailText(reportId));
+
+            RestInvoker<Void> invoker = RestInvoker.create(MAIL_URL, Void.class);
+
+            invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
         } else {
             System.out.println("신고 처리 보류");
         }

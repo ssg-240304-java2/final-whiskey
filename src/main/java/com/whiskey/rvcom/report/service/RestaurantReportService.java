@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+
+
 @Service
 @RequiredArgsConstructor
 public class RestaurantReportService {
@@ -54,7 +56,7 @@ public class RestaurantReportService {
 
     // 식당 신고 상태값 변경
     @Transactional
-    public void restaurantReportPunish(Long id, boolean isPunish) {
+    public String restaurantReportPunish(Long id, boolean isPunish) {
 
         // 가져온 id 값으로 데이터베이스에서 조회
         RestaurantReport restaurantReport = restaurantReportRepository.findById(id)
@@ -69,6 +71,8 @@ public class RestaurantReportService {
 
         // 변경된 상태값 저장
         restaurantReportRepository.save(restaurantReport);
+
+        return restaurantReport.getRestaurant().getOwner().getEmail();
 
     }
 
@@ -99,5 +103,13 @@ public class RestaurantReportService {
         return restaurantRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant not found with ID: " + id));
 
+    }
+
+    public String getMailText(Long reportId) {
+
+        RestaurantReport report = getRestaurantReport(reportId);
+
+        return "다음과 같은 내용이 확인되었으니 정보 변경바랍니다. \n" +
+                "신고 내용 : " + report.getContent();
     }
 }

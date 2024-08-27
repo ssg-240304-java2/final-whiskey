@@ -1,5 +1,8 @@
 package com.whiskey.rvcom.report.controller;
 
+import com.whiskey.rvcom.report.model.dto.MailInfo;
+import com.whiskey.libs.rest.request.RequestMethod;
+import com.whiskey.libs.rest.request.RestInvoker;
 import com.whiskey.rvcom.entity.report.RestaurantReport;
 import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.service.RestaurantReportService;
@@ -13,6 +16,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.whiskey.rvcom.report.model.dto.MailConst.MAIL_URL;
+import static com.whiskey.rvcom.report.model.dto.MailConst.RESTAURANT_SUBJECT;
+
 
 @Controller
 @RequestMapping("/restaurantreport")
@@ -20,6 +26,8 @@ import java.util.Map;
 public class RestaurantReportController {
 
     private final RestaurantReportService restaurantReportService;
+
+
 
     @PostMapping("/regist")
     public ResponseEntity<Void> registRestaurantReport(@RequestBody ReportData report) {
@@ -60,14 +68,20 @@ public class RestaurantReportController {
     }
 
     @PutMapping("/update/{reportId}")
-    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
+    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) throws Exception {
 
         boolean isPunish = btnId.equals("punish");
 
-        restaurantReportService.restaurantReportPunish(reportId, isPunish);
+        String onwerEmail = restaurantReportService.restaurantReportPunish(reportId, isPunish);
 
         if (isPunish){
-            // 메일 발송 코드 예정
+            // 메일 발송
+            MailInfo mailInfo =
+                    new MailInfo(onwerEmail, RESTAURANT_SUBJECT, restaurantReportService.getMailText(reportId));
+
+            RestInvoker<Void> invoker = RestInvoker.create(MAIL_URL, Void.class);
+
+            invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
         }
         return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
     }
