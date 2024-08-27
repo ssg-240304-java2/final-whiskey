@@ -32,6 +32,7 @@ public class RestaurantInquiryService {
                 .map(it -> new RestaurantInquiryResponseDTO(
                         it.getId(),
                         it.getContent(),
+                        it.getWriter().getId(),
                         it.getWriter().getName(),
                         it.getCreatedAt(),
                         it.getReply() != null ?
@@ -70,6 +71,7 @@ public class RestaurantInquiryService {
                 .map(it -> new RestaurantInquiryResponseDTO(
                     it.getId(),
                     it.getContent(),
+                    it.getWriter().getId(),
                     it.getWriter().getName(),
                     it.getCreatedAt(),
                     it.getReply() != null ?

@@ -71,4 +71,14 @@ public class RestaurantInquiryRestController {
     public void delete(@PathVariable Long inquiryId) {
         inquiryService.delete(inquiryId);
     }
+
+    /**
+     * 회원 정보 조회
+     * @param session
+     * @return 회원 정보
+     */
+    @GetMapping("/restaurant/inquiry/member")
+    public Member getMember(HttpSession session) {
+        return (Member) session.getAttribute("member");
+    }
 }
