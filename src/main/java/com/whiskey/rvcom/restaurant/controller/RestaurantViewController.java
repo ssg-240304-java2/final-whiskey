@@ -2,6 +2,7 @@ package com.whiskey.rvcom.restaurant.controller;
 
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.restaurant.dto.OwnersRestaurantInfoDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
@@ -58,5 +59,13 @@ public class RestaurantViewController {
                 restaurant.getCategory().getTitle(),
                 ImagePathParser.parse(restaurant.getCoverImage().getUuidFileName())
         );
+    }
+
+    @GetMapping("/api/restaurant/menus")
+    @ResponseBody
+    public List<Menu> OwnersRestauarntMenus(HttpSession session) {
+        Member member = (Member) session.getAttribute("member");
+        Restaurant restaurant = restaurantService.getRestaurantByOwnerId(member.getId());
+        return restaurant.getMenus();
     }
 }
