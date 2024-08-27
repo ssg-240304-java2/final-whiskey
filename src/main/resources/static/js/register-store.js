@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const verifyButton = document.getElementById('verifyBusiness');
     const additionalInfo = document.getElementById('additionalInfo');
     const submitButton = document.getElementById('submitApplication');
+    const validPart = document.getElementById('validSection');
 
     var businessNumber;
     var openingDate;
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(result);
                 if (result === 'success') {
                     alert('사업자 정보가 확인되었습니다. 추가 정보를 입력해주세요.');
+                    afterValid()
                     activateAdditionalInfo();
 
                 } else {
@@ -131,5 +133,16 @@ document.addEventListener('DOMContentLoaded', function() {
             input.value = '';
         });
         submitButton.disabled = true;
+    }
+
+    // 사업자등록증 검증 완료 후 해당 필드 비활성화
+    function afterValid() {
+        // validSection 내부의 모든 input, select, textarea 요소를 선택
+        var elements = validPart.querySelectorAll("input, select, textarea, button");
+
+        // 각 요소에 disabled 속성 추가
+        elements.forEach(function(element) {
+            element.disabled = true;
+        });
     }
 });

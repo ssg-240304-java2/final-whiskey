@@ -10,7 +10,6 @@ import com.whiskey.rvcom.entity.member.Role;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.Review;
-import com.whiskey.rvcom.entity.review.ReviewImage;
 import com.whiskey.rvcom.favorite.FavoriteService;
 import com.whiskey.rvcom.review.ReviewImageService;
 import com.whiskey.rvcom.review.ReviewService;
@@ -61,11 +60,6 @@ public class MemberController {
         this.favoriteService = favoriteService;
     }
 
-//    @GetMapping("/")
-//    public String home() {
-//        return "mainPage";
-//    }
-
     @GetMapping("/login")
     public String loginPage(HttpSession session) {
         Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
@@ -100,7 +94,6 @@ public class MemberController {
         }
     }
 
-
     @GetMapping("/mainPage")
     public String mainPage(HttpSession session, Model model) {
         Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
@@ -114,8 +107,8 @@ public class MemberController {
 
     @PostMapping("/mypage/remove-favorite")
     public String removeFavorite(HttpSession session, @RequestParam("restaurantId") Long restaurantId,
-                                 @RequestParam("bookmarkPage") int bookmarkPage,
-                                 @RequestParam("bookmarkSize") int bookmarkSize) {
+                                 @RequestParam("favoritePage") int favoritePage,
+                                 @RequestParam("favoriteSize") int favoriteSize) {
         Member member = (Member) session.getAttribute("member");
 
         if (member == null) {
@@ -129,16 +122,17 @@ public class MemberController {
             favoriteService.removeFavorite(member, restaurant);
         }
 
-        // 북마크 페이지로 리다이렉트
-        return "redirect:/mypage?bookmarkPage=" + bookmarkPage + "&bookmarkSize=" + bookmarkSize;
+        // 즐겨찾기 페이지로 리다이렉트
+        return "redirect:/mypage?favoritePage=" + favoritePage + "&favoriteSize=" + favoriteSize;
     }
 
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model,
                          @RequestParam(value = "page", defaultValue = "0") int page,
-                         @RequestParam(value = "size", defaultValue = "2") int size,
-                         @RequestParam(value = "bookmarkPage", defaultValue = "0") int bookmarkPage,
-                         @RequestParam(value = "bookmarkSize", defaultValue = "2") int bookmarkSize) {
+                         @RequestParam(value = "size", defaultValue = "10") int size,
+                         @RequestParam(value = "favoritePage", defaultValue = "0") int favoritePage,
+                         @RequestParam(value = "favoriteSize", defaultValue = "10") int favoriteSize,
+                         @RequestParam(value = "activeTab", defaultValue = "profile") String activeTab) {
 
         Member member = (Member) session.getAttribute("member");
 
@@ -148,10 +142,10 @@ public class MemberController {
 
         List<Favorite> favorites = favoriteService.getFavoritesByMember(member);
 
-        // 북마크 페이지네이션을 위한 하위 리스트 생성
-        int bookmarkStart = Math.min(bookmarkPage * bookmarkSize, favorites.size());
-        int bookmarkEnd = Math.min((bookmarkPage + 1) * bookmarkSize, favorites.size());
-        List<Favorite> paginatedFavorites = favorites.subList(bookmarkStart, bookmarkEnd);
+        // 즐겨찾기 페이지네이션을 위한 하위 리스트 생성
+        int favoriteStart = Math.min(favoritePage * favoriteSize, favorites.size());
+        int favoriteEnd = Math.min((favoritePage + 1) * favoriteSize, favorites.size());
+        List<Favorite> paginatedFavorites = favorites.subList(favoriteStart, favoriteEnd);
 
         // 프로필 이미지 URL 설정
         String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
@@ -176,7 +170,7 @@ public class MemberController {
             reviewImagesMap.put(review.getId(), imageUrls);
         }
 
-        // 북마크된 레스토랑의 평균 평점을 계산하여 가져옴
+        // 즐겨찾기된 레스토랑의 평균 평점을 계산하여 가져옴
         Map<Long, Double> restaurantRatingsMap = new HashMap<>();
         for (Favorite favorite : paginatedFavorites) {
             double averageRating = reviewService.getAverageRatingForRestaurant(reviewService.getReviewsByRestaurantAsList(favorite.getRestaurant()));
@@ -184,7 +178,7 @@ public class MemberController {
         }
 
         int totalPages = (int) Math.ceil((double) reviews.size() / size);
-        int bookmarkTotalPages = (int) Math.ceil((double) favorites.size() / bookmarkSize);
+        int favoriteTotalPages = (int) Math.ceil((double) favorites.size() / favoriteSize);
 
         model.addAttribute("member", member);
         model.addAttribute("profileImageUrl", profileImageUrl);
@@ -192,17 +186,16 @@ public class MemberController {
         model.addAttribute("reviews", paginatedReviews); // 페이지네이션 된 리뷰 목록
         model.addAttribute("reviewImagesMap", reviewImagesMap); // 리뷰 이미지 URL 맵
         model.addAttribute("restaurantRatingsMap", restaurantRatingsMap); // 레스토랑 평점 맵
-        model.addAttribute("favorites", paginatedFavorites); // 북마크된 레스토랑 목록 추가
+        model.addAttribute("favorites", paginatedFavorites); // 즐겨찾기된 레스토랑 목록 추가
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
-        model.addAttribute("bookmarkCurrentPage", bookmarkPage);
-        model.addAttribute("bookmarkTotalPages", bookmarkTotalPages);
-        model.addAttribute("bookmarkSize", bookmarkSize);
+        model.addAttribute("favoriteCurrentPage", favoritePage);
+        model.addAttribute("favoriteTotalPages", favoriteTotalPages > 0 ? favoriteTotalPages : 1); // 기본값 설정
+        model.addAttribute("favoriteSize", favoriteSize);
+        model.addAttribute("activeTab", activeTab); // 활성화된 탭 정보 전달
 
         return "mypage";
     }
-
-
 
     @PostMapping("/checkLoginId")
     public ResponseEntity<Map<String, Boolean>> checkLoginId(@RequestParam String loginId) {
@@ -269,7 +262,7 @@ public class MemberController {
             member.setPassword(null);
 
             // 사용자에게 환영 메시지를 설정
-            member.setIntroduction("안녕하세요 " + nickname + " 만나서 반갑습니다");
+            member.setIntroduction("안녕하세요 " + nickname + "입니다!! 만나서 반갑습니다");
 
             socialLoginService.save(member);
             setSessionAttributes(session, member);
@@ -363,7 +356,6 @@ public class MemberController {
         return "redirect:/mypage";
     }
 
-
     @PostMapping("/updateProfileSocial")
     public String updateProfileSocial(
             @RequestParam Map<String, String> params,
@@ -405,6 +397,7 @@ public class MemberController {
 
         return "redirect:/mypage";
     }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
@@ -442,6 +435,8 @@ public class MemberController {
         session.setAttribute("isAuthenticated", true);
         session.setAttribute("userRole", member.getRole().toString());
         session.setAttribute("loginType", member.getLoginType().toString());
+        session.setAttribute("memberId", member.getId());
         log.info("Session loginType set to: {}", member.getLoginType().toString());
+        log.info("Session Id set to: {}", member.getId());
     }
 }

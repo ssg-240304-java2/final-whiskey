@@ -1,7 +1,10 @@
 package com.whiskey.rvcom.report.controller;
 
+import com.whiskey.libs.rest.request.RequestMethod;
+import com.whiskey.libs.rest.request.RestInvoker;
 import com.whiskey.rvcom.entity.report.ReviewReport;
 import com.whiskey.rvcom.entity.review.Review;
+import com.whiskey.rvcom.report.model.dto.MailInfo;
 import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.service.ReviewReportService;
 import com.whiskey.rvcom.review.ReviewService;
@@ -13,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.whiskey.rvcom.report.model.dto.MailConst.MAIL_URL;
+import static com.whiskey.rvcom.report.model.dto.MailConst.REVIEW_SUBJECT;
 
 @RestController
 @RequestMapping("/reviewreport")
@@ -83,11 +89,12 @@ public class ReviewReportController {
      * @return
      */
     @PutMapping("/update/{reportId}")
-    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
+    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId)  {
+        System.out.println("btnId = " + btnId);
 
         boolean isPunish = btnId.equals("reviewPunish");
 
-        reviewReportService.reviewReportPunish(reportId, isPunish);
+        String ownerEmail = reviewReportService.reviewReportPunish(reportId, isPunish);
         ReviewReport reviewReport = reviewReportService.getReviewReport(reportId);
 
         if(isPunish) {
@@ -96,9 +103,18 @@ public class ReviewReportController {
             review.setSuspended(true);
 
             reviewService.saveReview(review);
-            System.out.println(review.isSuspended());
 
-            // 메일 발송 코드 예정
+            // 메일 발송 코드
+            MailInfo mailInfo =
+                    new MailInfo(ownerEmail, REVIEW_SUBJECT, reviewReportService.getMailText(reportId));
+
+            var invoker = RestInvoker.create(MAIL_URL, null);
+
+            try {
+                invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
+            } catch (Exception e) {
+                System.out.println("메일 발송 응답이 없어 NullPointException 발생~!");
+            }
         } else {
             System.out.println("신고 처리 보류");
         }

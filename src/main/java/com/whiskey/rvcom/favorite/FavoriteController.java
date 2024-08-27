@@ -145,9 +145,6 @@ public class FavoriteController {
         long count = favoriteService.getFavoriteCount(restaurant);
         return ResponseEntity.ok(count);
     }
-
-    // TODO: 즐겨찾기 목록 페이징 처리 API 추가
-    // TODO: 즐겨찾기 목록 정렬 기능 API 추가
 }
 
 

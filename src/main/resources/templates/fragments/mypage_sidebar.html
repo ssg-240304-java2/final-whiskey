@@ -1,23 +1,25 @@
 <!-- src/main/resources/templates/fragments/mypage_sidebar.html -->
 <nav th:fragment="sidebar" class="profile-nav">
     <ul>
-        <li class="nav-item active" data-tab="profile">
-            <a href="#profile">
+        <li class="nav-item" data-tab="profile">
+            <a href="#profile" onclick="setActiveTab('profile')">
                 <i class="fas fa-user"></i>
                 <span>회원정보</span>
             </a>
         </li>
         <li class="nav-item" data-tab="reviews">
-            <a href="#reviews">
+            <a href="#reviews" onclick="setActiveTab('reviews')">
                 <i class="fas fa-star"></i>
                 <span>리뷰</span>
             </a>
         </li>
-        <li class="nav-item" data-tab="bookmarks">
-            <a href="#bookmarks">
-                <i class="fas fa-bookmark"></i>
-                <span>북마크</span>
+        <li class="nav-item" data-tab="favorite">
+            <a href="#favorite" onclick="setActiveTab('favorite')">
+                <i class="fas fa-heart"></i>
+                <span>즐겨찾기</span>
             </a>
         </li>
     </ul>
 </nav>
+
+

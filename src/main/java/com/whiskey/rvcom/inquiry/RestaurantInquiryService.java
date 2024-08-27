@@ -10,6 +10,8 @@ import com.whiskey.rvcom.repository.MemberRepository;
 import com.whiskey.rvcom.repository.RestaurantInquiryRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +32,7 @@ public class RestaurantInquiryService {
                 .map(it -> new RestaurantInquiryResponseDTO(
                         it.getId(),
                         it.getContent(),
+                        it.getWriter().getId(),
                         it.getWriter().getName(),
                         it.getCreatedAt(),
                         it.getReply() != null ?
@@ -38,6 +41,11 @@ public class RestaurantInquiryService {
                                 it.getReply().getCreatedAt()
                         ) : null
                 )).toList();
+    }
+
+    // TODO: 음식점의 문의글 조회하기 (페이지네이션)
+    public Page<RestaurantInquiry> getPagedRestaurantInquiries(Long restaurantId, Pageable pageable) {
+        return inquiryRepository.getPagedRestaurantInquiries(restaurantId, pageable);
     }
 
     // TODO: 문의 작성
@@ -63,6 +71,7 @@ public class RestaurantInquiryService {
                 .map(it -> new RestaurantInquiryResponseDTO(
                     it.getId(),
                     it.getContent(),
+                    it.getWriter().getId(),
                     it.getWriter().getName(),
                     it.getCreatedAt(),
                     it.getReply() != null ?

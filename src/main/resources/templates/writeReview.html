@@ -11,10 +11,16 @@
     </style>
 </head>
 <body>
+    <!-- hidden input fields -->
+    <input type="hidden" id="restaurantId" th:value="${restaurantId}">
+
+    <!-- hidden input fields : receiptId -->
+    <input type="hidden" id="receiptId" th:value="${receiptId}">
+
     <div class="container">
         <div class="restaurant-info">
-            <h2>레스토랑 이름</h2>
-            <p>주소: 서울시 강남구 테헤란로 123</p>
+            <h2 th:text="${restaurant.getName()}">레스토랑 이름</h2>
+            <p th:text="${restaurant.getAddress().getName()}">주소: 서울시 강남구 테헤란로 123</p>
         </div>
 
         <h1>리뷰 작성</h1>
@@ -41,6 +47,8 @@
             star.addEventListener('click', () => {
                 // 클릭된 별의 data-rating 속성 값을 가져와 rating 변수에 저장합니다.
                 rating = star.getAttribute('data-rating');
+                console.log('Rating:', rating);
+
                 // 별점 표시를 업데이트합니다.
                 updateStars();
             });
@@ -70,6 +78,18 @@
             // TODO: 백엔드 개발자는 리뷰 제출을 처리하는 API를 구현해야 합니다.
             // 별점(rating), 리뷰 텍스트(reviewText), 사진(photos)을 서버로 전송하고 저장하는 기능이 필요합니다.
             // 또한 리뷰 제출 후 성공/실패 여부를 클라이언트에 알려주는 응답 처리도 구현해야 합니다.
+            // $.ajax({
+            //     url: "",
+            //     type: "POST",
+            //     contentType: "application/json",
+            //     data: JSON.stringify({
+            //         rating: rating,
+            //         reviewText: reviewText,
+            //         photos: photos,
+            //         receiptData:
+            //     }),
+            // })
+
 
             console.log('Rating:', rating);
             console.log('Review:', reviewText);

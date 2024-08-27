@@ -49,7 +49,7 @@ public class ReviewCommentReportService {
 
     // 댓글 신고 상태값 변경
     @Transactional
-    public void reviewCommentReportPunish(Long id, boolean isPunish) {
+    public String reviewCommentReportPunish(Long id, boolean isPunish) {
 
         ReviewCommentReport reviewCommentReport = reviewCommentReportRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewCommentReport not found with ID: " + id));
@@ -61,6 +61,8 @@ public class ReviewCommentReportService {
         }
 
         reviewCommentReportRepository.save(reviewCommentReport);
+
+        return reviewCommentReport.getReviewComment().getCommenter().getEmail();
     }
 
 
@@ -87,5 +89,13 @@ public class ReviewCommentReportService {
 
         return reviewCommentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("ReviewComment not found with ID: " + id));
+    }
+
+    public String getMailText(Long reportId) {
+
+        ReviewCommentReport report = getReviewCommentReport(reportId);
+
+        return "다음 댓글이 신고후 처리되어 비공개 처리 되었습니다. \n" +
+                "신고 내용 : " + report.getContent();
     }
 }

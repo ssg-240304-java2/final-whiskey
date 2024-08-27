@@ -2,7 +2,10 @@
      aria-labelledby="reviews-tab">
     <div class="review-header">
         <h2><i class="fas fa-star"></i> 리뷰</h2>
-        <a href="/receipt-verification" class="write-review-button"><i class="fas fa-pen"></i> 리뷰 작성하기</a>
+        <!-- 리뷰 작성하기 버튼에 restaurantId를 data 속성으로 추가 -->
+        <a href="#" class="write-review-button" th:data-restaurant-id="${restaurant.id}">
+            <i class="fas fa-pen"></i> 리뷰 작성하기
+        </a>
     </div>
     <div class="review-summary">
         <div class="review-cards">

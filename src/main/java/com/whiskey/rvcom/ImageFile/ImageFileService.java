@@ -45,27 +45,32 @@ public class ImageFileService {
     public ImageFile uploadFile(MultipartFile multipartFile) throws Exception {
         logger.info("파일 업로드 및 엔티티 생성 중: {}", multipartFile.getOriginalFilename());
 
-        // 1. 웹서버 로컬에 사용자가 요청한 파일을 다운로드하는 로직
-        String localFilePath = saveFileLocally(multipartFile);
+        try {
+            String localFilePath = saveFileLocally(multipartFile);
 
-        // 2. 웹서버 로컬에 저장된 파일을 다시 ncp 파일서버로 전송하는 로직
-        if (!isImageFile(localFilePath)) {
-            logger.error("유효하지 않은 이미지 파일 형식입니다: {}", localFilePath);
+            if (!isImageFile(localFilePath)) {
+                logger.error("유효하지 않은 이미지 파일 형식입니다: {}", localFilePath);
+                deleteFileLocally(localFilePath);
+                throw new IllegalArgumentException("유효하지 않은 이미지 파일 형식입니다.");
+            }
+
+            FileUploader fileUploader = new FileUploader(localFilePath, this.host);
+            FileNameGroup uploadedFileName = fileUploader.upload();
+
+            ImageFile imageFile = new ImageFile();
+            imageFile.setOriginalFileName(uploadedFileName.getOriginalFileName());
+            imageFile.setUuidFileName(uploadedFileName.getUuidFileName());
+
             deleteFileLocally(localFilePath);
-            throw new IllegalArgumentException("유효하지 않은 이미지 파일 형식입니다.");
+
+            return imageFileRepository.save(imageFile);
+        } catch (IOException e) {
+            logger.error("파일 저장 중 IO 오류 발생", e);
+            throw new RuntimeException("파일 저장 중 오류가 발생했습니다.", e);
+        } catch (Exception e) {
+            logger.error("파일 업로드 중 예상치 못한 오류 발생", e);
+            throw new RuntimeException("파일 업로드 중 오류가 발생했습니다.", e);
         }
-
-        FileUploader fileUploader = new FileUploader(localFilePath, this.host);
-        FileNameGroup uploadedFileName = fileUploader.upload();
-
-        ImageFile imageFile = new ImageFile();
-        imageFile.setOriginalFileName(uploadedFileName.getOriginalFileName());
-        imageFile.setUuidFileName(uploadedFileName.getUuidFileName());
-
-        // 3. 웹서버 로컬에 저장된 파일 삭제
-        deleteFileLocally(localFilePath);
-
-        return imageFileRepository.save(imageFile);
     }
 
     /**

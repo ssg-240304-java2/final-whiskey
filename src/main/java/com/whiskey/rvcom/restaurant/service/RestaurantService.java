@@ -9,6 +9,7 @@ import com.whiskey.rvcom.repository.RestaurantRepository;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
 import com.whiskey.rvcom.util.ImagePathParser;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
@@ -201,5 +203,9 @@ public class RestaurantService {
 
     public List<RestaurantSearchResultDTO> getRestaurantsBySearchText(String searchText) {
         return restaurantRepository.searchByNameAndMenu(searchText);
+    }
+
+    public Restaurant getRestaurantByOwnerId(Long id) {
+        return restaurantRepository.findByOwnerId(id);
     }
 }

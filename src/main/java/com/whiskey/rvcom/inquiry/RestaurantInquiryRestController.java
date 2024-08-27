@@ -1,11 +1,14 @@
 package com.whiskey.rvcom.inquiry;
 
+import com.whiskey.rvcom.entity.inquiry.restaurant.RestaurantInquiry;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryRequestDTO;
 import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryResponseDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +27,21 @@ public class RestaurantInquiryRestController {
     @GetMapping("/restaurant/{restaurantId}/inquiry")
     public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
         return inquiryService.findAllByRestaurantId(restaurantId);
+    }
+
+    /**
+     * 음식점의 문의글 조회하기(답변 포함, 페이지)
+     * @param restaurantId
+     * @return 문의글
+     */
+    @GetMapping("/restaurant/{restaurantId}/allInquiry")
+    public Page<RestaurantInquiry> getPagedRestaurantInquiries(
+            @PathVariable Long restaurantId,
+            @RequestParam(defaultValue = "1" ) int pageNumber,
+            @RequestParam(defaultValue = "5") int pageSize
+    ) {
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        return inquiryService.getPagedRestaurantInquiries(restaurantId, pageRequest);
     }
 
     @GetMapping("/restaurant/inquiry/{inquiryId}")
@@ -52,5 +70,15 @@ public class RestaurantInquiryRestController {
     @DeleteMapping("/restaurant/{inquiryId}/inquiry")
     public void delete(@PathVariable Long inquiryId) {
         inquiryService.delete(inquiryId);
+    }
+
+    /**
+     * 회원 정보 조회
+     * @param session
+     * @return 회원 정보
+     */
+    @GetMapping("/restaurant/inquiry/member")
+    public Member getMember(HttpSession session) {
+        return (Member) session.getAttribute("member");
     }
 }
