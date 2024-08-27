@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-class RedisRequestPayload {
+public class RedisRequestPayload {
     private String key;
     private String value;
 }

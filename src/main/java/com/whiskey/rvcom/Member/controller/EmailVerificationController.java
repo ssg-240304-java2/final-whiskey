@@ -1,5 +1,6 @@
 package com.whiskey.rvcom.Member.controller;
 
+import com.whiskey.rvcom.Member.dto.VerifyPayload;
 import com.whiskey.rvcom.Member.service.EmailService;
 import lombok.Getter;
 import lombok.Setter;

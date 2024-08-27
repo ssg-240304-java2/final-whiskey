@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import com.whiskey.rvcom.Member.dto.EmailRequest;
 import com.whiskey.libs.rest.request.RequestMethod;
 import com.whiskey.libs.rest.request.RestInvoker;
+import com.whiskey.rvcom.Member.dto.RedisRequestPayload;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -88,9 +89,3 @@ public class EmailService {
     }
 }
 
-@Getter
-@Setter
-class RedisRequestPayload {
-    private String key;
-    private String value;
-}
