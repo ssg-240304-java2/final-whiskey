@@ -56,28 +56,30 @@ public class RestaurantService {
 
         String today = LocalDate.now().getDayOfWeek().toString();
 
+        WeeklyOpenCloseTime weeklyOpenCloseTime = restaurant.getWeeklyOpenCloseTime();
+
         String openingHour = null;
         switch (today) {
             case "MONDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getMonday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getMonday() : null);
                 break;
             case "TUESDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getTuesday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getTuesday() : null);
                 break;
             case "WEDNESDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getWednesday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getWednesday() : null);
                 break;
             case "THURSDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getThursday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getThursday() : null);
                 break;
             case "FRIDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getFriday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getFriday() : null);
                 break;
             case "SATURDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getSaturday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getSaturday() : null);
                 break;
             case "SUNDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getSunday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getSunday() : null);
                 break;
         }
 
