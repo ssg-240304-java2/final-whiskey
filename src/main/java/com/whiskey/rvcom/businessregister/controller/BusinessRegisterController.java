@@ -85,9 +85,9 @@ public class BusinessRegisterController {
         return businessRegisterService.getAllBusinessRegister(page, sortOrder);
     }
 
-    @GetMapping("/detail/{registerId}")
+    @GetMapping("/detail/{id}")
     @ResponseBody
-    public ResponseEntity<Map<String, Object>> getRegistrationDetail(@PathVariable("registerId") Long id) {
+    public ResponseEntity<Map<String, Object>> getRegistrationDetail(@PathVariable("id") Long id) {
         System.out.println("id = " + id + " / 동작 확인");
 
         Map<String, Object> response = new HashMap<>();
