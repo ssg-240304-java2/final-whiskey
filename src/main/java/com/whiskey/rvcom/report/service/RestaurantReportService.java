@@ -110,7 +110,7 @@ public class RestaurantReportService {
         RestaurantReport report = getRestaurantReport(reportId);
 
         return "다음과 같은 내용이 확인되었으니 정보 변경바랍니다.\n" +
-                "------------------------------------------------------\n" +
+                "---------------------------------------------------------------------------------------------\n" +
                 "대상 식당 : " + report.getRestaurant().getName() + "\n" +
                 "신고 내용 : " + report.getContent() + "\n";
     }

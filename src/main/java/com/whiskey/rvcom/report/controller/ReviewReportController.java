@@ -4,7 +4,7 @@ import com.whiskey.libs.rest.request.RequestMethod;
 import com.whiskey.libs.rest.request.RestInvoker;
 import com.whiskey.rvcom.entity.report.ReviewReport;
 import com.whiskey.rvcom.entity.review.Review;
-import com.whiskey.rvcom.report.model.dto.MailInfo;
+import com.whiskey.rvcom.mail.MailInfo;
 import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.service.ReviewReportService;
 import com.whiskey.rvcom.review.ReviewService;
@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.whiskey.rvcom.report.model.dto.MailConst.MAIL_URL;
-import static com.whiskey.rvcom.report.model.dto.MailConst.REVIEW_SUBJECT;
+import static com.whiskey.rvcom.mail.MailConst.MAIL_URL;
+import static com.whiskey.rvcom.mail.MailConst.REVIEW_SUBJECT;
 
 @RestController
 @RequestMapping("/reviewreport")
@@ -94,7 +94,7 @@ public class ReviewReportController {
 
         boolean isPunish = btnId.equals("reviewPunish");
 
-        String ownerEmail = reviewReportService.reviewReportPunish(reportId, isPunish);
+        String ownerMail = reviewReportService.reviewReportPunish(reportId, isPunish);
         ReviewReport reviewReport = reviewReportService.getReviewReport(reportId);
 
         if(isPunish) {
@@ -106,7 +106,7 @@ public class ReviewReportController {
 
             // 메일 발송 코드
             MailInfo mailInfo =
-                    new MailInfo(ownerEmail, REVIEW_SUBJECT, reviewReportService.getMailText(reportId));
+                    new MailInfo(ownerMail, REVIEW_SUBJECT, reviewReportService.getMailText(reportId));
 
             var invoker = RestInvoker.create(MAIL_URL, null);
 
