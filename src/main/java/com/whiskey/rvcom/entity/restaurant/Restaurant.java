@@ -1,5 +1,6 @@
 package com.whiskey.rvcom.entity.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
@@ -44,6 +45,7 @@ public class Restaurant {
     private WeeklyOpenCloseTime weeklyOpenCloseTime;    // 요일별 영업시간
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Menu> menus; // 메뉴 리스트
 
     @OneToOne
