@@ -16,6 +16,10 @@
     <input type="hidden" id="restaurantId" th:value="${restaurantId}">
 
     <div class="container">
+        <div id="loadingUI" class="loading-ui" style="display: none;">
+            <div class="spinner"></div>
+            <p>영수증 인증 중...</p>
+        </div>
         <h1>영수증 인증</h1>
         <div class="verification-grid">
             <div class="upload-section">
@@ -145,8 +149,20 @@
         //     nextStepBtn.style.display = 'block';
         // });
 
+        // 로딩 UI를 표시하는 함수
+        function showLoadingUI() {
+            document.getElementById('loadingUI').style.display = 'flex';
+        }
+
+        // 로딩 UI를 숨기는 함수
+        function hideLoadingUI() {
+            document.getElementById('loadingUI').style.display = 'none';
+        }
+
+        // verifyReceipt 함수 수정
         async function verifyReceipt() {
             try {
+                showLoadingUI(); // 로딩 UI 표시
                 const file = document.getElementById('fileInput').files[0];
                 if (!file) {
                     throw new Error('파일을 선택해주세요.');
@@ -164,6 +180,8 @@
             } catch (error) {
                 console.error('영수증 인증 오류:', error);
                 alert('영수증 인증에 실패했습니다: ' + error.message);
+            } finally {
+                hideLoadingUI(); // 로딩 UI 숨김
             }
         }
 
@@ -390,6 +408,8 @@
 
             // 캡처된 이미지를 미리보기에서 숨김 처리
         });
+
+    
     </script>
 </body>
 </html>
