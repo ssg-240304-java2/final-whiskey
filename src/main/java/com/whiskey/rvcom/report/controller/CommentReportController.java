@@ -105,7 +105,7 @@ public class CommentReportController {
             MailInfo mailInfo =
                     new MailInfo(owenerEmail, COMMENT_SUBJECT, reviewCommentReportService.getMailText(reportId));
 
-            RestInvoker<Void> invoker = RestInvoker.create(MAIL_URL, Void.class);
+            var invoker = RestInvoker.create(MAIL_URL, null);
 
             invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
         } else {

@@ -108,7 +108,7 @@ public class ReviewReportController {
             MailInfo mailInfo =
                     new MailInfo(ownerEmail, REVIEW_SUBJECT, reviewReportService.getMailText(reportId));
 
-            RestInvoker<Void> invoker = RestInvoker.create(MAIL_URL, Void.class);
+            var invoker = RestInvoker.create(MAIL_URL, null);
 
             invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
         } else {

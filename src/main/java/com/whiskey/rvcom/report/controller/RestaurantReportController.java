@@ -79,7 +79,7 @@ public class RestaurantReportController {
             MailInfo mailInfo =
                     new MailInfo(onwerEmail, RESTAURANT_SUBJECT, restaurantReportService.getMailText(reportId));
 
-            RestInvoker<Void> invoker = RestInvoker.create(MAIL_URL, Void.class);
+            var invoker = RestInvoker.create(MAIL_URL, null);
 
             invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
         }
