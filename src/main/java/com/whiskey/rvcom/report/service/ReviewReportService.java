@@ -97,7 +97,9 @@ public class ReviewReportService {
 
         ReviewReport report = getReviewReport(reportId);
 
-        return "다음 리뷰가 신고 확인결과 비공개 처리 되었습니다. \n" +
+        return "다음 리뷰가 신고 확인결과 비공개 처리 되었습니다.\n" +
+                "------------------------------------------------------\n" +
+                "대상 리뷰 : " + report.getReview().getContent() + "\n" +
                 "신고 내용 : " + report.getContent();
     }
 }

@@ -95,7 +95,9 @@ public class ReviewCommentReportService {
 
         ReviewCommentReport report = getReviewCommentReport(reportId);
 
-        return "다음 댓글이 신고후 처리되어 비공개 처리 되었습니다. \n" +
+        return "다음 댓글이 신고후 처리되어 비공개 처리 되었습니다.\n" +
+                "------------------------------------------------------\n" +
+                "대상 댓글 : " + report.getReviewComment().getContent() + "\n" +
                 "신고 내용 : " + report.getContent();
     }
 }
