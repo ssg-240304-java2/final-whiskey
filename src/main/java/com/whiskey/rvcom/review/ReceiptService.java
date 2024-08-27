@@ -12,8 +12,8 @@ public class ReceiptService {
     private final ReceiptRepository receiptRepository;
 
     @Transactional
-    public void addReceipt(ReceiptData receipt) {
-        receiptRepository.save(receipt);
+    public ReceiptData addReceipt(ReceiptData receipt) {
+        return receiptRepository.save(receipt);
     }
 
     public ReceiptData getReceipt(Long id) {
