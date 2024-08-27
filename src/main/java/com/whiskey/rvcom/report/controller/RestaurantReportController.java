@@ -68,7 +68,7 @@ public class RestaurantReportController {
     }
 
     @PutMapping("/update/{reportId}")
-    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) throws Exception {
+    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) {
 
         boolean isPunish = btnId.equals("punish");
 
@@ -81,7 +81,11 @@ public class RestaurantReportController {
 
             var invoker = RestInvoker.create(MAIL_URL, null);
 
-            invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
+            try {
+                invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
+            } catch (Exception e) {
+                System.out.println("메일 발송 응답이 없어 NullPointException 발생~!");
+            }
         }
         return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
     }

@@ -89,7 +89,7 @@ public class ReviewReportController {
      * @return
      */
     @PutMapping("/update/{reportId}")
-    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId) throws Exception {
+    public ResponseEntity<Void> updateReport(@PathVariable Long reportId, @RequestParam String btnId)  {
         System.out.println("btnId = " + btnId);
 
         boolean isPunish = btnId.equals("reviewPunish");
@@ -110,7 +110,11 @@ public class ReviewReportController {
 
             var invoker = RestInvoker.create(MAIL_URL, null);
 
-            invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
+            try {
+                invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
+            } catch (Exception e) {
+                System.out.println("메일 발송 응답이 없어 NullPointException 발생~!");
+            }
         } else {
             System.out.println("신고 처리 보류");
         }
