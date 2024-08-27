@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     setupLoadMoreReviewsButton();
     setupReviewActions();
     setupReviewModal();
+    setupWriteReviewButton(); // 리뷰 작성 버튼 이벤트 핸들러 등록
 });
 
 function loadReviews() {
@@ -62,6 +63,19 @@ function setupReviewModal() {
 
     // 모달 설정
     window.RestaurantDetail.setupModal("reviewModal");
+}
+
+// 리뷰 작성하기 버튼 설정 함수
+function setupWriteReviewButton() {
+    const writeReviewButton = document.querySelector('.write-review-button');
+    if (writeReviewButton) {
+        writeReviewButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            const restaurantId = this.getAttribute('data-restaurant-id');
+            // 영수증 인증 페이지로 이동, restaurantId를 쿼리 파라미터로 전달
+            window.location.href = `/receipt/verify/${restaurantId}`;
+        });
+    }
 }
 
 window.loadComments = function (reviewId) {
