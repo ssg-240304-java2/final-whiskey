@@ -1,6 +1,6 @@
 package com.whiskey.rvcom.report.controller;
 
-import com.whiskey.rvcom.report.model.dto.MailInfo;
+import com.whiskey.rvcom.mail.MailInfo;
 import com.whiskey.libs.rest.request.RequestMethod;
 import com.whiskey.libs.rest.request.RestInvoker;
 import com.whiskey.rvcom.entity.report.RestaurantReport;
@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.whiskey.rvcom.report.model.dto.MailConst.MAIL_URL;
-import static com.whiskey.rvcom.report.model.dto.MailConst.RESTAURANT_SUBJECT;
+import static com.whiskey.rvcom.mail.MailConst.MAIL_URL;
+import static com.whiskey.rvcom.mail.MailConst.RESTAURANT_SUBJECT;
 
 
 @Controller
@@ -72,12 +72,12 @@ public class RestaurantReportController {
 
         boolean isPunish = btnId.equals("punish");
 
-        String onwerEmail = restaurantReportService.restaurantReportPunish(reportId, isPunish);
+        String ownerMail = restaurantReportService.restaurantReportPunish(reportId, isPunish);
 
         if (isPunish){
             // 메일 발송
             MailInfo mailInfo =
-                    new MailInfo(onwerEmail, RESTAURANT_SUBJECT, restaurantReportService.getMailText(reportId));
+                    new MailInfo(ownerMail, RESTAURANT_SUBJECT, restaurantReportService.getMailText(reportId));
 
             var invoker = RestInvoker.create(MAIL_URL, null);
 

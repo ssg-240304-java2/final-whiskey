@@ -61,7 +61,7 @@ public class BusinessRegisterService {
         return restaurantRegistrationRepository.findById(id).orElse(null);
     }
 
-    public void processBusinessRegist(Long registerId, boolean isApprove) {
+    public String processBusinessRegist(Long registerId, boolean isApprove) {
 
         RestaurantRegistration registration = restaurantRegistrationRepository.findById(registerId).orElse(null);
 
@@ -74,5 +74,33 @@ public class BusinessRegisterService {
                 restaurantRegistrationRepository.save(registration);
             }
         }
+
+        return registration.getMember().getEmail();
+    }
+
+    public String getApproveMailText(Long registerId) {
+
+        RestaurantRegistration registration = restaurantRegistrationRepository.findById(registerId).orElse(null);
+
+        return "회원님의 입점 신청이 승인되었습니다.\n" +
+                "다음과 같은 정보로 FoodFolio에 등록됩니다.\n" +
+                "---------------------------------------------------------------------------------------------\n" +
+                "음식점명 : " + registration.getRestaurantName() + "\n" +
+                "음식점 카테고리 : " + registration.getRestaurantCategory() + "\n" +
+                "음식점 전화번호 : " + registration.getRestaurantNumber() + "\n" +
+                "음식점 주소 : " + registration.getRestaurantAddress().getName();
+    }
+
+    public String getRejectMailText(Long registerId) {
+
+        RestaurantRegistration registration = restaurantRegistrationRepository.findById(registerId).orElse(null);
+
+        return "회원님의 입점 신청이 반려되었습니다.\n" +
+                "음식점 정보를 확인후 다시 신청해주세요.\n" +
+                "---------------------------------------------------------------------------------------------\n" +
+                "음식점명 : " + registration.getRestaurantName() + "\n" +
+                "음식점 카테고리 : " + registration.getRestaurantCategory() + "\n" +
+                "음식점 전화번호 : " + registration.getRestaurantNumber() + "\n" +
+                "음식점 주소 : " + registration.getRestaurantAddress().getName();
     }
 }

@@ -9,6 +9,7 @@ import com.whiskey.rvcom.businessregister.service.BusinessRegisterService;
 import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import com.whiskey.rvcom.entity.restaurant.registration.RegistrationStatus;
 import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
+import com.whiskey.rvcom.mail.MailInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.whiskey.rvcom.mail.MailConst.*;
 
 
 @Controller
@@ -109,10 +112,24 @@ public class BusinessRegisterController {
 
         boolean isApprove = btnId.equals("approve");
 
-        businessRegisterService.processBusinessRegist(registerId, isApprove);
+        String ownerMail = businessRegisterService.processBusinessRegist(registerId, isApprove);
 
+        MailInfo mailInfo;
 
-        // 메일 발송 코드 예정
+        if (isApprove) {
+            // 승인 메일 발송
+             mailInfo = new MailInfo(ownerMail, REGIST_APPROVE, businessRegisterService.getApproveMailText(registerId));
+        } else {
+            // 거절 메일 발송
+            mailInfo = new MailInfo(ownerMail, REGIST_REJECT, businessRegisterService.getRejectMailText(registerId));
+        }
+
+        var invoker = RestInvoker.create(MAIL_URL, null);
+        try {
+            invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
+        } catch (Exception e) {
+            System.out.println("메일 발송 응답이 없어 NullPointException 발생~!");
+        }
 
         return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
     }
