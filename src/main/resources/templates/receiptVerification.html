@@ -12,7 +12,14 @@
     </style>
 </head>
 <body>
+    <!-- hiddeninput 영역 -->
+    <input type="hidden" id="restaurantId" th:value="${restaurantId}">
+
     <div class="container">
+        <div id="loadingUI" class="loading-ui" style="display: none;">
+            <div class="spinner"></div>
+            <p>영수증 인증 중...</p>
+        </div>
         <h1>영수증 인증</h1>
         <div class="verification-grid">
             <div class="upload-section">
@@ -26,7 +33,15 @@
             </div>
             <div class="webcam-section">
                 <h2>웹캠 촬영</h2>
-                <video id="webcam" autoplay playsinline width="100%" height="auto"></video>
+                <div class="camera-controls">
+                    <select id="cameraSelect" class="camera-select">
+                        <option value="">카메라 선택</option>
+                    </select>
+                </div>
+                <div class="video-container">
+                    <video id="webcam" autoplay playsinline width="100%" height="auto"></video>
+                    <div class="receipt-frame"></div>
+                </div>
                 <button id="captureBtn" class="capture-btn">촬영하기</button>
                 <button id="retakeBtn" class="retake-btn" style="display: none;">다시 찍기</button>
                 <canvas id="canvas" style="display:none;"></canvas>
@@ -50,6 +65,8 @@
         const preview = document.getElementById('preview');
         const verifyBtn = document.getElementById('verifyBtn');
         const nextStepBtn = document.getElementById('nextStepBtn');
+        let ocrResponseObject = {};
+
 
         // 드래그 앤 드롭 이벤트를 처리합니다.
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -127,25 +144,74 @@
             // receipt/verification - post요청 전달
             // 이미지 경로를 전달해야 함
             await verifyReceipt();
-
         })
         // alert('영수증 인증이 완료되었습니다.');
         //     nextStepBtn.style.display = 'block';
         // });
 
+        // 로딩 UI를 표시하는 함수
+        function showLoadingUI() {
+            document.getElementById('loadingUI').style.display = 'flex';
+        }
+
+        // 로딩 UI를 숨기는 함수
+        function hideLoadingUI() {
+            document.getElementById('loadingUI').style.display = 'none';
+        }
+
+        // verifyReceipt 함수 수정
         async function verifyReceipt() {
-            // const uploadedFileName = await uploadFileToServer(preview.src);
-            // console.log('uploadedFileName', uploadedFileName);
-            
-            console.log('verifyReceipt', preview.src);
-            
-            const ocrResponseObject = await ocrProcess(preview.src);
+            try {
+                showLoadingUI(); // 로딩 UI 표시
+                const file = document.getElementById('fileInput').files[0];
+                if (!file) {
+                    throw new Error('파일을 선택해주세요.');
+                }
+                const uuidFileName = await uploadFileToServer(file);
+                ocrResponseObject = await ocrProcess(uuidFileName);
 
-            alert('영수증 인증이 완료되었습니다.');
+                if (ocrResponseObject && Object.keys(ocrResponseObject).length > 0) {
+                    alert('영수증 인증이 완료되었습니다.');
+                    nextStepBtn.style.display = 'block';
+                    updateReceiptInfo(ocrResponseObject);
+                } else {
+                    alert('영수증 인식에 실패했습니다. 다른 이미지를 시도해주세요.');
+                }
+            } catch (error) {
+                console.error('영수증 인증 오류:', error);
+                alert('영수증 인증에 실패했습니다: ' + error.message);
+            } finally {
+                hideLoadingUI(); // 로딩 UI 숨김
+            }
+        }
 
-            // receiptInfo.style.display = 'block';    // 영수증 인식정보 페이지 노출
-            // verifyBtn.style.display = 'none';       // 인증 버튼 숨김
-            // nextStepBtn.style.display = 'block';    // 다음 단계 버튼 노출
+        function updateReceiptInfo(receiptData) {
+            document.getElementById('storeName').textContent = receiptData.storeName;
+            document.getElementById('receiptDate').textContent = new Date(receiptData.paidAt).toLocaleDateString();
+            document.getElementById('totalAmount').textContent = receiptData.totalPrice.toLocaleString() + '원';
+            document.getElementById('menuItems').textContent = receiptData.paidItems.map(item => item.itemName).join(', ');
+            document.getElementById('receiptInfo').style.display = 'block';
+        }
+
+        async function sendReceiptData(receiptDataObject) {
+            const restaurantId = document.getElementById('restaurantId').value;
+
+            // /review/{restaurantId}/{receiptId}
+            fetch(`/review/${restaurantId}/1`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(receiptDataObject),
+            }).then(response => {
+                if(response.ok) return response.text();
+                throw new Error('Network response was not ok.');
+            }).then(html => {
+                // 새로운 페이지의 콘텐츠로 교체
+                document.documentElement.innerHTML = html;
+            }).catch(error => {
+                console.error('Error: ', error);
+            })
         }
         
         async function ocrProcess(filePath) {
@@ -187,6 +253,7 @@
 
                         document.getElementById('preview').style.display = 'none';
                         document.getElementById('receiptInfo').style.display = 'block';
+                        document.getElementById('verifyBtn').style.display = 'none';
                         nextStepBtn.style.display = 'block';
 
                         resolve(response);
@@ -197,34 +264,45 @@
             });
         }
 
+        // need. 파일업로드 요청 로직으로 업무요청예정
         async function uploadFileToServer(file) {
             const formData = new FormData();
             formData.append('file', file);
 
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: '/upload',
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        alert('파일 업로드에 성공했습니다.');
-                        console.log('uploaded filepath: ', response);
-
-                        resolve(response);
-                    }, error: function() {
-                        alert('파일 업로드에 실패했습니다.');
-                        reject();
-                    }
+            try {
+                const response = await fetch('/receipt/upload', {
+                    method: 'POST',
+                    body: formData
                 });
-            })
+                if (!response.ok) {
+                    const errorMessage = await response.text();
+                    throw new Error(errorMessage);
+                }
+                return await response.text(); // UUID 파일명 반환
+            } catch (error) {
+                console.error('파일 업로드 오류:', error);
+                alert('파일 업로드에 실패했습니다: ' + error.message);
+                throw error;
+            }
         }
 
-        nextStepBtn.addEventListener('click', function() {
-            // TODO: 리뷰 작성 페이지로 이동하는 로직을 구현해야 합니다.
-            // TODO: 필요한 경우, 영수증 정보를 세션 스토리지나 로컬 스토리지에 저장하여 다음 페이지로 전달해야 합니다.
-            window.location.href = '/write-review';
+        nextStepBtn.addEventListener('click', async function() {
+            try {
+                const response = await fetch('/receipt/verificationUrl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(ocrResponseObject)
+                });
+                if (!response.ok) throw new Error('ReceiptData 저장 실패');
+                const receiptId = await response.json();
+                const restaurantId = document.getElementById('restaurantId').value;
+                window.location.href = `/receipt/review/${restaurantId}/${receiptId}`;
+            } catch (error) {
+                console.error('다음 단계 이동 오류:', error);
+                alert('다음 단계로 이동하는데 실패했습니다. 다시 시도해주세요.');
+            }
         });
 
         // 웹캠 관련 요소들을 선택합니다.
@@ -234,14 +312,67 @@
         const retakeBtn = document.getElementById('retakeBtn');
         const receiptInfo = document.getElementById('receiptInfo');
 
-        // 웹캠 스트림을 가져와 비디오 요소에 연결합니다.
+        // 카메라 관련 변수
+        let currentStream;
+
+        // 사용 가능한 카메라 목록을 가져와 드롭다운 메뉴에 추가하는 함수
+        async function populateCameraOptions() {
+            const cameraSelect = document.getElementById('cameraSelect');
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevices = devices.filter(device => device.kind === 'videoinput');
+            
+            videoDevices.forEach(device => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                option.text = device.label || `Camera ${cameraSelect.length + 1}`;
+                cameraSelect.add(option);
+            });
+        }
+
+        // 선택한 카메라로 스트림을 변경하는 함수
+        async function switchCamera(deviceId) {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+
+            const constraints = {
+                video: {deviceId: deviceId ? {exact: deviceId} : undefined}
+            };
+
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = currentStream;
+            } catch (error) {
+                console.error('카메라 전환 오류:', error);
+            }
+        }
+
+        // 카메라 선택 이벤트 리스너
+        document.getElementById('cameraSelect').addEventListener('change', (event) => {
+            switchCamera(event.target.value);
+        });
+
+        // 페이지 로드 시 카메라 옵션 초기화 및 기본 카메라 설정
+        window.addEventListener('load', async () => {
+            await populateCameraOptions();
+            const cameraSelect = document.getElementById('cameraSelect');
+            if (cameraSelect.options.length > 1) {
+                switchCamera(cameraSelect.options[1].value);
+            }
+        });
+
+        // 기존의 웹캠 관련 코드를 수정
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(stream => {
+                currentStream = stream;
                 video.srcObject = stream;
             })
             .catch(error => {
                 console.error('웹캠 접근 오류:', error);
             });
+
+        // TODO: 캡처된 이미지를 서버로 전송하여 OCR 처리를 수행하는 API를 호출해야 합니다.
+        // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
 
         // 캡처 버튼 클릭 이벤트를 처리합니다.
         captureBtn.addEventListener('click', () => {
@@ -255,6 +386,12 @@
 
             // TODO: 
             verifyBtn.style.display = 'block';
+
+            // 촬영 버튼 클릭 시 '촬영하기' 버튼을 숨김 처리 후
+            // '다시 찍기' 버튼을 노출 처리
+            captureBtn.style.display = 'none';
+            retakeBtn.style.display = 'inline-block';
+
             // receiptInfo.style.display = 'block'; // TODO: 이 버튼은 영수증 인증하기 버튼 클릭 시 노출되어야 함
             // TODO: 캡처된 이미지를 서버로 전송하여 OCR 처리를 수행하는 API를 호출해야 합니다.
             // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
@@ -267,7 +404,12 @@
             receiptInfo.style.display = 'none';
             verifyBtn.style.display = 'block';
             nextStepBtn.style.display = 'none';
+            captureBtn.style.display = 'inline-block';
+
+            // 캡처된 이미지를 미리보기에서 숨김 처리
         });
+
+    
     </script>
 </body>
 </html>
