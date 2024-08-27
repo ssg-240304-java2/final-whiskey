@@ -40,13 +40,13 @@ body {
 .sidebar .nav-link:hover {
     color: #ffffff;
     background-color: rgba(255,255,255,0.1);
-    border-left-color: #4fc3f7;
+    border-left-color: #00cba6;
 }
 
 .sidebar .nav-link.active {
-    color: #4fc3f7;
+    color: #00cba6;
     background-color: rgba(79,195,247,0.1);
-    border-left-color: #4fc3f7;
+    border-left-color: #00cba6;
 }
 
 .sidebar .nav-link i {
@@ -66,7 +66,7 @@ body {
     font-family: 'Arial', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
-    color: #4fc3f7;
+    color: #00cba6;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     letter-spacing: -1px;
     padding: 1rem;
@@ -129,28 +129,28 @@ body {
 .form-control:focus {
     background-color: #404040;
     color: #ffffff;
-    border-color: #4fc3f7;
+    border-color: #00cba6;
     box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
 }
 
 /* 버튼 스타일 */
 .btn-primary {
-    background-color: #4fc3f7;
-    border-color: #4fc3f7;
+    background-color: #00cba6;
+    border-color: #00cba6;
 }
 
 .btn-primary:hover {
-    background-color: #3ab1e8;
-    border-color: #3ab1e8;
+    background-color: #00e88f;
+    border-color: #00e88f;
 }
 
 .btn-outline-primary {
-    color: #4fc3f7;
-    border-color: #4fc3f7;
+    color: #00cba6;
+    border-color: #00cba6;
 }
 
 .btn-outline-primary:hover {
-    background-color: #4fc3f7;
+    background-color: #00cba6;
     color: #ffffff;
 }
 
@@ -176,7 +176,7 @@ body {
 .card-text {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #4fc3f7;
+    color: #00cba6;
 }
 
 /* 네비게이션 바 스타일 */
@@ -210,8 +210,8 @@ body {
 }
 
 .pagination .page-item.active .page-link {
-    background-color: #4fc3f7;
-    border-color: #4fc3f7;
+    background-color: #00cba6;
+    border-color: #00cba6;
 }
 
 .pagination .page-link:hover {
@@ -281,7 +281,7 @@ body {
 .loading::after {
     content: "로딩 중...";
     font-size: 20px;
-    color: #4fc3f7;
+    color: #00cba6;
 }
 
 /* 에러 메시지 스타일 */
@@ -313,16 +313,16 @@ body {
 }
 
 .page-item.active .page-link {
-    background-color: #4fc3f7;
-    border-color: #4fc3f7;
+    background-color: #00cba6;
+    border-color: #00cba6;
 }
 
 .page-link {
-    color: #4fc3f7;
+    color: #00cba6;
 }
 
 .page-link:hover {
-    color: #0056b3;
+    color: #00e88f;
 }
 
 /* 반응형 디자인 개선 */
@@ -370,17 +370,52 @@ body {
     font-size: 0.875rem;
 }
 
-/* 모달 스타일 개선 */
+/* 기존 스타일 유지 */
+
+/* 모달 스타일 */
 .modal-content {
+    background-color: #252526;
+    color: #e0e0e0;
+    border: 1px solid #444;
     border-radius: 0.5rem;
 }
 
 .modal-header {
-    border-bottom: 1px solid #2c2c2c;
+    border-bottom: 1px solid #444;
 }
 
 .modal-footer {
-    border-top: 1px solid #2c2c2c;
+    border-top: 1px solid #444;
+}
+
+.modal-title {
+    color: #00cba6;
+}
+
+.modal-body p {
+    margin-bottom: 0.5rem;
+}
+
+.modal-body strong {
+    color: #00e88f;
+}
+
+/* 모달 버튼 스타일 */
+.modal-footer .btn-secondary {
+    background-color: #444;
+    border-color: #444;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #555;
+    border-color: #555;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
 }
 
 
@@ -439,7 +474,7 @@ tr:hover .report-completed {
 }
 
 .report-table th {
-    background-color: #40a0ff;
+    background-color: #00e88f;
     font-weight: 600;
     text-transform: uppercase;
     border-top: none;
@@ -450,7 +485,7 @@ tr:hover .report-completed {
 }
 
 .report-table tr:hover {
-    background-color: #40a0ff;
+    background-color: #00e88f;
     cursor: pointer;
 }
 
@@ -487,12 +522,12 @@ tr:hover .report-completed {
 }
 
 .page-link {
-    color: #4fc3f7;
-    border-color: #4fc3f7;
+    color: #00cba6;
+    border-color: #00cba6;
 }
 
 .page-link:hover {
-    background-color: #4fc3f7;
+    background-color: #00cba6;
     color: #fff;
 }
 
@@ -501,7 +536,7 @@ tr:hover .report-completed {
 .sort-btn {
     background: none;
     border: none;
-    color: #4fc3f7;
+    color: #00cba6;
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0;
@@ -509,7 +544,7 @@ tr:hover .report-completed {
 }
 
 .sort-btn:hover {
-    color: #0056b3;
+    color: #00e88f;
     text-decoration: underline;
 }
 

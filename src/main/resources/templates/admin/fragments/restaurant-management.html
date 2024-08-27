@@ -32,6 +32,42 @@
                 </nav>
             </div>
         </div>
+
+        <!-- 상세보기 모달 추가 -->
+        <div class="modal fade" id="restaurantDetailModal" tabindex="-1" role="dialog" aria-labelledby="restaurantDetailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="restaurantDetailModalLabel">입점 신청 상세 정보</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- 상세 정보 내용 -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>신청 번호:</strong> <span id="modalApplyId"></span></p>
+                                <p><strong>식당 이름:</strong> <span id="modalRestaurantTitle"></span></p>
+                                <p><strong>카테고리:</strong> <span id="modalCategory"></span></p>
+                                <p><strong>식당 주소:</strong> <span id="modalAddress"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>전화번호:</strong> <span id="modalPhone"></span></p>
+                                <p><strong>신청자:</strong> <span id="modalApplier"></span></p>
+                                <p><strong>신청 날짜:</strong> <span id="modalCreatedAt"></span></p>
+                                <p><strong>진행 현황:</strong> <span id="modalStatus"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-success" id="modalApprove">승인</button>
+                        <button type="button" class="btn btn-danger" id="modalReject">거절</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

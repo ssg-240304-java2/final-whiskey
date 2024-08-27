@@ -119,19 +119,38 @@ function changePage(page) {
     loadRestaurantRegistrations();
 }
 
-// TODO: 상세보기 기능 구현
+// 상세보기 기능 구현
 function viewDetails(id) {
-    const clickedElement = event.target.closest('tr');
-
-    if (clickedElement) {
-
-        console.log('register ID :', id);
-        window.location.href = `/businessregister/regist-detail?id=${id}`;
-    }
+    $.ajax({
+        url: `/businessregister/detail/${id}`,
+        type: "GET",
+        dataType: "json",
+        success: function(data) {
+            const register = data.register;
+            $('#modalApplyId').text(register.id);
+            $('#modalRestaurantTitle').text(register.restaurantName);
+            $('#modalCategory').text(register.restaurantCategory);
+            $('#modalAddress').text(register.restaurantAddress.name);
+            $('#modalPhone').text(register.restaurantNumber);
+            $('#modalApplier').text(register.member.name);
+            $('#modalCreatedAt').text(new Date(register.createdAt).toLocaleDateString());
+            $('#modalStatus').text(register.registrationStatus);
+            
+            // 모달 버튼에 ID 설정
+            $('#modalApprove').attr('onclick', `approveRegistration(${register.id})`);
+            $('#modalReject').attr('onclick', `rejectRegistration(${register.id})`);
+            
+            $('#restaurantDetailModal').modal('show');
+        },
+        error: function(xhr, status, error) {
+            console.error('상세 정보를 불러오는 데 실패했습니다:', error);
+            alert('상세 정보를 불러오는 데 실패했습니다.');
+        }
+    });
 }
 
 
-// TODO: 승인 기능 구현
+// 승인 기능 구현
 function approveRegistration(id) {
     console.log('승인:', id);
     // 여기에 승인 처리 로직을 구현합니다.
@@ -139,7 +158,7 @@ function approveRegistration(id) {
     updateReport(btnID,id)
 }
 
-// TODO: 거절 기능 구현
+// 거절 기능 구현
 function rejectRegistration(id) {
     console.log('거절:', id);
     // 여기에 거절 처리 로직을 구현합니다.
@@ -147,21 +166,26 @@ function rejectRegistration(id) {
     updateReport(btnID,id)
 }
 
+// 모달 닫기 기능 구현
+function closeModal() {
+    $("#restaurantDetailModal").modal("hide");
+}
+
 // 입점 처리 기능
 function updateReport(btnId, id) {
     if (confirm("입점처리를 진행하시겠습니까?")) {
         $.ajax({
-            url: `/businessregister/process/` + id,
+            url: `/businessregister/process/${id}`,
             type: "PUT",
             data: {btnId: btnId},
-            success() {
-                alert('입점처리 되었습니다.');
-                window.location.reload();
+            success: function() {
+                alert('입점처리가 완료되었습니다.');
+                $('#restaurantDetailModal').modal('hide');
+                loadRestaurantRegistrations(); // 목록 새로고침
             },
-            error() {
+            error: function() {
                 alert('입점처리에 실패했습니다.');
             }
         });
-        console.log("입점처리 완료");
-    } else {}
+    }
 }
