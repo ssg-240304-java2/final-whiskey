@@ -59,6 +59,13 @@ public class restaurantController {
         // 리뷰 관련 정보
         Map<String, Object> reviewAttributes = reviewService.getReviewsByRestaurant(restaurant);
 
+        String ratingPhase = (String) reviewAttributes.get("ratingPhase");
+
+        // 정규식을 사용하여 숫자와 소수점을 제거
+        String onlyStars = ratingPhase.replaceAll("[0-9.]", "").trim();
+
+        model.addAttribute("ratingOnlyStars", onlyStars);
+
         model.addAttribute("ratingPhase", reviewAttributes.get("ratingPhase"));
         model.addAttribute("reviews", reviewAttributes.get("reviews"));
 
