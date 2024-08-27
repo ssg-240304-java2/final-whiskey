@@ -1,20 +1,77 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 리뷰 아이템을 클릭했을 때 레스토랑 상세 페이지로 이동
-    const reviewItems = document.querySelectorAll('.review-item');
-    reviewItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const restaurantId = this.getAttribute('data-restaurant-id');
+    const sections = {
+        profile: document.querySelector('#profile'),
+        reviews: document.querySelector('#reviews'),
+        bookmarks: document.querySelector('#bookmarks')
+    };
+
+    const navItems = document.querySelectorAll('.nav-item');
+
+    function activateTab(tab) {
+        // 모든 섹션을 비활성화하고, 클릭한 탭의 섹션만 활성화
+        for (let key in sections) {
+            sections[key].classList.remove('active');
+        }
+        sections[tab].classList.add('active');
+
+        // 모든 네비게이션 아이템을 비활성화하고, 클릭한 탭만 활성화
+        navItems.forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
+
+        // 선택된 탭을 sessionStorage에 저장
+        sessionStorage.setItem('activeTab', tab);
+    }
+
+    // 로그아웃 버튼 클릭 시 sessionStorage 초기화
+    const logoutBtn = document.querySelector('.logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function() {
+            sessionStorage.clear();  // sessionStorage를 초기화하여 마지막 탭 정보 제거
+        });
+    }
+
+    // 기본적으로 "회원정보" 탭 활성화 (로그인 시)
+    let activeTab = location.hash.replace('#', '') || sessionStorage.getItem('activeTab') || 'profile';
+    activateTab(activeTab);
+
+    // 탭을 클릭할 때 해당 탭을 활성화
+    navItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            let tab = this.getAttribute('data-tab');
+            activateTab(tab);
+            location.hash = tab;  // URL 해시 변경
+        });
+    });
+
+    // 페이지네이션 링크에 activeTab 파라미터 추가
+    const paginationLinks = document.querySelectorAll('.pagination a');
+    paginationLinks.forEach(link => {
+        const href = new URL(link.href);
+        href.searchParams.set('activeTab', activeTab);
+        link.href = href.toString();
+    });
+
+    // 리뷰 아이템에서 레스토랑 이름 클릭 시 레스토랑 상세 페이지로 이동
+    const reviewNames = document.querySelectorAll('.review-item .restaurant-name');
+    reviewNames.forEach(name => {
+        name.addEventListener('click', function(event) {
+            event.stopPropagation();  // 부모 요소의 클릭 이벤트 전파 방지
+            const restaurantId = this.closest('.review-item').getAttribute('data-restaurant-id');
             if (restaurantId) {
                 window.location.href = '/restaurant/' + restaurantId + '/info';
             }
         });
     });
 
-    // 북마크 아이템을 클릭했을 때 레스토랑 상세 페이지로 이동
-    const bookmarkItems = document.querySelectorAll('.bookmark-item');
-    bookmarkItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const restaurantId = this.getAttribute('data-restaurant-id');
+    // 북마크된 레스토랑 이름 클릭 시 레스토랑 상세 페이지로 이동
+    const bookmarkNames = document.querySelectorAll('.bookmark-item .restaurant-name');
+    bookmarkNames.forEach(name => {
+        name.addEventListener('click', function(event) {
+            event.stopPropagation();  // 부모 요소의 클릭 이벤트 전파 방지
+            const restaurantId = this.closest('.bookmark-item').getAttribute('data-restaurant-id');
             if (restaurantId) {
                 window.location.href = '/restaurant/' + restaurantId + '/info';
             }
@@ -40,27 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
     span.onclick = function() {
         modal.style.display = "none";
     };
-
-    // 프로필 네비게이션 탭 전환
-    const navItems = document.querySelectorAll('.profile-nav li');
-    const contentSections = document.querySelectorAll('.content-section');
-
-    navItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault();
-            const tab = this.getAttribute('data-tab');
-
-            navItems.forEach(navItem => navItem.classList.remove('active'));
-            this.classList.add('active');
-
-            contentSections.forEach(section => {
-                section.classList.remove('active');
-                if (section.id === tab) {
-                    section.classList.add('active');
-                }
-            });
-        });
-    });
 
     // 프로필 수정 모달 관리
     const modalBasic = document.getElementById('editProfileModalBasic');
@@ -204,18 +240,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             })
                 .then(response => {
-                    return response.text().then(text => {
-                        if (response.ok) {
-                            alert('북마크가 해제되었습니다.');
-                            window.location.reload(); // 페이지 새로고침
-                        } else {
-                            alert(`북마크 해제에 실패했습니다: ${text}`);
-                        }
-                    });
+                    if (response.ok) {
+                        return response.text();
+                    } else {
+                        throw new Error('Failed to remove bookmark');
+                    }
+                })
+                .then(text => {
+                    alert('즐겨찾기가 해제되었습니다.');
+                    window.location.reload();
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('북마크 해제 중 오류가 발생했습니다.');
+                    alert('즐겨찾기 해제 중 오류가 발생했습니다.');
                 });
         });
     });
