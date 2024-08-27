@@ -1,9 +1,6 @@
 package com.whiskey.rvcom.report;
 
-import com.whiskey.rvcom.entity.report.RestaurantReport;
 import com.whiskey.rvcom.entity.report.ReviewReport;
-import com.whiskey.rvcom.entity.restaurant.Restaurant;
-import com.whiskey.rvcom.entity.review.Rating;
 import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.report.service.ReviewReportService;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @SpringBootTest
@@ -35,7 +31,7 @@ public class ReviewReportTest {
         // given
 
         // when
-        Page<ReviewReport> reports = reviewReportService.getAllReviewReports(10, "asc");
+        Page<ReviewReport> reports = reviewReportService.getAllBeforeReviewReports(10, "asc");
 
         for (ReviewReport report : reports) {
             System.out.println(report);
@@ -113,7 +109,7 @@ public class ReviewReportTest {
         reviewReportService.saveReviewReport(report);
 
         // 조회 성공 후 목록 가져오기
-        Page<ReviewReport> reports = reviewReportService.getAllReviewReports(10, "asc");
+        Page<ReviewReport> reports = reviewReportService.getAllBeforeReviewReports(10, "asc");
 
         // then 현재 테스트 코드로 등록한 신고와 DB에 등록된 신고의 내용이 같은지 비교
 //        Assertions.assertEquals(reports.get(reports.size()-1).getContent(), reviewReportDTO.getContent());
