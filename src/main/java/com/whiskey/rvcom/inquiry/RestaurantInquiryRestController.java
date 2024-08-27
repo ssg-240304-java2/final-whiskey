@@ -57,10 +57,8 @@ public class RestaurantInquiryRestController {
      */
     @PostMapping("/restaurant/{restaurantId}/inquiry")
     public void save(@PathVariable Long restaurantId, @RequestBody RestaurantInquiryRequestDTO request, HttpSession session) {
-//         TODO: session 에서 memberId 가져오기
-         Member memberId = (Member) session.getAttribute("memberId");
-//        inquiryService.save(request, memberId);
-        inquiryService.save(restaurantId, request, 5L);
+        Member member = (Member) session.getAttribute("member");
+        inquiryService.save(restaurantId, request, member);
     }
 
     /**

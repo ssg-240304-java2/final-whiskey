@@ -22,7 +22,6 @@ import java.util.List;
 @Service
 public class RestaurantInquiryService {
     private final RestaurantInquiryRepository inquiryRepository;
-    private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
 
     // TODO: 음식점의 문의글 조회하기
@@ -50,8 +49,7 @@ public class RestaurantInquiryService {
 
     // TODO: 문의 작성
     @Transactional
-    public void save(Long restaurantId, RestaurantInquiryRequestDTO request, Long memberId) {
-        Member member = memberRepository.getReferenceById(memberId);
+    public void save(Long restaurantId, RestaurantInquiryRequestDTO request, Member member) {
         Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
         inquiryRepository.save(new RestaurantInquiry(member, restaurant, request.content()));
     }

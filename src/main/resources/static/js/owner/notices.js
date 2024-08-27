@@ -12,6 +12,7 @@ $(document).ready(function () {
     $(document).on('click', '#forward', clickForward);
 });
 
+// 공지사항 전체 조회
 function loadNoticeList(restaurantId, pageNumber) {
     $.ajax({
         url: `/restaurant/${restaurantId}/allNotice?pageNumber=${pageNumber}&pageSize=5`,
@@ -27,8 +28,8 @@ function loadNoticeList(restaurantId, pageNumber) {
                                         <h3>${notice.title}</h3>
                                         <p>${notice.content}</p>
                                         <div class="notice-footer">
-                                            <span class="notice-date">${new Date(notice.createdAt).toLocaleDateString()}</span>
-                                            <span class="notice-status">${notice.isDeleted ? '삭제됨' : '작성 완료'}</span>
+                                            <span class="notice-date">${new Date(notice.createdAt).toLocaleString()}</span>
+<!--                                            <span class="notice-status">${notice.isDeleted ? '삭제됨' : '작성 완료'}</span>-->
                                             ${!notice.isDeleted ? `<button class="btn btn-sm btn-outline-danger" id="${notice.id}" name="delete-notice"><i class="fas fa-trash"></i> 삭제</button>` : ''}
                                         </div>
                                     </div>
@@ -54,25 +55,35 @@ function createNotice() {
     const title = $('#title').val();
     const content = $('#content').val();
 
+    if (!title) {
+        alert('제목을 입력해주세요.');
+        return;
+    }
+
+    if (!content) {
+        alert('내용을 입력해주세요.');
+        return;
+    }
+
     $.ajax({
         url: `/restaurant/${restaurantId}/notice`,
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({ title, content }),
+        data: JSON.stringify({title, content}),
         success: function (response) {
             console.log('공지사항 작성 성공:', response);
+            alert('공지사항이 작성되었습니다.');
             loadNoticeList(restaurantId, 1); // 공지사항 작성 후 목록 다시 불러오기
+            closeModal();
         },
         error: function (xhr, status, error) {
             console.error('AJAX 요청 실패:', status, error);
             alert('공지사항 작성에 실패했습니다.');
         }
     });
-
-    closeModal();
 }
 
-// 공지사항 삭제 확인 모달 표시
+// 공지사항 삭제
 function deleteNotice() {
     const noticeId = $(this).attr('id');
     // todo: 시간남으면 커스텀 모달창으로 삭제 해보기
@@ -120,7 +131,7 @@ function renderPageNumber(totalPages, pageNumber) {
 
     for (let i = 1; i <= totalPages; i++) {
         pageList.append(`<li class="page-item ${i === pageNumber ? 'active' : ''}" id="${i}">
-                            <a class="page-link" onclick="clickPage(${i})">${i}</a>
+                            <a class="page-link" href="#" onclick="clickPage(${i})">${i}</a>
                         </li>`);
     }
 
