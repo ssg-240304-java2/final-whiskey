@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/kakao")
 public class KakaoApi {
 
-    private static final Logger log = LoggerFactory.getLogger(KakaoApi.class);
+//    private static final Logger log = LoggerFactory.getLogger(KakaoApi.class);
     @Value("${kakao.apikey}")
     private String apiKey;
 

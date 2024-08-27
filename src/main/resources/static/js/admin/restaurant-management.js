@@ -121,18 +121,47 @@ function changePage(page) {
 
 // TODO: 상세보기 기능 구현
 function viewDetails(id) {
-    console.log('상세보기:', id);
-    // 여기에 상세보기 모달 또는 새 페이지로 이동하는 로직을 구현합니다.
+    const clickedElement = event.target.closest('tr');
+
+    if (clickedElement) {
+
+        console.log('register ID :', id);
+        window.location.href = `/businessregister/regist-detail?id=${id}`;
+    }
 }
+
 
 // TODO: 승인 기능 구현
 function approveRegistration(id) {
     console.log('승인:', id);
     // 여기에 승인 처리 로직을 구현합니다.
+    const btnID = 'approve';
+    updateReport(btnID,id)
 }
 
 // TODO: 거절 기능 구현
 function rejectRegistration(id) {
     console.log('거절:', id);
     // 여기에 거절 처리 로직을 구현합니다.
+    const btnID = 'reject';
+    updateReport(btnID,id)
+}
+
+// 입점 처리 기능
+function updateReport(btnId, id) {
+    if (confirm("입점처리를 진행하시겠습니까?")) {
+        $.ajax({
+            url: `/businessregister/process/` + id,
+            type: "PUT",
+            data: {btnId: btnId},
+            success() {
+                alert('입점처리 되었습니다.');
+                window.location.reload();
+            },
+            error() {
+                alert('입점처리에 실패했습니다.');
+            }
+        });
+        console.log("입점처리 완료");
+    } else {}
 }

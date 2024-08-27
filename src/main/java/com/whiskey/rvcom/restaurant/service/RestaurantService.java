@@ -87,7 +87,7 @@ public class RestaurantService {
         RestaurantCardDTO restaurantCardDTO = new RestaurantCardDTO(
                 restaurant.getId(),
                 restaurant.getName(),
-                restaurant.getCategory().name(),
+                restaurant.getCategory().getTitle(),
                 distanceString,
                 openingHour,
                 coverImageUrl
@@ -200,6 +200,6 @@ public class RestaurantService {
     }
 
     public List<RestaurantSearchResultDTO> getRestaurantsBySearchText(String searchText) {
-        return restaurantRepository.findAllByNameContaining(searchText);
+        return restaurantRepository.searchByNameAndMenu(searchText);
     }
 }

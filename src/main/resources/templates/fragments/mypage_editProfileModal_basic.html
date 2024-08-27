@@ -1,0 +1,62 @@
+<div th:fragment="editProfileModalBasic(member,profileImageUrl)" id="editProfileModalBasic" class="modal">
+    <div class="modal-content">
+        <span class="close">×</span>
+        <h2>회원정보 수정</h2>
+        <form id="editProfileFormBasic" class="basic-profile-form" action="/updateProfileBasic" method="post" enctype="multipart/form-data">
+            <label for="basicLoginId">로그인 ID:</label>
+            <div class="login-id-container">
+                <input type="text" id="basicLoginId" name="loginId" th:value="${member.loginId}" required>
+                <button type="button" id="loginIdCheckBtn">중복 확인</button>
+            </div>
+            <span id="loginId-check-message" style="display:none; color: red;"></span> <!-- 로그인 ID 중복 여부 메시지 -->
+
+            <label for="basicName">이름:</label>
+            <input type="text" id="basicName" name="name" th:value="${member.name}" required>
+
+            <label for="basicNickname">닉네임:</label>
+            <input type="text" id="basicNickname" name="nickname" th:value="${member.nickname}" required>
+
+            <label for="basicEmail">이메일:</label>
+            <input type="email" id="basicEmail" name="email" th:value="${member.email}" required>
+
+            <label for="basicPassword">비밀번호:</label>
+            <input type="password" id="basicPassword" name="password" placeholder="새 비밀번호">
+
+            <label for="basicConfirmPassword">비밀번호 확인:</label>
+            <input type="password" id="basicConfirmPassword" name="confirmPassword" placeholder="비밀번호 확인">
+            <span id="password-match-message" style="color:red; display:none;"></span> <!-- 비밀번호 일치 여부 메시지 -->
+
+            <label for="basicIntroduction">자기소개:</label>
+            <input type="text" id="basicIntroduction" name="introduction" th:value="${member.introduction != null ? member.introduction : ''}" placeholder="자기소개를 입력하세요">
+
+            <!-- 프로필 사진 업로드 -->
+            <label for="profileImage">프로필 이미지:</label>
+            <input type="file" id="profileImage" name="profileImage" accept="image/*">
+
+            <!-- 이미지 미리보기 -->
+            <img id="profileImagePreview" th:src="${profileImageUrl}" alt="프로필 이미지 미리보기" class="profile-image" style="width: 150px; height: 150px; object-fit: cover; margin-top: 10px;">
+
+            <button type="submit" id="submit-btn">저장</button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const profileImageInput = document.getElementById('profileImage');
+            const profileImagePreview = document.getElementById('profileImagePreview');
+
+            profileImageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profileImagePreview.src = e.target.result;
+                        profileImagePreview.style.display = 'block'; // 이미지 미리보기를 표시
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    profileImagePreview.style.display = 'none'; // 파일이 없을 경우 이미지 미리보기 숨김
+                }
+            });
+        });
+    </script>
+</div>

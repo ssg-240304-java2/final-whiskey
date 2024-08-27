@@ -1,9 +1,13 @@
 package com.whiskey.rvcom.favorite;
 
+import com.whiskey.rvcom.ImageFile.ImageFileService;
 import com.whiskey.rvcom.entity.favorite.Favorite;
 import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.review.Review;
+import com.whiskey.rvcom.entity.review.ReviewImage;
 import com.whiskey.rvcom.repository.FavoriteRepository;
+import com.whiskey.rvcom.repository.RestaurantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +19,11 @@ import java.util.Optional;
 public class FavoriteService {
 
     private final FavoriteRepository favoriteRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public FavoriteService(FavoriteRepository favoriteRepository) {
+    public FavoriteService(FavoriteRepository favoriteRepository, RestaurantRepository restaurantRepository) {
         this.favoriteRepository = favoriteRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     /**
@@ -30,6 +36,7 @@ public class FavoriteService {
     public List<Favorite> getFavoritesByMember(Member member) {
         return favoriteRepository.findByMember(member); 
     }
+
 
     /**
      * 새로운 즐겨찾기를 추가.
@@ -68,6 +75,18 @@ public class FavoriteService {
     }
 
     /**
+     * ID로 레스토랑을 찾는 메서드.
+     *
+     * @param restaurantId 찾고자 하는 레스토랑의 ID
+     * @return 해당 ID의 레스토랑 객체
+     * @throws IllegalArgumentException 해당 ID의 레스토랑이 존재하지 않을 때 발생
+     */
+    public Restaurant findRestaurantById(Long restaurantId) {
+        return restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID로 레스토랑을 찾을 수 없습니다: " + restaurantId));
+    }
+
+    /**
      * 특정 음식점이 회원의 즐겨찾기에 포함되어 있는지 확인.
      * 이 메서드는 음식점 목록이나 상세 페이지에서 즐겨찾기 상태를 표시할 때 사용될 수 있슴다. (아직 모르겠)
      * 
@@ -89,20 +108,4 @@ public class FavoriteService {
     public long getFavoriteCount(Restaurant restaurant) {
         return favoriteRepository.countByRestaurant(restaurant);
     }
-
-    // TODO: 회원 정보 변경 시 즐겨찾기 정보 업데이트
-    // 회원 정보가 변경될 때 관련된 즐겨찾기 정보도 함께 업데이트해야 합니다.
-    // 예를 들어, 회원의 이름이 변경되면 즐겨찾기 객체 내의 회원 정보도 갱신되어야 합니다.
-
-    // TODO: 음식점 정보 변경 시 즐겨찾기 정보 업데이트
-    // 음식점 정보가 변경될 때 관련된 즐겨찾기 정보도 함께 업데이트해야 합니다.
-    // 예를 들어, 음식점의 이름이 변경되면 즐겨찾기 객체 내의 음식점 정보도 갱신되어야 합니다.
-
-    // TODO: 즐겨찾기 목록 페이징 처리
-    // 사용자의 즐겨찾기 목록이 많을 경우, 페이지네이션을 구현하여 성능을 개선 및 사용자 경험을 향상시켜야 함.
-    // Spring Data JPA의 Pageable 인터페이스를 활용하여 구현할 수 있다네요...
-
-    // TODO: 즐겨찾기 목록 정렬 기능 (최신순, 이름순 등)
-    // 사용자가 자신의 즐겨찾기 목록을 다양한 기준으로 정렬할 수 있는 기능이 필요하다면?
-    // 최신 추가순, 음식점 이름순, 방문 횟수순 등 다양한 정렬 옵션을 제공할 수 있습니다.
 }

@@ -1,12 +1,12 @@
 <!-- src/main/resources/templates/fragments/mypage_profileHeader.html -->
-<div th:fragment="profileHeader(name, location, joinDate, reviewCount)">
+<div th:fragment="profileHeader(name, joinDate, reviewCount, profileImageUrl)">
     <div class="profile-header">
-        <img src="https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg" alt="프로필 이미지" class="profile-image">
+        <img th:src="${profileImageUrl}" alt="프로필 이미지" class="profile-image">
         <div class="profile-info">
             <h1 th:text="${name}">사용자 이름</h1>
-            <p th:text="${location + ' • 가입일: ' + joinDate}">위치 • 가입일</p>
+            <p th:text="${'• 가입일: ' + joinDate}"> • 가입일</p>
             <div class="profile-stats">
-                <span><i class="fas fa-star"></i> <span th:text="${reviewCount}">0</span> 리뷰</span>
+                <span><i class="fas fa-star"></i> <span th:text="${reviewCount}">0</span>개의 리뷰</span>
             </div>
         </div>
     </div>
