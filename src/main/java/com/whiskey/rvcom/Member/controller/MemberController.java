@@ -444,8 +444,8 @@ public class MemberController {
         session.setAttribute("isAuthenticated", true);
         session.setAttribute("userRole", member.getRole().toString());
         session.setAttribute("loginType", member.getLoginType().toString());
-        session.setAttribute("id", member.getId());
+        session.setAttribute("memberId", member.getId());
         log.info("Session loginType set to: {}", member.getLoginType().toString());
-        log.info("Session ld set to: {}", member.getId());
+        log.info("Session memberId set to: {}", member.getId());
     }
 }
