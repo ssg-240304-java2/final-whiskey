@@ -9,15 +9,13 @@ import org.springframework.web.bind.annotation.*;
 public class RestaurantInquiryReplyRestController {
     private final RestaurantInquiryReplyService inquiryReplyService;
 
-    // TODO: 문의 답변 작성
+    /**
+     * 문의 답변 작성
+     * @param inquiryId
+     * @param request
+     */
     @PostMapping("/restaurant/inquiry/reply/{inquiryId}")
     public void save(@PathVariable Long inquiryId, @RequestBody RestaurantInquiryReplyRequestDTO request) {
         inquiryReplyService.save(inquiryId, request);
-    }
-
-    // TODO: 문의 답변 삭제
-    @DeleteMapping("/restaurant/inquiry/reply")
-    public void delete(Long replyId) {
-        inquiryReplyService.delete(replyId);
     }
 }
