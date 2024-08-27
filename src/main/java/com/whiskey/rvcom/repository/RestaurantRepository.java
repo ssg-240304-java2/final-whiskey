@@ -15,4 +15,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     // Restaurant db에서 검색어를 포함하는 식당 정보를 가져오는 jpa
     @Query("select new com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO(r.id, r.name, r.category, r.address) from Restaurant r LEFT JOIN r.menus m where r.name like %:searchText% or m.name like %:searchText% group by r.id")
     List<RestaurantSearchResultDTO> searchByNameAndMenu(String searchText);
+
+    @Query("select r from Restaurant r where r.owner.id = :id order by r.id desc limit 1")
+    Restaurant findByOwnerId(Long id);
 }

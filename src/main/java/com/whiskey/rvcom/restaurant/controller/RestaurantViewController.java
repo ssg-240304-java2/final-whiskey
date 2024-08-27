@@ -1,9 +1,14 @@
 package com.whiskey.rvcom.restaurant.controller;
 
+import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.restaurant.dto.OwnersRestaurantInfoDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.review.ReviewService;
+import com.whiskey.rvcom.util.ImagePathParser;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,5 +40,23 @@ public class RestaurantViewController {
         List<RestaurantSearchResultDTO> restaurantSearchResultList = restaurantService.getRestaurantsBySearchText(searchText);
         model.addAttribute("restaurantSearchResult", restaurantSearchResultList);
         return "searchResults";
+    }
+
+    @GetMapping("/api/restaurant/info")
+    @ResponseBody
+    public OwnersRestaurantInfoDTO getOwnersRestaurantInfo(HttpSession session) {
+
+        Member member = (Member) session.getAttribute("member");
+
+        Restaurant restaurant = restaurantService.getRestaurantByOwnerId(member.getId());
+
+        return new OwnersRestaurantInfoDTO(
+                restaurant.getName(),
+                restaurant.getNumber(),
+                restaurant.getAddress().getName(),
+                member.getName(),
+                restaurant.getCategory().getTitle(),
+                ImagePathParser.parse(restaurant.getCoverImage().getUuidFileName())
+        );
     }
 }

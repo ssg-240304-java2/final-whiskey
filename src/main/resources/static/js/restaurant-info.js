@@ -48,7 +48,6 @@ function loadRestaurantInfo() {
             document.getElementById("displayRestaurantName").textContent = data.name;
             document.getElementById("displayRestaurantNumber").textContent = data.number;
             document.getElementById("displayRestaurantAddress").textContent = data.address;
-            document.getElementById("displayBusinessNumber").textContent = data.businessNumber;
             document.getElementById("displayOwnerName").textContent = data.ownerName;
             document.getElementById("displayCategory").textContent = data.category;
 
@@ -70,7 +69,6 @@ function loadRestaurantInfo() {
             document.getElementById("restaurantName").value = data.name;
             document.getElementById("restaurantNumber").value = data.number;
             document.getElementById("restaurantAddress").value = data.address;
-            document.getElementById("businessNumber").value = data.businessNumber;
             document.getElementById("ownerName").value = data.ownerName;
             document.getElementById("category").value = data.category;
 
@@ -81,7 +79,7 @@ function loadRestaurantInfo() {
                 const openTimeSelect = document.getElementById(`openTime${day}`);
                 const closeTimeSelect = document.getElementById(`closeTime${day}`);
 
-                if (data.operatingHours[day]) {
+                if (data.operatingHours[days.indexOf(day)]) {
                     operateCheckbox.checked = true;
                     openTimeSelect.value = data.operatingHours[day].open;
                     closeTimeSelect.value = data.operatingHours[day].close;
@@ -132,7 +130,7 @@ function sendModificationRequest() {
 // 음식점 삭제 요청을 보내는 함수
 function sendDeletionRequest() {
     const reason = document.getElementById("deletionReason").value;
-    
+
     // TODO: 백엔드 개발 - POST /api/restaurant/request-deletion 엔드포인트 구현
     // 요청 데이터: { reason: "삭제 사유" }
     // 응답 데이터: { success: true/false, message: "처리 결과 메시지" }
@@ -141,7 +139,7 @@ function sendDeletionRequest() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ reason: reason })
+        body: JSON.stringify({reason: reason})
     })
         .then(response => response.json())
         .then(data => {
