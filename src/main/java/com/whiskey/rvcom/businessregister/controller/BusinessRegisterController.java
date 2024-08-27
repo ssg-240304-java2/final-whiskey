@@ -10,6 +10,7 @@ import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import com.whiskey.rvcom.entity.restaurant.registration.RegistrationStatus;
 import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
 import com.whiskey.rvcom.mail.MailInfo;
+import com.whiskey.rvcom.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,8 @@ public class BusinessRegisterController {
     private final String REQUEST_URL = "https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=";
 
     private final BusinessRegisterService businessRegisterService;
+
+    private final RestaurantRepository restaurantRepository;
 
     @PostMapping("/valid")
     @ResponseBody
@@ -119,6 +122,9 @@ public class BusinessRegisterController {
         if (isApprove) {
             // 승인 메일 발송
              mailInfo = new MailInfo(ownerMail, REGIST_APPROVE, businessRegisterService.getApproveMailText(registerId));
+            // 승인 결정 후 식당 정보 저장
+            restaurantRepository.save(businessRegisterService.getRestairantInfo(registerId));
+
         } else {
             // 거절 메일 발송
             mailInfo = new MailInfo(ownerMail, REGIST_REJECT, businessRegisterService.getRejectMailText(registerId));
