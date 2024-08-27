@@ -411,6 +411,16 @@ body {
     border-color: #555;
 }
 
+.modal .close {
+    color: #e0e0e0;
+    opacity: 0.8;
+}
+
+.modal .close:hover {
+    color: #ffffff;
+    opacity: 1;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .modal-dialog {
@@ -418,8 +428,6 @@ body {
     }
 }
 
-
-/* 기존 스타일 유지 */
 
 /* 신고 처리 상태 스타일 */
 .report-status {

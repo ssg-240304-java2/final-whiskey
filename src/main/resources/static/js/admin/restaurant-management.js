@@ -7,6 +7,10 @@ let currentSortDirection = 'desc'; // 기본 정렬 방향
 $(document).ready(function() {
     loadRestaurantRegistrations();
     initializeSortButtons();
+
+    $('.btn-secondary[data-bs-dismiss="modal"], .close[data-bs-dismiss="modal"]').click(function() {
+        closeModal();
+    });
 });
 
 // 정렬 버튼 초기화 함수
