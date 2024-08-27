@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sections = {
         profile: document.querySelector('#profile'),
         reviews: document.querySelector('#reviews'),
-        bookmarks: document.querySelector('#bookmarks')
+        favorite: document.querySelector('#favorite')
     };
 
     const navItems = document.querySelectorAll('.nav-item');
@@ -66,12 +66,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 북마크된 레스토랑 이름 클릭 시 레스토랑 상세 페이지로 이동
-    const bookmarkNames = document.querySelectorAll('.bookmark-item .restaurant-name');
-    bookmarkNames.forEach(name => {
+    // 즐겨찾기된 레스토랑 이름 클릭 시 레스토랑 상세 페이지로 이동
+    const favoriteNames = document.querySelectorAll('.favorite-item .restaurant-name');
+    favoriteNames.forEach(name => {
         name.addEventListener('click', function(event) {
             event.stopPropagation();  // 부모 요소의 클릭 이벤트 전파 방지
-            const restaurantId = this.closest('.bookmark-item').getAttribute('data-restaurant-id');
+            const restaurantId = this.closest('.favorite-item').getAttribute('data-restaurant-id');
             if (restaurantId) {
                 window.location.href = '/restaurant/' + restaurantId + '/info';
             }
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 북마크 해제 버튼 로직
+    // 즐겨찾기 해제 버튼 로직
     const removeFavoriteButtons = document.querySelectorAll('.remove-favorite-btn');
 
     removeFavoriteButtons.forEach(button => {
@@ -220,8 +220,8 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
 
             const restaurantId = this.closest('form').querySelector('input[name="restaurantId"]').value;
-            const bookmarkPage = this.closest('form').querySelector('input[name="bookmarkPage"]').value;
-            const bookmarkSize = this.closest('form').querySelector('input[name="bookmarkSize"]').value;
+            const favoritePage = this.closest('form').querySelector('input[name="favoritePage"]').value;
+            const favoriteSize = this.closest('form').querySelector('input[name="favoriteSize"]').value;
 
             if (!restaurantId) {
                 alert('레스토랑 ID가 유효하지 않습니다.');
@@ -235,15 +235,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: new URLSearchParams({
                     'restaurantId': restaurantId,
-                    'bookmarkPage': bookmarkPage,
-                    'bookmarkSize': bookmarkSize
+                    'favoritePage': favoritePage,
+                    'favoriteSize': favoriteSize
                 })
             })
                 .then(response => {
                     if (response.ok) {
                         return response.text();
                     } else {
-                        throw new Error('Failed to remove bookmark');
+                        throw new Error('Failed to remove favorite');
                     }
                 })
                 .then(text => {

@@ -81,22 +81,22 @@
                 </div>
             </section>
 
-            <!-- 북마크 섹션 -->
-            <section id="bookmarks" class="content-section">
+            <!-- 즐겨찾기 섹션 -->
+            <section id="favorite" class="content-section">
                 <h2>즐겨찾기한 레스토랑</h2>
-                <div class="bookmark-list">
-                    <!-- 북마크가 없는 경우 메시지 표시 -->
+                <div class="favorite-list">
+                    <!-- 즐겨찾기가 없는 경우 메시지 표시 -->
                     <div th:if="${#lists.isEmpty(favorites)}">
                         <p>즐겨찾기한 레스토랑이 존재하지 않습니다.</p>
                     </div>
-                    <!-- 북마크가 있는 경우 -->
-                    <div th:each="favorite : ${favorites}" class="bookmark-item" th:attr="data-restaurant-id=${favorite.restaurant.id}">
+                    <!-- 즐겨찾기가 있는 경우 -->
+                    <div th:each="favorite : ${favorites}" class="favorite-item" th:attr="data-restaurant-id=${favorite.restaurant.id}">
                         <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : 'https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg'}" alt="레스토랑 이미지" class="restaurant-image">
-                        <div class="bookmark-content">
+                        <div class="favorite-content">
                             <form th:action="@{/mypage/remove-favorite}" method="post" class="remove-favorite-form">
                                 <input type="hidden" name="restaurantId" th:value="${favorite.restaurant.id}" />
-                                <input type="hidden" name="bookmarkPage" th:value="${bookmarkCurrentPage}" />
-                                <input type="hidden" name="bookmarkSize" th:value="${bookmarkSize}" />
+                                <input type="hidden" name="favoritePage" th:value="${favoriteCurrentPage}" />
+                                <input type="hidden" name="favoriteSize" th:value="${favoriteSize}" />
                                 <button type="submit" class="remove-favorite-btn">즐겨찾기 해제</button>
                             </form>
                             <h3 class="restaurant-name" th:text="${favorite.restaurant.name}">레스토랑 이름</h3>
@@ -117,28 +117,28 @@
                     </div>
                 </div>
 
-                <!-- 북마크가 있을 때만 페이지 네이션 표시 -->
+                <!-- 즐겨찾기가 있을 때만 페이지 네이션 표시 -->
                 <div th:if="${!#lists.isEmpty(favorites)}" class="pagination">
                     <ul>
                         <!-- 맨 처음 버튼 -->
                         <li>
-                            <a th:href="@{'/mypage'(bookmarkPage=0, bookmarkSize=${bookmarkSize})}">&laquo; 맨 처음</a>
+                            <a th:href="@{'/mypage'(favoritePage=0, favoriteSize=${favoriteSize})}">&laquo; 맨 처음</a>
                         </li>
                         <!-- 이전 버튼 -->
                         <li>
-                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkCurrentPage > 0 ? bookmarkCurrentPage - 1 : 0}, bookmarkSize=${bookmarkSize})}">&laquo; 이전</a>
+                            <a th:href="@{'/mypage'(favoritePage=${favoriteCurrentPage > 0 ? favoriteCurrentPage - 1 : 0}, favoriteSize=${favoriteSize})}">&laquo; 이전</a>
                         </li>
                         <!-- 페이지 번호 -->
-                        <li th:each="i : ${#numbers.sequence(0, bookmarkTotalPages - 1)}">
-                            <a th:classappend="${i == bookmarkCurrentPage} ? 'active'" th:href="@{'/mypage'(bookmarkPage=${i}, bookmarkSize=${bookmarkSize})}" th:text="${i + 1}">1</a>
+                        <li th:each="i : ${#numbers.sequence(0, favoriteTotalPages - 1)}">
+                            <a th:classappend="${i == favoriteCurrentPage} ? 'active'" th:href="@{'/mypage'(favoritePage=${i}, favoriteSize=${favoriteSize})}" th:text="${i + 1}">1</a>
                         </li>
                         <!-- 다음 버튼 -->
                         <li>
-                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkCurrentPage < bookmarkTotalPages - 1 ? bookmarkCurrentPage + 1 : bookmarkTotalPages - 1}, bookmarkSize=${bookmarkSize})}">다음 &raquo;</a>
+                            <a th:href="@{'/mypage'(favoritePage=${favoriteCurrentPage < favoriteTotalPages - 1 ? favoriteCurrentPage + 1 : favoriteTotalPages - 1}, favoriteSize=${favoriteSize})}">다음 &raquo;</a>
                         </li>
                         <!-- 맨 마지막 버튼 -->
                         <li>
-                            <a th:href="@{'/mypage'(bookmarkPage=${bookmarkTotalPages - 1}, bookmarkSize=${bookmarkSize})}">맨 마지막 &raquo;</a>
+                            <a th:href="@{'/mypage'(favoritePage=${favoriteTotalPages - 1}, favoriteSize=${favoriteSize})}">맨 마지막 &raquo;</a>
                         </li>
                     </ul>
                 </div>
