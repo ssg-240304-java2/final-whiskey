@@ -220,8 +220,8 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
 
             const restaurantId = this.closest('form').querySelector('input[name="restaurantId"]').value;
-            const favoritePage = this.closest('form').querySelector('input[name="bookmarkPage"]').value;
-            const favoriteSize = this.closest('form').querySelector('input[name="bookmarkSize"]').value;
+            const favoritePage = this.closest('form').querySelector('input[name="favoritePage"]').value;
+            const favoriteSize = this.closest('form').querySelector('input[name="favoriteSize"]').value;
 
             if (!restaurantId) {
                 alert('레스토랑 ID가 유효하지 않습니다.');
@@ -235,8 +235,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: new URLSearchParams({
                     'restaurantId': restaurantId,
-                    'bookmarkPage': favoritePage,
-                    'bookmarkSize': favoriteSize
+                    'favoritePage': favoritePage,
+                    'favoriteSize': favoriteSize
                 })
             })
                 .then(response => {

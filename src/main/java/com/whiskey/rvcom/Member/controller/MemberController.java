@@ -190,7 +190,7 @@ public class MemberController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("favoriteCurrentPage", favoritePage);
-        model.addAttribute("favoriteTotalPages", favoriteTotalPages);
+        model.addAttribute("favoriteTotalPages", favoriteTotalPages > 0 ? favoriteTotalPages : 1); // 기본값 설정
         model.addAttribute("favoriteSize", favoriteSize);
         model.addAttribute("activeTab", activeTab); // 활성화된 탭 정보 전달
 
@@ -437,6 +437,6 @@ public class MemberController {
         session.setAttribute("loginType", member.getLoginType().toString());
         session.setAttribute("memberId", member.getId());
         log.info("Session loginType set to: {}", member.getLoginType().toString());
-        log.info("Session memberId set to: {}", member.getId());
+        log.info("Session Id set to: {}", member.getId());
     }
 }
