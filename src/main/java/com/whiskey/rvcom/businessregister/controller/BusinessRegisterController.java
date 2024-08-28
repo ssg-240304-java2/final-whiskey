@@ -133,6 +133,8 @@ public class BusinessRegisterController {
              mailInfo = new MailInfo(ownerMail, REGIST_APPROVE, businessRegisterService.getApproveMailText(registerId));
             // 승인 결정 후 식당 정보 저장
             restaurantRepository.save(businessRegisterService.getRestairantInfo(registerId));
+            // 승인 후 해당 멤버 권한 OWNER로 변경
+            businessRegisterService.changeMemberRole(registerId);
 
         } else {
             // 거절 메일 발송
@@ -161,6 +163,7 @@ public class BusinessRegisterController {
     private String moveToDetailPage() {
         return "admin/regist-detail";
     }
+
 
     @GetMapping("/register-store")
     // 매장 등록 페이지로 이동
