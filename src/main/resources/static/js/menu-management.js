@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeMenuManagement();
 });
 
@@ -14,23 +14,16 @@ function initializeMenuManagement() {
     const itemsPerPage = 8;
 
     // 메뉴 데이터 로드 (백엔드 연동 전 더미 데이터 사용)
-    function loadMenus() {
+    async function loadMenus() {
         // TODO: 백엔드 API 호출로 실제 메뉴 데이터 가져오기
-        const dummyMenus = [
-            { id: 1, name: '민트초코 불고기', description: '상쾌한 민트와 달콤한 초코의 조화', price: 15000, image: 'https://via.placeholder.com/150' },
-            { id: 2, name: '와사비 아이스크림 비빔밥', description: '매콤하고 차가운 비빔밥', price: 12000, image: 'https://via.placeholder.com/150' },
-            { id: 3, name: '콜라 김치찌개', description: '톡톡 튀는 탄산 김치찌개', price: 10000, image: 'https://via.placeholder.com/150' },
-            { id: 4, name: '초콜릿 삼겹살', description: '달콤한 초콜릿 코팅 삼겹살', price: 18000, image: 'https://via.placeholder.com/150' },
-            { id: 5, name: '블루베리 된장찌개', description: '새콤달콤한 블루베리 된장찌개', price: 9000, image: 'https://via.placeholder.com/150' },
-            { id: 6, name: '바나나 갈비탕', description: '이국적인 바나나 향의 갈비탕', price: 14000, image: 'https://via.placeholder.com/150' },
-            { id: 7, name: '치약맛 떡볶이', description: '상쾌한 치약 향의 떡볶이', price: 8000, image: 'https://via.placeholder.com/150' },
-            { id: 8, name: '커피 냉면', description: '카페인 충전 시원한 냉면', price: 11000, image: 'https://via.placeholder.com/150' },
-            { id: 9, name: '두리안 순대국', description: '독특한 향의 순대국', price: 10000, image: 'https://via.placeholder.com/150' },
-            { id: 10, name: '마늘 아이스크림 제육볶음', description: '달콤하고 알싸한 제육볶음', price: 13000, image: 'https://via.placeholder.com/150' },
-            { id: 11, name: '피자맛 김밥', description: '이탈리안 스타일 김밥', price: 5000, image: 'https://via.placeholder.com/150' },
-            { id: 12, name: '김치 파스타', description: '한국식 퓨전 파스타', price: 16000, image: 'https://via.placeholder.com/150' }
-        ];
-        return dummyMenus;
+        return new Promise((resolve, reject) => {
+            fetch("/api/restaurant/menus")
+                .then((response) => response.json())
+                .then((data) => {
+                    resolve(data);
+                })
+                .catch((error) => console.error("음식점 메뉴 정보 로드 실패:", error));
+        });
     }
 
     // 메뉴 리스트 렌더링
@@ -44,7 +37,6 @@ function initializeMenuManagement() {
                     <img src="${menu.image}" class="card-img-top" alt="${menu.name}">
                     <div class="card-body">
                         <h5 class="card-title">${menu.name}</h5>
-                        <p class="card-text">${menu.description}</p>
                         <p class="card-text"><strong>${menu.price.toLocaleString()}원</strong></p>
                         <button class="btn btn-sm btn-primary edit-menu" data-id="${menu.id}">수정</button>
                         <button class="btn btn-sm btn-danger delete-menu" data-id="${menu.id}">삭제</button>
@@ -85,10 +77,21 @@ function initializeMenuManagement() {
     }
 
     // 메뉴 리스트 업데이트
-    function updateMenuList() {
-        const menus = loadMenus();
+    async function updateMenuList() {
+
+        const menus = await loadMenus();
         const start = (currentPage - 1) * itemsPerPage;
-        const paginatedMenus = menus.slice(start, start + itemsPerPage);
+
+        // start부터 itemsPerPage만큼의 메뉴를 가져옴
+        // 새로운 배열을 생성하여 전달하기
+        let paginatedMenus = [];
+        for (let i = start; i < start + itemsPerPage; i++) {
+            if (menus[i] !== undefined) {
+                menus[i].image = menus[i].image != null ? menus[i].image : 'https://via.placeholder.com/150';
+                paginatedMenus.push(menus[i]);
+            }
+        }
+
         renderMenus(paginatedMenus);
         renderPagination(menus.length);
     }
@@ -102,17 +105,20 @@ function initializeMenuManagement() {
     });
 
     // 메뉴 수정
-    function editMenu(id) {
+    async function editMenu(id) {
         // TODO: 백엔드에서 해당 id의 메뉴 정보 가져오기
-        const menu = loadMenus().find(m => m.id === parseInt(id));
-        if (menu) {
+        const menus = await loadMenus();
+        console.log("async :: menus : ", menus);
+
+        console.log("Start iter..")
+        menus.forEach(menu => {
             document.getElementById('menuId').value = menu.id;
             document.getElementById('menuName').value = menu.name;
-            document.getElementById('menuDescription').value = menu.description;
             document.getElementById('menuPrice').value = menu.price;
+            // TODO: 메뉴 이미지 수정 추가
             document.getElementById('menuModalLabel').textContent = '메뉴 수정';
             menuModal.show();
-        }
+        });
     }
 
     // 메뉴 삭제
