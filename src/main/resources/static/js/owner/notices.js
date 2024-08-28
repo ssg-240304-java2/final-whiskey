@@ -1,11 +1,8 @@
 // 페이지 로드 시 공지사항 목록 로드
 $(document).ready(function () {
-    /**
-     * TODO: 음식점 id 받아와야함
-     * 시큐리티 만진 사람이 컨텍스트 홀더에 담아놓은 유저정보를 이용해 db에서 조회를 하던가
-     * 아니면 처음 레스토랑 페이지 랜더링 될 때 레스토랑 아이디를 박고 시작하면서 그걸 계속 써야할 거 같음
-     */
-    const restaurantId = 2; // 예시로 고정된 값
+    // 음식점 id 값 가져오기
+    const restaurantId = document.getElementById('restaurantId').value;
+
     loadNotices(restaurantId, 1);
 
     $(document).on('click', '[name=delete-notice]', deleteNotice);
@@ -16,7 +13,7 @@ $(document).ready(function () {
 // 공지사항 전체 조회
 function loadNotices(restaurantId, pageNumber) {
     $.ajax({
-        url: `/restaurant/${restaurantId}/notices?pageNumber=${pageNumber}&pageSize=5`,
+        url: `/restaurant/${restaurantId}/owner-notices?pageNumber=${pageNumber}&pageSize=5`,
         type: 'GET',
         success: function (notices) {
             const noticeList = $('.notice-list');
@@ -49,9 +46,8 @@ function loadNotices(restaurantId, pageNumber) {
 
 // 공지사항 작성
 function createNotice() {
-    // TODO: 음식점 id 받아와야함
-    // const restaurantId = document.getElementById('restaurantId').value;
-    const restaurantId = 2; // 예시로 고정된 값
+    // 음식점 id 값 가져오기
+    const restaurantId = document.getElementById('restaurantId').value;
     const title = $('#title').val();
     const content = $('#content').val();
 
