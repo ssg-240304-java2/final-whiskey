@@ -59,7 +59,7 @@ public class ReviewReportController {
     @ResponseBody
     public Page<ReviewReport> getReviewReports(@RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "asc") String sortOrder) {
-        return reviewReportService.getAllReviewReports(page, sortOrder);
+        return reviewReportService.getAllBeforeReviewReports(page, sortOrder);
     }
 
     /***
