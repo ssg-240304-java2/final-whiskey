@@ -1,5 +1,7 @@
 package com.whiskey.rvcom.Member.controller;
 
+import com.whiskey.libs.rest.request.RestInvoker;
+import com.whiskey.rvcom.Member.dto.ResponseModel;
 import com.whiskey.rvcom.Member.dto.VerifyPayload;
 import com.whiskey.rvcom.Member.service.EmailService;
 import lombok.Getter;
@@ -30,7 +32,7 @@ public class EmailVerificationController {
 
         // 이메일 발송
         String subject = "이메일 인증 코드";
-        String body = "요청하신 인증 코드는 " + verificationCode + " 입니다.";
+        String body = "만나서 반갑습니다!! FoodPolio 입니다.\n 회원가입에서 이 인증코드를 " + verificationCode + " 입력해주세용 :)";
         emailService.sendVerificationEmail(email, subject, body);
 
         // Redis에 인증 코드 저장
@@ -40,27 +42,14 @@ public class EmailVerificationController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Boolean> verifyCode(@RequestBody VerifyPayload payload) {
-//        @RequestParam String email, @RequestParam String code
+    public String verifyCode(@RequestBody VerifyPayload responseModel) {
+//        System.out.println(responseModel);
+//        System.out.println(responseModel.getEmail());
 
-        System.out.println(payload.getEmail());
-        System.out.println(payload.getCode());
+        String storedCode = emailService.getVerificationCode(responseModel.getEmail());
+        System.out.println("storedCode = " + storedCode);
 
-        String email = payload.getEmail();
-        String code = payload.getCode();
-
-        try {
-            String storedCode = emailService.getVerificationCode(email);
-
-            if (storedCode != null && storedCode.equals(code)) {
-                return ResponseEntity.ok(true);
-            } else {
-                return ResponseEntity.ok(false);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body(false);
-        }
+        return storedCode;
     }
 
     private String generateVerificationCode() {
