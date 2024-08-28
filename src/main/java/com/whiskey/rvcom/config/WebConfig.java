@@ -32,9 +32,6 @@ public class WebConfig implements WebMvcConfigurer {
                         Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
                         String userRole = (String) session.getAttribute("userRole");
 
-                        // 로그 추가
-                        log.info("postHandle - isAuthenticated: {}, userRole: {}", isAuthenticated, userRole);
-
                         modelAndView.addObject("isAuthenticated", isAuthenticated);
                         modelAndView.addObject("userRole", userRole);
                     }
