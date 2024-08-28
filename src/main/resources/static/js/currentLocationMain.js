@@ -125,6 +125,15 @@ function getDistance(lat1, lng1, lat2, lng2) {
     return R * c;
 }
 
+// 새로고침 버튼 클릭 시 페이지 새로고침
+document.getElementById("refresh-button").addEventListener("click", function () {
+    location.reload();
+});
+
+// TODO: 필터링 기능 구현
+// 정렬 기준과 음식 종류에 따른 필터링 로직을 추가해야 합니다.
+// 선택된 필터 옵션에 따라 서버에 요청을 보내고 결과를 업데이트하는 함수를 구현해야 합니다.
+
 // 카테고리 분류
 $('.filter-dropdown')[1].addEventListener('change', function () {
     let selectedCategory = $(this.options[$(this.options.selectedIndex)[0]])[0].textContent;
@@ -154,6 +163,3 @@ function setAllRestaurantCardInvisibleExcept(category) {
     });
 }
 
-// TODO: 필터링 기능 구현
-// 정렬 기준과 음식 종류에 따른 필터링 로직을 추가해야 합니다.
-// 선택된 필터 옵션에 따라 서버에 요청을 보내고 결과를 업데이트하는 함수를 구현해야 합니다.
