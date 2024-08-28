@@ -6,12 +6,12 @@
 .menu-items-container {
     overflow-x: auto;
     width: 100%;
+    display: flex;
 }
 
 .menu-items {
-    display: flex;
     gap: 20px;
-    padding: 10px 0;
+    padding: 10px 8px;
 }
 
 .menu-item {
