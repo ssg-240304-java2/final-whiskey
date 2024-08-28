@@ -1,5 +1,5 @@
 // DOM이 로드되면 실행
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // 사이드바 링크와 콘텐츠 영역, 페이지 제목 요소 선택
     const sidebarLinks = document.querySelectorAll('#sidebar .nav-link');
     const contentArea = document.getElementById('content-area');
@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 각 사이드바 링크에 클릭 이벤트 리스너 추가
     sidebarLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
 
             // 모든 링크에서 'active' 클래스 제거 후 클릭된 링크에 추가
@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else if (targetId === 'menu-management') {
                         initMenuManagement();
                     }
+                    loadRestaurantInfo();
                 })
                 .catch(error => {
                     console.error('Error loading content:', error);
@@ -56,6 +57,7 @@ function initializeModals() {
         new bootstrap.Modal(modal);
     });
 }
+
 // 페이지별 초기화 함수 예시 (필요에 따라 추가)
 function initDashboard() {
     console.log('Dashboard initialized');
