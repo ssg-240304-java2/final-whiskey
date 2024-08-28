@@ -1,17 +1,20 @@
-
 $(document).ready(function() {
+    console.log('Document ready');
+
     // 사이드바 메뉴 클릭 이벤트 처리
     $('.nav-link').on('click', function(e) {
         e.preventDefault();
         var target = $(this).data('target');
+        console.log('Nav link clicked:', target);
         loadContent(target);
         updateActiveMenu(this);
     });
 
-    // 대시보드 내 빠른 링크 버튼 클릭 이벤트 처리
-    $(document).on('click', '#dashboard .btn', function(e) {
+    // 빠른 링크 버튼 클릭 이벤트 처리 개선
+    $(document).on('click', '.quick-link-btn', function(e) {
         e.preventDefault();
         var target = $(this).data('target');
+        console.log('Quick link clicked:', target);
         loadContent(target);
         updateActiveMenu($('.nav-link[data-target="' + target + '"]'));
     });
@@ -28,8 +31,8 @@ $(document).ready(function() {
                 $('#content-area').html(response);
                 $('#page-title').text(getPageTitle(target));
                 initializeCharts();
+                highlightActiveButton(target);
 
-                // 입점 관리 탭을 위한 추가 초기화
                 if (target === 'restaurant-management') {
                     loadRestaurantRegistrations();
                 }
@@ -40,6 +43,7 @@ $(document).ready(function() {
             }
         });
     }
+
     function updateActiveMenu(clickedItem) {
         $('.nav-link').removeClass('active');
         $(clickedItem).addClass('active');
@@ -54,6 +58,12 @@ $(document).ready(function() {
             case 'restaurant-management': return '입점 관리';
             default: return 'FoodFolio 관리자';
         }
+    }
+
+    // 활성 버튼 하이라이트 함수
+    function highlightActiveButton(target) {
+        $('#dashboard .btn').removeClass('active');
+        $('#dashboard .btn[data-target="' + target + '"]').addClass('active');
     }
 
     function initializeCharts() {

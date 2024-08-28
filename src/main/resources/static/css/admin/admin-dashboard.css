@@ -239,9 +239,33 @@ body {
     margin-bottom: 0;
 }
 
-/* 빠른 링크 버튼 스타일 */
-#dashboard .btn {
-    margin: 0.25rem;
+
+/* 빠른 링크 버튼 스타일 개선 */
+.card-body .btn {
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-body .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+.card-body .btn i {
+    margin-right: 8px;
+}
+
+/* 반응형 디자인 개선 */
+@media (max-width: 768px) {
+    .card-body .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }
 
 /* 리스트 그룹 스타일 */
