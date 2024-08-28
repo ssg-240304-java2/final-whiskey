@@ -47,7 +47,7 @@ public class BusinessRegisterService {
         return addressRepository.save(restaurantAddress);
     }
 
-    public Page<RestaurantRegistration> getAllBusinessRegister(int page, String sortOrder) {
+    public Page<RestaurantRegistration> getBeforeBusinessRegister(int page, String sortOrder) {
         Sort sort = Sort.by("createdAt");
 
         if ("desc".equalsIgnoreCase(sortOrder)) {
@@ -57,7 +57,7 @@ public class BusinessRegisterService {
         }
 
         Pageable pageable = PageRequest.of(page, 10, sort);
-        return restaurantRegistrationRepository.findAll(pageable);
+        return restaurantRegistrationRepository.findByRegistrationStatus(pageable, RegistrationStatus.SUBMITTED);
     }
 
     public RestaurantRegistration getBusinessRegister(Long id) {
