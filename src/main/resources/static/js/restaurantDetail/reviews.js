@@ -88,7 +88,7 @@ window.submitReviewComment = function (reviewId, content) {
     // TODO: 백엔드 API를 호출하여 새 댓글을 추가하는 로직 구현
 };
 
-    function submitCommentAsync(reviewId) {
+function submitCommentAsync(reviewId) {
 
     /*
      저장 후 댓글 목록을 갱신하는 로직을 추가합니다.
@@ -99,67 +99,77 @@ window.submitReviewComment = function (reviewId, content) {
     console.log(`댓글 내용: ${commentContent}`);
 
     $.ajax({
-    type: 'POST',
-    url: '/review/comment/add',
-    contentType: 'application/json',  // Content-Type을 JSON으로 지정
-    data: JSON.stringify({
-    reviewId: reviewId,
-    content: commentContent
-}),
-    success: function (data) {
-    console.log(data);
+        type: 'POST',
+        url: '/review/comment/add',
+        contentType: 'application/json',  // Content-Type을 JSON으로 지정
+        data: JSON.stringify({
+            reviewId: reviewId,
+            content: commentContent
+        }),
+        success: function (data) {
+            console.log(data);
 
-    // 입력창을 비운다.
-    document.getElementById('comment' + reviewId).value = '';
+            // 입력창을 비운다.
+            document.getElementById('comment' + reviewId).value = '';
 
-    // 댓글 목록을 갱신하는 로직을 추가합니다.
-    const commentsList = document.getElementById('commentsBox' + reviewId);
-    commentsList.innerHTML = '';
+            // 댓글 목록을 갱신하는 로직을 추가합니다.
+            const commentsList = document.getElementById('commentsBox' + reviewId);
+            commentsList.innerHTML = '';
 
-    //commentbutton도 최신화
-    const commentButton = document.getElementById('comment-button-' + reviewId);
-    commentButton.innerText = `💬 댓글 (${data.length})`;
+            //commentbutton도 최신화
+            const commentButton = document.getElementById('comment-button-' + reviewId);
+            commentButton.innerText = `💬 댓글 (${data.length})`;
 
-    data.forEach(comment => {
-    const commentElement = document.createElement('div');
-    commentElement.classList.add('comment');
+            data.forEach(comment => {
+                const commentElement = document.createElement('div');
+                commentElement.classList.add('comment');
 
-    const commentContent = document.createElement('p');
-    commentContent.innerText = comment.content;
-    commentElement.appendChild(commentContent);
+                const commentContent = document.createElement('p');
+                commentContent.innerText = comment.content;
+                commentElement.appendChild(commentContent);
 
-    const reportButton = document.createElement('button');
-    reportButton.classList.add('report-button');
-    reportButton.style.float = 'right';
-    reportButton.innerText = '🚨';
-    commentElement.appendChild(reportButton);
+                const reportButton = document.createElement('button');
+                reportButton.classList.add('report-button');
+                reportButton.style.float = 'right';
+                reportButton.innerText = '🚨';
+                commentElement.appendChild(reportButton);
 
-    const commentInfo = document.createElement('span');
-    commentInfo.innerText = `${comment.createdAt} / ${comment.commenter.nickname}`;
-    commentElement.appendChild(commentInfo);
+                const commentInfo = document.createElement('span');
+                commentInfo.innerText = `${comment.createdAt} / ${comment.commenter.nickname}`;
+                commentElement.appendChild(commentInfo);
 
-    commentsList.appendChild(commentElement);
-});
-}
-});
-}
-
-
-    document.addEventListener('click', function (e) {
-        if (e.target && e.target.classList.contains('like-button')) {
-            const reviewId = e.target.id.split('-')[3];
-
-            $.ajax({
-                method: 'POST',
-                url: '/reviewlike/add',
-                data: {reviewId: reviewId},
-                success: function (data) {
-                    console.log('좋아요 수 : ' + data);
-                    e.target.innerHTML = '👍 좋아요 (' + data + ')';
-                },
-                error: function (error){
-                    console.log(error);
-                }
+                commentsList.appendChild(commentElement);
             });
+        },
+        error: function (error) {
+            alert("먼저 로그인해주세요.");
+
+            // href.location = "/login";
+            console.error(error);
+
+            // redirect to login page
+            window.location.href = "/login";
         }
     });
+}
+
+
+document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList.contains('like-button')) {
+        const reviewId = e.target.id.split('-')[3];
+
+        $.ajax({
+            method: 'POST',
+            url: '/reviewlike/add',
+            data: {reviewId: reviewId},
+            success: function (data) {
+                console.log('좋아요 수 : ' + data);
+                e.target.innerHTML = '👍 좋아요 (' + data + ')';
+            },
+            error: function (error) {
+                alert('로그인이 필요합니다.');
+                console.log(error);
+            }
+        });
+    }
+});
