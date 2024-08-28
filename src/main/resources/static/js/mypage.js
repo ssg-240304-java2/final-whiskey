@@ -23,11 +23,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const logoutBtn = document.querySelector('.logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function() {
-            sessionStorage.clear();
+            sessionStorage.clear();  // 로그아웃 시 sessionStorage를 비웁니다.
         });
     }
 
-    let activeTab = location.hash.replace('#', '') || sessionStorage.getItem('activeTab') || 'profile';
+    // 로그인 시 마지막 탭으로 이동하지만, 로그아웃 후 로그인 시 항상 'profile' 탭이 활성화되도록 설정
+    let loggedInBefore = sessionStorage.getItem('loggedInBefore');
+    let activeTab = 'profile';  // 기본값은 'profile'
+
+    if (loggedInBefore) {
+        activeTab = sessionStorage.getItem('activeTab') || 'profile';
+    }
+
+    // 로그인 후에는 loggedInBefore 플래그를 true로 설정
+    sessionStorage.setItem('loggedInBefore', true);
+
     activateTab(activeTab);
 
     navItems.forEach(item => {
@@ -197,18 +207,32 @@ document.addEventListener('DOMContentLoaded', function() {
             if (confirm('즐겨찾기를 해제하시겠습니까?')) {
                 const currentPage = parseInt(document.querySelector('input[name="favoritePage"]').value);
                 const favoriteItem = this.closest('.favorite-item');
-                const favoriteList = document.querySelector('.favorite-list');
-
-                this.submit(); // 동기 방식으로 폼을 제출합니다.
-
-                favoriteItem.remove(); // UI에서 해당 아이템 제거
                 const remainingItems = document.querySelectorAll('.favorite-item').length;
 
-                if (remainingItems === 0 && currentPage > 0) {
-                    window.location.href = `/mypage?favoritePage=${currentPage - 1}&activeTab=favorite`;
-                } else {
-                    window.location.href = `/mypage?favoritePage=${currentPage}&activeTab=favorite`;
-                }
+                fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        } else {
+                            throw new Error('즐겨찾기 해제 중 오류가 발생했습니다.');
+                        }
+                    })
+                    .then(() => {
+                        alert('즐겨찾기가 해제되었습니다.');
+                        favoriteItem.remove();
+
+                        if (remainingItems === 1 && currentPage > 0) {
+                            window.location.href = `/mypage?favoritePage=${currentPage - 1}&activeTab=favorite`;
+                        } else {
+                            window.location.href = `/mypage?favoritePage=${currentPage}&activeTab=favorite`;
+                        }
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
             }
         });
     });

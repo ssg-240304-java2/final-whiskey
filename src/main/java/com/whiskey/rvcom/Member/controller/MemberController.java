@@ -133,10 +133,12 @@ public class MemberController {
 
             // 삭제 후 페이지가 없어지는 경우 이전 페이지로 이동
             if (favoritePage >= totalPages && favoritePage > 0) {
+                model.addAttribute("message", "즐겨찾기가 해제되었습니다.");
                 return "redirect:/mypage?favoritePage=" + (favoritePage - 1) + "&favoriteSize=" + favoriteSize + "&activeTab=favorite";
             }
 
             // 삭제 후 현재 페이지로 리다이렉트
+            model.addAttribute("message", "즐겨찾기가 해제되었습니다.");
             return "redirect:/mypage?favoritePage=" + favoritePage + "&favoriteSize=" + favoriteSize + "&activeTab=favorite";
         } catch (EntityNotFoundException e) {
             model.addAttribute("error", "해당 레스토랑을 찾을 수 없습니다.");
