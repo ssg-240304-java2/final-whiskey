@@ -20,13 +20,12 @@ public class ReviewCommentRestController {
 
     @PostMapping("/review/comment/add")
     public ResponseEntity<List<ReviewComment>> addComment(@RequestBody ReviewCommentAddRequestModel reviewComment, HttpSession session) {
-//        Member member = (Member) session.getAttribute("member");
-        Member member = memberRepository.findById(1L).orElseThrow();
+        Member member = (Member) session.getAttribute("member");
+
         if(member == null) {
             return ResponseEntity.internalServerError().build();
             // todo. throw exceiption or return error message as async response
         }
-
         System.out.println("들어온 요청: " + reviewComment);
 
         // 리뷰 댓글 추가
