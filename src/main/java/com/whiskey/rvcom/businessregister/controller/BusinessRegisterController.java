@@ -84,11 +84,17 @@ public class BusinessRegisterController {
         businessRegisterService.saveRestaurantRegistration(registration);
     }
 
+    /***
+     * 처리 전 입점신청 목록 조회
+     * @param page
+     * @param sortOrder
+     * @return
+     */
     @GetMapping("/list")
     @ResponseBody
-    public Page<RestaurantRegistration> getRegistrations(@RequestParam(defaultValue = "0") int page,
+    public Page<RestaurantRegistration> getBeforeRegistrations(@RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "asc") String sortOrder) {
-        return businessRegisterService.getAllBusinessRegister(page, sortOrder);
+        return businessRegisterService.getBeforeBusinessRegister(page, sortOrder);
     }
 
     @GetMapping("/detail/{id}")
