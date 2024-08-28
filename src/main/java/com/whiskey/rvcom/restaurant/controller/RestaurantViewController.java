@@ -1,7 +1,9 @@
 package com.whiskey.rvcom.restaurant.controller;
 
 import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.entity.restaurant.OpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.restaurant.WeeklyOpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.restaurant.dto.OwnersRestaurantInfoDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
@@ -16,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -50,15 +53,36 @@ public class RestaurantViewController {
         Member member = (Member) session.getAttribute("member");
 
         Restaurant restaurant = restaurantService.getRestaurantByOwnerId(member.getId());
-
+        
         return new OwnersRestaurantInfoDTO(
                 restaurant.getName(),
                 restaurant.getNumber(),
                 restaurant.getAddress().getName(),
                 member.getName(),
                 restaurant.getCategory().getTitle(),
-                ImagePathParser.parse(restaurant.getCoverImage().getUuidFileName())
+                ImagePathParser.parse(restaurant.getCoverImage().getUuidFileName()),
+                operatingHours(restaurant.getWeeklyOpenCloseTime())
         );
+    }
+
+    private Map<String, String> operatingHours(WeeklyOpenCloseTime weeklyOpenCloseTime) {
+        return Map.of(
+                "월", dailyHour(weeklyOpenCloseTime.getMonday()),
+                "화", dailyHour(weeklyOpenCloseTime.getTuesday()),
+                "수", dailyHour(weeklyOpenCloseTime.getWednesday()),
+                "목", dailyHour(weeklyOpenCloseTime.getThursday()),
+                "금", dailyHour(weeklyOpenCloseTime.getFriday()),
+                "토", dailyHour(weeklyOpenCloseTime.getSaturday()),
+                "일", dailyHour(weeklyOpenCloseTime.getSunday())
+        );
+    }
+
+    private String dailyHour(OpenCloseTime openCloseTime) {
+        if (openCloseTime == null) {
+            return "휴무";
+        } else {
+            return openCloseTime.getOpenTime() + " - " + openCloseTime.getCloseTime();
+        }
     }
 
     @GetMapping("/api/restaurant/menus")

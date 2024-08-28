@@ -39,12 +39,15 @@ document.addEventListener("DOMContentLoaded", initRestaurantInfo);
 // 음식점 정보를 로드하고 화면에 표시하는 함수
 function loadRestaurantInfo() {
     // TODO: 백엔드 개발 - GET /api/restaurant/info 엔드포인트 구현
-    // 응답 데이터 형식: { name, number, address, businessNumber, ownerName, category, imageUrl, operatingHours }
+    // 응답 데이터 형식: { name, number, address, ownerName, category, imageUrl, operatingHours }
     // operatingHours 형식: { "월": { open: "09:00", close: "18:00" }, ... }
     fetch("/api/restaurant/info")
         .then((response) => response.json())
         .then((data) => {
             // 음식점 기본 정보 표시
+
+            console.log(data.operatingHours["월"].toString());
+
             document.getElementById("displayRestaurantName").textContent = data.name;
             if (document.getElementById("displayRestaurantNumber") !== null) {
                 document.getElementById("displayRestaurantNumber").textContent = data.number;
@@ -64,15 +67,45 @@ function loadRestaurantInfo() {
             }
 
             // 영업 시간 정보 표시
-            // const operatingHoursList = document.getElementById("displayOperatingHours");
-            // operatingHoursList.innerHTML = "";
-            // for (const [day, hours] of Object.entries(data.operatingHours)) {
-            //     if (hours) {
-            //         const li = document.createElement("li");
-            //         li.textContent = `${day}: ${hours.open} - ${hours.close}`;
-            //         operatingHoursList.appendChild(li);
-            //     }
-            // }
+            if (document.getElementById("displayOperatingHours") !== null) {
+                const days = ["월", "화", "수", "목", "금", "토", "일"];
+                const operatingHoursList = document.getElementById("displayOperatingHours");
+                console.log("operatingHoursList : " + operatingHoursList);
+                operatingHoursList.innerHTML = "";
+                console.log("operatingHoursList : " + operatingHoursList);
+                for (let day of days) {
+                    var li = document.createElement("li");
+                    li.textContent = `${day} : ` + data.operatingHours[day];
+                    operatingHoursList.appendChild(li);
+                }
+
+                // 영업 시간 정보 설정
+                days.forEach((day) => {
+                    const operateCheckbox = document.getElementById(`operate${day}`);
+                    const openTimeSelect = document.getElementById(`openTime${day}`);
+                    const closeTimeSelect = document.getElementById(`closeTime${day}`);
+
+                    console.log(data.operatingHours[day] === "휴무");
+
+                    if (data.operatingHours[day] !== "휴무") {
+                        var hour = data.operatingHours[day].split(" - ");
+                        console.log(hour);
+                        operateCheckbox.checked = true;
+                        for (let option of openTimeSelect.options) {
+                            if (option.textContent === hour[0]) {
+                                option.selected = true;
+                            }
+                        }
+                        for (let option of closeTimeSelect.options) {
+                            if (option.textContent === hour[1]) {
+                                option.selected = true;
+                            }
+                        }
+                    } else {
+                        operateCheckbox.checked = false;
+                    }
+                });
+            }
 
             // 수정 모달 폼에 데이터 설정
             if (document.getElementById("restaurantName") !== null) {
@@ -90,24 +123,6 @@ function loadRestaurantInfo() {
             if (document.getElementById("category") !== null) {
                 document.getElementById("category").value = data.category;
             }
-
-            // 영업 시간 정보 설정
-            // const days = ["월", "화", "수", "목", "금", "토", "일"];
-            // days.forEach((day) => {
-            //     const operateCheckbox = document.getElementById(`operate${day}`);
-            //     const openTimeSelect = document.getElementById(`openTime${day}`);
-            //     const closeTimeSelect = document.getElementById(`closeTime${day}`);
-            //
-            //     if (data.operatingHours[days.indexOf(day)]) {
-            //         operateCheckbox.checked = true;
-            //         openTimeSelect.value = data.operatingHours[day].open;
-            //         closeTimeSelect.value = data.operatingHours[day].close;
-            //     } else {
-            //         operateCheckbox.checked = false;
-            //         openTimeSelect.value = "";
-            //         closeTimeSelect.value = "";
-            //     }
-            // });
         })
         .catch((error) => console.error("음식점 정보 로드 실패:", error));
 }
