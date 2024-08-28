@@ -71,6 +71,13 @@ body {
     letter-spacing: -1px;
     padding: 1rem;
     text-align: center;
+    cursor: pointer; /* 커서를 포인터로 변경하여 클릭 가능함을 나타냄 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 추가 */
+}
+
+.foodfolio-logo:hover {
+    color: #00e88f; /* 호버 시 색상 변경 */
+    transform: scale(1.05); /* 호버 시 약간 확대 */
 }
 
 /* 메인 콘텐츠 영역 스타일 */

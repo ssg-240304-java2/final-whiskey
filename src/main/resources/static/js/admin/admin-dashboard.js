@@ -1,6 +1,13 @@
 $(document).ready(function() {
     console.log('Document ready');
 
+    // FoodFolio 로고 클릭 이벤트 처리
+    $('#foodfolio-logo').on('click', function(e) {
+        e.preventDefault();
+        loadContent('dashboard');
+        updateActiveMenu($('.nav-link[data-target="dashboard"]'));
+    });
+
     // 사이드바 메뉴 클릭 이벤트 처리
     $('.nav-link').on('click', function(e) {
         e.preventDefault();
@@ -32,6 +39,12 @@ $(document).ready(function() {
                 $('#page-title').text(getPageTitle(target));
                 initializeCharts();
                 highlightActiveButton(target);
+
+                // 대시보드로 돌아갈 때 추가 작업
+                if (target === 'dashboard') {
+                    console.log('대시보드로 돌아왔습니다.');
+                    // TODO: 대시보드 특정 초기화 작업이 필요하다면 여기에 추가
+                }
 
                 if (target === 'restaurant-management') {
                     loadRestaurantRegistrations();
