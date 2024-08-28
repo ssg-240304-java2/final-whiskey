@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Controller
 @RequiredArgsConstructor
@@ -75,9 +76,10 @@ public class OwnerFragmentController {
         System.out.println("최근 일주일간의 리뷰 수: " + weeklyReviewCount);
 
         // 인기 리뷰 수 도출하여 바인딩
-        var copiedReviews = reviews.stream().toList();
+        var copiedReviews = new ArrayList<>(reviews.stream().toList());
         copiedReviews.sort((r1, r2) -> r2.getLikes().size() - r1.getLikes().size());
         var topReviews = copiedReviews.stream().limit(3).toList();
+        System.out.println("인기 리뷰 목록: " + topReviews);
 //        model.addAttribute("topReviews", topReviews); // todo. 인기 리뷰 목록 바인딩
 
         model.addAttribute("profileImageUrl", profileImageUrl);
