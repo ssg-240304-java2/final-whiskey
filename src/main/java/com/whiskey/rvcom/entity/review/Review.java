@@ -31,7 +31,7 @@ public class Review {
     @Column(nullable = false)
     private String content; // 리뷰 내용
 
-    @Column
+    @Column(nullable = false)
     private String title;   // 리뷰 제목
 
     @CreationTimestamp
