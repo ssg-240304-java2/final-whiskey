@@ -12,7 +12,6 @@ body {
     bottom: 0;
     left: 0;
     z-index: 100;
-    padding: 48px 0 0;
     background-color: #252526;
     box-shadow: inset -1px 0 0 rgba(255,255,255,.1);
     transition: all 0.3s;
@@ -40,13 +39,13 @@ body {
 .sidebar .nav-link:hover {
     color: #ffffff;
     background-color: rgba(255,255,255,0.1);
-    border-left-color: #4fc3f7;
+    border-left-color: #00cba6;
 }
 
 .sidebar .nav-link.active {
-    color: #4fc3f7;
+    color: #00cba6;
     background-color: rgba(79,195,247,0.1);
-    border-left-color: #4fc3f7;
+    border-left-color: #00cba6;
 }
 
 .sidebar .nav-link i {
@@ -66,11 +65,18 @@ body {
     font-family: 'Arial', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
-    color: #4fc3f7;
+    color: #00cba6;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
     letter-spacing: -1px;
     padding: 1rem;
     text-align: center;
+    cursor: pointer; /* 커서를 포인터로 변경하여 클릭 가능함을 나타냄 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 추가 */
+}
+
+.foodfolio-logo:hover {
+    color: #00e88f; /* 호버 시 색상 변경 */
+    transform: scale(1.05); /* 호버 시 약간 확대 */
 }
 
 /* 메인 콘텐츠 영역 스타일 */
@@ -78,18 +84,6 @@ body {
     margin-left: 250px;
     padding: 20px;
     transition: all 0.3s;
-}
-
-/* 반응형 디자인을 위한 미디어 쿼리 */
-@media (max-width: 767.98px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-    }
-    .content-wrapper {
-        margin-left: 0;
-    }
 }
 
 /* 다크 테마 스타일 */
@@ -129,28 +123,28 @@ body {
 .form-control:focus {
     background-color: #404040;
     color: #ffffff;
-    border-color: #4fc3f7;
+    border-color: #00cba6;
     box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
 }
 
 /* 버튼 스타일 */
 .btn-primary {
-    background-color: #4fc3f7;
-    border-color: #4fc3f7;
+    background-color: #00cba6;
+    border-color: #00cba6;
 }
 
 .btn-primary:hover {
-    background-color: #3ab1e8;
-    border-color: #3ab1e8;
+    background-color: #00cba6;
+    border-color: #00cba6;
 }
 
 .btn-outline-primary {
-    color: #4fc3f7;
-    border-color: #4fc3f7;
+    color: #00cba6;
+    border-color: #00cba6;
 }
 
 .btn-outline-primary:hover {
-    background-color: #4fc3f7;
+    background-color: #00cba6;
     color: #ffffff;
 }
 
@@ -176,7 +170,7 @@ body {
 .card-text {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #4fc3f7;
+    color: #00cba6;
 }
 
 /* 네비게이션 바 스타일 */
@@ -210,8 +204,8 @@ body {
 }
 
 .pagination .page-item.active .page-link {
-    background-color: #4fc3f7;
-    border-color: #4fc3f7;
+    background-color: #00cba6;
+    border-color: #00cba6;
 }
 
 .pagination .page-link:hover {
@@ -239,9 +233,33 @@ body {
     margin-bottom: 0;
 }
 
-/* 빠른 링크 버튼 스타일 */
-#dashboard .btn {
-    margin: 0.25rem;
+
+/* 빠른 링크 버튼 스타일 개선 */
+.card-body .btn {
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.card-body .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+}
+
+.card-body .btn i {
+    margin-right: 8px;
+}
+
+/* 반응형 디자인 개선 */
+@media (max-width: 768px) {
+    .card-body .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }
 
 /* 리스트 그룹 스타일 */
@@ -281,7 +299,7 @@ body {
 .loading::after {
     content: "로딩 중...";
     font-size: 20px;
-    color: #4fc3f7;
+    color: #00cba6;
 }
 
 /* 에러 메시지 스타일 */
@@ -313,42 +331,16 @@ body {
 }
 
 .page-item.active .page-link {
-    background-color: #4fc3f7;
-    border-color: #4fc3f7;
+    background-color: #00cba6;
+    border-color: #00cba6;
 }
 
 .page-link {
-    color: #4fc3f7;
+    color: #00cba6;
 }
 
 .page-link:hover {
-    color: #0056b3;
-}
-
-/* 반응형 디자인 개선 */
-@media (max-width: 768px) {
-    .sidebar {
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: -100%;
-        z-index: 100;
-        padding: 48px 0 0;
-        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        transition: all .3s;
-    }
-
-    .sidebar.show {
-        left: 0;
-    }
-
-    .content-wrapper {
-        margin-left: 0;
-    }
-
-    .navbar-toggler {
-        display: block;
-    }
+    color: #00cba6;
 }
 
 /* 액션 버튼 스타일 */
@@ -370,21 +362,57 @@ body {
     font-size: 0.875rem;
 }
 
-/* 모달 스타일 개선 */
+/* 기존 스타일 유지 */
+
+/* 모달 스타일 */
 .modal-content {
+    background-color: #252526;
+    color: #e0e0e0;
+    border: 1px solid #444;
     border-radius: 0.5rem;
 }
 
 .modal-header {
-    border-bottom: 1px solid #2c2c2c;
+    border-bottom: 1px solid #444;
 }
 
 .modal-footer {
-    border-top: 1px solid #2c2c2c;
+    border-top: 1px solid #444;
 }
 
+.modal-title {
+    color: #00cba6;
+}
 
-/* 기존 스타일 유지 */
+.modal-body p {
+    margin-bottom: 0.5rem;
+}
+
+.modal-body strong {
+    color: #00cba6;
+}
+
+/* 모달 버튼 스타일 */
+.modal-footer .btn-secondary {
+    background-color: #444;
+    border-color: #444;
+}
+
+.modal-footer .btn-secondary:hover {
+    background-color: #555;
+    border-color: #555;
+}
+
+.modal .close {
+    color: #e0e0e0;
+    opacity: 0.8;
+}
+
+.modal .close:hover {
+    color: #ffffff;
+    opacity: 1;
+}
+
 
 /* 신고 처리 상태 스타일 */
 .report-status {
@@ -418,14 +446,6 @@ tr:hover .report-completed {
     animation: completedPulse 2s infinite;
 }
 
-/* 반응형 디자인 개선 */
-@media (max-width: 768px) {
-    .report-status {
-        display: inline-block;
-        margin-top: 5px;
-    }
-}
-
 /* 신고 관리 스타일 */
 .report-card {
     border: none;
@@ -439,7 +459,7 @@ tr:hover .report-completed {
 }
 
 .report-table th {
-    background-color: #40a0ff;
+    background-color: #00cba6;
     font-weight: 600;
     text-transform: uppercase;
     border-top: none;
@@ -447,10 +467,15 @@ tr:hover .report-completed {
 
 .report-table td {
     vertical-align: middle;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ffffff;
+    font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 .report-table tr:hover {
-    background-color: #40a0ff;
+    background-color: #00cba6;
     cursor: pointer;
 }
 
@@ -487,12 +512,12 @@ tr:hover .report-completed {
 }
 
 .page-link {
-    color: #4fc3f7;
-    border-color: #4fc3f7;
+    color: #00cba6;
+    border-color: #00cba6;
 }
 
 .page-link:hover {
-    background-color: #4fc3f7;
+    background-color: #00cba6;
     color: #fff;
 }
 
@@ -501,7 +526,7 @@ tr:hover .report-completed {
 .sort-btn {
     background: none;
     border: none;
-    color: #4fc3f7;
+    color: #00cba6;
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0;
@@ -509,7 +534,7 @@ tr:hover .report-completed {
 }
 
 .sort-btn:hover {
-    color: #0056b3;
+    color: #00e88f;
     text-decoration: underline;
 }
 
@@ -524,9 +549,149 @@ tr:hover .report-completed {
     margin-left: 2px;
 }
 
+/* 상단 바 스타일 개선 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+/* 빠른 액세스 드롭다운 스타일 */
+#quickAccessDropdown {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.dropdown-item i {
+    margin-right: 0.5rem;
+    width: 20px;
+    text-align: center;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(0, 203, 166, 0.1);
+    color: #00cba6;
+}
+
+/* 관리자 프로필 드롭다운 스타일 */
+#dropdownUser1 {
+    transition: all 0.3s ease;
+}
+
+#dropdownUser1:hover {
+    opacity: 0.8;
+}
 /* 반응형 디자인 */
 @media (max-width: 768px) {
+    /* 사이드바 스타일 */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: -250px;
+        z-index: 1000;
+        transition: all 0.3s;
+        width: 250px;
+    }
+
+    .sidebar.show {
+        left: 0;
+    }
+
+    /* 메인 콘텐츠 영역 */
+    .content-wrapper {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    /* 네비게이션 바 */
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar .d-flex {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #page-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* 드롭다운 메뉴 */
+    .dropdown {
+        margin-bottom: 0.5rem;
+    }
+
+    #quickAccessDropdown, #dropdownUser1 {
+        width: 100%;
+        text-align: left;
+    }
+
+    /* 카드 레이아웃 */
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    /* 테이블 반응형 */
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    /* 버튼 그룹 */
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btn-group .btn {
+        margin-bottom: 0.5rem;
+        border-radius: 0.25rem !important;
+    }
+
+    /* 리포트 카드 및 상세 카드 */
     .report-card, .report-detail-card {
         margin-bottom: 20px;
+    }
+
+    /* 모달 다이얼로그 */
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+}
+
+/* 사이드바 토글 버튼 */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1001;
+    background-color: #00cba6;
+    border: none;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .sidebar-toggle {
+        display: block;
+    }
+}
+
+/* 모바일 환경에서 빠른 액세스 버튼 숨기기 */
+@media (max-width: 768px) {
+    #quickAccessDropdown {
+        display: none;
     }
 }

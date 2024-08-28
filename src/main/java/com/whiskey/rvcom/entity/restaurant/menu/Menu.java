@@ -1,10 +1,12 @@
 package com.whiskey.rvcom.entity.restaurant.menu;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.*;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tbl_menu")
 @Entity
@@ -27,5 +29,6 @@ public class Menu {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
+    @JsonBackReference
     private Restaurant restaurant;  // 해당 메뉴의 레스토랑
 }

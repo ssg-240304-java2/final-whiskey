@@ -25,7 +25,7 @@ public class ReviewCommentReportService {
 
 
     // 댓글 신고 전체 조회
-    public Page<ReviewCommentReport> getAllReviewCommentReports(int page, String sortOrder) {
+    public Page<ReviewCommentReport> getBeforeReviewCommentReports(int page, String sortOrder) {
 
         Sort sort = Sort.by("reportedAt");
 
@@ -36,7 +36,7 @@ public class ReviewCommentReportService {
         }
 
         Pageable pageable = PageRequest.of(page, 10, sort);
-        return reviewCommentReportRepository.findAll(pageable);
+        return reviewCommentReportRepository.findAllByIsCheckedFalse(pageable);
     }
 
 
@@ -95,7 +95,9 @@ public class ReviewCommentReportService {
 
         ReviewCommentReport report = getReviewCommentReport(reportId);
 
-        return "다음 댓글이 신고후 처리되어 비공개 처리 되었습니다. \n" +
+        return "다음 댓글이 신고후 처리되어 비공개 처리 되었습니다.\n" +
+                "---------------------------------------------------------------------------------------------\n" +
+                "대상 댓글 : " + report.getReviewComment().getContent() + "\n" +
                 "신고 내용 : " + report.getContent();
     }
 }

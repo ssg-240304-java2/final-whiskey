@@ -14,8 +14,14 @@ import org.springframework.web.bind.annotation.*;
 public class RestaurantOwnerNoticeController {
     private final RestaurantNoticeService noticeService;
 
-    // 음식점의 공지사항 전체 조회
-    @GetMapping("/restaurant/{restaurantId}/allNotice")
+    /**
+     * 해당 음식점의 공지사항 전체 조회
+     * @param restaurantId
+     * @param pageNumber
+     * @param pageSize
+     * @return 페이지객체의 음식점 공지사항 리스트
+     */
+    @GetMapping("/restaurant/{restaurantId}/owner-notices")
     public Page<RestaurantNoticeResponseDTO> getPagedRestaurantNotices(
             @PathVariable Long restaurantId,
             @RequestParam(defaultValue = "1") int pageNumber,

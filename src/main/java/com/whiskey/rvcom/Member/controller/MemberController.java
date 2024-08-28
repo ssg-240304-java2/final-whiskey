@@ -11,9 +11,11 @@ import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.favorite.FavoriteService;
+import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.review.ReviewImageService;
 import com.whiskey.rvcom.review.ReviewService;
 import com.whiskey.rvcom.util.ImagePathParser;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -45,11 +47,12 @@ public class MemberController {
     private final ImageFileService imageFileService;
     private final ReviewImageService reviewImageService;
     private final FavoriteService favoriteService;
+    private final RestaurantService restaurantService;
 
     @Autowired
     public MemberController(ReviewService reviewService, SocialLoginService socialLoginService,
                             MemberManagementService memberManagementService, PasswordEncoder passwordEncoder,
-                            RestTemplate restTemplate, ImageFileService imageFileService, ReviewImageService reviewImageService, FavoriteService favoriteService) {
+                            RestTemplate restTemplate, ImageFileService imageFileService, ReviewImageService reviewImageService, FavoriteService favoriteService, RestaurantService restaurantService) {
         this.reviewService = reviewService;
         this.socialLoginService = socialLoginService;
         this.memberManagementService = memberManagementService;
@@ -58,6 +61,7 @@ public class MemberController {
         this.imageFileService = imageFileService;
         this.reviewImageService = reviewImageService;
         this.favoriteService = favoriteService;
+        this.restaurantService = restaurantService;
     }
 
     @GetMapping("/login")
@@ -106,25 +110,28 @@ public class MemberController {
     }
 
     @PostMapping("/mypage/remove-favorite")
-    public String removeFavorite(HttpSession session, @RequestParam("restaurantId") Long restaurantId,
-                                 @RequestParam("favoritePage") int favoritePage,
-                                 @RequestParam("favoriteSize") int favoriteSize) {
+    @ResponseBody
+    public ResponseEntity<String> removeFavorite(@RequestParam("restaurantId") Long restaurantId, HttpSession session) {
         Member member = (Member) session.getAttribute("member");
 
         if (member == null) {
-            return "redirect:/login";
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
         }
 
-        // 레스토랑 ID를 사용해 해당 레스토랑을 찾음
-        Restaurant restaurant = favoriteService.findRestaurantById(restaurantId);
+        try {
+            // restaurantId를 사용하여 Restaurant 객체를 조회
+            Restaurant restaurant = restaurantService.getRestaurantById(restaurantId);
 
-        if (restaurant != null) {
+            // 조회된 Restaurant 객체를 removeFavorite 메서드에 전달
             favoriteService.removeFavorite(member, restaurant);
+            return ResponseEntity.ok("즐겨찾기가 해제되었습니다.");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 레스토랑을 찾을 수 없습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("즐겨찾기 해제 중 오류가 발생했습니다.");
         }
-
-        // 즐겨찾기 페이지로 리다이렉트
-        return "redirect:/mypage?favoritePage=" + favoritePage + "&favoriteSize=" + favoriteSize;
     }
+
 
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model,
@@ -148,7 +155,7 @@ public class MemberController {
         List<Favorite> paginatedFavorites = favorites.subList(favoriteStart, favoriteEnd);
 
         // 프로필 이미지 URL 설정
-        String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
+        String profileImageUrl = "https://via.placeholder.com/150";
         if (member.getProfileImage() != null) {
             profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
         }
@@ -214,8 +221,17 @@ public class MemberController {
         String nickname = allParams.get("nickname");
         String verificationCode = allParams.get("emailVerificationCode");
 
+        // 로그인 ID 중복 확인
         if (memberManagementService.existsByLoginId(loginId)) {
             model.addAttribute("error", "이미 존재하는 로그인 ID입니다. 다른 ID를 사용해주세요.");
+            return "register_basic";
+        }
+
+        // 이메일 인증 코드 검증
+        String url = String.format("https://localhost:8080/api/redis/get?key=%s", email);
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        if (response.getStatusCode() != HttpStatus.OK || !response.getBody().equals(verificationCode)) {
+            model.addAttribute("error", "이메일 인증에 실패했습니다. 올바른 인증 코드를 입력해주세요.");
             return "register_basic";
         }
 

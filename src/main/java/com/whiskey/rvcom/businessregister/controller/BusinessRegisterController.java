@@ -6,18 +6,25 @@ import com.whiskey.rvcom.businessregister.model.dto.BusinessRequestHead;
 import com.whiskey.rvcom.businessregister.model.dto.RegistInfo;
 import com.whiskey.rvcom.businessregister.model.dto.MyResponseBody;
 import com.whiskey.rvcom.businessregister.service.BusinessRegisterService;
+import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import com.whiskey.rvcom.entity.restaurant.registration.RegistrationStatus;
 import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
+import com.whiskey.rvcom.mail.MailInfo;
+import com.whiskey.rvcom.repository.RestaurantRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.whiskey.rvcom.mail.MailConst.*;
 
 
 @Controller
@@ -31,6 +38,8 @@ public class BusinessRegisterController {
     private final String REQUEST_URL = "https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=";
 
     private final BusinessRegisterService businessRegisterService;
+
+    private final RestaurantRepository restaurantRepository;
 
     @PostMapping("/valid")
     @ResponseBody
@@ -78,11 +87,17 @@ public class BusinessRegisterController {
         businessRegisterService.saveRestaurantRegistration(registration);
     }
 
+    /***
+     * 처리 전 입점신청 목록 조회
+     * @param page
+     * @param sortOrder
+     * @return
+     */
     @GetMapping("/list")
     @ResponseBody
-    public Page<RestaurantRegistration> getRegistrations(@RequestParam(defaultValue = "0") int page,
+    public Page<RestaurantRegistration> getBeforeRegistrations(@RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "asc") String sortOrder) {
-        return businessRegisterService.getAllBusinessRegister(page, sortOrder);
+        return businessRegisterService.getBeforeBusinessRegister(page, sortOrder);
     }
 
     @GetMapping("/detail/{id}")
@@ -109,10 +124,29 @@ public class BusinessRegisterController {
 
         boolean isApprove = btnId.equals("approve");
 
-        businessRegisterService.processBusinessRegist(registerId, isApprove);
+        String ownerMail = businessRegisterService.processBusinessRegist(registerId, isApprove);
 
+        MailInfo mailInfo;
 
-        // 메일 발송 코드 예정
+        if (isApprove) {
+            // 승인 메일 발송
+             mailInfo = new MailInfo(ownerMail, REGIST_APPROVE, businessRegisterService.getApproveMailText(registerId));
+            // 승인 결정 후 식당 정보 저장
+            restaurantRepository.save(businessRegisterService.getRestairantInfo(registerId));
+            // 승인 후 해당 멤버 권한 OWNER로 변경
+            businessRegisterService.changeMemberRole(registerId);
+
+        } else {
+            // 거절 메일 발송
+            mailInfo = new MailInfo(ownerMail, REGIST_REJECT, businessRegisterService.getRejectMailText(registerId));
+        }
+
+        var invoker = RestInvoker.create(MAIL_URL, null);
+        try {
+            invoker.request(mailInfo, MailInfo.class, RequestMethod.POST);
+        } catch (Exception e) {
+            System.out.println("메일 발송 응답이 없어 NullPointException 발생~!");
+        }
 
         return ResponseEntity.ok().build(); // 명시적으로 상태 코드 200 OK를 반환
     }
@@ -128,5 +162,20 @@ public class BusinessRegisterController {
     @GetMapping("/regist-detail")
     private String moveToDetailPage() {
         return "admin/regist-detail";
+    }
+
+
+    @GetMapping("/register-store")
+    // 매장 등록 페이지로 이동
+    public String getRegisterStore(HttpSession session, Model model) {
+
+        // 세션에 멤버 객체 저장하기
+        Member member = (Member) session.getAttribute("member");
+
+        if (member == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("memberId", member.getId());
+        return "register-store";
     }
 }

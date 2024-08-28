@@ -29,8 +29,8 @@ public class RestaurantReportService {
     private final ModelMapper modelMapper;
 
 
-    // 식당 신고 전체 조회
-    public Page<RestaurantReport> getAllRestaurantReports(int page, String sortOrder) {
+    // 식당 신고 처리전 조회
+    public Page<RestaurantReport> getBeforeRestaurantReports(int page, String sortOrder) {
 
         Sort sort = Sort.by("reportedAt");
 
@@ -41,7 +41,7 @@ public class RestaurantReportService {
         }
 
         Pageable pageable = PageRequest.of(page, 10, sort);
-        return restaurantReportRepository.findAll(pageable);
+        return restaurantReportRepository.findAllByIsCheckedFalse(pageable);
     }
 
 
@@ -109,7 +109,9 @@ public class RestaurantReportService {
 
         RestaurantReport report = getRestaurantReport(reportId);
 
-        return "다음과 같은 내용이 확인되었으니 정보 변경바랍니다. \n" +
-                "신고 내용 : " + report.getContent();
+        return "다음과 같은 내용이 확인되었으니 정보 변경바랍니다.\n" +
+                "---------------------------------------------------------------------------------------------\n" +
+                "대상 식당 : " + report.getRestaurant().getName() + "\n" +
+                "신고 내용 : " + report.getContent() + "\n";
     }
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class RestaurantInquiryRestController {
      * @param restaurantId
      * @return 문의글
      */
-    @GetMapping("/restaurant/{restaurantId}/inquiry")
+    @GetMapping("/restaurant/{restaurantId}/user-inquiries")
     public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
         return inquiryService.findAllByRestaurantId(restaurantId);
     }
@@ -34,7 +35,7 @@ public class RestaurantInquiryRestController {
      * @param restaurantId
      * @return 문의글
      */
-    @GetMapping("/restaurant/{restaurantId}/allInquiry")
+    @GetMapping("/restaurant/{restaurantId}/owner-inquiries")
     public Page<RestaurantInquiry> getPagedRestaurantInquiries(
             @PathVariable Long restaurantId,
             @RequestParam(defaultValue = "1" ) int pageNumber,
@@ -44,7 +45,8 @@ public class RestaurantInquiryRestController {
         return inquiryService.getPagedRestaurantInquiries(restaurantId, pageRequest);
     }
 
-    @GetMapping("/restaurant/inquiry/{inquiryId}")
+    // TODO: 점주페이지 문의글 상세보기
+    @GetMapping("/restaurant/{inquiryId}/inquiry")
     public RestaurantInquiryResponseDTO findById(@PathVariable Long inquiryId) {
         return inquiryService.findById(inquiryId);
     }
@@ -57,10 +59,8 @@ public class RestaurantInquiryRestController {
      */
     @PostMapping("/restaurant/{restaurantId}/inquiry")
     public void save(@PathVariable Long restaurantId, @RequestBody RestaurantInquiryRequestDTO request, HttpSession session) {
-//         TODO: session 에서 memberId 가져오기
-         Member memberId = (Member) session.getAttribute("memberId");
-//        inquiryService.save(request, memberId);
-        inquiryService.save(restaurantId, request, 5L);
+        Member member = (Member) session.getAttribute("member");
+        inquiryService.save(restaurantId, request, member);
     }
 
     /**
@@ -78,7 +78,8 @@ public class RestaurantInquiryRestController {
      * @return 회원 정보
      */
     @GetMapping("/restaurant/inquiry/member")
-    public Member getMember(HttpSession session) {
-        return (Member) session.getAttribute("member");
+    public ResponseEntity<Member> getMember(HttpSession session) {
+        Member member = (Member) session.getAttribute("member");
+        return ResponseEntity.ok(member);
     }
 }

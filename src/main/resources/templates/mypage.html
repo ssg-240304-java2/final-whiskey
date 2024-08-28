@@ -14,7 +14,7 @@
 <div th:replace="fragments/header :: header"></div>
 
 <div class="container">
-    <div th:replace="fragments/mypage_profileHeader :: profileHeader(${member.name}, ${member.createdAt}, ${reviews.size()}, ${profileImageUrl})"></div>
+    <div th:replace="fragments/mypage_profileHeader :: profileHeader(${member.name}, ${member.createdAt}, ${reviews.size()}, ${profileImageUrl != null ? profileImageUrl : 'https://via.placeholder.com/150'})"></div>
 
     <div class="content-wrapper">
         <div class="sidebar">
@@ -36,7 +36,7 @@
                     <div th:each="review : ${reviews}" class="review-item" th:attr="data-restaurant-id=${review.restaurant.id}">
                         <!-- 이미지 갤러리 -->
                         <div class="review-images">
-                            <img th:each="image : ${reviewImagesMap[review.id]}" th:src="${image}" alt="리뷰 이미지" class="restaurant-image">
+                            <img th:each="image : ${reviewImagesMap[review.id]}" th:src="${image != null ? image : 'https://via.placeholder.com/300x200'}" alt="리뷰 이미지" class="restaurant-image">
                         </div>
                         <!-- 리뷰 내용 -->
                         <div class="review-content">
@@ -91,7 +91,7 @@
                     </div>
                     <!-- 즐겨찾기가 있는 경우 -->
                     <div th:each="favorite : ${favorites}" class="favorite-item" th:attr="data-restaurant-id=${favorite.restaurant.id}">
-                        <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : 'https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg'}" alt="레스토랑 이미지" class="restaurant-image">
+                        <img th:src="${favorite.restaurant.coverImage != null ? favorite.restaurant.coverImage.uuidFileName : 'https://via.placeholder.com/300x200'}" alt="레스토랑 이미지" class="restaurant-image">
                         <div class="favorite-content">
                             <form th:action="@{/mypage/remove-favorite}" method="post" class="remove-favorite-form">
                                 <input type="hidden" name="restaurantId" th:value="${favorite.restaurant.id}" />
@@ -145,10 +145,10 @@
             </section>
 
             <!-- 일반 회원 수정 모달 -->
-            <div th:if="${isSocialLogin == false}" th:insert="~{fragments/mypage_editProfileModal_basic :: editProfileModalBasic(${member}, ${profileImageUrl})}"></div>
+            <div th:if="${isSocialLogin == false}" th:insert="~{fragments/mypage_editProfileModal_basic :: editProfileModalBasic(${member}, ${profileImageUrl != null ? profileImageUrl : 'https://via.placeholder.com/150'})}"></div>
 
             <!-- 소셜 로그인 사용자 모달 -->
-            <div th:if="${isSocialLogin == true}" th:insert="~{fragments/mypage_editProfileModal_social :: editProfileModalSocial(${member}, ${profileImageUrl})}"></div>
+            <div th:if="${isSocialLogin == true}" th:insert="~{fragments/mypage_editProfileModal_social :: editProfileModalSocial(${member}, ${profileImageUrl != null ? profileImageUrl : 'https://via.placeholder.com/150'})}"></div>
 
         </div>
     </div>

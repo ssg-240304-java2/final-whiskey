@@ -15,16 +15,16 @@
         </div>
         <div class="review-images" th:if="${images.size() > 0}">
             <div class="image-container" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <div th:each="image, iterStat : ${images}" th:if="${iterStat.index < 4}">
+                <div th:each="image, iterStat : ${images}" th:if="${iterStat.index < 5}">
                     <img th:src="@{|https://kr.object.ncloudstorage.com/whiskey-file/${image.imageFile.uuidFileName}|}"
                          alt="Review Image"
                          class="review-image">
                 </div>
 
                 <!-- 더보기 버튼 조건 -->
-                <div th:if="${images.size() > 4}" class="more-images">
-                    <span>+ 더보기</span>
-                </div>
+<!--                <div th:if="${images.size() > 4}" class="more-images">-->
+<!--                    <span>+ 더보기</span>-->
+<!--                </div>-->
             </div>
         </div>
 
@@ -43,6 +43,9 @@
             <button class="comment-button">
                 <span th:id="'comment-button-' + ${id}" th:text="'💬 댓글 (' + ${comments.size()} + ')'"></span>
             </button>
+<!--            <button class="comment-button">-->
+<!--                <span th:id="'comment-button-' + ${id}" th:text="'💬 댓글 (' + ${#lists.size(#lists.filter(comments, comment -> !comment.isSuspended))} + ')'"></span>-->
+<!--            </button>-->
 
         </div>
         <div class="comments-section" style="display: none;">
@@ -50,9 +53,14 @@
                      <!-- - 페이지네이션 구현
                      - 댓글 정렬 기능 추가 (최신순, 추천순 등) -->
                 <!-- 예시 댓글 -->
+<!--                <div class="comment" th:each="comment : ${comments}">-->
+<!--                    <p th:text="${comment.content}"></p>-->
+<!--                    <button class="report-button comment-report" style="float: right;" th:id="'commentReport' + ${comment.id}" >🚨</button>-->
+<!--                    <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')} + ' / ' + ${comment.commenter.nickname}"></span>-->
+<!--                </div>-->
                 <div class="comment" th:each="comment : ${comments}">
                     <p th:text="${comment.content}"></p>
-                    <button class="report-button comment-report" style="float: right;" th:id="'commentReport' + ${comment.id}" >🚨</button>
+                    <button class="report-button comment-report" style="float: right;" th:id="'commentReport' + ${comment.id}">🚨</button>
                     <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')} + ' / ' + ${comment.commenter.nickname}"></span>
                 </div>
             </div>

@@ -220,8 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
 
             const restaurantId = this.closest('form').querySelector('input[name="restaurantId"]').value;
-            const favoritePage = this.closest('form').querySelector('input[name="favoritePage"]').value;
-            const favoriteSize = this.closest('form').querySelector('input[name="favoriteSize"]').value;
+            const favoriteItem = this.closest('.favorite-item'); // 즐겨찾기 아이템 요소
 
             if (!restaurantId) {
                 alert('레스토랑 ID가 유효하지 않습니다.');
@@ -234,9 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams({
-                    'restaurantId': restaurantId,
-                    'favoritePage': favoritePage,
-                    'favoriteSize': favoriteSize
+                    'restaurantId': restaurantId
                 })
             })
                 .then(response => {
@@ -248,7 +245,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(text => {
                     alert('즐겨찾기가 해제되었습니다.');
-                    window.location.reload();
+                    favoriteItem.remove(); // UI에서 해당 아이템 제거
+
+                    // 모든 즐겨찾기 아이템이 제거된 경우 페이지 새로고침
+                    if (document.querySelectorAll('.favorite-item').length === 0) {
+                        window.location.reload(); // 페이지 새로고침
+                    }
                 })
                 .catch(error => {
                     console.error('Error:', error);

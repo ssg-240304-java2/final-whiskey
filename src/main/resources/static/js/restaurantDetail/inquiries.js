@@ -4,62 +4,28 @@ RestaurantDetail.initInquiries = function() {
     loadCurrentMemberAndInquiries();
     setupInquiryForm();
     // setupInquirySort();
-    // setupReplyButtons();
 };
 
 function loadCurrentMemberAndInquiries() {
-
     fetch(`/restaurant/inquiry/member`, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
     })
         .then(response => {
             if (!response.ok) {
                 throw new Error('멤버 정보를 가져오지 못했습니다.');
             }
-            console.log(response);
             return response.json();
         })
-        .then(member => {
+        .then(async member => {
             loginMember = member;
             console.log('로그인한 사용자:', loginMember);
-
-            loadInquiries();
+            await loadInquiries();
         })
-        .catch(error => {
+        .catch(async error => {
             console.error('멤버 정보를 가져오는 중 오류 발생:', error);
+            await loadInquiries();
         });
 }
-
-// function setupReplyButtons() {
-//     const replyButtons = document.querySelectorAll('.reply-inquiry');
-//     replyButtons.forEach(button => {
-//         button.addEventListener('click', function() {
-//             const inquiryId = this.getAttribute('data-inquiry-id');
-//             openReplyModal(inquiryId);
-//         });
-//     });
-// }
-
-// function openReplyModal(inquiryId) {
-//     const modal = document.getElementById('replyModal');
-//     if (modal) {
-//         modal.style.display = 'block';
-//         const submitReplyBtn = document.getElementById('submitReply');
-//         submitReplyBtn.onclick = function() {
-//             const replyText = document.getElementById('replyText').value;
-//             submitReply(inquiryId, replyText);
-//             modal.style.display = 'none';
-//         };
-//     }
-// }
-
-// function submitReply(inquiryId, replyText) {
-//     console.log(`답변 제출: 문의 ID ${inquiryId}, 내용: ${replyText}`);
-//     // TODO: 백엔드 API를 호출하여 답변을 제출하는 로직 구현
-// }
 
 function setupInquiryForm() {
     const submitInquiryBtn = document.getElementById('submitInquiry');
@@ -86,30 +52,29 @@ function submitInquiry(content) {
     const confirmed = confirm("문의를 제출하시겠습니까?");
 
     if (confirmed) {
-
-    fetch(`/restaurant/${restaurantId}/inquiry`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            content: content
+        fetch(`/restaurant/${restaurantId}/inquiry`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                content: content
+            })
         })
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('문의를 제출할 수 없습니다.');
-            }
-            alert("문의 제출 성공!!");
-            console.log("문의 제출 성공!!");
-            document.getElementById('inquiryContent').value = '';
+            .then(async response => {
+                if (!response.ok) {
+                    throw new Error('문의를 제출할 수 없습니다.');
+                }
+                alert("문의 제출 성공!!");
 
-            loadInquiries();
-        })
-        .catch(error => {
-            alert("문의 제출 실패!");
-            console.log("문의 제출 실패!", error);
-        });
+                document.getElementById('inquiryContent').value = '';
+
+                await loadInquiries();
+            })
+            .catch(error => {
+                alert("문의 제출 실패!");
+                console.log("문의 제출 실패!", error);
+            });
     }
 }
 
@@ -118,29 +83,33 @@ function submitInquiry(content) {
 //     // TODO: 백엔드 API를 호출하여 정렬된 문의 목록을 가져오는 로직 구현
 // }
 
-function loadInquiries() {
+async function loadInquiries() {
     const restaurantId = document.getElementById('restaurantId').value;
 
-    fetch(`/restaurant/${restaurantId}/inquiry`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('문의 목록을 가져올 수 없습니다.');
+    let inquiryList = await getInquiryList(restaurantId);
+    console.log('inquiryList in async loadInquiries:', inquiryList);
+
+    renderInquiry(inquiryList);
+}
+
+async function getInquiryList(restaurantId) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: 'GET',
+            url: `/restaurant/${restaurantId}/user-inquiries`,
+            headers: {
+                "Accept": "application/json",  // 서버에 JSON 형식의 응답을 기대한다고 알림
+            },
+            success: function (inquiries) {
+                resolve(inquiries);
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX 요청 실패:", status, error); // 오류 시 콘솔 출력
+                alert('문의 내역을 불러오는 데 실패했습니다.');
+                reject(error);
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log(data);
-            renderInquiry(data);
-        })
-        .catch(error => {
-            alert("문의 목록을 가져오는데 실패했습니다.");
-            console.log("ERROR: ", error);
         });
+    });
 }
 
 function renderInquiry(data) {
@@ -148,19 +117,23 @@ function renderInquiry(data) {
 
     inquiryList.innerHTML = '';
 
+    console.log('data in renderInquiry:', data);
+
     data.forEach(inquiry => {
         const inquiryItem = document.createElement('div');
         inquiryItem.classList.add('inquiry-item');
-
-        //작성자와 로그인한 사용자가 같으면 삭제 버튼 추가
         let deleteButtonHtml = '';
-        if (inquiry.writerId === loginMember.id) {
-            deleteButtonHtml = `<button type="button" class="btn btn-danger delete-inquiry" data-inquiry-id="${inquiry.id}">삭제</button>`;
+
+        // loginMember의 null 체크 루틴 추가
+        if(loginMember === null) {
+            deleteButtonHtml = '';
+        } else if(inquiry.writerId === loginMember.id) {
+            deleteButtonHtml =
+                `<button class="delete-inquiry" data-inquiry-id="${inquiry.id}">삭제</button>`;
         }
+
         inquiryItem.innerHTML = `
             <div class="inquiry-header">
-            <!-- 이미지 있으면 사용 예정-->
-<!--                <img src="https://via.placeholder.com/40" alt="사용자 프로필" class="user-avatar">-->
                 <div class="inquiry-user-info">
                     <span class="inquiry-user">${inquiry.writer}</span>
                 </div>
@@ -205,26 +178,17 @@ function deleteInquiry(inquiryId) {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            console.log("문의 삭제 성공!!");
-            alert("문의가 삭제되었습니다.");
-            loadInquiries();
-        })
-        .catch(error => {
-            alert("Error!");
-            console.log("ERROR: ", error);
-        });
+            .then(async response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                console.log("문의 삭제 성공!!");
+                alert("문의가 삭제되었습니다.");
+                await loadInquiries();
+            })
+            .catch(error => {
+                alert("Error!");
+                console.log("ERROR: ", error);
+            });
     }
 }
-// window.loadComments = function(reviewId) {
-//     console.log(`댓글 로딩: 리뷰 ID ${reviewId}`);
-//     // TODO: 백엔드 API를 호출하여 댓글 목록을 가져오는 로직 구현
-// };
-//
-// window.submitComment = function(reviewId, content) {
-//     console.log(`댓글 제출: 리뷰 ID ${reviewId}, 내용: ${content}`);
-//     // TODO: 백엔드 API를 호출하여 새 댓글을 추가하는 로직 구현
-// }

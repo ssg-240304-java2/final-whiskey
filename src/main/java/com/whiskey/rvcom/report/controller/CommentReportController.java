@@ -4,7 +4,7 @@ import com.whiskey.libs.rest.request.RequestMethod;
 import com.whiskey.libs.rest.request.RestInvoker;
 import com.whiskey.rvcom.entity.report.ReviewCommentReport;
 import com.whiskey.rvcom.entity.review.ReviewComment;
-import com.whiskey.rvcom.report.model.dto.MailInfo;
+import com.whiskey.rvcom.mail.MailInfo;
 import com.whiskey.rvcom.report.model.dto.ReportData;
 import com.whiskey.rvcom.report.service.ReviewCommentReportService;
 import com.whiskey.rvcom.review.ReviewCommentService;
@@ -17,8 +17,8 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.whiskey.rvcom.report.model.dto.MailConst.COMMENT_SUBJECT;
-import static com.whiskey.rvcom.report.model.dto.MailConst.MAIL_URL;
+import static com.whiskey.rvcom.mail.MailConst.COMMENT_SUBJECT;
+import static com.whiskey.rvcom.mail.MailConst.MAIL_URL;
 
 @RestController
 @RequestMapping("/reviewcommentreport")
@@ -52,16 +52,16 @@ public class CommentReportController {
     }
 
     /***
-     * 댓글신고 전체 조회
+     * 댓글신고 처리전 조회
      * @param page
      * @param sortOrder
      * @return
      */
     @GetMapping("/list")
     @ResponseBody
-    public Page<ReviewCommentReport> getReviewCommentReports(@RequestParam(defaultValue = "0") int page,
+    public Page<ReviewCommentReport> getBeforeReviewCommentReports(@RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "asc") String sortOrder) {
-        return reviewCommentReportService.getAllReviewCommentReports(page, sortOrder);
+        return reviewCommentReportService.getBeforeReviewCommentReports(page, sortOrder);
     }
 
     /***
@@ -90,7 +90,7 @@ public class CommentReportController {
 
         boolean isPunish = btnId.equals("commentPunish");
 
-        String owenerEmail = reviewCommentReportService.reviewCommentReportPunish(reportId, isPunish);
+        String ownerMail = reviewCommentReportService.reviewCommentReportPunish(reportId, isPunish);
 
         ReviewCommentReport reviewCommentReport = reviewCommentReportService.getReviewCommentReport(reportId);
 
@@ -103,7 +103,7 @@ public class CommentReportController {
 
             // 메일 발송 코드
             MailInfo mailInfo =
-                    new MailInfo(owenerEmail, COMMENT_SUBJECT, reviewCommentReportService.getMailText(reportId));
+                    new MailInfo(ownerMail, COMMENT_SUBJECT, reviewCommentReportService.getMailText(reportId));
 
             var invoker = RestInvoker.create(MAIL_URL, null);
 

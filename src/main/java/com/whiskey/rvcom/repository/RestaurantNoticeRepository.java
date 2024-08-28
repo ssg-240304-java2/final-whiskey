@@ -26,6 +26,4 @@ public interface RestaurantNoticeRepository extends JpaRepository<RestaurantNoti
              order by n.createdAt desc
              """)
      Page<RestaurantNoticeResponseDTO> getPagedRestaurantNotices(@Param("restaurantId") Long restaurantId, Pageable pageable);
-
-     List<RestaurantNotice> findAllByRestaurantId(Long restaurantId);
 }

@@ -26,6 +26,21 @@ public class ReviewReportService {
     private final ReviewRepository reviewRepository;
 
 
+    // 리뷰 신고 처리 전 조회
+    public Page<ReviewReport> getBeforeReviewReports(int page, String sortOrder) {
+
+        Sort sort = Sort.by("reportedAt");
+
+        if ("desc".equalsIgnoreCase(sortOrder)) {
+            sort = sort.descending();
+        } else {
+            sort = sort.ascending();
+        }
+
+        Pageable pageable = PageRequest.of(page, 10, sort);
+        return reviewReportRepository.findAllByIsCheckedFalse(pageable);
+    }
+
     // 리뷰 신고 전체 조회
     public Page<ReviewReport> getAllReviewReports(int page, String sortOrder) {
 
@@ -97,7 +112,9 @@ public class ReviewReportService {
 
         ReviewReport report = getReviewReport(reportId);
 
-        return "다음 리뷰가 신고 확인결과 비공개 처리 되었습니다. \n" +
+        return "다음 리뷰가 신고 확인결과 비공개 처리 되었습니다.\n" +
+                "---------------------------------------------------------------------------------------------\n" +
+                "대상 리뷰 : " + report.getReview().getContent() + "\n" +
                 "신고 내용 : " + report.getContent();
     }
 }

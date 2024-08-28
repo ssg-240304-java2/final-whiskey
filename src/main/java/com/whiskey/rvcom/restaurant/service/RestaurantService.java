@@ -9,6 +9,7 @@ import com.whiskey.rvcom.repository.RestaurantRepository;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
 import com.whiskey.rvcom.util.ImagePathParser;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +25,12 @@ import java.util.Map;
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
+    private final EntityManager entityManager;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, MenuRepository menuRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, MenuRepository menuRepository, EntityManager entityManager) {
         this.restaurantRepository = restaurantRepository;
         this.menuRepository = menuRepository;
+        this.entityManager = entityManager;
     }
 
     public List<RestaurantCardDTO> getNearbyRestaurantByLocation(double latitude, double longitude) {
@@ -56,28 +59,30 @@ public class RestaurantService {
 
         String today = LocalDate.now().getDayOfWeek().toString();
 
+        WeeklyOpenCloseTime weeklyOpenCloseTime = restaurant.getWeeklyOpenCloseTime();
+
         String openingHour = null;
         switch (today) {
             case "MONDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getMonday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getMonday() : null);
                 break;
             case "TUESDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getTuesday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getTuesday() : null);
                 break;
             case "WEDNESDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getWednesday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getWednesday() : null);
                 break;
             case "THURSDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getThursday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getThursday() : null);
                 break;
             case "FRIDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getFriday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getFriday() : null);
                 break;
             case "SATURDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getSaturday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getSaturday() : null);
                 break;
             case "SUNDAY":
-                openingHour = restaurantTimeData(restaurant.getWeeklyOpenCloseTime().getSunday());
+                openingHour = restaurantTimeData(weeklyOpenCloseTime != null ? weeklyOpenCloseTime.getSunday() : null);
                 break;
         }
 
@@ -207,5 +212,27 @@ public class RestaurantService {
 
     public Restaurant getRestaurantByOwnerId(Long id) {
         return restaurantRepository.findByOwnerId(id);
+    }
+
+    public Restaurant getRestaurantById(Long id) {
+        return restaurantRepository.findById(id).orElse(null);
+    }
+
+    /***
+     * 새로운 메뉴 추가
+     * @param menu
+     */
+    public void addNewMenu(Menu menu) {
+        menuRepository.save(menu);
+    }
+
+    /***
+     * 기존 메뉴 수정
+     * @param m
+     */
+    public void updateMenu(Menu m) {
+        Menu menu = entityManager.find(Menu.class, m.getId());
+        menu.setName(m.getName());
+        menu.setPrice(m.getPrice());
     }
 }

@@ -11,9 +11,9 @@
 </head>
 <body>
     <div th:replace="fragments/header :: header"></div>
-    
     <div class="container">
         <h1>입점(점주) 신청</h1>
+        <span th:text="${memberId}" id="ownerId" hidden="hidden"></span>
         <form id="storeRegistrationForm">
             <div id="validSection">
             <div class="form-group">

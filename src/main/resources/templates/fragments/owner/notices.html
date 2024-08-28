@@ -7,17 +7,15 @@
             
             <!-- 공지사항 작성 버튼 -->
             <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createNoticeModal">
-                <i class="fas fa-plus"></i> 새 공지사항 작성
+                <i class="fas fa-plus"></i>  새 공지사항 작성
             </button>
 
             <!-- 공지사항 목록 -->
-            <div class="notice-list">
-            </div>
+            <div class="notice-list"></div>
 
             <!-- 페이지네이션 -->
             <nav aria-label="Page navigation" class="mt-4">
-                <ul class="pagination justify-content-center" id="pagination">
-                </ul>
+                <ul class="pagination justify-content-center" id="pagination-notice"></ul>
             </nav>
         </div>
 
@@ -30,7 +28,6 @@
                         <button type="button" class="btn-close" onclick="closeModal()" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <!-- TODO: 백엔드와 연동하여 공지사항 작성 폼 구현 -->
                         <form id="createNoticeForm">
                             <div class="mb-3">
                                 <label for="title" class="form-label">제목</label>
@@ -43,32 +40,32 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()" data-bs-dismiss="modal">취소</button>
-                        <button type="button" class="btn btn-primary" onclick="createNotice()" data-bs-dismiss="modal">작성</button>
+<!--                        <button type="button" class="btn btn-primary" onclick="closeModal()">취소</button>-->
+                        <button type="button" class="btn btn-secondary" onclick="createNotice()">작성</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 공지사항 삭제 확인 모달 -->
-        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="deleteConfirmModalLabel">공지사항 삭제 확인</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        정말로 이 공지사항을 삭제하시겠습니까?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                        <button type="button" class="btn btn-danger" id="confirmDelete">삭제</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+<!--        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel" aria-hidden="true">-->
+<!--            <div class="modal-dialog">-->
+<!--                <div class="modal-content">-->
+<!--                    <div class="modal-header">-->
+<!--                        <h5 class="modal-title" id="deleteConfirmModalLabel">공지사항 삭제 확인</h5>-->
+<!--                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                    </div>-->
+<!--                    <div class="modal-body">-->
+<!--                        정말로 이 공지사항을 삭제하시겠습니까?-->
+<!--                    </div>-->
+<!--                    <div class="modal-footer">-->
+<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>-->
+<!--                        <button type="button" class="btn btn-danger" id="confirmDelete">삭제</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
-    <script src="/js/owner/notices.js"></script>
+    <script th:src="@{/js/owner/notices.js}"></script>
 </body>
 </html>

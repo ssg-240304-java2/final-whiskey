@@ -64,11 +64,6 @@ public class TestController {
         return "writeReview";
     }
 
-    @GetMapping("/register-store")
-    // 매장 등록 페이지로 이동
-    public String getRegisterStore() {
-        return "register-store";
-    }
 
 //    @GetMapping("/owner-dashboard")
 //    // 점주 관리자 대시보드 페이지로 이동
