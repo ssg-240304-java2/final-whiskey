@@ -146,17 +146,6 @@
                     .catch(error => console.error('Error loading fragment:', error));
             });
         });
-
-        // 페이지가 로드될 때 기본적으로 첫 번째 프래그먼트를 로드하고, 해당 탭을 활성화합니다.
-        const defaultFragment = sidebarLinks[0].getAttribute("data-bs-target").substring(1);
-        sidebarLinks[0].classList.add("active");
-        fetch(`/fragments/owner/${defaultFragment}`)
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector("#content-area").innerHTML = html;
-            })
-            .catch(error => console.error('Error loading fragment:', error));
     });
-
 </script>
 </html>

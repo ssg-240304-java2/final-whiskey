@@ -46,49 +46,68 @@ function loadRestaurantInfo() {
         .then((data) => {
             // 음식점 기본 정보 표시
             document.getElementById("displayRestaurantName").textContent = data.name;
-            document.getElementById("displayRestaurantNumber").textContent = data.number;
-            document.getElementById("displayRestaurantAddress").textContent = data.address;
-            document.getElementById("displayOwnerName").textContent = data.ownerName;
-            document.getElementById("displayCategory").textContent = data.category;
-
+            if (document.getElementById("displayRestaurantNumber") !== null) {
+                document.getElementById("displayRestaurantNumber").textContent = data.number;
+            }
+            if (document.getElementById("displayRestaurantAddress") !== null) {
+                document.getElementById("displayRestaurantAddress").textContent = data.address;
+            }
+            if (document.getElementById("displayOwnerName") !== null) {
+                document.getElementById("displayOwnerName").textContent = data.ownerName;
+            }
+            if (document.getElementById("displayCategory") !== null) {
+                document.getElementById("displayCategory").textContent = data.category;
+            }
             // 음식점 이미지 설정
-            document.getElementById("restaurantImage").src = data.imageUrl || "https://via.placeholder.com/300x200";
-
-            // 영업 시간 정보 표시
-            const operatingHoursList = document.getElementById("displayOperatingHours");
-            operatingHoursList.innerHTML = "";
-            for (const [day, hours] of Object.entries(data.operatingHours)) {
-                if (hours) {
-                    const li = document.createElement("li");
-                    li.textContent = `${day}: ${hours.open} - ${hours.close}`;
-                    operatingHoursList.appendChild(li);
-                }
+            if (document.getElementById("restaurantImage") !== null) {
+                document.getElementById("restaurantImage").src = data.imageUrl || "https://via.placeholder.com/300x200";
             }
 
+            // 영업 시간 정보 표시
+            // const operatingHoursList = document.getElementById("displayOperatingHours");
+            // operatingHoursList.innerHTML = "";
+            // for (const [day, hours] of Object.entries(data.operatingHours)) {
+            //     if (hours) {
+            //         const li = document.createElement("li");
+            //         li.textContent = `${day}: ${hours.open} - ${hours.close}`;
+            //         operatingHoursList.appendChild(li);
+            //     }
+            // }
+
             // 수정 모달 폼에 데이터 설정
-            document.getElementById("restaurantName").value = data.name;
-            document.getElementById("restaurantNumber").value = data.number;
-            document.getElementById("restaurantAddress").value = data.address;
-            document.getElementById("ownerName").value = data.ownerName;
-            document.getElementById("category").value = data.category;
+            if (document.getElementById("restaurantName") !== null) {
+                document.getElementById("restaurantName").value = data.name;
+            }
+            if (document.getElementById("restaurantNumber") !== null) {
+                document.getElementById("restaurantNumber").value = data.number;
+            }
+            if (document.getElementById("restaurantAddress") !== null) {
+                document.getElementById("restaurantAddress").value = data.address;
+            }
+            if (document.getElementById("ownerName") !== null) {
+                document.getElementById("ownerName").value = data.ownerName;
+            }
+            if (document.getElementById("category") !== null) {
+                document.getElementById("category").value = data.category;
+            }
 
             // 영업 시간 정보 설정
-            const days = ["월", "화", "수", "목", "금", "토", "일"];
-            days.forEach((day) => {
-                const operateCheckbox = document.getElementById(`operate${day}`);
-                const openTimeSelect = document.getElementById(`openTime${day}`);
-                const closeTimeSelect = document.getElementById(`closeTime${day}`);
-
-                if (data.operatingHours[days.indexOf(day)]) {
-                    operateCheckbox.checked = true;
-                    openTimeSelect.value = data.operatingHours[day].open;
-                    closeTimeSelect.value = data.operatingHours[day].close;
-                } else {
-                    operateCheckbox.checked = false;
-                    openTimeSelect.value = "";
-                    closeTimeSelect.value = "";
-                }
-            });
+            // const days = ["월", "화", "수", "목", "금", "토", "일"];
+            // days.forEach((day) => {
+            //     const operateCheckbox = document.getElementById(`operate${day}`);
+            //     const openTimeSelect = document.getElementById(`openTime${day}`);
+            //     const closeTimeSelect = document.getElementById(`closeTime${day}`);
+            //
+            //     if (data.operatingHours[days.indexOf(day)]) {
+            //         operateCheckbox.checked = true;
+            //         openTimeSelect.value = data.operatingHours[day].open;
+            //         closeTimeSelect.value = data.operatingHours[day].close;
+            //     } else {
+            //         operateCheckbox.checked = false;
+            //         openTimeSelect.value = "";
+            //         closeTimeSelect.value = "";
+            //     }
+            // });
         })
         .catch((error) => console.error("음식점 정보 로드 실패:", error));
 }
