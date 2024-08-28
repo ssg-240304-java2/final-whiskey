@@ -1,7 +1,6 @@
 $(document).ready(function () {
-    // 음식점 id 값 가져오기
     const restaurantId = document.getElementById('restaurantId').value;
-    console.log(restaurantId);
+
     loadInquiries(restaurantId, 1);
 
     $(document).on('click', '#post-inquiry', clickInquiryPost);
@@ -12,10 +11,9 @@ $(document).ready(function () {
 
 // 문의 내역 전체 조회
 function loadInquiries(restaurantId, pageNumber) {
-    console.log("음식점 잘 가져오나요 ", restaurantId);
     $.ajax({
-        type: 'GET',
         url: `/restaurant/${restaurantId}/owner-inquiries?pageNumber=${pageNumber}&pageSize=5`,
+        type: 'GET',
         contentType: "application/json",
         success: function (inquiries) {
             const $inquiriesTable = $('#inquiries-table');
@@ -36,7 +34,7 @@ function loadInquiries(restaurantId, pageNumber) {
             renderPageNumber(inquiries.totalPages, pageNumber);
         },
         error: function (xhr, status, error) {
-            console.error("AJAX 요청 실패:", status, error); // 오류 시 콘솔 출력
+            console.error("AJAX 요청 실패:", status, error);
             alert('문의 내역을 불러오는 데 실패했습니다.');
         }
     });
@@ -45,9 +43,9 @@ function loadInquiries(restaurantId, pageNumber) {
 // 문의 내역 상세 보기
 function inquiryDetail(inquiryId) {
     $.ajax({
-        type: 'GET',
         url: `/restaurant/${inquiryId}/inquiry`,
-        content: "application/json",
+        type: 'GET',
+        contentType: "application/json",
         success: function (response) {
             console.log(response);
             $('#inquiryWriter').text(response.writer);
@@ -66,18 +64,25 @@ function inquiryDetail(inquiryId) {
 
 // 문의 내역 답변 작성
 function saveInquiryReply() {
+    const restaurantId = document.getElementById('restaurantId').value;
     const reply = $('#inquiryReply').val();
     const inquiryId = $('#inquiryModal').data('id');
 
+    if (!reply || reply.trim() === '') {
+        alert('답변을 입력해주세요.');
+        return;
+    }
+
     $.ajax({
-        type: 'POST',
-        contentType: 'application/json',
         url: `/restaurant/inquiry/reply/${inquiryId}`,
+        type: 'POST',
         data: JSON.stringify({content: reply}),
+        contentType: 'application/json',
         success: function (response) {
             alert('답변이 저장되었습니다: ' + reply);
+            const currentPage = getCurrentPage();
             $('#inquiryModal').modal('hide');
-            loadInquiries(getCurrentPage());
+            loadInquiries(restaurantId, currentPage);
         },
         error: function (xhr, status, error) {
             console.error("AJAX 요청 실패:", status, error);
@@ -113,8 +118,8 @@ function clickInquiryPage(pageNumber) {
 }
 
 function clickInquiryPost() {
-    const currentPageNumber = getCurrentPage();
     const restaurantId = document.getElementById('restaurantId').value;
+    const currentPageNumber = getCurrentPage();
 
     if (currentPageNumber > 1) {
         loadInquiries(restaurantId,currentPageNumber - 1);
@@ -122,8 +127,8 @@ function clickInquiryPost() {
 }
 
 function clickInquiryForward() {
-    const currentPageNumber = getCurrentPage();
     const restaurantId = document.getElementById('restaurantId').value;
+    const currentPageNumber = getCurrentPage();
     const totalPageNumber = parseInt($(this).attr('data-totalPage'));
 
     if (currentPageNumber < totalPageNumber) {

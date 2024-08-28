@@ -1,6 +1,5 @@
 // 페이지 로드 시 공지사항 목록 로드
 $(document).ready(function () {
-    // 음식점 id 값 가져오기
     const restaurantId = document.getElementById('restaurantId').value;
 
     loadNotices(restaurantId, 1);
@@ -64,8 +63,8 @@ function createNotice() {
     $.ajax({
         url: `/restaurant/${restaurantId}/notice`,
         type: 'POST',
-        contentType: 'application/json',
         data: JSON.stringify({title, content}),
+        contentType: 'application/json',
         success: function (response) {
             console.log('공지사항 작성 성공:', response);
             alert('공지사항이 작성되었습니다.');
@@ -81,6 +80,7 @@ function createNotice() {
 
 // 공지사항 삭제
 function deleteNotice() {
+    const restaurantId = document.getElementById('restaurantId').value;
     const noticeId = $(this).attr('id');
     // todo: 시간남으면 커스텀 모달창으로 삭제 해보기
     // $('#deleteConfirmModal').modal('show');
@@ -90,17 +90,15 @@ function deleteNotice() {
         $.ajax({
             url: `/restaurant/${noticeId}/notice`,
             type: 'DELETE',
-            success: function (response) {
-                console.log('공지사항 삭제 확인:', response);
+            success: function () {
                 alert('공지사항이 삭제되었습니다.');
                 let currentPage = getCurrentPage();
-                // 삭제 후 렌더링 하기 전 해당 페이지에 공지사항이 하나만 남았을 경우 페이지 번호를 하나 줄여서 렌더링
-                // 이미 DB상으로 삭제가 되었고 loadNoticeList를 통해 다시 조회하면 총 페이지 갯수가 하나 줄어셔 나오기 때문에
-                // 렌더링 할때 현재 페이지 번호 -1 을 해줘서 보냄
+
                 if ($('.notice-list .notice-card').length === 1) {
                     currentPage -= 1;
                 }
-                loadNotices(2, currentPage);
+
+                loadNotices(restaurantId, currentPage);
             },
             error: function (xhr, status, error) {
                 console.error('AJAX 요청 실패:', status, error);
@@ -139,23 +137,26 @@ function renderPageNumber(totalPages, pageNumber) {
 }
 
 function clickNoticePage(pageNumber) {
-    loadNotices(2, pageNumber);
+    const restaurantId = document.getElementById('restaurantId').value;
+    loadNotices(restaurantId, pageNumber);
 }
 
 function clickNoticePost() {
+    const restaurantId = document.getElementById('restaurantId').value;
     const currentPageNumber = getCurrentPage();
 
     if (currentPageNumber > 1) {
-        loadNotices(2, currentPageNumber - 1);
+        loadNotices(restaurantId, currentPageNumber - 1);
     }
 }
 
 function clickNoticeForward() {
+    const restaurantId = document.getElementById('restaurantId').value;
     const currentPageNumber = getCurrentPage();
     const totalPageNumber = parseInt($(this).attr('data-totalPage'));
 
     if (currentPageNumber < totalPageNumber) {
-        loadNotices(2, currentPageNumber + 1);
+        loadNotices(restaurantId, currentPageNumber + 1);
     }
 }
 
