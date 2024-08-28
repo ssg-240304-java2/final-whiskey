@@ -52,16 +52,16 @@ public class CommentReportController {
     }
 
     /***
-     * 댓글신고 전체 조회
+     * 댓글신고 처리전 조회
      * @param page
      * @param sortOrder
      * @return
      */
     @GetMapping("/list")
     @ResponseBody
-    public Page<ReviewCommentReport> getReviewCommentReports(@RequestParam(defaultValue = "0") int page,
+    public Page<ReviewCommentReport> getBeforeReviewCommentReports(@RequestParam(defaultValue = "0") int page,
                                                              @RequestParam(defaultValue = "asc") String sortOrder) {
-        return reviewCommentReportService.getAllReviewCommentReports(page, sortOrder);
+        return reviewCommentReportService.getBeforeReviewCommentReports(page, sortOrder);
     }
 
     /***

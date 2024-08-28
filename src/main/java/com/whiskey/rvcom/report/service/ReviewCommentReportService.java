@@ -25,7 +25,7 @@ public class ReviewCommentReportService {
 
 
     // 댓글 신고 전체 조회
-    public Page<ReviewCommentReport> getAllReviewCommentReports(int page, String sortOrder) {
+    public Page<ReviewCommentReport> getBeforeReviewCommentReports(int page, String sortOrder) {
 
         Sort sort = Sort.by("reportedAt");
 
@@ -36,7 +36,7 @@ public class ReviewCommentReportService {
         }
 
         Pageable pageable = PageRequest.of(page, 10, sort);
-        return reviewCommentReportRepository.findAll(pageable);
+        return reviewCommentReportRepository.findAllByIsCheckedFalse(pageable);
     }
 
 

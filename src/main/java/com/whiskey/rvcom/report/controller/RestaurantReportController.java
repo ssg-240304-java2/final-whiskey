@@ -45,11 +45,17 @@ public class RestaurantReportController {
         return ResponseEntity.ok().build();
     }
 
+    /***
+     * 식당 신고 처리전 조회
+     * @param page
+     * @param sortOrder
+     * @return
+     */
     @GetMapping("/list")
     @ResponseBody
     public Page<RestaurantReport> getReports(@RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "asc") String sortOrder) {
-        return restaurantReportService.getAllRestaurantReports(page, sortOrder);
+        return restaurantReportService.getBeforeRestaurantReports(page, sortOrder);
     }
 
     @GetMapping("/detail/{reportId}")
