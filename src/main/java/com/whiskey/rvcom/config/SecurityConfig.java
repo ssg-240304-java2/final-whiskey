@@ -54,9 +54,9 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/mainPage", true)
                         .failureHandler(customAuthenticationFailureHandler)
                         .successHandler((request, response, authentication) -> {
-                            log.info("User {} has successfully logged in.", authentication.getName());
+//                            log.info("User {} has successfully logged in.", authentication.getName());
                             SecurityContextHolder.getContext().setAuthentication(authentication);
-                            log.info("User Roles after setting context: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+//                            log.info("User Roles after setting context: {}", SecurityContextHolder.getContext().getAuthentication().getAuthorities());
 
                             // 세션에 인증 정보 추가
                             request.getSession().setAttribute("isAuthenticated", true);
