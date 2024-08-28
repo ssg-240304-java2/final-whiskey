@@ -72,18 +72,25 @@
                             <i class="fas fa-bell"></i>
                         </div>
                         <div class="dropdown">
-                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a href="#"
+                               class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                               id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <!-- 여기에서 전달된 프로필 이미지와 이름 사용 -->
-                                <img th:src="${profileImageUrl}" alt="Profile Image" width="32" height="32" class="rounded-circle me-2">
+                                <img th:src="${profileImageUrl}" alt="Profile Image" width="32" height="32"
+                                     class="rounded-circle me-2">
                                 <strong th:text="${memberName}">관리자명</strong>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser1">
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end text-small shadow"
+                                aria-labelledby="dropdownUser1">
                                 <li><a class="dropdown-item" href="/mypage">프로필</a></li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
                             </ul>
                         </div>
                     </div>
+                    <input hidden="hidden" id="restaurantId" type="text" th:value="${restaurantId}">
                 </div>
             </div>
 
@@ -93,7 +100,8 @@
                 <div id="dashboard" class="content-section" th:replace="fragments/owner/dashboard :: dashboard"></div>
 
                 <!-- 음식점 정보 콘텐츠 -->
-                <div id="restaurant-info" class="content-section" th:replace="fragments/owner/restaurant-info :: restaurant-info"></div>
+                <div id="restaurant-info" class="content-section"
+                     th:replace="fragments/owner/restaurant-info :: restaurant-info"></div>
 
                 <!-- 문의 내역 콘텐츠 -->
                 <div id="inquiries" class="content-section" th:replace="fragments/owner/inquiries :: inquiries"></div>
@@ -102,7 +110,8 @@
                 <div id="notices" class="content-section" th:replace="fragments/owner/notices :: notices"></div>
 
                 <!-- 메뉴 관리 콘텐츠 -->
-                <div id="menu-management" class="content-section" th:replace="fragments/owner/menu-management :: menu-management"></div>
+                <div id="menu-management" class="content-section"
+                     th:replace="fragments/owner/menu-management :: menu-management"></div>
             </div>
         </main>
     </div>
