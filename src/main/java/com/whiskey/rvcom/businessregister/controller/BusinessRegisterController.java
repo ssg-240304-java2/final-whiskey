@@ -6,16 +6,19 @@ import com.whiskey.rvcom.businessregister.model.dto.BusinessRequestHead;
 import com.whiskey.rvcom.businessregister.model.dto.RegistInfo;
 import com.whiskey.rvcom.businessregister.model.dto.MyResponseBody;
 import com.whiskey.rvcom.businessregister.service.BusinessRegisterService;
+import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import com.whiskey.rvcom.entity.restaurant.registration.RegistrationStatus;
 import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
 import com.whiskey.rvcom.mail.MailInfo;
 import com.whiskey.rvcom.repository.RestaurantRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -157,5 +160,19 @@ public class BusinessRegisterController {
     @GetMapping("/regist-detail")
     private String moveToDetailPage() {
         return "admin/regist-detail";
+    }
+
+    @GetMapping("/register-store")
+    // 매장 등록 페이지로 이동
+    public String getRegisterStore(HttpSession session, Model model) {
+
+        // 세션에 멤버 객체 저장하기
+        Member member = (Member) session.getAttribute("member");
+
+        if (member == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("memberId", member.getId());
+        return "register-store";
     }
 }

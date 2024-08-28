@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+    // 로그인한 사용자의 ID를 가져오기 위해 hidden 태그의 텍스트를 가져옴
+    var ownerId = document.getElementById('ownerId').innerText;
+
     const form = document.getElementById('storeRegistrationForm');
     const verifyButton = document.getElementById('verifyBusiness');
     const additionalInfo = document.getElementById('additionalInfo');
@@ -9,8 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var businessNumber;
     var openingDate;
     var businessOwner;
-
-    var memberId;
+    var memberId = ownerId;
     var storeName;
     var phoneNumber;
     var storeAddress;
@@ -63,8 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 
-
-
     // 추가 정보 입력 필드 활성화 함수
     function activateAdditionalInfo() {
         additionalInfo.classList.remove('disabled');
@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
 
-        memberId = 43;
         storeName = document.getElementById('storeName').value;
         phoneNumber = document.getElementById('phoneNumber').value;
         storeAddress = document.getElementById('storeAddress').value;
@@ -146,3 +145,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
