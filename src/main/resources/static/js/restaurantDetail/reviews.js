@@ -167,6 +167,7 @@ document.addEventListener('click', function (e) {
                 e.target.innerHTML = '👍 좋아요 (' + data + ')';
             },
             error: function (error) {
+                alert('로그인이 필요합니다.');
                 console.log(error);
             }
         });
