@@ -208,4 +208,8 @@ public class RestaurantService {
     public Restaurant getRestaurantByOwnerId(Long id) {
         return restaurantRepository.findByOwnerId(id);
     }
+
+    public Restaurant getRestaurantById(Long id) {
+        return restaurantRepository.findById(id).orElse(null);
+    }
 }
