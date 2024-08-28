@@ -43,7 +43,6 @@ $(document).ready(function () {
             <tr data-id="${report.id}">
                 <td>${report.id}</td>
                 <td>${report.title}</td>
-                <td>${report.content}</td>
                 <td>${report.review.content}</td>
                 <td>${formattedDate}</td>
                 <td class="report-status ${statusClass}" aria-label="처리 상태">${statusText}</td>
@@ -139,6 +138,7 @@ $(document).ready(function () {
                       <h6>신고 번호: <span id="reviewReportId">${report.id}</span></h6>
                       <p>신고 제목: <span id="reviewReportTitle">${report.title}</span></p>
                       <p>신고 내용: <span id="reviewReportContent">${report.content}</span></p>
+                      <p>리뷰 제목: <span id="reviewReportContent">${report.review.title}</span></p>
                       <p>리뷰 내용: <span id="reviewTitle">${report.review.content}</span></p>
                       <p>신고일: <span id="reviewReportedAt">${new Date(report.reportedAt).toLocaleDateString()}</span></p>
                       <p>처리여부: <span id="reviewReportChecked">${report.checked ? '처리완료' : '처리 전'}</span></p>
