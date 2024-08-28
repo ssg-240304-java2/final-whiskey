@@ -34,7 +34,7 @@ public class RestaurantInquiryRestController {
      * @param restaurantId
      * @return 문의글
      */
-    @GetMapping("/restaurant/{restaurantId}/allInquiry")
+    @GetMapping("/restaurant/{restaurantId}/inquiries")
     public Page<RestaurantInquiry> getPagedRestaurantInquiries(
             @PathVariable Long restaurantId,
             @RequestParam(defaultValue = "1" ) int pageNumber,
@@ -42,11 +42,6 @@ public class RestaurantInquiryRestController {
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return inquiryService.getPagedRestaurantInquiries(restaurantId, pageRequest);
-    }
-
-    @GetMapping("/restaurant/inquiry/{inquiryId}")
-    public RestaurantInquiryResponseDTO findById(@PathVariable Long inquiryId) {
-        return inquiryService.findById(inquiryId);
     }
 
     /**

@@ -6,15 +6,19 @@ import com.whiskey.rvcom.businessregister.model.dto.BusinessRequestHead;
 import com.whiskey.rvcom.businessregister.model.dto.RegistInfo;
 import com.whiskey.rvcom.businessregister.model.dto.MyResponseBody;
 import com.whiskey.rvcom.businessregister.service.BusinessRegisterService;
+import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import com.whiskey.rvcom.entity.restaurant.registration.RegistrationStatus;
 import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
 import com.whiskey.rvcom.mail.MailInfo;
+import com.whiskey.rvcom.repository.RestaurantRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -34,6 +38,8 @@ public class BusinessRegisterController {
     private final String REQUEST_URL = "https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=";
 
     private final BusinessRegisterService businessRegisterService;
+
+    private final RestaurantRepository restaurantRepository;
 
     @PostMapping("/valid")
     @ResponseBody
@@ -81,11 +87,17 @@ public class BusinessRegisterController {
         businessRegisterService.saveRestaurantRegistration(registration);
     }
 
+    /***
+     * 처리 전 입점신청 목록 조회
+     * @param page
+     * @param sortOrder
+     * @return
+     */
     @GetMapping("/list")
     @ResponseBody
-    public Page<RestaurantRegistration> getRegistrations(@RequestParam(defaultValue = "0") int page,
+    public Page<RestaurantRegistration> getBeforeRegistrations(@RequestParam(defaultValue = "0") int page,
                                              @RequestParam(defaultValue = "asc") String sortOrder) {
-        return businessRegisterService.getAllBusinessRegister(page, sortOrder);
+        return businessRegisterService.getBeforeBusinessRegister(page, sortOrder);
     }
 
     @GetMapping("/detail/{id}")
@@ -119,6 +131,9 @@ public class BusinessRegisterController {
         if (isApprove) {
             // 승인 메일 발송
              mailInfo = new MailInfo(ownerMail, REGIST_APPROVE, businessRegisterService.getApproveMailText(registerId));
+            // 승인 결정 후 식당 정보 저장
+            restaurantRepository.save(businessRegisterService.getRestairantInfo(registerId));
+
         } else {
             // 거절 메일 발송
             mailInfo = new MailInfo(ownerMail, REGIST_REJECT, businessRegisterService.getRejectMailText(registerId));
@@ -145,5 +160,19 @@ public class BusinessRegisterController {
     @GetMapping("/regist-detail")
     private String moveToDetailPage() {
         return "admin/regist-detail";
+    }
+
+    @GetMapping("/register-store")
+    // 매장 등록 페이지로 이동
+    public String getRegisterStore(HttpSession session, Model model) {
+
+        // 세션에 멤버 객체 저장하기
+        Member member = (Member) session.getAttribute("member");
+
+        if (member == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("memberId", member.getId());
+        return "register-store";
     }
 }

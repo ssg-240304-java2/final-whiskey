@@ -15,7 +15,6 @@ public class RestaurantInquiryReplyService {
     private final RestaurantInquiryRepository inquiryRepository;
     private final RestaurantInquiryReplyRepository inquiryReplyRepository;
 
-    // TODO: 문의글에 답변 작성
     @Transactional
     public void save(Long inquiryId, RestaurantInquiryReplyRequestDTO request) {
         RestaurantInquiry inquiry = inquiryRepository.findById(inquiryId)
@@ -29,7 +28,6 @@ public class RestaurantInquiryReplyService {
         inquiryRepository.save(inquiry);
     }
 
-    // TODO: 문의글에 답변 삭제
     @Transactional
     public void delete(Long replyId) {
         RestaurantInquiry inquiry = inquiryRepository.findByReplyId(replyId)

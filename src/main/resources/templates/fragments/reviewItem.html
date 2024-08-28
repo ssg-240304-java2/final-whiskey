@@ -15,16 +15,16 @@
         </div>
         <div class="review-images" th:if="${images.size() > 0}">
             <div class="image-container" style="display: flex; gap: 10px; flex-wrap: wrap;">
-                <div th:each="image, iterStat : ${images}" th:if="${iterStat.index < 4}">
+                <div th:each="image, iterStat : ${images}" th:if="${iterStat.index < 5}">
                     <img th:src="@{|https://kr.object.ncloudstorage.com/whiskey-file/${image.imageFile.uuidFileName}|}"
                          alt="Review Image"
                          class="review-image">
                 </div>
 
                 <!-- 더보기 버튼 조건 -->
-                <div th:if="${images.size() > 4}" class="more-images">
-                    <span>+ 더보기</span>
-                </div>
+<!--                <div th:if="${images.size() > 4}" class="more-images">-->
+<!--                    <span>+ 더보기</span>-->
+<!--                </div>-->
             </div>
         </div>
 

@@ -2,12 +2,16 @@ package com.whiskey.rvcom.businessregister.service;
 
 
 import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.entity.report.RestaurantReport;
 import com.whiskey.rvcom.entity.restaurant.Address;
+import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.restaurant.RestaurantCategory;
 import com.whiskey.rvcom.entity.restaurant.registration.RegistrationStatus;
 import com.whiskey.rvcom.entity.restaurant.registration.RestaurantRegistration;
 import com.whiskey.rvcom.repository.AddressRepository;
 import com.whiskey.rvcom.repository.MemberRepository;
 import com.whiskey.rvcom.repository.RestaurantRegistrationRepository;
+import com.whiskey.rvcom.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +47,7 @@ public class BusinessRegisterService {
         return addressRepository.save(restaurantAddress);
     }
 
-    public Page<RestaurantRegistration> getAllBusinessRegister(int page, String sortOrder) {
+    public Page<RestaurantRegistration> getBeforeBusinessRegister(int page, String sortOrder) {
         Sort sort = Sort.by("createdAt");
 
         if ("desc".equalsIgnoreCase(sortOrder)) {
@@ -53,7 +57,7 @@ public class BusinessRegisterService {
         }
 
         Pageable pageable = PageRequest.of(page, 10, sort);
-        return restaurantRegistrationRepository.findAll(pageable);
+        return restaurantRegistrationRepository.findByRegistrationStatus(pageable, RegistrationStatus.SUBMITTED);
     }
 
     public RestaurantRegistration getBusinessRegister(Long id) {
@@ -102,5 +106,26 @@ public class BusinessRegisterService {
                 "음식점 카테고리 : " + registration.getRestaurantCategory() + "\n" +
                 "음식점 전화번호 : " + registration.getRestaurantNumber() + "\n" +
                 "음식점 주소 : " + registration.getRestaurantAddress().getName();
+    }
+
+    public Restaurant getRestairantInfo(Long registerId) {
+
+        RestaurantRegistration registration = restaurantRegistrationRepository.findById(registerId).orElse(null);
+
+        Member owner = registration.getMember();
+        String restaurantName = registration.getRestaurantName();
+        String restaurantNumber = registration.getRestaurantNumber();
+        Address restaurantAddress = registration.getRestaurantAddress();
+        RestaurantCategory restaurantCategory = registration.getRestaurantCategory();
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.setOwner(owner);
+        restaurant.setName(restaurantName);
+        restaurant.setNumber(restaurantNumber);
+        restaurant.setAddress(restaurantAddress);
+        restaurant.setCategory(restaurantCategory);
+        restaurant.setVisible(true);
+
+        return restaurant;
     }
 }
