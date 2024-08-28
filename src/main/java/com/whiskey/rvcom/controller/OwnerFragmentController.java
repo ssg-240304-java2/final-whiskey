@@ -1,6 +1,7 @@
 package com.whiskey.rvcom.controller;
 
 import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class OwnerFragmentController {
+
+    private final RestaurantService restaurantService;
+
+    public OwnerFragmentController(RestaurantService restaurantService) {
+        this.restaurantService = restaurantService;
+    }
 
     @GetMapping("/fragments/owner/{fragment}")
     public String getOwnerFragment(@PathVariable String fragment) {
@@ -31,6 +38,7 @@ public class OwnerFragmentController {
 
         model.addAttribute("profileImageUrl", profileImageUrl);
         model.addAttribute("memberName", member.getName());
+        model.addAttribute("restaurantId", restaurantService.getRestaurantByOwnerId(member.getId()).getId());
 
         return "owner/dashboard";
     }
