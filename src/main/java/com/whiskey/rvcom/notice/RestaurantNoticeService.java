@@ -21,7 +21,6 @@ public class RestaurantNoticeService {
     private final RestaurantRepository restaurantRepository;
     private final RestaurantNoticeRepository noticeRepository;
 
-    // TODO: 해당 음식점의 공지사항 전체 조회
     public List<RestaurantNoticeResponseDTO> findNoticeByRestaurantId(Long restaurantId) {
         return noticeRepository.findByRestaurantId(restaurantId).stream()
                 .sorted(Comparator.comparing(RestaurantNotice::getCreatedAt).reversed())
@@ -34,19 +33,16 @@ public class RestaurantNoticeService {
                 )).toList();
     }
 
-    // TODO: 해당 음식점의 공지사항 전체 조회 (삭제된 내용 제외)
     public Page<RestaurantNoticeResponseDTO> getPagedRestaurantNotices(Long restaurantId, Pageable pageable) {
         return noticeRepository.getPagedRestaurantNotices(restaurantId, pageable);
     }
 
-    // TODO: 해당 음식점의 점주가 공지사항 작성
     @Transactional
     public void save(RestaurantNoticeRequestDTO request, Long restaurantId) {
         Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
         noticeRepository.save(new RestaurantNotice(request.title(), request.content(), restaurant));
     }
 
-    // TODO: 해당 음식점의 점주가 공지사항 삭제
     @Transactional
     public void delete(Long noticeId) {
         RestaurantNotice restaurantNotice = noticeRepository.findById(noticeId).orElseThrow();
