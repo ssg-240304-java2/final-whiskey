@@ -25,11 +25,38 @@
 
         <h1>리뷰 작성</h1>
 
-        <form id="reviewForm">
+        <!-- <form id="reviewForm">
             <div th:replace="fragments/starRating :: starRating"></div>
             <div th:replace="fragments/reviewTextarea :: reviewTextarea"></div>
             <div th:replace="fragments/photoUpload :: photoUpload"></div>
-            <div th:replace="fragments/reviewSubmitButtons :: reviewSubmitButtons"></div>
+            <div th:replace="fragments/reviewSubmitButtons :: reviewSubmitButtons"></div> -->
+        </form>
+        <form id="reviewForm" th:action="@{/review/save}" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="restaurantId" name="restaurantId" th:value="${restaurantId}">
+            <input type="hidden" id="receiptId" name="receiptDataId" th:value="${receiptId}">
+            
+            <div class="form-group">
+                <label for="rating">별점</label>
+                <select id="rating" name="rating" required>
+                    <option value="ONE_STAR">★☆☆☆☆</option>
+                    <option value="TWO_STAR">★★☆☆☆</option>
+                    <option value="THREE_STAR">★★★☆☆</option>
+                    <option value="FOUR_STAR">★★★★☆</option>
+                    <option value="FIVE_STAR">★★★★★</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="content">리뷰 내용</label>
+                <textarea id="content" name="content" rows="5" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="images">이미지 업로드 (1~5개)</label>
+                <input type="file" id="images" name="images" multiple accept="image/*" required>
+            </div>
+            
+            <button type="submit">리뷰 등록</button>
         </form>
     </div>
 
@@ -68,35 +95,41 @@
         }
 
         // 리뷰 폼 제출 이벤트를 처리합니다.
-        document.getElementById('reviewForm').addEventListener('submit', (e) => {
-            // 폼의 기본 제출 동작을 막습니다.
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            // 리뷰 텍스트와 업로드된 사진들을 가져옵니다.
-            const reviewText = document.getElementById('reviewText').value;
-            const photos = document.getElementById('photoUpload').files;
+            
+            const images = document.getElementById('images').files;
+            if (images.length < 1 || images.length > 5) {
+                alert('이미지는 1개 이상 5개 이하로 업로드해주세요.');
+                return;
+            }
 
-            // TODO: 백엔드 개발자는 리뷰 제출을 처리하는 API를 구현해야 합니다.
-            // 별점(rating), 리뷰 텍스트(reviewText), 사진(photos)을 서버로 전송하고 저장하는 기능이 필요합니다.
-            // 또한 리뷰 제출 후 성공/실패 여부를 클라이언트에 알려주는 응답 처리도 구현해야 합니다.
-            // $.ajax({
-            //     url: "",
-            //     type: "POST",
-            //     contentType: "application/json",
-            //     data: JSON.stringify({
-            //         rating: rating,
-            //         reviewText: reviewText,
-            //         photos: photos,
-            //         receiptData:
-            //     }),
-            // })
+            // 폼 데이터 생성
+            const formData = new FormData(this);
 
-
-            console.log('Rating:', rating);
-            console.log('Review:', reviewText);
-            console.log('Photos:', photos);
-
-            // 리뷰 등록 완료 메시지를 표시합니다.
-            alert('리뷰가 성공적으로 등록되었습니다!');
+            // AJAX를 사용하여 서버에 데이터 전송
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('서버 응답 오류');
+            })
+            .then(data => {
+                if (data.success) {
+                    alert('리뷰가 성공적으로 등록되었습니다.');
+                    window.location.href = data.redirectUrl;
+                } else {
+                    alert('리뷰 등록에 실패했습니다: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('리뷰 등록 중 오류가 발생했습니다.');
+            });
         });
 
         // 취소 버튼 기능
