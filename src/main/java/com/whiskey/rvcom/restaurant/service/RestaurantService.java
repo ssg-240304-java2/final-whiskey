@@ -9,6 +9,7 @@ import com.whiskey.rvcom.repository.RestaurantRepository;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
 import com.whiskey.rvcom.util.ImagePathParser;
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +25,12 @@ import java.util.Map;
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
+    private final EntityManager entityManager;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, MenuRepository menuRepository) {
+    public RestaurantService(RestaurantRepository restaurantRepository, MenuRepository menuRepository, EntityManager entityManager) {
         this.restaurantRepository = restaurantRepository;
         this.menuRepository = menuRepository;
+        this.entityManager = entityManager;
     }
 
     public List<RestaurantCardDTO> getNearbyRestaurantByLocation(double latitude, double longitude) {
@@ -213,5 +216,23 @@ public class RestaurantService {
 
     public Restaurant getRestaurantById(Long id) {
         return restaurantRepository.findById(id).orElse(null);
+    }
+
+    /***
+     * 새로운 메뉴 추가
+     * @param menu
+     */
+    public void addNewMenu(Menu menu) {
+        menuRepository.save(menu);
+    }
+
+    /***
+     * 기존 메뉴 수정
+     * @param m
+     */
+    public void updateMenu(Menu m) {
+        Menu menu = entityManager.find(Menu.class, m.getId());
+        menu.setName(m.getName());
+        menu.setPrice(m.getPrice());
     }
 }

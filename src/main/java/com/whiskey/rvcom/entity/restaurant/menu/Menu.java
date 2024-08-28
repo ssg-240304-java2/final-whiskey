@@ -6,6 +6,7 @@ import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.*;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tbl_menu")
 @Entity
