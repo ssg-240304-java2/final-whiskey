@@ -43,6 +43,9 @@
             <button class="comment-button">
                 <span th:id="'comment-button-' + ${id}" th:text="'💬 댓글 (' + ${comments.size()} + ')'"></span>
             </button>
+<!--            <button class="comment-button">-->
+<!--                <span th:id="'comment-button-' + ${id}" th:text="'💬 댓글 (' + ${#lists.size(#lists.filter(comments, comment -> !comment.isSuspended))} + ')'"></span>-->
+<!--            </button>-->
 
         </div>
         <div class="comments-section" style="display: none;">
@@ -50,9 +53,14 @@
                      <!-- - 페이지네이션 구현
                      - 댓글 정렬 기능 추가 (최신순, 추천순 등) -->
                 <!-- 예시 댓글 -->
+<!--                <div class="comment" th:each="comment : ${comments}">-->
+<!--                    <p th:text="${comment.content}"></p>-->
+<!--                    <button class="report-button comment-report" style="float: right;" th:id="'commentReport' + ${comment.id}" >🚨</button>-->
+<!--                    <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')} + ' / ' + ${comment.commenter.nickname}"></span>-->
+<!--                </div>-->
                 <div class="comment" th:each="comment : ${comments}">
                     <p th:text="${comment.content}"></p>
-                    <button class="report-button comment-report" style="float: right;" th:id="'commentReport' + ${comment.id}" >🚨</button>
+                    <button class="report-button comment-report" style="float: right;" th:id="'commentReport' + ${comment.id}">🚨</button>
                     <span th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd')} + ' / ' + ${comment.commenter.nickname}"></span>
                 </div>
             </div>

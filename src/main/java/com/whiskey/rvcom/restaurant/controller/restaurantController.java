@@ -2,7 +2,7 @@ package com.whiskey.rvcom.restaurant.controller;
 
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
-import com.whiskey.rvcom.entity.review.Review;
+import com.whiskey.rvcom.entity.review.*;
 import com.whiskey.rvcom.repository.ReviewRepository;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.review.ReviewService;
@@ -67,6 +67,9 @@ public class restaurantController {
         List<Review> reviews = (List<Review>) reviewAttributes.get("reviews");
         // review 내의 isSuspended가 false인 review만 가져오기
         reviews.removeIf(Review::isSuspended);
+
+        // 다음으로 각각의 리뷰 내의 모든 댓글들을 순차적으로 순회하며, isSuspended가 false인 댓글만 가져오기
+        reviews.forEach(review -> review.getReviewComments().removeIf(ReviewComment::isSuspended));
 
         // 좋아요 개수 상위 2개의 리뷰 가져오기
         // reviewAttributes를 순회하여 좋아요 개수가 가장 많은 리뷰 2개를 가져옴
