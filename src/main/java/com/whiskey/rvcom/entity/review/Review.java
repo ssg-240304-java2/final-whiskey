@@ -31,6 +31,9 @@ public class Review {
     @Column(nullable = false)
     private String content; // 리뷰 내용
 
+    @Column
+    private String title;   // 리뷰 제목
+
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime createdAt;    // 리뷰 작성시간
