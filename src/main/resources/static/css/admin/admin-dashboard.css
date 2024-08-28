@@ -609,3 +609,60 @@ tr:hover .report-completed {
         margin-bottom: 20px;
     }
 }
+
+/* 상단 바 스타일 개선 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+
+/* 빠른 액세스 드롭다운 스타일 */
+#quickAccessDropdown {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.dropdown-item i {
+    margin-right: 0.5rem;
+    width: 20px;
+    text-align: center;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(0, 203, 166, 0.1);
+    color: #00cba6;
+}
+
+/* 관리자 프로필 드롭다운 스타일 */
+#dropdownUser1 {
+    transition: all 0.3s ease;
+}
+
+#dropdownUser1:hover {
+    opacity: 0.8;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .navbar .d-flex {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    #page-title {
+        margin-bottom: 1rem;
+    }
+
+    .dropdown {
+        margin-bottom: 0.5rem;
+    }
+}

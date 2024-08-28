@@ -26,6 +26,14 @@ $(document).ready(function() {
         updateActiveMenu($('.nav-link[data-target="' + target + '"]'));
     });
 
+    // 빠른 액세스 메뉴 클릭 이벤트 처리
+    $('.dropdown-item[data-target]').on('click', function(e) {
+        e.preventDefault();
+        var target = $(this).data('target');
+        loadContent(target);
+        updateActiveMenu($('.nav-link[data-target="' + target + '"]'));
+    });
+
     // 초기 대시보드 로드
     loadContent('dashboard');
 
@@ -77,6 +85,12 @@ $(document).ready(function() {
     function highlightActiveButton(target) {
         $('#dashboard .btn').removeClass('active');
         $('#dashboard .btn[data-target="' + target + '"]').addClass('active');
+    }
+
+    // 활성 메뉴 업데이트 함수
+    function updateActiveMenu(clickedItem) {
+        $('.nav-link').removeClass('active');
+        $(clickedItem).addClass('active');
     }
 
     function initializeCharts() {
