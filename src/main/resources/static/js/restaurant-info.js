@@ -41,12 +41,27 @@ function loadRestaurantInfo() {
     // TODO: 백엔드 개발 - GET /api/restaurant/info 엔드포인트 구현
     // 응답 데이터 형식: { name, number, address, ownerName, category, imageUrl, operatingHours }
     // operatingHours 형식: { "월": { open: "09:00", close: "18:00" }, ... }
+
+    // 카테고리 목록 불러오기
+    if (document.getElementById("category")) {
+        fetch("/api/restaurant/category")
+            .then((response) => response.json())
+            .then((data) => {
+                var categoryList = document.getElementById("category");
+                categoryList.innerHTML = `<option disabled hidden>카테고리 선택</option>`;
+                data.forEach((category) => {
+                    var option = document.createElement("option");
+                    option.value = category.value;
+                    option.textContent = category.name;
+                    categoryList.appendChild(option);
+                });
+            });
+    }
+
     fetch("/api/restaurant/info")
         .then((response) => response.json())
         .then((data) => {
             // 음식점 기본 정보 표시
-
-            console.log(data.operatingHours["월"].toString());
 
             document.getElementById("displayRestaurantName").textContent = data.name;
             if (document.getElementById("displayRestaurantNumber") !== null) {
@@ -121,7 +136,11 @@ function loadRestaurantInfo() {
                 document.getElementById("ownerName").value = data.ownerName;
             }
             if (document.getElementById("category") !== null) {
-                document.getElementById("category").value = data.category;
+                document.getElementById('category').options.forEach((option) => {
+                    if (option.value === data.category) {
+                        option.selected = true;
+                    }
+                });
             }
         })
         .catch((error) => console.error("음식점 정보 로드 실패:", error));
@@ -139,8 +158,8 @@ function sendModificationRequest() {
         const operateCheckbox = document.getElementById(`operate${day}`);
         if (operateCheckbox.checked) {
             operatingHours[day] = {
-                open: document.getElementById(`openTime${day}`).value,
-                close: document.getElementById(`closeTime${day}`).value,
+                open: document.getElementById(`openTime${day}`).textContent,
+                close: document.getElementById(`closeTime${day}`).textContent,
             };
         }
     });
