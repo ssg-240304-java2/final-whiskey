@@ -111,4 +111,24 @@ $(document).ready(function() {
 
         // TODO: 다른 차트들도 비슷한 방식으로 초기화
     }
+
+    // 사이드바 토글 기능
+    $('#sidebarToggle').on('click', function() {
+        $('.sidebar').toggleClass('show');
+    });
+
+    // 화면 크기 변경 시 빠른 액세스 버튼 표시 여부 조절
+    $(window).resize(function() {
+        if ($(window).width() <= 768) {
+            $('#quickAccessDropdown').hide();
+        } else {
+            $('#quickAccessDropdown').show();
+        }
+    });
+
+    // 초기 로드 시 화면 크기에 따라 버튼 표시 여부 설정
+    if ($(window).width() <= 768) {
+        $('#quickAccessDropdown').hide();
+    }
+
 });
