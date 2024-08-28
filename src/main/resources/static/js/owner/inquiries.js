@@ -1,8 +1,8 @@
-var restaurantId = 2; // 예시로 고정된 값
-
 $(document).ready(function () {
-
-    loadInquiries(1);
+    // 음식점 id 값 가져오기
+    const restaurantId = document.getElementById('restaurantId').value;
+    console.log(restaurantId);
+    loadInquiries(restaurantId, 1);
 
     $(document).on('click', '#post-inquiry', clickInquiryPost);
     $(document).on('click', '#forward-inquiry', clickInquiryForward);
@@ -11,11 +11,12 @@ $(document).ready(function () {
 });
 
 // 문의 내역 전체 조회
-function loadInquiries(pageNumber) {
+function loadInquiries(restaurantId, pageNumber) {
+    console.log("음식점 잘 가져오나요 ", restaurantId);
     $.ajax({
         type: 'GET',
-        url: `/restaurant/${restaurantId}/inquiries?pageNumber=${pageNumber}&pageSize=5`,
-        content: "application/json",
+        url: `/restaurant/${restaurantId}/owner-inquiries?pageNumber=${pageNumber}&pageSize=5`,
+        contentType: "application/json",
         success: function (inquiries) {
             const $inquiriesTable = $('#inquiries-table');
             $inquiriesTable.empty();
@@ -45,7 +46,7 @@ function loadInquiries(pageNumber) {
 function inquiryDetail(inquiryId) {
     $.ajax({
         type: 'GET',
-        url: `/restaurant/inquiry/${inquiryId}`,
+        url: `/restaurant/${inquiryId}/inquiry`,
         content: "application/json",
         success: function (response) {
             console.log(response);
@@ -102,28 +103,31 @@ function renderPageNumber(totalPages, pageNumber) {
 
     const forwardButton = `<li class="page-item ${pageNumber === totalPages ? 'disabled' : ''}" id="forward-inquiry" data-totalPage="${totalPages}">
                                     <a class="page-link" href="#" onclick="clickInquiryForward()">다음</a>
-                                </li>`;
+                                  </li>`;
     pageList.append(forwardButton);
 }
 
 function clickInquiryPage(pageNumber) {
-    loadInquiries(pageNumber);
+    const restaurantId = document.getElementById('restaurantId').value;
+    loadInquiries(restaurantId, pageNumber);
 }
 
 function clickInquiryPost() {
     const currentPageNumber = getCurrentPage();
+    const restaurantId = document.getElementById('restaurantId').value;
 
     if (currentPageNumber > 1) {
-        loadInquiries(currentPageNumber - 1);
+        loadInquiries(restaurantId,currentPageNumber - 1);
     }
 }
 
 function clickInquiryForward() {
     const currentPageNumber = getCurrentPage();
+    const restaurantId = document.getElementById('restaurantId').value;
     const totalPageNumber = parseInt($(this).attr('data-totalPage'));
 
     if (currentPageNumber < totalPageNumber) {
-        loadInquiries(currentPageNumber + 1);
+        loadInquiries(restaurantId,currentPageNumber + 1);
     }
 }
 

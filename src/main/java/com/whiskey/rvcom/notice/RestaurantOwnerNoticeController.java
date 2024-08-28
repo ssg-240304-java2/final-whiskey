@@ -21,7 +21,7 @@ public class RestaurantOwnerNoticeController {
      * @param pageSize
      * @return 페이지객체의 음식점 공지사항 리스트
      */
-    @GetMapping("/restaurant/{restaurantId}/notices")
+    @GetMapping("/restaurant/{restaurantId}/owner-notices")
     public Page<RestaurantNoticeResponseDTO> getPagedRestaurantNotices(
             @PathVariable Long restaurantId,
             @RequestParam(defaultValue = "1") int pageNumber,
