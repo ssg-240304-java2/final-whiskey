@@ -3,9 +3,11 @@ package com.whiskey.rvcom.restaurant.controller;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.entity.review.Review;
+import com.whiskey.rvcom.repository.ReviewRepository;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.review.ReviewService;
 import com.whiskey.rvcom.util.ImagePathParser;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,14 +20,11 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/restaurant")
+@RequiredArgsConstructor
 public class restaurantController {
     private final RestaurantService restaurantService;
     private final ReviewService reviewService;
-
-    public restaurantController(RestaurantService restaurantService, ReviewService reviewService) {
-        this.restaurantService = restaurantService;
-        this.reviewService = reviewService;
-    }
+    private final ReviewRepository reviewRepository;
 
     @GetMapping("/{restaurantId}/{tab}")
     public String getRestaurantDetailWithTab(Model model, @PathVariable Long restaurantId, @PathVariable String tab) {
@@ -65,9 +64,12 @@ public class restaurantController {
         // 정규식을 사용하여 숫자와 소수점을 제거
         String onlyStars = ratingPhase.replaceAll("[0-9.]", "").trim();
 
+        List<Review> reviews = (List<Review>) reviewAttributes.get("reviews");
+        // review 내의 isSuspended가 false인 review만 가져오기
+        reviews.removeIf(Review::isSuspended);
+
         // 좋아요 개수 상위 2개의 리뷰 가져오기
         // reviewAttributes를 순회하여 좋아요 개수가 가장 많은 리뷰 2개를 가져옴
-        List<Review> reviews = (List<Review>) reviewAttributes.get("reviews");
         reviews.sort((r1, r2) -> Integer.compare(r2.getLikes().size(), r1.getLikes().size()));
         List<Review> topReviews = reviews.stream().limit(2).collect(Collectors.toList());
 
@@ -76,7 +78,7 @@ public class restaurantController {
         model.addAttribute("ratingOnlyStars", onlyStars);
 
         model.addAttribute("ratingPhase", reviewAttributes.get("ratingPhase"));
-        model.addAttribute("reviews", reviewAttributes.get("reviews"));
+        model.addAttribute("reviews", reviews);
 
         return "restaurantDetail";
     }
