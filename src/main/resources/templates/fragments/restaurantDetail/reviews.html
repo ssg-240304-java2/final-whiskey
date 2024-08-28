@@ -35,10 +35,8 @@
                             <span class="likes"><i class="fas fa-thumbs-up"></i><span th:text="'좋아요 ' + ${topReview.likes.size()}"></span></span>
                         </div>
                     </div>
-                    <div class="image-placeholder">
-                        <div th:each="image, iterStat : ${topReview.reviewImages}" th:if="${iterStat.index == 0}">
-                            <img th:src="@{|https://kr.object.ncloudstorage.com/whiskey-file/${image.imageFile.uuidFileName}|}" alt="Review Image" class="review-image">
-                        </div>
+                    <div class="image-placeholder" th:each="image, iterStat : ${topReview.reviewImages}" th:if="${iterStat.index == 0}">
+                        <img th:src="@{|https://kr.object.ncloudstorage.com/whiskey-file/${image.imageFile.uuidFileName}|}" alt="Review Image" class="review-image">
                     </div>
                 </div>
 
