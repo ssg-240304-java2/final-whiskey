@@ -140,8 +140,8 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: #00e88f;
-    border-color: #00e88f;
+    background-color: #00cba6;
+    border-color: #00cba6;
 }
 
 .btn-outline-primary {
@@ -322,7 +322,7 @@ body {
 }
 
 .page-link:hover {
-    color: #00e88f;
+    color: #00cba6;
 }
 
 /* 반응형 디자인 개선 */
@@ -397,7 +397,7 @@ body {
 }
 
 .modal-body strong {
-    color: #00e88f;
+    color: #00cba6;
 }
 
 /* 모달 버튼 스타일 */
@@ -482,7 +482,7 @@ tr:hover .report-completed {
 }
 
 .report-table th {
-    background-color: #00e88f;
+    background-color: #00cba6;
     font-weight: 600;
     text-transform: uppercase;
     border-top: none;
@@ -490,10 +490,15 @@ tr:hover .report-completed {
 
 .report-table td {
     vertical-align: middle;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #ffffff;
+    font-weight: 400;
+    letter-spacing: 0.5px;
 }
 
 .report-table tr:hover {
-    background-color: #00e88f;
+    background-color: #00cba6;
     cursor: pointer;
 }
 
