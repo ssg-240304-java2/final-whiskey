@@ -2,6 +2,7 @@ package com.whiskey.rvcom.restaurant.controller;
 
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
+import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.review.ReviewService;
 import com.whiskey.rvcom.util.ImagePathParser;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/restaurant")
@@ -58,11 +60,18 @@ public class restaurantController {
 
         // 리뷰 관련 정보
         Map<String, Object> reviewAttributes = reviewService.getReviewsByRestaurant(restaurant);
-
         String ratingPhase = (String) reviewAttributes.get("ratingPhase");
 
         // 정규식을 사용하여 숫자와 소수점을 제거
         String onlyStars = ratingPhase.replaceAll("[0-9.]", "").trim();
+
+        // 좋아요 개수 상위 2개의 리뷰 가져오기
+        // reviewAttributes를 순회하여 좋아요 개수가 가장 많은 리뷰 2개를 가져옴
+        List<Review> reviews = (List<Review>) reviewAttributes.get("reviews");
+        reviews.sort((r1, r2) -> Integer.compare(r2.getLikes().size(), r1.getLikes().size()));
+        List<Review> topReviews = reviews.stream().limit(2).collect(Collectors.toList());
+
+        model.addAttribute("topReviews", topReviews);
 
         model.addAttribute("ratingOnlyStars", onlyStars);
 

@@ -24,29 +24,33 @@
         <div class="popular-reviews">
             <h3><i class="fas fa-thumbs-up"></i> 인기 리뷰</h3>
             <!-- TODO: 백엔드 - 인기 리뷰를 좋아요 수 기준으로 정렬하여 가져와 동적으로 표시 -->
-            <div class="popular-review-cards">
-                <div class="popular-review-card">
+            <div class="popular-review-cards" >
+                <div class="popular-review-card" th:each="topReview : ${topReviews}">
                     <div class="review-content">
-                        <h4>최고의 파스타 맛집!</h4>
-                        <p>트러플 크림 파스타가 정말 일품이에요. 분위기도 좋고 서비스도 친절해요.</p>
+                        <h4 th:text="${topReview.title}"></h4>
+                        <p th:text="${topReview.content}"></p>
+
                         <div class="review-footer">
-                            <span class="reviewer"><i class="fas fa-user"></i> 김맛있다</span>
-                            <span class="likes"><i class="fas fa-thumbs-up"></i> 좋아요 128</span>
+                            <span class="reviewer"><i class="fas fa-user"></i><span th:text="${topReview.reviewer.nickname}"></span></span>
+                            <span class="likes"><i class="fas fa-thumbs-up"></i><span th:text="'좋아요 ' + ${topReview.likes.size()}"></span></span>
                         </div>
                     </div>
-                    <div class="image-placeholder">인기 리뷰 이미지</div>
-                </div>
-                <div class="popular-review-card">
-                    <div class="review-content">
-                        <h4>데이트 코스로 완벽해요</h4>
-                        <p>와인과 스테이크의 조화가 환상적이에요. 연인과 함께 오기 좋은 곳입니다.</p>
-                        <div class="review-footer">
-                            <span class="reviewer"><i class="fas fa-user"></i> 박데이트</span>
-                            <span class="likes"><i class="fas fa-thumbs-up"></i> 좋아요 95</span>
-                        </div>
+                    <div class="image-placeholder" th:each="image, iterStat : ${topReview.reviewImages}" th:if="${iterStat.index == 0}">
+                        <img th:src="@{|https://kr.object.ncloudstorage.com/whiskey-file/${image.imageFile.uuidFileName}|}" alt="Review Image" class="review-image">
                     </div>
-                    <div class="image-placeholder">인기 리뷰 이미지</div>
                 </div>
+
+<!--                <div class="popular-review-card">-->
+<!--                    <div class="review-content">-->
+<!--                        <h4>데이트 코스로 완벽해요</h4>-->
+<!--                        <p>와인과 스테이크의 조화가 환상적이에요. 연인과 함께 오기 좋은 곳입니다.</p>-->
+<!--                        <div class="review-footer">-->
+<!--                            <span class="reviewer"><i class="fas fa-user"></i> 박데이트</span>-->
+<!--                            <span class="likes"><i class="fas fa-thumbs-up"></i> 좋아요 95</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="image-placeholder">인기 리뷰 이미지</div>-->
+<!--                </div>-->
             </div>
         </div>
         <div class="recent-reviews">
@@ -54,7 +58,7 @@
             <!-- TODO: 백엔드 - 최근 리뷰를 날짜순으로 정렬하여 가져와 동적으로 표시 -->
             <div class="review-items" th:each="review : ${reviews}">
                 <div th:replace="fragments/reviewItem :: reviewItem(
-                        title=${review.content},
+                        title=${review.title},
                         content=${review.content},
                         author=${review.reviewer.nickname},
                         date=${#temporals.format(review.createdAt, 'yyyy-MM-dd')},
