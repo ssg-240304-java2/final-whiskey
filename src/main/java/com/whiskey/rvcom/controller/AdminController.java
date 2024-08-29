@@ -12,22 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 public class AdminController {
 
-//    @GetMapping("/adminMain")
-//    public String adminMain(Model model, HttpSession session) {
-//        Member member = (Member) session.getAttribute("member");
-//        if (member == null) {
-//            return "redirect:/login";
-//        }
-//
-//        String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg";
-//        if (member.getProfileImage() != null) {
-//            profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
-//        }
-//
-//        model.addAttribute("profileImageUrl", profileImageUrl);
-//        model.addAttribute("memberName", member.getName());
-//        return "adminMain";
-//    }
 
     @GetMapping("/dashboard")
     public String getDashboard(Model model) {

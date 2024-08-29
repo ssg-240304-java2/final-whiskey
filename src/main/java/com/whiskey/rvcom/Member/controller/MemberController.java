@@ -502,6 +502,26 @@ public class MemberController {
         return "redirect:/mainPage";
     }
 
+    @GetMapping("/adminMain")
+    public String adminMain(Model model, HttpSession session) {
+        Member member = (Member) session.getAttribute("member");
+        if (member == null) {
+            return "redirect:/login";
+        }
+
+        // 프로필 이미지 URL 설정
+        String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg"; // 기본 이미지 URL
+        if (member.getProfileImage() != null) {
+            profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
+        }
+
+        // 모델에 데이터 추가
+        model.addAttribute("profileImageUrl", profileImageUrl);
+        model.addAttribute("memberName", member.getName());
+
+        return "admin/adminMain";  // 리다이렉트 대신 뷰 이름 반환
+    }
+
     private void setSessionAttributes(HttpSession session, Member member) {
         session.setAttribute("member", member);
         session.setAttribute("isAuthenticated", true);
