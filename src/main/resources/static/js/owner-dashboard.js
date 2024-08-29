@@ -5,50 +5,47 @@ document.addEventListener('DOMContentLoaded', function () {
     const contentArea = document.getElementById('content-area');
     const pageTitle = document.getElementById('page-title');
 
-    // 각 사이드바 링크에 클릭 이벤트 리스너 추가
+    function loadFragment(targetId) {
+        fetch(`/fragments/owner/${targetId}`)
+            .then(response => response.text())
+            .then(html => {
+                contentArea.innerHTML = html;
+                // 동적으로 로드된 스크립트 실행
+                const scripts = contentArea.getElementsByTagName('script');
+                Array.from(scripts).forEach(script => {
+                    const newScript = document.createElement('script');
+                    newScript.src = script.src;
+                    document.body.appendChild(newScript);
+                });
+                // 페이지별 초기화 함수 호출
+                if (targetId === 'restaurant-info') {
+                    initRestaurantInfo();
+                } else if (targetId === 'menu-management') {
+                    initMenuManagement();
+                } else if (targetId === 'dashboard') {
+                    initDashboard();
+                }
+            })
+            .catch(error => {
+                console.error('Error loading content:', error);
+                contentArea.innerHTML = '<p>콘텐츠를 불러오는 중 오류가 발생했습니다.</p>';
+            });
+    }
+
+    // 사이드바 링크 클릭 이벤트 수정
     sidebarLinks.forEach(link => {
         link.addEventListener('click', function (e) {
             e.preventDefault();
-
-            // 모든 링크에서 'active' 클래스 제거 후 클릭된 링크에 추가
             sidebarLinks.forEach(l => l.classList.remove('active'));
             this.classList.add('active');
-
-            // 클릭된 링크의 대상 ID와 텍스트 가져오기
             const targetId = this.getAttribute('data-bs-target').substring(1);
             pageTitle.textContent = this.textContent.trim();
-
-            // AJAX를 사용하여 해당 프래그먼트 로드
-            fetch(`/fragments/owner/${targetId}.html`)
-                .then(response => response.text())
-                .then(html => {
-                    contentArea.innerHTML = html;
-                    // 동적으로 로드된 스크립트 실행
-                    const scripts = contentArea.getElementsByTagName('script');
-                    Array.from(scripts).forEach(script => {
-                        const newScript = document.createElement('script');
-                        newScript.src = script.src;
-                        document.body.appendChild(newScript);
-                    });
-                    // 모달 초기화 함수 호출
-                    initializeModals();
-                    // 페이지별 초기화 함수 호출
-                    if (targetId === 'restaurant-info') {
-                        initRestaurantInfo();
-                    } else if (targetId === 'menu-management') {
-                        initMenuManagement();
-                    }
-                    loadRestaurantInfo();
-                })
-                .catch(error => {
-                    console.error('Error loading content:', error);
-                    contentArea.innerHTML = '<p>콘텐츠를 불러오는 중 오류가 발생했습니다.</p>';
-                });
+            loadFragment(targetId);
         });
     });
 
-    // 초기 로드 시 첫 번째 사이드바 링크(대시보드) 클릭
-    sidebarLinks[0].click();
+    // 초기 로드 시 대시보드 프래그먼트 로드
+    loadFragment('dashboard');
 });
 
 function initializeModals() {
@@ -58,10 +55,10 @@ function initializeModals() {
     });
 }
 
-// 페이지별 초기화 함수 예시 (필요에 따라 추가)
+// 대시보드 초기화 함수
 function initDashboard() {
     console.log('Dashboard initialized');
-    // 대시보드 특정 초기화 로직
+    // 대시보드 특정 초기화 로직 (필요한 경우)
 }
 
 function initRestaurantInfo() {
