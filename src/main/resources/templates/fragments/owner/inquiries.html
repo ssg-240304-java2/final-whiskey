@@ -2,11 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
     <div th:fragment="inquiries">
-        <div class="container mt-4">
-             <h2 class="mb-4">문의 내역</h2>
-            
+        <div class="container mt-4">            
             <!-- 문의 목록 테이블 -->
-            <table class="table table-hover">
+            <table class="table table-hover inquiries-table">
                 <thead>
                     <tr>
                         <th>번호</th>
@@ -17,8 +15,6 @@
                         <th>상세보기</th>
                     </tr>
                 </thead>
-
-                <!-- 문의 목록 테이블 -->
                 <tbody id="inquiries-table"></tbody>
             </table>
 

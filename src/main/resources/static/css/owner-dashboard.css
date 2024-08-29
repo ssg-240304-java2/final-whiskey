@@ -12,7 +12,7 @@ body {
     bottom: 0;
     left: 0;
     z-index: 100;
-    padding: 48px 0 0;
+    padding: 0;
     background-color: #252526;
     box-shadow: inset -1px 0 0 rgba(255,255,255,.1);
     transition: all 0.3s;
@@ -61,7 +61,6 @@ body {
     color: #a0a0a0;
 }
 
-/* 로고 스타일 */
 .foodfolio-logo {
     font-family: 'Arial', sans-serif;
     font-weight: bold;
@@ -71,6 +70,14 @@ body {
     letter-spacing: -1px;
     padding: 1rem;
     text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.foodfolio-logo:hover {
+    color: #ff4f4f;
+    text-decoration: none;
 }
 
 /* 메인 콘텐츠 영역 스타일 */
@@ -90,6 +97,33 @@ body {
     .content-wrapper {
         margin-left: 0;
     }
+}
+
+/* 드롭다운 메뉴 스타일 */
+.dropdown-menu {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+}
+
+.dropdown-item { 
+    color: #e0e0e0 !important;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: #3c3c3c;
+    color: #ff6b6b !important; /* 호버 시 색상 변경 */
+}
+
+.dropdown-item i {
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+}
+
+/* 구분선 스타일 */
+.dropdown-divider {
+    border-top: 1px solid #444;
 }
 
 /* 다크 테마 스타일 */
@@ -133,25 +167,52 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
 }
 
-/* 버튼 스타일 */
+/* 빠른 링크 버튼 스타일 */
+.quick-link-btn {
+    margin: 10px;
+    padding: 15px 25px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.quick-link-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.quick-link-btn i {
+    margin-right: 10px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .quick-link-btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
 .btn-primary {
-    background-color: #ff6b6b;
-    border-color: #ff6b6b;
+    background-color: var(--yelp-red);
+    border-color: var(--yelp-red);
 }
 
 .btn-primary:hover {
-    background-color: #ff4f4f;
-    border-color: #ff4f4f;
+    background-color: var(--yelp-red-dark);
+    border-color: var(--yelp-red-dark);
 }
 
-.btn-outline-primary {
-    color: #ff6b6b;
-    border-color: #ff6b6b;
+.btn-secondary {
+    background-color: var(--yelp-blue);
+    border-color: var(--yelp-blue);
 }
 
-.btn-outline-primary:hover {
-    background-color: #ff6b6b;
-    color: #ffffff;
+.btn-secondary:hover {
+    background-color: #3ab1e8;
+    border-color: #3ab1e8;
 }
 
 /* 카드 스타일 */
@@ -200,14 +261,87 @@ body {
     font-size: 1.2rem;
 }
 
-/* 테이블 스타일 */
-.table {
-    color: #e0e0e0;
+/* 문의 내역 테이블 스타일 */
+.inquiries-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.table-hover tbody tr:hover {
-    background-color: #333;
+.inquiries-table th {
+    background-color: #f7f7f7;
+    color: #333;
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #e6e6e6;
 }
+
+.inquiries-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.inquiries-table tr:last-child td {
+    border-bottom: none;
+}
+
+.inquiries-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* 답변 상태 뱃지 스타일 */
+.badge-answered {
+    background-color: #41a700;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+}
+
+.badge-unanswered {
+    background-color: #ff4040;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+}
+
+/* 상세보기 버튼 스타일 */
+.btn-view-inquiry {
+    background-color: #d32323;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.btn-view-inquiry:hover {
+    background-color: #be2020;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 768px) {
+    .inquiries-table {
+        font-size: 0.9em;
+    }
+
+    .inquiries-table th,
+    .inquiries-table td {
+        padding: 8px;
+    }
+
+    .btn-view-inquiry {
+        padding: 4px 8px;
+        font-size: 0.8em;
+    }
+}
+
 
 /* 음식점 정보 폼 스타일 */
 #restaurantInfoForm .form-control[readonly] {
@@ -393,7 +527,7 @@ body {
 /* 버튼 스타일 */
 .btn-primary, .btn-secondary, .btn-info {
     border: none;
-    padding: 4px 8px;
+    padding: 15px 25px;
     font-weight: bold;
     transition: all 0.3s ease;
 }
@@ -420,4 +554,44 @@ body {
 
 .btn-info:hover {
     background-color: #42a5f5;
+}
+
+#sidebar {
+    transition: margin 0.3s ease-in-out;
+}
+
+/* 사이드바 토글 버튼 스타일 */
+#sidebarToggle {
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0;
+}
+
+/* 모바일에서 사이드바 숨김 */
+@media (max-width: 767.98px) {
+    #sidebar {
+        margin-left: -100%;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        width: 100%;
+        max-width: 250px;
+    }
+
+    #sidebar.active {
+        margin-left: 0;
+    }
+
+    .content-wrapper {
+        margin-left: 0;
+    }
+}
+
+/* 데스크톱에서 토글 버튼 숨김 */
+@media (min-width: 768px) {
+    #sidebarToggle {
+        display: none;
+    }
 }
