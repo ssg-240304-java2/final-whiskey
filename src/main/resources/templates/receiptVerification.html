@@ -110,11 +110,11 @@
         }
 
         // 파일 입력 변경 이벤트를 처리합니다.
-        fileInput.addEventListener('change', function() {
+        fileInput.addEventListener('change', async function() {
             handleFiles(this.files);
 
             const file = this.files[0];
-            if(file) uploadFileToServer(file);
+            if(file) await uploadFileToServer(file);
         });
 
         // 파일을 처리하고 미리보기를 표시하는 함수입니다.
@@ -163,10 +163,14 @@
         async function verifyReceipt() {
             try {
                 showLoadingUI(); // 로딩 UI 표시
-                const file = document.getElementById('fileInput').files[0];
+                // const file = document.getElementById('fileInput').files[0];
+
+                const file = dataURLtoFile(preview.src, 'receipt.jpg');
+
                 if (!file) {
                     throw new Error('파일을 선택해주세요.');
                 }
+                // const uuidFileName = await uploadFileToServer(file);
                 const uuidFileName = await uploadFileToServer(file);
                 ocrResponseObject = await ocrProcess(uuidFileName);
 
@@ -375,7 +379,7 @@
         // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
 
         // 캡처 버튼 클릭 이벤트를 처리합니다.
-        captureBtn.addEventListener('click', () => {
+        captureBtn.addEventListener('click', async () => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
@@ -385,7 +389,7 @@
             retakeBtn.style.display = 'inline-block';
 
             // TODO: 
-            verifyBtn.style.display = 'block';
+            // verifyBtn.style.display = 'block';
 
             // 촬영 버튼 클릭 시 '촬영하기' 버튼을 숨김 처리 후
             // '다시 찍기' 버튼을 노출 처리
@@ -395,7 +399,25 @@
             // receiptInfo.style.display = 'block'; // TODO: 이 버튼은 영수증 인증하기 버튼 클릭 시 노출되어야 함
             // TODO: 캡처된 이미지를 서버로 전송하여 OCR 처리를 수행하는 API를 호출해야 합니다.
             // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
+
+            const file = dataURLtoFile(imageDataUrl, 'receipt.jpg');
+            if(file) await uploadFileToServer(file);
+
+            verifyBtn.style.display = 'block';
         });
+
+        // Data URL을 File 객체로 변환하는 함수
+        function dataURLtoFile(dataurl, filename) {
+            const arr = dataurl.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        }
 
         // 재촬영 버튼 클릭 이벤트를 처리합니다.
         retakeBtn.addEventListener('click', () => {
