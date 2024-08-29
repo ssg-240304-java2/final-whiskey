@@ -6,7 +6,8 @@ $(document).ready(function () {
     $(document).on('click', '#post-inquiry', clickInquiryPost);
     $(document).on('click', '#forward-inquiry', clickInquiryForward);
 
-    $('#saveReply').click(saveInquiryReply);
+    // 기존 이벤트 리스너 제거 후 새로 등록
+    $('#saveReply').off('click').on('click', saveInquiryReply);
 });
 
 function loadInquiries(restaurantId, pageNumber) {

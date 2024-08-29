@@ -137,9 +137,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function initializeModals() {
-    const modals = document.querySelectorAll('.modal');
+    const modals = document.querySelectorAll('.modal:not(.initialized)');
     modals.forEach(modal => {
         new bootstrap.Modal(modal);
+        modal.classList.add('initialized');
     });
 }
 
