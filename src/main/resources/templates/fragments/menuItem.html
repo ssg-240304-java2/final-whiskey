@@ -1,7 +1,12 @@
 <!-- src/main/resources/templates/fragments/menuItem.html -->
-<div th:fragment="menuItem(name, price)">
+<div th:fragment="menuItem(name, price, image)">
     <div class="menu-item">
-        <div class="image-placeholder" th:alt="${name}"></div>
+        <div th:if="${image!=null}" class="image-placeholder">
+            <img th:src="${image}" alt="등록된 이미지가 없습니다.">
+        </div>
+        <div th:if="${image==null}" class="image-placeholder">
+            등록된 이미지가 없습니다.
+        </div>
         <h3 th:text="${name}">메뉴 이름</h3>
         <p th:text="${price + '원'}">가격</p>
     </div>
