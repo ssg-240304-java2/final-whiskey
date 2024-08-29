@@ -4,12 +4,8 @@
         <textarea id="inquiryContent" placeholder="이 음식점에 대해 궁금한 점을 물어보세요." rows="4"></textarea>
         <button id="submitInquiry" class="submit-inquiry"><i class="fas fa-paper-plane"></i> 문의 등록</button>
     </div>
-    <div class="recent-inquiries">
-    </div>
-    <div class="inquiry-pagination">
-        <!-- TODO: 백엔드 - 페이지네이션 구현 (전체 문의 수에 따라 페이지 수 계산) -->
-        <button class="prev-page"><i class="fas fa-chevron-left"></i> 이전</button>
-        <span class="current-page">1</span>
-        <button class="next-page">다음 <i class="fas fa-chevron-right"></i></button>
-    </div>
+    <!-- 문의 목록 -->
+    <div class="recent-inquiries"></div>
+    <!-- 문의 페이징 -->
+    <div class="inquiry-pagination" id="pagination-inquiry"></div>
 </div>
