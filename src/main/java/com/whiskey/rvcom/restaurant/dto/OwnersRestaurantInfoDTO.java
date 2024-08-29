@@ -2,6 +2,8 @@ package com.whiskey.rvcom.restaurant.dto;
 
 import lombok.*;
 
+import java.util.Map;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -14,4 +16,5 @@ public class OwnersRestaurantInfoDTO {
     private String category;
 
     private String imageUrl;
+    private Map<String, String> operatingHours;
 }

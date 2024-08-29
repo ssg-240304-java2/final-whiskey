@@ -87,7 +87,7 @@ function initializeMenuManagement() {
         let paginatedMenus = [];
         for (let i = start; i < start + itemsPerPage; i++) {
             if (menus[i] !== undefined) {
-                menus[i].image = menus[i].image != null ? menus[i].image : 'https://via.placeholder.com/150';
+                menus[i].image = menus[i].image != null ? "https://kr.object.ncloudstorage.com/whiskey-file/" + menus[i].image.uuidFileName : 'https://via.placeholder.com/150';
                 paginatedMenus.push(menus[i]);
             }
         }
