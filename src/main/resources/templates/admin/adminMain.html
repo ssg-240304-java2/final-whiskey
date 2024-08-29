@@ -22,13 +22,17 @@
     <script th:src="@{/js/admin/restaurant-management.js}"></script>
 </head>
 <body class="bg-dark">
+    <!-- 사이드바 토글 버튼 -->
+    <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
     <div class="container-fluid">
         <div class="row">
             <!-- 사이드바 -->
             <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
                 <div class="position-sticky pt-3">
                     <div class="sidebar-header mb-3">
-                        <h3 class="text-center foodfolio-logo">FoodFolio</h3>
+                        <h3 class="text-center foodfolio-logo" id="foodfolio-logo">FoodFolio</h3>
                     </div>
                     <ul class="nav flex-column">
                         <li class="nav-item">
@@ -64,23 +68,38 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <!-- 상단 바 -->
                 <div class="navbar navbar-dark bg-dark p-3 border-bottom">
-                    <div class="d-flex justify-content-between w-100">
-                        <h1 class="h2" id="page-title">관리자 대시보드</h1>
+                    <div class="d-flex justify-content-between w-100 align-items-center">
+                        <h1 class="h2 mb-0" id="page-title">관리자 대시보드</h1>
                         <div class="d-flex align-items-center">
+                            <!-- 빠른 액세스 메뉴 드롭다운 -->
+                            <div class="dropdown me-3">
+                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="quickAccessDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-bolt"></i> 빠른 액세스
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="quickAccessDropdown">
+                                    <li><a class="dropdown-item" href="#" data-target="user-management"><i class="fas fa-users"></i> 사용자 관리</a></li>
+                                    <li><a class="dropdown-item" href="#" data-target="report-management"><i class="fas fa-flag"></i> 신고 관리</a></li>
+                                    <li><a class="dropdown-item" href="#" data-target="restaurant-management"><i class="fas fa-utensils"></i> 입점 관리</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#" data-target="statistics"><i class="fas fa-chart-bar"></i> 통계</a></li>
+                                </ul>
+                            </div>
+                            <!-- 관리자 프로필 드롭다운 -->
                             <div class="dropdown">
                                 <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
                                     <strong>관리자</strong>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser1">
-                                    <li><a class="dropdown-item" href="#">설정</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> 설정</a></li>
                                     <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> 로그아웃</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <!-- 콘텐츠 영역 -->
                 <div id="content-area">
                     <!-- 대시보드 콘텐츠 -->

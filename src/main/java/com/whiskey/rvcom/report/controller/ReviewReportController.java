@@ -50,7 +50,7 @@ public class ReviewReportController {
     }
 
     /***
-     * 리뷰신고 전체 조회
+     * 리뷰신고 처리전 조회
      * @param page
      * @param sortOrder
      * @return
@@ -59,7 +59,7 @@ public class ReviewReportController {
     @ResponseBody
     public Page<ReviewReport> getReviewReports(@RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "asc") String sortOrder) {
-        return reviewReportService.getAllBeforeReviewReports(page, sortOrder);
+        return reviewReportService.getBeforeReviewReports(page, sortOrder);
     }
 
     /***

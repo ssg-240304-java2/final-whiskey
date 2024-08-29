@@ -88,11 +88,10 @@ public class ReviewController {
     // 리뷰 좋아요 추가 요청
     @PostMapping("/reviewlike/add")
     @ResponseBody
-    public ResponseEntity<Long> addLikeToReview(@RequestParam("reviewId") Long reviewNo) { // need. 좋아요 처리할 사용자 정보 추가 필요
+    public ResponseEntity<Long> addLikeToReview(@RequestParam("reviewId") Long reviewNo, HttpSession session) { // need. 좋아요 처리할 사용자 정보 추가 필요
         Review dest = reviewService.getReviewById(reviewNo);
+        Member member = (Member) session.getAttribute("member");
 
-        Member member = new Member();  // block. 로그인한 사용자 정보로 대체
-        member.setId(43L); // 임시로 아무 ID나 넣음
         ReviewLike reviewLike = reviewLikeService.getReviewLikeByReviewAndMember(dest, member);
 
         // 이미 해당 리뷰에 좋아요를 누른 경우 좋아요 취소(토글처리)

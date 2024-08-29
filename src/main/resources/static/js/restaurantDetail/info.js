@@ -1,7 +1,6 @@
 RestaurantDetail.initInfo = function() {
     initMap();
     setupViewFullMenuButton();
-    setupRestaurantReportButton();
 };
 
 function initMap() {
@@ -15,16 +14,6 @@ function setupViewFullMenuButton() {
         viewFullMenuBtn.addEventListener('click', function() {
             console.log('전체 메뉴 보기');
             // 전체 메뉴 모달 표시 로직
-        });
-    }
-}
-
-function setupRestaurantReportButton() {
-    const restaurantReportBtn = document.getElementById('restaurantReport');
-    if (restaurantReportBtn) {
-        restaurantReportBtn.addEventListener('click', function() {
-            console.log('레스토랑 신고하기');
-            // 신고 모달 표시 로직
         });
     }
 }

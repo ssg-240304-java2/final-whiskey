@@ -11,7 +11,7 @@
 <body class="register-page">
 <div class="register-container">
     <div class="image-section">
-        <img src="/images/logo.png" alt="Foodfolio 로고" class="logo">
+        <img src="/images/login_register_logo.png" alt="Foodfolio 로고" class="logo">
     </div>
     <div class="form-section">
         <h1>Foodfolio 회원가입</h1>
@@ -23,8 +23,17 @@
             </div>
             <span id="loginId-check-message" style="color:red; display:none;"></span>
 
-            <!-- 이메일 필드 -->
-            <input type="email" id="email" name="email" placeholder="이메일" required>
+            <!-- 이메일 입력 및 인증 코드 발송 -->
+            <div class="email-container">
+                <input type="email" id="email" name="email" placeholder="이메일" required>
+                <button type="button" id="emailVerifyBtn">인증 코드 발송</button>
+            </div>
+
+            <!-- 인증 코드 입력 및 코드 확인 -->
+            <div class="verification-code-container">
+                <input type="text" id="emailVerificationCode" name="emailVerificationCode" placeholder="인증 코드" required>
+                <button type="button" id="verifyCodeBtn">코드 확인</button>
+            </div>
 
             <!-- 나머지 필드들 -->
             <input type="text" name="name" placeholder="이름" required>
@@ -39,6 +48,6 @@
         </div>
     </div>
 </div>
-<script src="/js/register.js"></script> <!-- 분리된 JavaScript 파일을 로드 -->
+<script src="/js/register.js"></script>
 </body>
 </html>

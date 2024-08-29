@@ -25,10 +25,10 @@
 <div class="container-fluid">
     <div class="row">
         <!-- 사이드바 -->
-        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar">
             <div class="position-sticky pt-3">
                 <div class="sidebar-header mb-3">
-                    <h3 class="text-center foodfolio-logo">FoodFolio</h3>
+                    <a href="#" class="text-center foodfolio-logo" data-bs-target="#dashboard">FoodFolio</a>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -66,24 +66,36 @@
             <!-- 상단 바 -->
             <div class="navbar navbar-dark bg-dark p-3 border-bottom">
                 <div class="d-flex justify-content-between w-100">
+                    <!-- 사이드바 토글 버튼 -->
+                    <button class="btn btn-link d-md-none mr-3" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <h1 class="h2" id="page-title">대시보드</h1>
                     <div class="d-flex align-items-center">
                         <div class="me-3">
                             <i class="fas fa-bell"></i>
                         </div>
                         <div class="dropdown">
-                            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a href="#"
+                               class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                               id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                                 <!-- 여기에서 전달된 프로필 이미지와 이름 사용 -->
-                                <img th:src="${profileImageUrl}" alt="Profile Image" width="32" height="32" class="rounded-circle me-2">
+                                <img th:src="${profileImageUrl}" alt="Profile Image" width="32" height="32"
+                                     class="rounded-circle me-2">
                                 <strong th:text="${memberName}">관리자명</strong>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser1">
+                            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end text-small shadow"
+                                aria-labelledby="dropdownUser1">
+                                <li><a class="dropdown-item" href="/"></i> 메인 페이지</a></li>
                                 <li><a class="dropdown-item" href="/mypage">프로필</a></li>
-                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
                                 <li><a class="dropdown-item" href="/logout">로그아웃</a></li>
                             </ul>
                         </div>
                     </div>
+                    <input hidden="hidden" id="restaurantId" type="text" th:value="${restaurantId}">
                 </div>
             </div>
 
@@ -93,7 +105,8 @@
                 <div id="dashboard" class="content-section" th:replace="fragments/owner/dashboard :: dashboard"></div>
 
                 <!-- 음식점 정보 콘텐츠 -->
-                <div id="restaurant-info" class="content-section" th:replace="fragments/owner/restaurant-info :: restaurant-info"></div>
+                <div id="restaurant-info" class="content-section"
+                     th:replace="fragments/owner/restaurant-info :: restaurant-info"></div>
 
                 <!-- 문의 내역 콘텐츠 -->
                 <div id="inquiries" class="content-section" th:replace="fragments/owner/inquiries :: inquiries"></div>
@@ -102,7 +115,8 @@
                 <div id="notices" class="content-section" th:replace="fragments/owner/notices :: notices"></div>
 
                 <!-- 메뉴 관리 콘텐츠 -->
-                <div id="menu-management" class="content-section" th:replace="fragments/owner/menu-management :: menu-management"></div>
+                <div id="menu-management" class="content-section"
+                     th:replace="fragments/owner/menu-management :: menu-management"></div>
             </div>
         </main>
     </div>
@@ -137,17 +151,6 @@
                     .catch(error => console.error('Error loading fragment:', error));
             });
         });
-
-        // 페이지가 로드될 때 기본적으로 첫 번째 프래그먼트를 로드하고, 해당 탭을 활성화합니다.
-        const defaultFragment = sidebarLinks[0].getAttribute("data-bs-target").substring(1);
-        sidebarLinks[0].classList.add("active");
-        fetch(`/fragments/owner/${defaultFragment}`)
-            .then(response => response.text())
-            .then(html => {
-                document.querySelector("#content-area").innerHTML = html;
-            })
-            .catch(error => console.error('Error loading fragment:', error));
     });
-
 </script>
 </html>
