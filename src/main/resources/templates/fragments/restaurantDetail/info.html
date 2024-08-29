@@ -8,7 +8,7 @@
         <h2><i class="fas fa-utensils"></i> 메뉴</h2>
         <div th:if="${!menuList.isEmpty()}" class="menu-items-container">
             <div class="menu-items" th:each="menu: ${menuList}">
-                <div th:replace="fragments/menuItem :: menuItem(${menu.getName()}, ${menu.getPrice()})"></div>
+                <div th:replace="fragments/menuItem :: menuItem(name=${menu.getName()}, price=${menu.getPrice()}, image=${menu.getImage()!=null?'https://kr.object.ncloudstorage.com/whiskey-file/'+menu.getImage().getUuidFileName():null})"></div>
             </div>
         </div>
         <div th:if="${menuList.isEmpty()}" class="menu-items-container">
@@ -16,6 +16,7 @@
                 <p>영업점에서 등록한 메뉴가 없습니다.</p>
             </div>
         </div>
+        <!--        <button th:if="${!menuList.isEmpty()}" class="view-full-menu"><i class="fas fa-list"></i> 전체 메뉴 보기</button>-->
     </div>
 
     <div class="tab-divider"></div>
