@@ -21,6 +21,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +68,41 @@ public class MemberController {
         this.favoriteService = favoriteService;
         this.restaurantService = restaurantService;
     }
+
+    @GetMapping("/admin/user-management")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> listMembersData(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                               @RequestParam(value = "size", defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        // 각각의 로그인 타입에 따라 데이터를 가져옵니다.
+        Page<Member> basicMembers = memberManagementService.getMembers(pageable);
+        Page<Member> naverMembers = socialLoginService.getMembers(pageable, LoginType.NAVER);
+        Page<Member> googleMembers = socialLoginService.getMembers(pageable, LoginType.GOOGLE);
+
+        // 모든 데이터를 합칩니다.
+        List<Member> combinedMembers = new ArrayList<>();
+        combinedMembers.addAll(basicMembers.getContent());
+        combinedMembers.addAll(naverMembers.getContent());
+        combinedMembers.addAll(googleMembers.getContent());
+
+        // 전체 페이지 수와 아이템 수를 계산합니다.
+        int totalElements = (int) (basicMembers.getTotalElements() + naverMembers.getTotalElements() + googleMembers.getTotalElements());
+        Page<Member> combinedPage = new PageImpl<>(combinedMembers, pageable, totalElements);
+
+        // 응답을 준비합니다.
+        Map<String, Object> response = new HashMap<>();
+        response.put("content", combinedPage.getContent());
+        response.put("totalPages", combinedPage.getTotalPages());
+        response.put("totalElements", combinedPage.getTotalElements());
+        response.put("number", combinedPage.getNumber());
+        response.put("size", combinedPage.getSize());
+
+        return ResponseEntity.ok(response);
+    }
+
+
+
 
     @GetMapping("/login")
     public String loginPage(HttpSession session) {
@@ -110,12 +150,14 @@ public class MemberController {
     }
 
     @PostMapping("/mypage/remove-favorite")
-    @ResponseBody
-    public ResponseEntity<String> removeFavorite(@RequestParam("restaurantId") Long restaurantId, HttpSession session) {
+    public String removeFavorite(@RequestParam("restaurantId") Long restaurantId,
+                                 @RequestParam(value = "favoritePage", defaultValue = "0") int favoritePage,
+                                 @RequestParam(value = "favoriteSize", defaultValue = "10") int favoriteSize,
+                                 HttpSession session, Model model) {
         Member member = (Member) session.getAttribute("member");
 
         if (member == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+            return "redirect:/login";
         }
 
         try {
@@ -124,14 +166,28 @@ public class MemberController {
 
             // 조회된 Restaurant 객체를 removeFavorite 메서드에 전달
             favoriteService.removeFavorite(member, restaurant);
-            return ResponseEntity.ok("즐겨찾기가 해제되었습니다.");
+
+            // 현재 페이지의 즐겨찾기 아이템이 모두 제거된 경우
+            List<Favorite> favorites = favoriteService.getFavoritesByMember(member);
+            int totalPages = (int) Math.ceil((double) favorites.size() / favoriteSize);
+
+            // 삭제 후 페이지가 없어지는 경우 이전 페이지로 이동
+            if (favoritePage >= totalPages && favoritePage > 0) {
+                model.addAttribute("message", "즐겨찾기가 해제되었습니다.");
+                return "redirect:/mypage?favoritePage=" + (favoritePage - 1) + "&favoriteSize=" + favoriteSize + "&activeTab=favorite";
+            }
+
+            // 삭제 후 현재 페이지로 리다이렉트
+            model.addAttribute("message", "즐겨찾기가 해제되었습니다.");
+            return "redirect:/mypage?favoritePage=" + favoritePage + "&favoriteSize=" + favoriteSize + "&activeTab=favorite";
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 레스토랑을 찾을 수 없습니다.");
+            model.addAttribute("error", "해당 레스토랑을 찾을 수 없습니다.");
+            return "mypage";
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("즐겨찾기 해제 중 오류가 발생했습니다.");
+            model.addAttribute("error", "즐겨찾기 해제 중 오류가 발생했습니다.");
+            return "mypage";
         }
     }
-
 
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model,
@@ -228,7 +284,7 @@ public class MemberController {
         }
 
         // 이메일 인증 코드 검증
-        String url = String.format("https://localhost:8080/api/redis/get?key=%s", email);
+        String url = String.format("https://web.dokalab.site:8084/api/redis/get?key=%s", email);
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         if (response.getStatusCode() != HttpStatus.OK || !response.getBody().equals(verificationCode)) {
             model.addAttribute("error", "이메일 인증에 실패했습니다. 올바른 인증 코드를 입력해주세요.");
@@ -444,6 +500,26 @@ public class MemberController {
         log.info("Member {} has deactivated their account.", member.getLoginId());
 
         return "redirect:/mainPage";
+    }
+
+    @GetMapping("/adminMain")
+    public String adminMain(Model model, HttpSession session) {
+        Member member = (Member) session.getAttribute("member");
+        if (member == null) {
+            return "redirect:/login";
+        }
+
+        // 프로필 이미지 URL 설정
+        String profileImageUrl = "https://i.kym-cdn.com/entries/icons/facebook/000/049/273/cover11.jpg"; // 기본 이미지 URL
+        if (member.getProfileImage() != null) {
+            profileImageUrl = ImagePathParser.parse(member.getProfileImage().getUuidFileName());
+        }
+
+        // 모델에 데이터 추가
+        model.addAttribute("profileImageUrl", profileImageUrl);
+        model.addAttribute("memberName", member.getName());
+
+        return "admin/adminMain";  // 리다이렉트 대신 뷰 이름 반환
     }
 
     private void setSessionAttributes(HttpSession session, Member member) {

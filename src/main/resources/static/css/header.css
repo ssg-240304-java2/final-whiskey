@@ -71,27 +71,47 @@ header {
     background-color: #ff1a1a;
 }
 
-/* 내비게이션 링크 스타일 */
-nav {
-    display: flex;
+/* 네비게이션 버튼 스타일 */
+.nav-btn {
+    display: inline-flex;
     align-items: center;
+    padding: 8px 16px;
+    margin-left: 10px;
+    background-color: #f5f5f5;
+    color: #333;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
 }
 
-nav a {
-    color: #333;
-    text-decoration: none;
-    margin-left: 20px;
-    font-size: 14px;
-    transition: color 0.3s ease;
-    white-space: nowrap;
+.nav-btn:hover {
+    background-color: #d32323;
+    color: #ffffff;
+}
+
+.nav-btn i {
+    margin-right: 8px;
+}
+
+/* 반응형 디자인 수정 */
+@media (max-width: 768px) {
+    nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-btn {
+        margin: 5px;
+        font-size: 12px;
+        padding: 6px 12px;
+    }
 }
 
 /* 내비게이션 링크 호버 효과 */
 nav a:hover {
     color: #0073bb;
 }
-
-/* 기존 코드 유지 */
 
 .logo-link {
     display: flex;
@@ -133,13 +153,5 @@ nav a:hover {
     .search-bar {
         width: 100%;
         margin: 0 0 15px 0;
-    }
-
-    nav {
-        justify-content: center;
-    }
-
-    nav a {
-        margin: 0 10px;
     }
 }

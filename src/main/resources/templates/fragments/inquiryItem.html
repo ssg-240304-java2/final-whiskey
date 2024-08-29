@@ -1,9 +1,6 @@
-<!-- src/main/resources/templates/fragments/inquiryItem.html -->
 <div th:fragment="inquiryItem(inquiry)">
     <div class="inquiry-item">
         <div class="inquiry-header">
-            <!-- 이미지 사용 예정 -->
-<!--            <img src="https://via.placeholder.com/40" alt="사용자 프로필" class="user-avatar">-->
             <div class="inquiry-user-info">
                 <span class="inquiry-user" th:text="${inquiry.writer}">작성자 이름</span>
             </div>
@@ -14,11 +11,15 @@
             <button type="button" class="btn btn-danger delete-inquiry" th:data-inquiry-id="${inquiry.id}">삭제</button>
         </div>
         <div class="inquiry-answer" th:if="${inquiry.reply != null}">
-            <p class="answer-text" th:text="${inquiry.reply.content}">답변 내용</p>
-            <p class="answer-meta">
-                <span class="answer-date"
-                      th:text="${#dates.format(inquiry.reply.createdAt, 'yyyy-MM-dd HH:mm')}">답변 날짜</span>
-            </p>
+            <div class="inquiry-answer-info">
+                <span class="answer-owner">점주</span>
+            </div>
+            <div class="inquiry-answer-content">
+                <p class="answer-text" th:text="${inquiry.reply.content}">답변 내용</p>
+                <p class="answer-meta">
+                    <span class="answer-date" th:text="${#dates.format(inquiry.reply.createdAt, 'yyyy-MM-dd HH:mm')}">답변 날짜</span>
+                </p>
+            </div>
         </div>
     </div>
 </div>

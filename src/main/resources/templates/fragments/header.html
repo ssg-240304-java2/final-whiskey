@@ -21,15 +21,27 @@
                 <button id="search-btn" onclick="searchRestaurant()"><i class="fas fa-search"></i> 검색</button>
             </div>
             <nav>
-                <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/login">로그인</a>
-                <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/register_basic">회원가입</a>
-
-                <a th:if="${isAuthenticated}" href="/logout">로그아웃</a>
-                <a th:if="${isAuthenticated} and ${userRole != 'ADMIN'}" href="/mypage">마이페이지</a>
-
-                <a th:if="${isAuthenticated} and ${userRole == 'USER'}" href="/businessregister/register-store">입점 신청</a>
-                <a th:if="${isAuthenticated} and ${userRole == 'OWNER'}" href="/owner-dashboard">점주 페이지</a>
-                <a th:if="${isAuthenticated} and ${userRole == 'ADMIN'}" href="/adminMain">관리자 페이지</a>
+                <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/login" class="nav-btn">
+                    <i class="fas fa-sign-in-alt"></i> 로그인
+                </a>
+                <a th:if="${isAuthenticated == null || !isAuthenticated}" href="/register_basic" class="nav-btn">
+                    <i class="fas fa-user-plus"></i> 회원가입
+                </a>
+                <a th:if="${isAuthenticated}" href="/logout" class="nav-btn">
+                    <i class="fas fa-sign-out-alt"></i> 로그아웃
+                </a>
+                <a th:if="${isAuthenticated} and ${userRole != 'ADMIN'}" href="/mypage" class="nav-btn">
+                    <i class="fas fa-user"></i> 마이페이지
+                </a>
+                <a th:if="${isAuthenticated} and ${userRole == 'USER'}" href="/businessregister/register-store" class="nav-btn">
+                    <i class="fas fa-store"></i> 입점 신청
+                </a>
+                <a th:if="${isAuthenticated} and ${userRole == 'OWNER'}" href="/owner-dashboard" class="nav-btn">
+                    <i class="fas fa-chart-line"></i> 점주 페이지
+                </a>
+                <a th:if="${isAuthenticated} and ${userRole == 'ADMIN'}" href="/adminMain" class="nav-btn">
+                    <i class="fas fa-cogs"></i> 관리자 페이지
+                </a>
             </nav>
         </div>
     </div>

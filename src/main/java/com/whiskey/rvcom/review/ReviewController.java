@@ -1,23 +1,35 @@
 package com.whiskey.rvcom.review;
 
+import com.whiskey.libs.file.FileNameGroup;
+import com.whiskey.rvcom.ImageFile.ImageFileService;
 import com.whiskey.rvcom.entity.member.Member;
-import com.whiskey.rvcom.entity.restaurant.Restaurant;
+import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.review.*;
 import com.whiskey.rvcom.repository.MemberRepository;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
+import com.whiskey.rvcom.review.dto.ReviewDTO;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
-//@RequestMapping("/restaurant/review")
+@RequestMapping("/review")
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewController {
+    
+    private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
+
     private final RestaurantService restaurantService;
 //    private final RestaurantRepository restaurantRepository;    // need. 서비스 모듈로 교체 필요(업요전달)
 
@@ -26,6 +38,10 @@ public class ReviewController {
     private final ReviewLikeService reviewLikeService;
     private final ReviewImageService reviewImageService;
     private final MemberRepository memberRepository;
+    private final ReceiptService receiptService;
+
+    @Autowired
+    private ImageFileService imageFileService;
 
     // use path variable
     // 리뷰 목록 조회 요청
@@ -90,4 +106,181 @@ public class ReviewController {
 
         return ResponseEntity.ok(reviewLikeService.getReviewLikeCount(dest));
     }
+
+    // let submitFormData = new FormData();
+    //            submitFormData.append('title', document.getElementById('title').value);
+    //            submitFormData.append('content', document.getElementById('content').value);
+    //            submitFormData.append('rating', rating);
+    //            submitFormData.append('images', imageFileIdsAsString);
+    //
+    //            $.ajax({
+    //                url: "review/saveReview",
+    //                type: "POST",
+    //                data: submitFormData,
+    //                processData: false,
+    //                contentType: false,
+    //                success: function (data) {
+    //                    alert("리뷰가 성공적으로 등록되었습니다.");
+    //                    window.location.href = data.redirectUrl;
+    //                },
+    //                error: function (error) {
+    //                    console.log("리뷰 등록 오류 : ", error);
+    //                    alert("리뷰 등록 중 오류가 발생했습니다.");
+    //                },
+    //            })
+    @PostMapping("/saveReview")
+    public void saveReview(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam("rating") int rating,
+            @RequestParam("images") String imageFileIds,
+            @RequestParam("restaurantId") Long restaurantId,
+            @RequestParam("receiptDataId") Long receiptDataId,
+            HttpSession session
+    ) {
+        System.out.println("리뷰 저장 요청 받음");
+
+        System.out.println("title: " + title);
+        System.out.println("content: " + content);
+        System.out.println("rating: " + rating);
+        System.out.println("images: " + imageFileIds);
+        System.out.println("restaurantId: " + restaurantId);
+        System.out.println("receiptDataId: " + receiptDataId);
+
+        List<Long> imageFileIdList = Arrays.stream(imageFileIds.split(" "))
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+
+        System.out.println("imageFileIdList: " + imageFileIdList);
+
+        Review destReview = new Review();
+        destReview.setTitle(title);
+        destReview.setContent(content);
+//        destReview.setRating(rating); int -> Rating Enum
+//        destReview.setRating(Rating.valueOf(rating));
+        destReview.setReviewer((Member) session.getAttribute("member"));
+        destReview.setRestaurant(restaurantService.getRestaurantById(restaurantId));
+        destReview.setReceiptData(receiptService.getReceipt(receiptDataId));
+//        destReview.setRating(Rating.valueOf(rating));
+        // rating은 반드시 1~5사이의 정수이며 Rating ENum타입으로 변환되어야 함
+        switch(rating) {
+            case 1:
+                destReview.setRating(Rating.ONE_STAR);
+                break;
+            case 2:
+                destReview.setRating(Rating.TWO_STAR);
+                break;
+            case 3:
+                destReview.setRating(Rating.THREE_STAR);
+                break;
+            case 4:
+                destReview.setRating(Rating.FOUR_STAR);
+                break;
+            case 5:
+                destReview.setRating(Rating.FIVE_STAR);
+                break;
+            default:
+                destReview.setRating(Rating.ONE_STAR);
+        }
+
+//        destReview.getReviewImages().add()
+//        reviewImageService.getReviewImageById(1L);
+//        imageFileIdList.forEach(imageFileId -> {
+//            ImageFile imageFile = imageFileService.getImageFile(imageFileId);
+//            ReviewImage reviewImage = new ReviewImage();
+//            destReview.getReviewImages().add(reviewImage);
+//        });
+        reviewService.saveReview(destReview);
+
+//        ReviewImage reviewImage = new ReviewImage();
+//        reviewImage.setReview(destReview);
+        List<ReviewImage> reviewImages = new ArrayList<>();
+        for(var imageId : imageFileIdList) {
+            ImageFile imageFile = imageFileService.getImageFile(imageId);
+            ReviewImage reviewImage = new ReviewImage();
+            reviewImage.setImageFile(imageFile);
+            reviewImage.setReview(destReview);
+
+            reviewImages.add(reviewImage);
+        }
+
+        destReview.setReviewImages(reviewImages);
+
+        reviewService.saveReview(destReview);
+    }
+
+//    @PostMapping("/save")
+//    @ResponseBody
+//    public ResponseEntity<?> saveReview(@ModelAttribute ReviewDTO reviewDTO,
+//                                        @RequestParam("images") List<MultipartFile> images,
+//                                        HttpSession session) {
+//        log.info("Received request to save review: {}", reviewDTO);
+//        try {
+//            logger.info("Received reviewDTO: {}", reviewDTO);
+//            // receiptDataId 확인
+//            if (reviewDTO.getReceiptDataId() == 0) {
+//                return ResponseEntity.badRequest().body(Map.of("success", false, "message", "영수증 데이터 ID가 유효하지 않습니다."));
+//            }
+//            // 세션에서 사용자 정보 가져오기
+//            Member member = (Member) session.getAttribute("member");
+//            if (member == null) {
+//                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                        .body(Map.of("success", false, "message", "로그인이 필요합니다."));
+//            }
+//
+//            // images에서 항목을 하나씩 꺼내와 파일을 ncp에 업로드 수행
+//            List<FileNameGroup> uploadedFiles = new ArrayList<>();
+//            for (MultipartFile image : images) {
+//                FileNameGroup fileNameGroup = fileUploader.upload(image);
+//                uploadedFiles.add(fileNameGroup);
+//            }
+//
+//            // FileUpload 클래스로 업로드를 하면 FileNameGroup이 하나씩 반환된다.
+//            // 1. 업로드 수행 후 파일 이름 객체를 가져와 saveFileName에 저장
+//            List<String> savedFileNames = uploadedFiles.stream()
+//                    .map(FileNameGroup::getSaveFileName)
+//                    .collect(Collectors.toList());
+//
+//            // 2. 업로드 수행 후 파일 이름 객체를 가지고 ImageFile 타입의 엔티티를 각각 생성하여 데이터베이스에 저장
+//            List<ImageFile> imageFiles = new ArrayList<>();
+//            for (FileNameGroup fileNameGroup : uploadedFiles) {
+//                ImageFile imageFile = new ImageFile();
+//                imageFile.setOriginalFileName(fileNameGroup.getOriginalFileName());
+//                imageFile.setUuidFileName(fileNameGroup.getUuidFileName());
+//                imageFiles.add(imageFileService.saveImageFile(imageFile));
+//            }
+//
+//            // 3. 저장된 ImageFile 엔티티를 ReviewImage 엔티티 리스트로만 만듦
+//            List<ReviewImage> reviewImages = imageFiles.stream()
+//                    .map(imageFile -> {
+//                        ReviewImage reviewImage = new ReviewImage();
+//                        reviewImage.setImageFile(imageFile);
+//                        return reviewImage;
+//                    })
+//                    .collect(Collectors.toList());
+//
+//            // 리뷰 엔티티 객체 생성
+//            Review review = new Review();
+//            review.setRating(reviewDTO.getRating());
+//            review.setContent(reviewDTO.getContent());
+//            review.setReviewer(member);
+//            review.setRestaurant(restaurantService.getRestaurantById(reviewDTO.getRestaurantId()));
+//            review.setReceiptData(receiptService.getReceipt(reviewDTO.getReceiptDataId()));
+//            review.setReviewImages(reviewImages);
+//
+//            // 리뷰 저장 로직 호출
+//            // Review savedReview = reviewService.saveReview(reviewDTO, images, member);
+//            Review savedReview = reviewService.saveReview(new Review());
+//
+//            // 리다이렉트 URL 생성
+//            String redirectUrl = "/restaurant/" + savedReview.getRestaurant().getId() + "#reviews";
+//
+//            return ResponseEntity.ok(Map.of("success", true, "redirectUrl", redirectUrl));
+//        } catch (Exception e) {
+//            logger.error("리뷰 저장 중 오류 발생", e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(Map.of("success", false, "message", e.getMessage()));
+//        }
+//    }
+
 }

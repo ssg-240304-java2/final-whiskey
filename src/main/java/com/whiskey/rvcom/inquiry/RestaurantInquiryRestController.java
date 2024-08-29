@@ -45,10 +45,24 @@ public class RestaurantInquiryRestController {
         return inquiryService.getPagedRestaurantInquiries(restaurantId, pageRequest);
     }
 
-    // TODO: 점주페이지 문의글 상세보기
+    /**
+     * 문의 상세 보기
+     * @param inquiryId
+     * @return 문의글 상세 보기
+     */
     @GetMapping("/restaurant/{inquiryId}/inquiry")
     public RestaurantInquiryResponseDTO findById(@PathVariable Long inquiryId) {
         return inquiryService.findById(inquiryId);
+    }
+
+    /**
+     * 미답변 문의글 수 조회
+     * @param restaurantId
+     * @return 미답변 문의글 수
+     */
+    @GetMapping("/restaurant/{restaurantId}/inquiries/unanswered-count")
+    public ResponseEntity<Integer> getUnansweredInquiryCount(@PathVariable Long restaurantId) {
+        return ResponseEntity.ok(inquiryService.getUnansweredInquiryCount(restaurantId));
     }
 
     /**

@@ -31,12 +31,12 @@
                 </div>
             </div>
         </div>
+        <!-- 실제 미답변 문의 수 데이터 연동 -->
         <div class="col-md-3 mb-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">미답변 문의</h5>
-                    <p class="card-text">3건</p>
-                    <!-- TODO: 실제 미답변 문의 수 데이터 연동 -->
+                    <p class="card-text unansweredInquiryCount">0건</p>
                 </div>
             </div>
         </div>
@@ -82,16 +82,33 @@
         </div>
     </div>
 
-    <!-- 빠른 링크 -->
+    <!-- 빠른 링크 섹션 -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">빠른 링크</h5>
-                    <div class="d-flex justify-content-around">
-                        <a href="#" class="btn btn-primary">리뷰 페이지 보기</a>
-                        <a href="#" class="btn btn-secondary">내 음식점 정보</a>
-                        <a href="#" class="btn btn-info">미답변 문의 관리</a>
+                    <div class="d-flex justify-content-around flex-wrap">
+                        <!-- 대시보드 링크 -->
+                        <a href="#" class="btn btn-primary quick-link-btn" data-bs-target="dashboard">
+                            <i class="fas fa-home mr-2"></i> 대시보드
+                        </a>
+                        <!-- 음식점 정보 링크 -->
+                        <a href="#" class="btn btn-secondary quick-link-btn" data-bs-target="restaurant-info">
+                            <i class="fas fa-utensils mr-2"></i> 음식점 정보
+                        </a>
+                        <!-- 문의 내역 링크 -->
+                        <a href="#" class="btn btn-info quick-link-btn" data-bs-target="inquiries">
+                            <i class="fas fa-question-circle mr-2"></i> 문의 내역
+                        </a>
+                        <!-- 공지사항 링크 -->
+                        <a href="#" class="btn btn-warning quick-link-btn" data-bs-target="notices">
+                            <i class="fas fa-bullhorn mr-2"></i> 공지사항
+                        </a>
+                        <!-- 메뉴 관리 링크 -->
+                        <a href="#" class="btn btn-success quick-link-btn" data-bs-target="menu-management">
+                            <i class="fas fa-list mr-2"></i> 메뉴 관리
+                        </a>
                     </div>
                 </div>
             </div>
