@@ -36,4 +36,13 @@ public interface RestaurantInquiryRepository extends JpaRepository<RestaurantInq
     Optional<RestaurantInquiry> findByReplyId(Long replyId);
 
     Optional<RestaurantInquiry> findByContent(String content);
+
+    @Query("""
+            select count(i)
+            from RestaurantInquiry i
+            where i.restaurant.id = :restaurantId
+            and i.reply is null
+            and i.deletedAt is null
+            """)
+    int countUnansweredInquiries(Long restaurantId);
 }
