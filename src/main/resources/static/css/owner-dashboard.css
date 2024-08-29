@@ -261,14 +261,87 @@ body {
     font-size: 1.2rem;
 }
 
-/* 테이블 스타일 */
-.table {
-    color: #e0e0e0;
+/* 문의 내역 테이블 스타일 */
+.inquiries-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
-.table-hover tbody tr:hover {
-    background-color: #333;
+.inquiries-table th {
+    background-color: #f7f7f7;
+    color: #333;
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid #e6e6e6;
 }
+
+.inquiries-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.inquiries-table tr:last-child td {
+    border-bottom: none;
+}
+
+.inquiries-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* 답변 상태 뱃지 스타일 */
+.badge-answered {
+    background-color: #41a700;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+}
+
+.badge-unanswered {
+    background-color: #ff4040;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+}
+
+/* 상세보기 버튼 스타일 */
+.btn-view-inquiry {
+    background-color: #d32323;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.btn-view-inquiry:hover {
+    background-color: #be2020;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 768px) {
+    .inquiries-table {
+        font-size: 0.9em;
+    }
+
+    .inquiries-table th,
+    .inquiries-table td {
+        padding: 8px;
+    }
+
+    .btn-view-inquiry {
+        padding: 4px 8px;
+        font-size: 0.8em;
+    }
+}
+
 
 /* 음식점 정보 폼 스타일 */
 #restaurantInfoForm .form-control[readonly] {
