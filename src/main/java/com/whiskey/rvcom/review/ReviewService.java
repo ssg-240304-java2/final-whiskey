@@ -7,20 +7,14 @@ import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.*;
 import com.whiskey.rvcom.repository.*;
-import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.review.dto.ReviewDTO;
 import lombok.RequiredArgsConstructor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +22,8 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReceiptService receiptService;
     private final ImageFileService imageFileService;
-    private final RestaurantService restaurantService;
+//    private final RestaurantService restaurantService;
+    private final RestaurantRepository restaurantRepository;
     private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
 
 
@@ -150,7 +145,8 @@ public class ReviewService {
         }
 
         // Restaurant 가져오기
-        Restaurant restaurant = restaurantService.getRestaurantById(reviewDTO.getRestaurantId());
+        Restaurant restaurant = restaurantRepository.findById(reviewDTO.getRestaurantId()).orElse(null);
+//        Restaurant restaurant = restaurantService.getRestaurantById(reviewDTO.getRestaurantId());
         if (restaurant == null) {
             throw new IllegalArgumentException("유효하지 않은 레스토랑 ID입니다.");
         }
