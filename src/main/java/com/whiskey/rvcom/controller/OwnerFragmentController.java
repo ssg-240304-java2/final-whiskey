@@ -51,28 +51,28 @@ public class OwnerFragmentController {
         System.out.println("리뷰 리스트: " + reviews);
 
         int reviewCount = reviews.size();       // 총 리뷰 수 바인딩용
-//        model.addAttribute("reviewCount", reviewCount); // todo. 총 리뷰 수 바인딩
+        model.addAttribute("reviewCount", reviewCount); // todo. 총 리뷰 수 바인딩
         System.out.println("총 리뷰 수: " + reviewCount);
 
         double avgRating = reviewService.getAverageRatingForRestaurant(reviews); // 평균 별점 도출
 //        model.addAttribute("avgRating", avgRating);
         // avgRating / 5 형태로 출력되도록
         String ratingPhase = avgRating + " / 5";
-//        model.addAttribute("avgRating", ratingPhase);   // todo. 평균평점 바인딩
+        model.addAttribute("avgRating", ratingPhase);   // todo. 평균평점 바인딩
 
         // 리뷰 목록에서 최근순으로 3개만 가져오기
         var recentReviews = reviews.stream()
                 .sorted((r1, r2) -> r2.getCreatedAt().compareTo(r1.getCreatedAt()))
                 .limit(3)
                 .toList();
-//        model.addAttribute("recentReviews", recentReviews); // todo. 최근 리뷰 목록 바인딩
+        model.addAttribute("recentReviews", recentReviews); // todo. 최근 리뷰 목록 바인딩
 
         // 최근 일주일(7일)간의 리뷰 수 도출
         LocalDateTime oneWeekAgo = LocalDateTime.now().minusDays(7);
         int weeklyReviewCount = (int) reviews.stream()
                 .filter(review -> review.getCreatedAt().isAfter(oneWeekAgo))
                 .count();
-//        model.addAttribute("weeklyReviewCount", weeklyReviewCount); // todo. 최근 리뷰 수 바인딩
+        model.addAttribute("weeklyReviewCount", weeklyReviewCount); // todo. 최근 리뷰 수 바인딩
         System.out.println("최근 일주일간의 리뷰 수: " + weeklyReviewCount);
 
         // 인기 리뷰 수 도출하여 바인딩

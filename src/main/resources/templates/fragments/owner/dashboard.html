@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">총 리뷰 수</h5>
-                    <p class="card-text">152개</p>
+                    <p class="card-text" th:text="${reviewCount}">152개</p>
                     <!-- TODO: 실제 총 리뷰 수 데이터 연동 -->
                 </div>
             </div>
@@ -26,7 +26,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">신규 리뷰</h5>
-                    <p class="card-text">5개</p>
+                    <p class="card-text" th:text="${weeklyReviewCount}">5개</p>
                     <!-- TODO: 실제 신규 리뷰 수 데이터 연동 -->
                 </div>
             </div>
@@ -44,7 +44,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">평균 평점</h5>
-                    <p class="card-text">4.5 / 5</p>
+                    <p class="card-text" th:text="${avgRating}">4.5 / 5</p>
                     <!-- TODO: 실제 평균 평점 데이터 연동 -->
                 </div>
             </div>
@@ -59,9 +59,10 @@
                     <h5 class="card-title">최근 리뷰</h5>
                     <ul class="list-group list-group-flush">
                         <!-- TODO: 실제 최근 리뷰 데이터 연동 -->
-                        <li class="list-group-item">맛있어요! 또 방문하고 싶어요.</li>
-                        <li class="list-group-item">서비스가 친절해요.</li>
-                        <li class="list-group-item">분위기가 좋아요.</li>
+<!--                        <li class="list-group-item">맛있어요! 또 방문하고 싶어요.</li>-->
+<!--                        <li class="list-group-item">서비스가 친절해요.</li>-->
+<!--                        <li class="list-group-item">분위기가 좋아요.</li>-->
+                        <li class="list-group-item" th:each="recentReview : ${recentReviews}" th:text="${recentReview.title}">분위기가 좋아요.</li>
                     </ul>
                 </div>
             </div>
