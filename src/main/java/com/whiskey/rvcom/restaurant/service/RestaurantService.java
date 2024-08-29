@@ -4,12 +4,15 @@ import com.whiskey.rvcom.entity.restaurant.OpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.WeeklyOpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
+import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.repository.MenuRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
+import com.whiskey.rvcom.review.ReviewService;
 import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +25,19 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
     private final EntityManager entityManager;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, MenuRepository menuRepository, EntityManager entityManager) {
-        this.restaurantRepository = restaurantRepository;
-        this.menuRepository = menuRepository;
-        this.entityManager = entityManager;
-    }
+    private final ReviewService reviewService;
+
+//    public RestaurantService(RestaurantRepository restaurantRepository, MenuRepository menuRepository, EntityManager entityManager) {
+//        this.restaurantRepository = restaurantRepository;
+//        this.menuRepository = menuRepository;
+//        this.entityManager = entityManager;
+//    }
 
     public List<RestaurantCardDTO> getNearbyRestaurantByLocation(double latitude, double longitude) {
 
@@ -207,7 +213,61 @@ public class RestaurantService {
     }
 
     public List<RestaurantSearchResultDTO> getRestaurantsBySearchText(String searchText) {
-        return restaurantRepository.searchByNameAndMenu(searchText);
+        List<RestaurantSearchResultDTO> restaurantSearchResultDTOS = restaurantRepository.searchByNameAndMenu(searchText);
+
+        // set bannerImageFileName / reviewAndRatingPhase / topReviewContent'
+        String bannerImageFileName;
+        String reviewAndRatingPhase;
+        String topReviewContent;
+
+        for (RestaurantSearchResultDTO restaurantSearchResultDTO : restaurantSearchResultDTOS) {
+            Long id = restaurantSearchResultDTO.getId();
+            Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+
+            // bannerImageFileName
+            if (restaurant.getCoverImage() != null) {
+                bannerImageFileName = ImagePathParser.parse(restaurant.getCoverImage().getUuidFileName());
+                restaurantSearchResultDTO.setBannerImageFileName(bannerImageFileName);
+            } else restaurantSearchResultDTO.setBannerImageFileName(null);
+
+            // reviewAndRatingPhase
+            StringBuilder reviewAndRatingPhaseBuilder = new StringBuilder();
+            // ★★☆☆☆ 2.5(104 리뷰)  형태로 표시되도록
+            double rating = reviewService.getAverageRatingForRestaurant(reviewService.getReviewsByRestaurantAsList(restaurant));
+            int ratingInt = (int) rating;
+            for (int i = 0; i < 5; i++) {
+                if (i < ratingInt) {
+                    reviewAndRatingPhaseBuilder.append("★");
+                } else {
+                    reviewAndRatingPhaseBuilder.append("☆");
+                }
+            }
+            reviewAndRatingPhaseBuilder.append(" ").append(rating);
+//            reviewAndRatingPhaseBuilder.append(" (").append(reviewService.getReviewsByRestaurantAsList(restaurant).size()).append(" 리뷰)");
+
+            restaurantSearchResultDTO.setReviewAndRatingPhase(reviewAndRatingPhaseBuilder.toString());
+
+            // topReviewContent
+            List<Review> reviews = reviewService.getReviewsByRestaurantAsList(restaurant);
+            reviews.removeIf(Review::isSuspended);
+
+            int reviewCount = reviews.size();
+            restaurantSearchResultDTO.setReviewCount(reviewCount);
+
+            // 좋아요 개수가 가장 많은 리뷰 1개 가져오기
+            reviews.sort((r1, r2) -> Integer.compare(r2.getLikes().size(), r1.getLikes().size()));
+
+            if (reviews.size() > 0) {
+                topReviewContent = reviews.get(0).getContent();
+                restaurantSearchResultDTO.setTopReviewContent(topReviewContent);
+            } else restaurantSearchResultDTO.setTopReviewContent(null);
+
+            // bannerImageFilePath =
+        }
+
+//        restaurantSearchResultDTOS.forEach();
+
+        return restaurantSearchResultDTOS;
     }
 
     public Restaurant getRestaurantByOwnerId(Long id) {
