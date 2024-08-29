@@ -1,21 +1,17 @@
 $(document).ready(function () {
-    // 사용자 관리 탭의 JavaScript 코드
     function loadMembers(page) {
         $.ajax({
             url: '/admin/user-management',
             type: 'GET',
             data: { page: page },
-            success: function(data) {
-                console.log(data); // 서버에서 반환된 데이터를 콘솔에 출력
-
+            success: function (data) {
                 const contentArea = $('#content-area');
                 contentArea.empty();
 
-                // HTML 구조 생성
                 let htmlContent = `
                     <div class="card">
                         <div class="card-body">
-                            <table class="table table-hover">
+                            <table class="table report-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -27,8 +23,7 @@ $(document).ready(function () {
                                 </thead>
                                 <tbody>`;
 
-                // 회원 데이터를 테이블에 추가
-                data.content.forEach(function(member) {
+                data.content.forEach(function (member) {
                     htmlContent += `
                         <tr>
                             <td>${member.id}</td>
@@ -37,7 +32,7 @@ $(document).ready(function () {
                             <td>${new Date(member.createdAt).toLocaleDateString()}</td>
                             <td>
                                 <span class="${member.active ? 'badge badge-success' : 'badge badge-secondary'}">
-                                    ${member.active ? '활성' : '비활성'}
+                                    ${member.active ? '활성' : '탈퇴'}
                                 </span>
                             </td>
                         </tr>`;
@@ -47,31 +42,10 @@ $(document).ready(function () {
                                 </tbody>
                             </table>
                             <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center">`;
+                                <ul class="pagination justify-content-center" id="userManagementPagination">`;
 
-                // 이전 페이지 버튼
-                if (data.number > 0) {
-                    htmlContent += `
-                            <li class="page-item">
-                                <a class="page-link" href="#" data-page="${data.number - 1}">이전</a>
-                            </li>`;
-                }
-
-                // 페이지 번호 버튼들
-                for (let i = 0; i < data.totalPages; i++) {
-                    htmlContent += `
-                            <li class="page-item ${i === data.number ? 'active' : ''}">
-                                <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
-                            </li>`;
-                }
-
-                // 다음 페이지 버튼
-                if (data.number < data.totalPages - 1) {
-                    htmlContent += `
-                            <li class="page-item">
-                                <a class="page-link" href="#" data-page="${data.number + 1}">다음</a>
-                            </li>`;
-                }
+                // 페이지네이션 처리
+                htmlContent += generatePagination(data.number, data.totalPages);
 
                 htmlContent += `
                                 </ul>
@@ -79,26 +53,62 @@ $(document).ready(function () {
                         </div>
                     </div>`;
 
-                // 생성한 HTML을 contentArea에 삽입
                 contentArea.html(htmlContent);
                 $('#page-title').text('사용자 관리');
 
                 // 페이지네이션 클릭 이벤트 처리 (이벤트 위임)
-                $('#content-area .page-link').on('click', function(e) {
-                    e.preventDefault();
+                $('#userManagementPagination .page-link').on('click', function (e) {
+                    e.preventDefault(); // 클릭 시 페이지 이동 방지
                     const page = $(this).data('page');
                     loadMembers(page);
                 });
             },
-            error: function(error) {
+            error: function (error) {
                 console.error('Error loading user management:', error);
             }
         });
     }
 
+    // 페이지네이션 버튼 생성 함수
+    function generatePagination(currentPage, totalPages) {
+        let paginationHtml = '';
+
+        // 이전 페이지 버튼
+        if (currentPage > 0) {
+            paginationHtml += `
+                <li class="page-item">
+                    <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
+                        <span aria-hidden="true">«</span>
+                    </a>
+                </li>`;
+        }
+
+        // 페이지 번호 버튼들
+        let startPage = Math.max(0, currentPage - 2);
+        let endPage = Math.min(totalPages - 1, currentPage + 2);
+
+        for (let i = startPage; i <= endPage; i++) {
+            paginationHtml += `
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
+                </li>`;
+        }
+
+        // 다음 페이지 버튼
+        if (currentPage < totalPages - 1) {
+            paginationHtml += `
+                <li class="page-item">
+                    <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
+                        <span aria-hidden="true">»</span>
+                    </a>
+                </li>`;
+        }
+
+        return paginationHtml;
+    }
+
     // user-management 링크 클릭 시 데이터 로드
-    $('[data-target="user-management"]').on('click', function(e) {
-        e.preventDefault();
+    $('[data-target="user-management"]').on('click', function (e) {
         loadMembers(0); // 첫 페이지를 로드
     });
 });
