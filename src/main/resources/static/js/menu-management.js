@@ -143,16 +143,23 @@ function initializeMenuManagement() {
     }
 
     // 메뉴 저장 (추가 또는 수정)
-    saveMenuBtn.addEventListener('click', () => {
+    saveMenuBtn.addEventListener('click', async () => {
+        // TODO: 백엔드 API 호출하여 메뉴 저장
+        const menuImage = document.getElementById('menuImage').files[0];
+        var menuImageId = null;
+        if (menuImage) {
+            menuImageId = await uploadFileToServer(menuImage);
+        }
+
         const menuData = {
             id: document.getElementById('menuId').value,
             name: document.getElementById('menuName').value,
             price: document.getElementById('menuPrice').value,
-            restaurantId: document.getElementById('restaurantId').value
+            restaurantId: document.getElementById('restaurantId').value,
             // TODO: 이미지 처리 로직 추가
+            image: menuImageId
         };
 
-        // TODO: 백엔드 API 호출하여 메뉴 저장
         $.ajax({
             type: "POST",
             url: "/api/restaurant/saveMenu",
@@ -160,15 +167,39 @@ function initializeMenuManagement() {
             success: function (response) {
                 alert("메뉴 저장에 성공했습니다.");
                 console.log("response : ", response);
+                renderMenus();
             },
             error: function (error) {
                 alert("메뉴 저장에 실패했습니다.");
                 console.log("error : ", error);
+                renderMenus();
             }
         });
+
         menuModal.hide();
         updateMenuList();
     });
+
+    async function uploadFileToServer(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/menu/image/upload', {
+                method: 'POST',
+                body: formData
+            });
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+            return await response.text(); // UUID 파일명 반환
+        } catch (error) {
+            console.error('파일 업로드 오류:', error);
+            alert('파일 업로드에 실패했습니다: ' + error.message);
+            throw error;
+        }
+    }
 
     // 초기 메뉴 리스트 로드
     updateMenuList();

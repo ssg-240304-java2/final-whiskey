@@ -294,5 +294,6 @@ public class RestaurantService {
         Menu menu = entityManager.find(Menu.class, m.getId());
         menu.setName(m.getName());
         menu.setPrice(m.getPrice());
+        menu.setImage(m.getImage());
     }
 }
