@@ -89,18 +89,28 @@ public class ReviewController {
     @PostMapping("/reviewlike/add")
     @ResponseBody
     public ResponseEntity<Long> addLikeToReview(@RequestParam("reviewId") Long reviewNo, HttpSession session) { // need. 좋아요 처리할 사용자 정보 추가 필요
+        System.out.println("리뷰 좋아요 추가 요청 받음");
         Review dest = reviewService.getReviewById(reviewNo);
         Member member = (Member) session.getAttribute("member");
+
+        if(member == null) {
+            System.out.println("로그인한 사용자 정보가 없습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         ReviewLike reviewLike = reviewLikeService.getReviewLikeByReviewAndMember(dest, member);
 
         // 이미 해당 리뷰에 좋아요를 누른 경우 좋아요 취소(토글처리)
         if (reviewLike == null) {
+            System.out.println("이미 좋아요를 누른 리뷰입니다.");
+            System.out.println("좋아요 취소 처리");
             reviewLike = new ReviewLike();
             reviewLike.setReview(dest);
             reviewLike.setMember(member);
             reviewLikeService.addReviewLike(reviewLike);
         } else {
+            System.out.println("좋아요를 누르지 않은 리뷰입니다.");
+            System.out.println("좋아요 추가 처리");
             reviewLikeService.removeReviewLike(reviewLike);
         }
 
