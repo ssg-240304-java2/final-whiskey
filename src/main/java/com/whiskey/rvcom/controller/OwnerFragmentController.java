@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import com.whiskey.rvcom.inquiry.RestaurantInquiryService;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +27,7 @@ public class OwnerFragmentController {
 
     private final RestaurantService restaurantService;
     private final ReviewService reviewService;
+    private final RestaurantInquiryService restaurantInquiryService;
 
     /**
      * 소유자 대시보드의 특정 프래그먼트를 로드하는 메서드
@@ -85,11 +88,14 @@ public class OwnerFragmentController {
         String ratingPhase = String.format("%.1f / 5", avgRating);
         var recentReviews = getRecentReviews(reviews);
         int weeklyReviewCount = getWeeklyReviewCount(reviews);
+        int unansweredInquiryCount = restaurantInquiryService.getUnansweredInquiryCount(restaurant.getId());
+
 
         model.addAttribute("reviewCount", reviewCount);
         model.addAttribute("avgRating", ratingPhase);
         model.addAttribute("recentReviews", recentReviews);
         model.addAttribute("weeklyReviewCount", weeklyReviewCount);
+        model.addAttribute("unansweredInquiryCount", unansweredInquiryCount); 
     }
 
     /**
