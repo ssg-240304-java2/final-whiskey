@@ -55,7 +55,7 @@
                 <!--                <div th:replace="fragments/resultCard :: resultCard(${restaurant.getId()}, ${restaurant.getName()}, '★★★★☆ 4', 302, '₩₩', ${restaurant.getCategory().name()}, ${restaurant.getAddress().getName()}, '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>-->
                 <div style="display: inline;" th:each="restaurant: ${restaurantSearchResult}">
                     <div th:each="restaurant: ${restaurantSearchResult}"
-                         th:replace="fragments/resultCard :: resultCard(${restaurant.getId()}, ${restaurantSearchResult.indexOf(restaurant)}, ${restaurant.getName()}, '★★★★☆ 4', 302, '₩₩', ${restaurant.getCategory().name()}, ${restaurant.getAddress().getName()}, '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>
+                         th:replace="fragments/resultCard :: resultCard(${restaurant.getId()}, ${restaurantSearchResult.indexOf(restaurant)}, ${restaurant.getName()}, ${restaurant.getReviewAndRatingPhase()}, ${restaurant.getReviewCount()}, '₩₩', ${restaurant.getCategory().name()}, ${restaurant.getAddress().getName()}, ${restaurant.getTopReviewContent()}, ${restaurant.getBannerImageFileName()})"></div>
                 </div>
                 <!-- 검색 결과 카드 사용 예시 -->
                 <!--                <div th:replace="fragments/resultCard :: resultCard(1, '맛있는 파스타', '★★★★☆ 4', 302, '₩₩', '이탈리안, 파스타', '인천시 남동구 구월동', '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>-->
