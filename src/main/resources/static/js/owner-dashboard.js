@@ -14,6 +14,13 @@ document.addEventListener('DOMContentLoaded', function () {
             sidebar.classList.toggle('active');
         });
     }
+    
+    // 로고 클릭 이벤트 리스너 추가
+    const logo = document.querySelector('.foodfolio-logo');
+    logo.addEventListener('click', function (e) {
+        e.preventDefault();
+        loadContent('dashboard');
+    });
 
     // 화면 크기 변경 시 사이드바 상태 조정
     window.addEventListener('resize', function() {

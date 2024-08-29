@@ -61,7 +61,6 @@ body {
     color: #a0a0a0;
 }
 
-/* 로고 스타일 */
 .foodfolio-logo {
     font-family: 'Arial', sans-serif;
     font-weight: bold;
@@ -71,6 +70,14 @@ body {
     letter-spacing: -1px;
     padding: 1rem;
     text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.foodfolio-logo:hover {
+    color: #ff4f4f;
+    text-decoration: none;
 }
 
 /* 메인 콘텐츠 영역 스타일 */
