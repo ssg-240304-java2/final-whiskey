@@ -183,7 +183,7 @@ public class ReviewController {
             default:
                 destReview.setRating(Rating.ONE_STAR);
         }
-//
+
 //        destReview.getReviewImages().add()
 //        reviewImageService.getReviewImageById(1L);
 //        imageFileIdList.forEach(imageFileId -> {
@@ -191,6 +191,22 @@ public class ReviewController {
 //            ReviewImage reviewImage = new ReviewImage();
 //            destReview.getReviewImages().add(reviewImage);
 //        });
+        reviewService.saveReview(destReview);
+
+//        ReviewImage reviewImage = new ReviewImage();
+//        reviewImage.setReview(destReview);
+        List<ReviewImage> reviewImages = new ArrayList<>();
+        for(var imageId : imageFileIdList) {
+            ImageFile imageFile = imageFileService.getImageFile(imageId);
+            ReviewImage reviewImage = new ReviewImage();
+            reviewImage.setImageFile(imageFile);
+            reviewImage.setReview(destReview);
+
+            reviewImages.add(reviewImage);
+        }
+
+        destReview.setReviewImages(reviewImages);
+
         reviewService.saveReview(destReview);
     }
 
