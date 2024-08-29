@@ -25,7 +25,7 @@
 <div class="container-fluid">
     <div class="row">
         <!-- 사이드바 -->
-        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+        <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar">
             <div class="position-sticky pt-3">
                 <div class="sidebar-header mb-3">
                     <h3 class="text-center foodfolio-logo">FoodFolio</h3>
@@ -66,6 +66,10 @@
             <!-- 상단 바 -->
             <div class="navbar navbar-dark bg-dark p-3 border-bottom">
                 <div class="d-flex justify-content-between w-100">
+                    <!-- 사이드바 토글 버튼 -->
+                    <button class="btn btn-link d-md-none mr-3" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <h1 class="h2" id="page-title">대시보드</h1>
                     <div class="d-flex align-items-center">
                         <div class="me-3">

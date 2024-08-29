@@ -12,7 +12,7 @@ body {
     bottom: 0;
     left: 0;
     z-index: 100;
-    padding: 48px 0 0;
+    padding: 0;
     background-color: #252526;
     box-shadow: inset -1px 0 0 rgba(255,255,255,.1);
     transition: all 0.3s;
@@ -133,25 +133,52 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
 }
 
-/* 버튼 스타일 */
+/* 빠른 링크 버튼 스타일 */
+.quick-link-btn {
+    margin: 10px;
+    padding: 15px 25px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.quick-link-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.quick-link-btn i {
+    margin-right: 10px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .quick-link-btn {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
 .btn-primary {
-    background-color: #ff6b6b;
-    border-color: #ff6b6b;
+    background-color: var(--yelp-red);
+    border-color: var(--yelp-red);
 }
 
 .btn-primary:hover {
-    background-color: #ff4f4f;
-    border-color: #ff4f4f;
+    background-color: var(--yelp-red-dark);
+    border-color: var(--yelp-red-dark);
 }
 
-.btn-outline-primary {
-    color: #ff6b6b;
-    border-color: #ff6b6b;
+.btn-secondary {
+    background-color: var(--yelp-blue);
+    border-color: var(--yelp-blue);
 }
 
-.btn-outline-primary:hover {
-    background-color: #ff6b6b;
-    color: #ffffff;
+.btn-secondary:hover {
+    background-color: #3ab1e8;
+    border-color: #3ab1e8;
 }
 
 /* 카드 스타일 */
@@ -393,7 +420,7 @@ body {
 /* 버튼 스타일 */
 .btn-primary, .btn-secondary, .btn-info {
     border: none;
-    padding: 4px 8px;
+    padding: 15px 25px;
     font-weight: bold;
     transition: all 0.3s ease;
 }
@@ -420,4 +447,44 @@ body {
 
 .btn-info:hover {
     background-color: #42a5f5;
+}
+
+#sidebar {
+    transition: margin 0.3s ease-in-out;
+}
+
+/* 사이드바 토글 버튼 스타일 */
+#sidebarToggle {
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 0;
+}
+
+/* 모바일에서 사이드바 숨김 */
+@media (max-width: 767.98px) {
+    #sidebar {
+        margin-left: -100%;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        width: 100%;
+        max-width: 250px;
+    }
+
+    #sidebar.active {
+        margin-left: 0;
+    }
+
+    .content-wrapper {
+        margin-left: 0;
+    }
+}
+
+/* 데스크톱에서 토글 버튼 숨김 */
+@media (min-width: 768px) {
+    #sidebarToggle {
+        display: none;
+    }
 }
