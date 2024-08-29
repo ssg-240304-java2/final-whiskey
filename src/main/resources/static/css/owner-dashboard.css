@@ -92,6 +92,33 @@ body {
     }
 }
 
+/* 드롭다운 메뉴 스타일 */
+.dropdown-menu {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+}
+
+.dropdown-item { 
+    color: #e0e0e0 !important;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: #3c3c3c;
+    color: #ff6b6b !important; /* 호버 시 색상 변경 */
+}
+
+.dropdown-item i {
+    margin-right: 8px;
+    width: 16px;
+    text-align: center;
+}
+
+/* 구분선 스타일 */
+.dropdown-divider {
+    border-top: 1px solid #444;
+}
+
 /* 다크 테마 스타일 */
 body {
     background-color: #1e1e1e;
