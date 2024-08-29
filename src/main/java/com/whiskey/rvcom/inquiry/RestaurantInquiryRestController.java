@@ -20,25 +20,33 @@ import java.util.List;
 public class RestaurantInquiryRestController {
     private final RestaurantInquiryService inquiryService;
 
+//    @GetMapping("/restaurant/{restaurantId}/user-inquiries")
+//    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
+//        return inquiryService.findAllByRestaurantId(restaurantId);
+//    }
     /**
-     * 음식점의 문의글 조회하기(답변 포함)
+     * 음식점의 문의글 조회하기(답변 포함, 사용자 페이지)
      * @param restaurantId
      * @return 문의글
      */
     @GetMapping("/restaurant/{restaurantId}/user-inquiries")
-    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
-        return inquiryService.findAllByRestaurantId(restaurantId);
+    public Page<RestaurantInquiry> getPagedInquiries(
+            @PathVariable Long restaurantId,
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "5") int pageSize){
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+        return inquiryService.getPagedRestaurantInquiries(restaurantId, pageRequest);
     }
 
     /**
-     * 음식점의 문의글 조회하기(답변 포함, 페이지)
+     * 음식점의 문의글 조회하기(답변 포함, 점주 페이지)
      * @param restaurantId
      * @return 문의글
      */
     @GetMapping("/restaurant/{restaurantId}/owner-inquiries")
     public Page<RestaurantInquiry> getPagedRestaurantInquiries(
             @PathVariable Long restaurantId,
-            @RequestParam(defaultValue = "1" ) int pageNumber,
+            @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize
     ) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);

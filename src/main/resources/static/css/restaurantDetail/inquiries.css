@@ -134,6 +134,15 @@
 .current-page {
     margin: 0 10px;
     font-weight: bold;
+    cursor: pointer;
+}
+
+.current-page.active {
+    text-decoration: underline;
+}
+
+.current-page:hover {
+    background-color: #e0e0e0;
 }
 
 .delete-inquiry {
