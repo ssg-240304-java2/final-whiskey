@@ -15,7 +15,8 @@ public class ReceiptApi {
 //        ReceiptResponseDto result = new ReceiptResponseDto();
 
         // test. 테스트 목적으로 임의의 이미지 파일로 오버라이드
-        imagePath = "2df35998-f930-4db0-af7a-3c00d54b8e58.jpg";
+        System.out.println("OCR 요청된 이미지 파일 경로: " + imagePath);
+//        imagePath = "2df35998-f930-4db0-af7a-3c00d54b8e58.jpg";
 
         ReceiptResponse response = new OcrRequestService().invoke(imagePath);
         ReceiptData entity = new ReceiptMapper().toEntity(response);

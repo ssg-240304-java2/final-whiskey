@@ -1,13 +1,23 @@
 package com.whiskey.rvcom.review;
 
+import com.whiskey.rvcom.ImageFile.ImageFileService;
 import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.entity.receipt.ReceiptData;
+import com.whiskey.rvcom.entity.resource.ImageFile;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.review.*;
 import com.whiskey.rvcom.repository.*;
+import com.whiskey.rvcom.restaurant.service.RestaurantService;
+import com.whiskey.rvcom.review.dto.ReviewDTO;
 import lombok.RequiredArgsConstructor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +26,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ReviewService {
     private final ReviewRepository reviewRepository;
+    private final ReceiptService receiptService;
+    private final ImageFileService imageFileService;
+    private final RestaurantService restaurantService;
+    private static final Logger logger = LoggerFactory.getLogger(ReviewController.class);
+
 
     /**
      * 리뷰 아이디로 리뷰 객체 조회
@@ -124,4 +139,43 @@ public class ReviewService {
                 .average()
                 .orElse(0);
     }
+
+    @Transactional
+    public Review saveReview(ReviewDTO reviewDTO, List<MultipartFile> images, Member member) throws Exception {
+        // ReceiptData 가져오기
+        ReceiptData receiptData = receiptService.getReceipt(reviewDTO.getReceiptDataId());
+        if (receiptData == null) {
+            logger.error("영수증 데이터를 찾을 수 없습니다. ID: {}", reviewDTO.getReceiptDataId());
+            throw new IllegalArgumentException("유효하지 않은 영수증 데이터입니다. ID: " + reviewDTO.getReceiptDataId());
+        }
+
+        // Restaurant 가져오기
+        Restaurant restaurant = restaurantService.getRestaurantById(reviewDTO.getRestaurantId());
+        if (restaurant == null) {
+            throw new IllegalArgumentException("유효하지 않은 레스토랑 ID입니다.");
+        }
+
+        // Review 엔티티 생성 및 설정
+        Review review = new Review();
+        review.setRating(reviewDTO.getRating());
+        review.setContent(reviewDTO.getContent());
+        review.setRestaurant(restaurant);
+        review.setReviewer(member);
+        review.setReceiptData(receiptData);
+
+        // 이미지 처리
+        List<ReviewImage> reviewImages = new ArrayList<>();
+        for (MultipartFile image : images) {
+            ImageFile imageFile = imageFileService.uploadFile(image);
+            ReviewImage reviewImage = new ReviewImage();
+            reviewImage.setReview(review);
+            reviewImage.setImageFile(imageFile);
+            reviewImages.add(reviewImage);
+        }
+        review.setReviewImages(reviewImages);
+
+        // 리뷰 저장
+        return reviewRepository.save(review);
+    }
+
 }
