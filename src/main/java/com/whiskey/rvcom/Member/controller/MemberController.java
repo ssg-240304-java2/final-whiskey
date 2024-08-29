@@ -284,7 +284,7 @@ public class MemberController {
         }
 
         // 이메일 인증 코드 검증
-        String url = String.format("https://web.dokalab.site:8081/api/redis/get?key=%s", email);
+        String url = String.format("https://web.dokalab.site:8084/api/redis/get?key=%s", email);
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         if (response.getStatusCode() != HttpStatus.OK || !response.getBody().equals(verificationCode)) {
             model.addAttribute("error", "이메일 인증에 실패했습니다. 올바른 인증 코드를 입력해주세요.");
