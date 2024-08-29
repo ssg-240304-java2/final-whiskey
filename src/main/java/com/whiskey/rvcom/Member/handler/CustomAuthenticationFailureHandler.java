@@ -16,7 +16,8 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException, ServletException {
         // 에러 메시지를 쿼리 파라미터로 전달
-        setDefaultFailureUrl("/login?error=아이디 또는 비밀번호가 다릅니다.");
+//        setDefaultFailureUrl("/login?error=아이디 또는 비밀번호가 다릅니다.");
+        setDefaultFailureUrl("/login");
         super.onAuthenticationFailure(request, response, exception);
     }
 }

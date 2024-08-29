@@ -106,6 +106,7 @@ public class MemberController {
 
     @GetMapping("/login")
     public String loginPage(HttpSession session) {
+        System.out.println("로그인 페이지 요청");
         Boolean isAuthenticated = (Boolean) session.getAttribute("isAuthenticated");
         String userRole = (String) session.getAttribute("userRole");
 
@@ -118,22 +119,27 @@ public class MemberController {
 
     @PostMapping("/login")
     public String login(@RequestParam String loginId, @RequestParam String password, HttpSession session, Model model) {
+        System.out.println("로그인 요청: " + loginId);
         Member member = memberManagementService.findByLoginId(loginId);
         if (member == null) {
             model.addAttribute("error", "존재하지 않는 회원입니다.");
+            System.out.println("존재하지 않는 회원입니다.");
             return "login";
         }
 
         if (!member.isActive()) {
             model.addAttribute("alertMessage", "해당 계정은 비활성화되어 있습니다. 관리자에게 문의하세요.");
+            System.out.println("해당 계정은 비활성화되어 있습니다. 관리자에게 문의하세요.");
             return "login";
         }
 
         if (passwordEncoder.matches(password, member.getPassword())) {
+            System.out.println("로그인 성공");
             setSessionAttributes(session, member);
             return "redirect:/mainPage";
         } else {
             model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            System.out.println("아이디 또는 비밀번호가 일치하지 않습니다.");
             return "login";
         }
     }

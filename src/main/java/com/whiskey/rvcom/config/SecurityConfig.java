@@ -46,7 +46,26 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // CORS 설정 추가
                 .csrf(csrf -> csrf.disable()) // CSRF 비활성화
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // 그 외의 모든 요청은 인증 필요
+//                        .requestMatchers("/**").permitAll()
+//                        .requestMatchers("/login").permitAll()
+//                        .requestMatchers("/mypage/**").hasAnyRole("MEMBER", "OWNER", "ADMIN")
+//                        .requestMatchers("/owner-dashboard").hasAnyRole("OWNER", "ADMIN")
+//                        .requestMatchers("/adminMain").hasRole("ADMIN")
+//                        .requestMatchers("/test").hasRole("ADMIN")
+//                        .requestMatchers("/businessregister/register-store").hasRole("MEMBER")
+//                        .anyRequest().permitAll() // 그 외의 모든 요청은 인증 필요
+
+                                .requestMatchers("/adminMain").hasRole("ADMIN")
+                                .requestMatchers("/test").hasRole("ADMIN")
+                                .requestMatchers("/owner-dashboard").hasAnyRole("OWNER", "ADMIN")
+
+                                .requestMatchers("/mypage/**").hasAnyRole("MEMBER", "OWNER", "ADMIN")
+                                .requestMatchers("/businessregister/register-store").hasRole("MEMBER")
+
+                                .requestMatchers("/**").permitAll()
+                                .requestMatchers("/login").permitAll()
+
+                                .anyRequest().permitAll() // 그 외의 모든 요청은 인증 필요
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
