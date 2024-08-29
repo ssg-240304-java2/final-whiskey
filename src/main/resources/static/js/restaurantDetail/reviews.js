@@ -184,6 +184,9 @@ function addReviewLike(id) {
         success: function (data) {
             console.log('좋아요 수 : ' + data);
             const likeButton = document.getElementById(`review-like-button-${id}`);
+
+            // todo. 회원정보 대조하여 좋아요 여부 확인 후
+            // 좋아요 버튼 내 텍스트에 볼드체 설정
             likeButton.innerHTML = `👍 좋아요 (${data})`;
         },
         error: function (error) {
