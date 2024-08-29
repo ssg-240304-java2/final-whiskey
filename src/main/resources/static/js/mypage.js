@@ -201,39 +201,49 @@ document.addEventListener('DOMContentLoaded', function() {
     const removeFavoriteForms = document.querySelectorAll('.remove-favorite-form');
 
     removeFavoriteForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+        form.addEventListener('submit', function (e) {
 
             if (confirm('즐겨찾기를 해제하시겠습니까?')) {
-                const currentPage = parseInt(document.querySelector('input[name="favoritePage"]').value);
-                const favoriteItem = this.closest('.favorite-item');
-                const remainingItems = document.querySelectorAll('.favorite-item').length;
+                const currentUrl = new URL(window.location.href);
+                const baseUrl = `${currentUrl.protocol}//${currentUrl.host}`;
 
-                fetch(this.action, {
-                    method: 'POST',
-                    body: new FormData(this)
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.text();
-                        } else {
-                            throw new Error('즐겨찾기 해제 중 오류가 발생했습니다.');
-                        }
-                    })
-                    .then(() => {
-                        alert('즐겨찾기가 해제되었습니다.');
-                        favoriteItem.remove();
+                removeFavoriteForms.forEach(form => {
+                    form.addEventListener('submit', function (e) {
+                        e.preventDefault();
 
-                        if (remainingItems === 1 && currentPage > 0) {
-                            window.location.href = `/mypage?favoritePage=${currentPage - 1}&activeTab=favorite`;
-                        } else {
-                            window.location.href = `/mypage?favoritePage=${currentPage}&activeTab=favorite`;
+                        if (confirm('즐겨찾기를 해제하시겠습니까?')) {
+                            const currentPage = parseInt(document.querySelector('input[name="favoritePage"]').value);
+                            const favoriteItem = this.closest('.favorite-item');
+                            const remainingItems = document.querySelectorAll('.favorite-item').length;
+
+                            fetch(`${baseUrl}${this.action}`, {
+                                method: 'POST',
+                                body: new FormData(this)
+                            })
+                                .then(response => {
+                                    if (response.ok) {
+                                        return response.text();
+                                    } else {
+                                        throw new Error('즐겨찾기 해제 중 오류가 발생했습니다.');
+                                    }
+                                })
+                                .then(() => {
+                                    alert('즐겨찾기가 해제되었습니다.');
+                                    favoriteItem.remove();
+
+                                    if (remainingItems === 1 && currentPage > 0) {
+                                        window.location.href = `${baseUrl}/mypage?favoritePage=${currentPage - 1}&activeTab=favorite`;
+                                    } else {
+                                        window.location.href = `${baseUrl}/mypage?favoritePage=${currentPage}&activeTab=favorite`;
+                                    }
+                                })
+                                .catch(error => {
+                                    alert(error.message);
+                                });
                         }
-                    })
-                    .catch(error => {
-                        alert(error.message);
                     });
+                });
             }
-        });
+        })
     });
 });

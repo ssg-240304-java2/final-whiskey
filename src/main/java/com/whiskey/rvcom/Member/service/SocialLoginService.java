@@ -5,6 +5,8 @@ import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,5 +79,10 @@ public class SocialLoginService {
         member.setDeletedAt(LocalDateTime.now());
         memberRepository.save(member);
     }
+
+    public Page<Member> getMembers(Pageable pageable, LoginType loginType) {
+        return memberRepository.findAllByLoginType(loginType, pageable);
+    }
+
 
 }

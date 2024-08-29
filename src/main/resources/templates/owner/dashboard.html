@@ -28,31 +28,31 @@
         <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar">
             <div class="position-sticky pt-3">
                 <div class="sidebar-header mb-3">
-                    <a href="#" class="text-center foodfolio-logo" data-bs-target="#dashboard">FoodFolio</a>
+                    <a href="javascript:void(0)" class="text-center foodfolio-logo" data-bs-target="#dashboard">FoodFolio</a>
                 </div>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-target="#dashboard">
+                        <a class="nav-link" href="javascript:void(0)" data-bs-target="#dashboard">
                             <i class="fas fa-home"></i> 대시보드
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-target="#restaurant-info">
+                        <a class="nav-link" href="javascript:void(0)" data-bs-target="#restaurant-info">
                             <i class="fas fa-utensils"></i> 음식점 정보
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-target="#inquiries">
+                        <a class="nav-link" href="javascript:void(0)" data-bs-target="#inquiries">
                             <i class="fas fa-question-circle"></i> 문의 내역
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-target="#notices">
+                        <a class="nav-link" href="javascript:void(0)" data-bs-target="#notices">
                             <i class="fas fa-bullhorn"></i> 공지사항
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" data-bs-target="#menu-management">
+                        <a class="nav-link" href="javascript:void(0)" data-bs-target="#menu-management">
                             <i class="fas fa-list"></i> 메뉴 관리
                         </a>
                     </li>
@@ -100,9 +100,12 @@
             </div>
 
             <!-- 콘텐츠 영역 -->
+
             <div id="content-area">
                 <!-- 대시보드 콘텐츠 -->
                 <div id="dashboard" class="content-section" th:replace="fragments/owner/dashboard :: dashboard"></div>
+
+
 
                 <!-- 음식점 정보 콘텐츠 -->
                 <div id="restaurant-info" class="content-section"
@@ -143,7 +146,7 @@
                     .then(response => response.text())
                     .then(html => {
                         // 메인 콘텐츠 영역을 업데이트합니다.
-                        document.querySelector("#content-area").innerHTML = html;
+                        // document.querySelector("#content-area").innerHTML = html;
 
                         // 필요한 경우 새로 로드된 HTML에 대해 추가 스크립트를 실행할 수 있습니다.
                         console.log(`Fragment ${targetFragment} loaded.`);
