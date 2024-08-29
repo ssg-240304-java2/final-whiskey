@@ -282,14 +282,7 @@ public class MemberController {
             model.addAttribute("error", "이미 존재하는 로그인 ID입니다. 다른 ID를 사용해주세요.");
             return "register_basic";
         }
-
-        // 이메일 인증 코드 검증
-        String url = String.format("https://web.dokalab.site:8084/api/redis/get?key=%s", email);
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        if (response.getStatusCode() != HttpStatus.OK || !response.getBody().equals(verificationCode)) {
-            model.addAttribute("error", "이메일 인증에 실패했습니다. 올바른 인증 코드를 입력해주세요.");
-            return "register_basic";
-        }
+        
 
         String encodedPassword = passwordEncoder.encode(password);
 
