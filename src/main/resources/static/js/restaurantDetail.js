@@ -197,63 +197,6 @@ function setupReports() {
         });
 }
 
-// function setupReviewAndCommentReports() {
-//     const reportModal = document.getElementById("reportModal");
-//     const closeBtn = reportModal.querySelector(".close-btn");
-//     const form = document.getElementById("reportForm");
-//
-//     // 리뷰 및 댓글 신고 버튼 클릭 시 로그인 여부 확인 후 모달 열기
-//     document.addEventListener("click", function(e) {
-//         if (e.target.classList.contains("review-report") || e.target.classList.contains("comment-report")) {
-//
-//             fetch('/report/valid', {
-//                 method: 'POST',
-//                 headers: {
-//                     'Content-Type': 'application/x-www-form-urlencoded',
-//                 }
-//             })
-//                 .then(response => response.json()) // Expecting a JSON response from the server
-//                 .then(data => {
-//                     if (data.success) {
-//
-//                         // 버튼의 id 값을 가져옴 (예: "commentReport123", "reviewReport45")
-//                         const fullId = e.target.id;
-//
-//                         // 정규 표현식을 사용하여 "reviewReport" 또는 "commentReport" 접두사 제거 후 숫자만 추출
-//                         const id = fullId.replace(/^(reviewReport|commentReport)/, "");
-//
-//                         // 타입을 결정 (commentReport 또는 reviewReport 접두사에 따라)
-//                         const type = fullId.startsWith("reviewReport") ? "review" : "comment";
-//
-//                         // 모달 열기 함수 호출
-//                         openReportModal(type, id);
-//
-//                     } else {
-//                         // If the user is not logged in, show an alert
-//                         alert(data.message);
-//                         console.log("알럿 밑 부분")
-//                     }
-//                 })
-//                 .catch(error => {
-//                     console.error("Request failed", error);
-//                 });
-//
-//
-//         }
-//     });
-//
-//     // 모달 닫기
-//     closeBtn.onclick = function() {
-//         reportModal.style.display = "none";
-//     }
-//
-//     // 폼 제출
-//     form.onsubmit = function(e) {
-//         e.preventDefault();
-//         submitReport();
-//     }
-// }
-
 function openReportModal(type, id) {
     const reportModal = document.getElementById("reportModal");
     if (id) {
