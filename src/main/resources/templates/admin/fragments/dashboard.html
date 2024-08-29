@@ -77,11 +77,22 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">빠른 링크</h5>
-                        <div class="d-flex justify-content-around">
-                            <a href="#" class="btn btn-primary" data-target="user-management">사용자 관리</a>
-                            <a href="#" class="btn btn-secondary" data-target="restaurant-management">음식점 관리</a>
-                            <a href="#" class="btn btn-info" data-target="report-management">신고 처리</a>
-                            <a href="#" class="btn btn-warning" data-target="statistics">통계 보기</a>
+                        <div class="d-flex justify-content-around flex-wrap">
+                            <a href="#" class="btn btn-primary m-2 quick-link-btn" data-target="dashboard">
+                                <i class="fas fa-tachometer-alt mr-2"></i> 대시보드
+                            </a>
+                            <a href="#" class="btn btn-success m-2 quick-link-btn" data-target="user-management">
+                                <i class="fas fa-users mr-2"></i> 사용자 관리
+                            </a>
+                            <a href="#" class="btn btn-warning m-2 quick-link-btn" data-target="report-management">
+                                <i class="fas fa-flag mr-2"></i> 신고 관리
+                            </a>
+                            <a href="#" class="btn btn-info m-2 quick-link-btn" data-target="statistics">
+                                <i class="fas fa-chart-bar mr-2"></i> 통계
+                            </a>
+                            <a href="#" class="btn btn-secondary m-2 quick-link-btn" data-target="restaurant-management">
+                                <i class="fas fa-utensils mr-2"></i> 입점 관리
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -99,6 +110,6 @@
             });
         });
         /*]]>*/
-        </script>
+    </script>
 </body>
 </html>

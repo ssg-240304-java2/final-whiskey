@@ -8,45 +8,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const navItems = document.querySelectorAll('.nav-item');
 
     function activateTab(tab) {
-        // 모든 섹션을 비활성화하고, 클릭한 탭의 섹션만 활성화
         for (let key in sections) {
             sections[key].classList.remove('active');
         }
         sections[tab].classList.add('active');
 
-        // 모든 네비게이션 아이템을 비활성화하고, 클릭한 탭만 활성화
         navItems.forEach(item => {
             item.classList.remove('active');
         });
         document.querySelector(`.nav-item[data-tab="${tab}"]`).classList.add('active');
-
-        // 선택된 탭을 sessionStorage에 저장
         sessionStorage.setItem('activeTab', tab);
     }
 
-    // 로그아웃 버튼 클릭 시 sessionStorage 초기화
     const logoutBtn = document.querySelector('.logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', function() {
-            sessionStorage.clear();  // sessionStorage를 초기화하여 마지막 탭 정보 제거
+            sessionStorage.clear();  // 로그아웃 시 sessionStorage를 비웁니다.
         });
     }
 
-    // 기본적으로 "회원정보" 탭 활성화 (로그인 시)
-    let activeTab = location.hash.replace('#', '') || sessionStorage.getItem('activeTab') || 'profile';
+    // 로그인 시 마지막 탭으로 이동하지만, 로그아웃 후 로그인 시 항상 'profile' 탭이 활성화되도록 설정
+    let loggedInBefore = sessionStorage.getItem('loggedInBefore');
+    let activeTab = 'profile';  // 기본값은 'profile'
+
+    if (loggedInBefore) {
+        activeTab = sessionStorage.getItem('activeTab') || 'profile';
+    }
+
+    // 로그인 후에는 loggedInBefore 플래그를 true로 설정
+    sessionStorage.setItem('loggedInBefore', true);
+
     activateTab(activeTab);
 
-    // 탭을 클릭할 때 해당 탭을 활성화
     navItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             let tab = this.getAttribute('data-tab');
             activateTab(tab);
-            location.hash = tab;  // URL 해시 변경
+            location.hash = tab;
         });
     });
 
-    // 페이지네이션 링크에 activeTab 파라미터 추가
     const paginationLinks = document.querySelectorAll('.pagination a');
     paginationLinks.forEach(link => {
         const href = new URL(link.href);
@@ -54,11 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
         link.href = href.toString();
     });
 
-    // 리뷰 아이템에서 레스토랑 이름 클릭 시 레스토랑 상세 페이지로 이동
     const reviewNames = document.querySelectorAll('.review-item .restaurant-name');
     reviewNames.forEach(name => {
         name.addEventListener('click', function(event) {
-            event.stopPropagation();  // 부모 요소의 클릭 이벤트 전파 방지
+            event.stopPropagation();
             const restaurantId = this.closest('.review-item').getAttribute('data-restaurant-id');
             if (restaurantId) {
                 window.location.href = '/restaurant/' + restaurantId + '/info';
@@ -66,11 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 즐겨찾기된 레스토랑 이름 클릭 시 레스토랑 상세 페이지로 이동
     const favoriteNames = document.querySelectorAll('.favorite-item .restaurant-name');
     favoriteNames.forEach(name => {
         name.addEventListener('click', function(event) {
-            event.stopPropagation();  // 부모 요소의 클릭 이벤트 전파 방지
+            event.stopPropagation();
             const restaurantId = this.closest('.favorite-item').getAttribute('data-restaurant-id');
             if (restaurantId) {
                 window.location.href = '/restaurant/' + restaurantId + '/info';
@@ -78,7 +78,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // 이미지 모달
     const modal = document.getElementById("imageModal");
     const modalImg = document.getElementById("modalImage");
     const captionText = document.getElementById("caption");
@@ -86,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     images.forEach(img => {
         img.addEventListener('click', function(event) {
-            event.stopPropagation(); // 부모 요소의 클릭 이벤트 전파 방지
+            event.stopPropagation();
             modal.style.display = "block";
             modalImg.src = this.src;
             captionText.innerHTML = this.alt;
@@ -98,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = "none";
     };
 
-    // 프로필 수정 모달 관리
     const modalBasic = document.getElementById('editProfileModalBasic');
     const modalSocial = document.getElementById('editProfileModalSocial');
     const btn = document.querySelector('.edit-profile-btn');
@@ -147,17 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    window.onclick = function(event) {
-        if (modalBasic && event.target == modalBasic) {
-            modalBasic.classList.remove('show');
-            setTimeout(() => modalBasic.style.display = "none", 300);
-        } else if (modalSocial && event.target == modalSocial) {
-            modalSocial.classList.remove('show');
-            setTimeout(() => modalSocial.style.display = "none", 300);
-        }
-    };
-
-    // 로그인 ID 중복 확인 로직
     document.getElementById('loginIdCheckBtn').addEventListener('click', function() {
         const loginId = document.getElementById('basicLoginId').value;
 
@@ -194,7 +181,6 @@ document.addEventListener('DOMContentLoaded', function() {
         xhr.send('loginId=' + encodeURIComponent(loginId));
     });
 
-    // 비밀번호 확인 로직
     document.getElementById('basicPassword').addEventListener('keyup', checkPasswords);
     document.getElementById('basicConfirmPassword').addEventListener('keyup', checkPasswords);
 
@@ -212,48 +198,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 즐겨찾기 해제 버튼 로직
-    const removeFavoriteButtons = document.querySelectorAll('.remove-favorite-btn');
+    const removeFavoriteForms = document.querySelectorAll('.remove-favorite-form');
 
-    removeFavoriteButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault(); // 기본 폼 제출 동작을 방지합니다.
+    removeFavoriteForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
 
-            const restaurantId = this.closest('form').querySelector('input[name="restaurantId"]').value;
-            const favoritePage = this.closest('form').querySelector('input[name="favoritePage"]').value;
-            const favoriteSize = this.closest('form').querySelector('input[name="favoriteSize"]').value;
+            if (confirm('즐겨찾기를 해제하시겠습니까?')) {
+                const currentPage = parseInt(document.querySelector('input[name="favoritePage"]').value);
+                const favoriteItem = this.closest('.favorite-item');
+                const remainingItems = document.querySelectorAll('.favorite-item').length;
 
-            if (!restaurantId) {
-                alert('레스토랑 ID가 유효하지 않습니다.');
-                return;
+                fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this)
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        } else {
+                            throw new Error('즐겨찾기 해제 중 오류가 발생했습니다.');
+                        }
+                    })
+                    .then(() => {
+                        alert('즐겨찾기가 해제되었습니다.');
+                        favoriteItem.remove();
+
+                        if (remainingItems === 1 && currentPage > 0) {
+                            window.location.href = `/mypage?favoritePage=${currentPage - 1}&activeTab=favorite`;
+                        } else {
+                            window.location.href = `/mypage?favoritePage=${currentPage}&activeTab=favorite`;
+                        }
+                    })
+                    .catch(error => {
+                        alert(error.message);
+                    });
             }
-
-            fetch('/mypage/remove-favorite', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: new URLSearchParams({
-                    'restaurantId': restaurantId,
-                    'favoritePage': favoritePage,
-                    'favoriteSize': favoriteSize
-                })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.text();
-                    } else {
-                        throw new Error('Failed to remove favorite');
-                    }
-                })
-                .then(text => {
-                    alert('즐겨찾기가 해제되었습니다.');
-                    window.location.reload();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('즐겨찾기 해제 중 오류가 발생했습니다.');
-                });
         });
     });
 });

@@ -1,15 +1,33 @@
-
 $(document).ready(function() {
+    console.log('Document ready');
+
+    // FoodFolio 로고 클릭 이벤트 처리
+    $('#foodfolio-logo').on('click', function(e) {
+        e.preventDefault();
+        loadContent('dashboard');
+        updateActiveMenu($('.nav-link[data-target="dashboard"]'));
+    });
+
     // 사이드바 메뉴 클릭 이벤트 처리
     $('.nav-link').on('click', function(e) {
         e.preventDefault();
         var target = $(this).data('target');
+        console.log('Nav link clicked:', target);
         loadContent(target);
         updateActiveMenu(this);
     });
 
-    // 대시보드 내 빠른 링크 버튼 클릭 이벤트 처리
-    $(document).on('click', '#dashboard .btn', function(e) {
+    // 빠른 링크 버튼 클릭 이벤트 처리 개선
+    $(document).on('click', '.quick-link-btn', function(e) {
+        e.preventDefault();
+        var target = $(this).data('target');
+        console.log('Quick link clicked:', target);
+        loadContent(target);
+        updateActiveMenu($('.nav-link[data-target="' + target + '"]'));
+    });
+
+    // 빠른 액세스 메뉴 클릭 이벤트 처리
+    $('.dropdown-item[data-target]').on('click', function(e) {
         e.preventDefault();
         var target = $(this).data('target');
         loadContent(target);
@@ -28,8 +46,14 @@ $(document).ready(function() {
                 $('#content-area').html(response);
                 $('#page-title').text(getPageTitle(target));
                 initializeCharts();
+                highlightActiveButton(target);
 
-                // 입점 관리 탭을 위한 추가 초기화
+                // 대시보드로 돌아갈 때 추가 작업
+                if (target === 'dashboard') {
+                    console.log('대시보드로 돌아왔습니다.');
+                    // TODO: 대시보드 특정 초기화 작업이 필요하다면 여기에 추가
+                }
+
                 if (target === 'restaurant-management') {
                     loadRestaurantRegistrations();
                 }
@@ -40,6 +64,7 @@ $(document).ready(function() {
             }
         });
     }
+
     function updateActiveMenu(clickedItem) {
         $('.nav-link').removeClass('active');
         $(clickedItem).addClass('active');
@@ -54,6 +79,18 @@ $(document).ready(function() {
             case 'restaurant-management': return '입점 관리';
             default: return 'FoodFolio 관리자';
         }
+    }
+
+    // 활성 버튼 하이라이트 함수
+    function highlightActiveButton(target) {
+        $('#dashboard .btn').removeClass('active');
+        $('#dashboard .btn[data-target="' + target + '"]').addClass('active');
+    }
+
+    // 활성 메뉴 업데이트 함수
+    function updateActiveMenu(clickedItem) {
+        $('.nav-link').removeClass('active');
+        $(clickedItem).addClass('active');
     }
 
     function initializeCharts() {
@@ -74,4 +111,24 @@ $(document).ready(function() {
 
         // TODO: 다른 차트들도 비슷한 방식으로 초기화
     }
+
+    // 사이드바 토글 기능
+    $('#sidebarToggle').on('click', function() {
+        $('.sidebar').toggleClass('show');
+    });
+
+    // 화면 크기 변경 시 빠른 액세스 버튼 표시 여부 조절
+    $(window).resize(function() {
+        if ($(window).width() <= 768) {
+            $('#quickAccessDropdown').hide();
+        } else {
+            $('#quickAccessDropdown').show();
+        }
+    });
+
+    // 초기 로드 시 화면 크기에 따라 버튼 표시 여부 설정
+    if ($(window).width() <= 768) {
+        $('#quickAccessDropdown').hide();
+    }
+
 });

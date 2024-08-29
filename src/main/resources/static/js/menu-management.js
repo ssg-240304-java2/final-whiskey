@@ -87,7 +87,7 @@ function initializeMenuManagement() {
         let paginatedMenus = [];
         for (let i = start; i < start + itemsPerPage; i++) {
             if (menus[i] !== undefined) {
-                menus[i].image = menus[i].image != null ? menus[i].image : 'https://via.placeholder.com/150';
+                menus[i].image = menus[i].image != null ? "https://kr.object.ncloudstorage.com/whiskey-file/" + menus[i].image.uuidFileName : 'https://via.placeholder.com/150';
                 paginatedMenus.push(menus[i]);
             }
         }
@@ -105,28 +105,40 @@ function initializeMenuManagement() {
     });
 
     // 메뉴 수정
-    async function editMenu(id) {
+    function editMenu(id) {
+        var menu;
         // TODO: 백엔드에서 해당 id의 메뉴 정보 가져오기
-        const menus = await loadMenus();
-        console.log("async :: menus : ", menus);
-
-        console.log("Start iter..")
-        menus.forEach(menu => {
-            document.getElementById('menuId').value = menu.id;
-            document.getElementById('menuName').value = menu.name;
-            document.getElementById('menuPrice').value = menu.price;
-            // TODO: 메뉴 이미지 수정 추가
-            document.getElementById('menuModalLabel').textContent = '메뉴 수정';
-            menuModal.show();
-        });
+        $.ajax({
+            type: "GET",
+            url: "/api/restaurant/menu/" + id,
+            success: function (response) {
+                document.getElementById('menuId').value = response.id;
+                document.getElementById('menuName').value = response.name;
+                document.getElementById('menuPrice').value = response.price;
+                // TODO: 메뉴 이미지 수정 추가
+                document.getElementById('menuModalLabel').textContent = '메뉴 수정';
+                menuModal.show();
+            },
+            error: function (error) {
+                console.log("error : ", error);
+            }
+        })
     }
 
     // 메뉴 삭제
     function deleteMenu(id) {
         if (confirm('정말로 이 메뉴를 삭제하시겠습니까?')) {
             // TODO: 백엔드 API 호출하여 메뉴 삭제
-            console.log(`메뉴 ID ${id} 삭제`);
-            updateMenuList();
+            $.ajax({
+                type: "DELETE",
+                url: "/api/restaurant/deleteMenu/" + id,
+                success: function (response) {
+                    updateMenuList();
+                },
+                error: function (error) {
+                    console.log("error : ", error);
+                }
+            });
         }
     }
 
@@ -135,13 +147,25 @@ function initializeMenuManagement() {
         const menuData = {
             id: document.getElementById('menuId').value,
             name: document.getElementById('menuName').value,
-            description: document.getElementById('menuDescription').value,
-            price: parseInt(document.getElementById('menuPrice').value),
+            price: document.getElementById('menuPrice').value,
+            restaurantId: document.getElementById('restaurantId').value
             // TODO: 이미지 처리 로직 추가
         };
 
         // TODO: 백엔드 API 호출하여 메뉴 저장
-        console.log('메뉴 저장:', menuData);
+        $.ajax({
+            type: "POST",
+            url: "/api/restaurant/saveMenu",
+            data: menuData,
+            success: function (response) {
+                alert("메뉴 저장에 성공했습니다.");
+                console.log("response : ", response);
+            },
+            error: function (error) {
+                alert("메뉴 저장에 실패했습니다.");
+                console.log("error : ", error);
+            }
+        });
         menuModal.hide();
         updateMenuList();
     });
@@ -149,3 +173,4 @@ function initializeMenuManagement() {
     // 초기 메뉴 리스트 로드
     updateMenuList();
 }
+

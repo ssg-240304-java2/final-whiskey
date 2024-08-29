@@ -2,11 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
     <div th:fragment="inquiries">
-        <div class="container mt-4">
-             <h2 class="mb-4">문의 내역</h2>
-            
+        <div class="container mt-4">            
             <!-- 문의 목록 테이블 -->
-            <table class="table table-hover">
+            <table class="table table-hover inquiries-table">
+                <!-- 문의 목록 테이블 헤더 -->
                 <thead>
                     <tr>
                         <th>번호</th>
@@ -18,7 +17,7 @@
                     </tr>
                 </thead>
 
-                <!-- 문의 목록 테이블 -->
+                <!-- 문의 목록 테이블 데이터 -->
                 <tbody id="inquiries-table"></tbody>
             </table>
 
@@ -39,13 +38,13 @@
                     <div class="modal-body">
                         <p>작성자: <span id="inquiryWriter"></span></p>
                         <p>날짜: <span id="inquiryDate"></span></p>
+                        <hr>
                         <p>내용: <span id="inquiryContent"></span></p>
                         <hr>
                         <h6>답변</h6>
                         <textarea class="form-control" id="inquiryReply" rows="3"></textarea>
                     </div>
                     <div class="modal-footer">
-<!--                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">닫기</button>-->
                         <button type="button" class="btn btn-secondary" id="saveReply">답변 저장</button>
                     </div>
                 </div>

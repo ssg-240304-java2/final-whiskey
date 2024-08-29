@@ -2,6 +2,7 @@ package com.whiskey.rvcom.businessregister.service;
 
 
 import com.whiskey.rvcom.entity.member.Member;
+import com.whiskey.rvcom.entity.member.Role;
 import com.whiskey.rvcom.entity.report.RestaurantReport;
 import com.whiskey.rvcom.entity.restaurant.Address;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
@@ -47,7 +48,7 @@ public class BusinessRegisterService {
         return addressRepository.save(restaurantAddress);
     }
 
-    public Page<RestaurantRegistration> getAllBusinessRegister(int page, String sortOrder) {
+    public Page<RestaurantRegistration> getBeforeBusinessRegister(int page, String sortOrder) {
         Sort sort = Sort.by("createdAt");
 
         if ("desc".equalsIgnoreCase(sortOrder)) {
@@ -57,7 +58,7 @@ public class BusinessRegisterService {
         }
 
         Pageable pageable = PageRequest.of(page, 10, sort);
-        return restaurantRegistrationRepository.findAll(pageable);
+        return restaurantRegistrationRepository.findByRegistrationStatus(pageable, RegistrationStatus.SUBMITTED);
     }
 
     public RestaurantRegistration getBusinessRegister(Long id) {
@@ -127,5 +128,18 @@ public class BusinessRegisterService {
         restaurant.setVisible(true);
 
         return restaurant;
+    }
+
+    public void changeMemberRole(Long registerId) {
+
+        RestaurantRegistration registration = restaurantRegistrationRepository.findById(registerId).orElse(null);
+
+        Member member = registration.getMember();
+        if (member == null) {
+            return;
+        }
+        member.setRole(Role.OWNER);
+
+        memberRepository.save(member);
     }
 }
