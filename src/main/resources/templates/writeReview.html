@@ -6,6 +6,7 @@
     <title>리뷰 작성 - Foodfolio</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/writeReview.css}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         
     </style>
@@ -45,6 +46,11 @@
                     <option value="FIVE_STAR">★★★★★</option>
                 </select>
             </div>
+
+            <div class="form-group">
+                <label for="title">리뷰 내용</label>
+                <input id="title" name="title" required />
+            </div>
             
             <div class="form-group">
                 <label for="content">리뷰 내용</label>
@@ -67,7 +73,7 @@
         // 별점을 나타내는 요소들을 선택합니다.
         const stars = document.querySelectorAll('.star');
         // 현재 선택된 별점을 저장하는 변수입니다.
-        let rating = 0;
+        let rating = 5;     // need. 항목 변경사항에 따라 값을 동적으로 변화하도록 하는 로직 작성: 반드시 1~5 사이의 값이어야 함
 
         // 각 별점 요소에 클릭 이벤트를 추가합니다.
         stars.forEach(star => {
@@ -95,41 +101,90 @@
         }
 
         // 리뷰 폼 제출 이벤트를 처리합니다.
-        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+        document.getElementById('reviewForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            const images = document.getElementById('images').files;
+
+            // 업로드된 이미지 목록 가져오기
+            const images = document.getElementById('images').files; // Type: File[]
             if (images.length < 1 || images.length > 5) {
                 alert('이미지는 1개 이상 5개 이하로 업로드해주세요.');
                 return;
             }
+            console.log('업로드된 이미지 목록 : ', images);
+
+            // todo. 이미지 업로드 로직 추가
+            // desc. 파일은 하나씩 업로드한다.
+            let uploadedImageFileIds = [];    // 리뷰 객체 등록 시 사용할 이미지 파일 이름 목록
+
+            for(let img of images) {
+                let uploadedFileId = await uploadeReviewImages(img);
+                uploadedImageFileIds.push(uploadedFileId);
+            }
+
+            console.log('업로드된 이미지 파일 ID 목록 : ', uploadedImageFileIds);
+
+            let imageFileIdsAsString = uploadedImageFileIds.join(' ');
 
             // 폼 데이터 생성
-            const formData = new FormData(this);
+            // const formData = new FormData(this);
+            let submitFormData = new FormData();
+            submitFormData.append('title', document.getElementById('title').value);
+            submitFormData.append('content', document.getElementById('content').value);
+            submitFormData.append('rating', rating);
+            submitFormData.append('images', imageFileIdsAsString);
+            submitFormData.append('restaurantId', document.getElementById('restaurantId').value);
+            submitFormData.append('receiptDataId', document.getElementById('receiptId').value);
+
+            console.log('restaurantId : ', document.getElementById('restaurantId').value);
+            console.log('receiptDataId : ', document.getElementById('receiptId').value);
+            console.log('rating : ', rating);
+            console.log('title : ', document.getElementById('title').value);
+            console.log('content : ', document.getElementById('content').value);
+            console.log('images : ', imageFileIdsAsString);
+
+            $.ajax({
+                url: "/review/saveReview",
+                type: "POST",
+                data: submitFormData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    alert("리뷰가 성공적으로 등록되었습니다.");
+                    window.location.href = data.redirectUrl;
+                },
+                error: function (error) {
+                    console.log("리뷰 등록 오류 : ", error);
+                    alert("리뷰 등록 중 오류가 발생했습니다.");
+                },
+            })
+
+            // $.ajax({
+            //     url: ""
+            // })
 
             // AJAX를 사용하여 서버에 데이터 전송
-            fetch(this.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('서버 응답 오류');
-            })
-            .then(data => {
-                if (data.success) {
-                    alert('리뷰가 성공적으로 등록되었습니다.');
-                    window.location.href = data.redirectUrl;
-                } else {
-                    alert('리뷰 등록에 실패했습니다: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('리뷰 등록 중 오류가 발생했습니다.');
-            });
+            // fetch(this.action, {
+            //     method: 'POST',
+            //     body: formData
+            // })
+            // .then(response => {
+            //     if (response.ok) {
+            //         return response.json();
+            //     }
+            //     throw new Error('서버 응답 오류');
+            // })
+            // .then(data => {
+            //     if (data.success) {
+            //         alert('리뷰가 성공적으로 등록되었습니다.');
+            //         window.location.href = data.redirectUrl;
+            //     } else {
+            //         alert('리뷰 등록에 실패했습니다: ' + data.message);
+            //     }
+            // })
+            // .catch(error => {
+            //     console.error('Error:', error);
+            //     alert('리뷰 등록 중 오류가 발생했습니다.');
+            // });
         });
 
         // 취소 버튼 기능
@@ -169,6 +224,32 @@
         // TODO: 백엔드 개발자는 업로드된 사진의 용량, 형식, 개수를 서버 측에서 검증하는 로직을 구현해야 합니다.
         // 허용된 이미지 형식만 업로드 가능하도록 하고, 최대 5장까지만 저장되도록 제한해야 합니다.
         // 또한 각 이미지의 최대 용량도 서버 측에서 체크해야 합니다.
+
+        async function uploadeReviewImages(img) {
+            console.log('파일 업로드 시작 : ', img);
+            const formData = new FormData();
+            formData.append('file', img);
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "/review/uploadReviewImage",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        // alert("파일 업로드 성공 : " + data);
+                        console.log(`[${img}] 파일의 업로드 완료 : ${data}`);
+                        resolve(data);
+                    },
+                    error: function (error) {
+                        console.log("파일 업로드 오류 : ", error);
+                        alert("파일 업로드 중 오류가 발생했습니다.");
+                        reject(error);
+                    },
+                })
+            });
+        }
     </script>
 </body>
 </html>
