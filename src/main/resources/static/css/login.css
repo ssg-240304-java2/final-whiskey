@@ -226,7 +226,7 @@ form button:hover {
 .image-section img.logo {
     width: auto;
     height: 60%;
-    max-height: 380px;
+    max-height: 250px;
     position: relative;
     z-index: 1;
     transition: transform 0.3s ease;

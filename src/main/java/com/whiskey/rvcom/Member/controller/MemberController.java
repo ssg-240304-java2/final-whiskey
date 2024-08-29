@@ -110,12 +110,14 @@ public class MemberController {
     }
 
     @PostMapping("/mypage/remove-favorite")
-    @ResponseBody
-    public ResponseEntity<String> removeFavorite(@RequestParam("restaurantId") Long restaurantId, HttpSession session) {
+    public String removeFavorite(@RequestParam("restaurantId") Long restaurantId,
+                                 @RequestParam(value = "favoritePage", defaultValue = "0") int favoritePage,
+                                 @RequestParam(value = "favoriteSize", defaultValue = "10") int favoriteSize,
+                                 HttpSession session, Model model) {
         Member member = (Member) session.getAttribute("member");
 
         if (member == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인이 필요합니다.");
+            return "redirect:/login";
         }
 
         try {
@@ -124,14 +126,28 @@ public class MemberController {
 
             // 조회된 Restaurant 객체를 removeFavorite 메서드에 전달
             favoriteService.removeFavorite(member, restaurant);
-            return ResponseEntity.ok("즐겨찾기가 해제되었습니다.");
+
+            // 현재 페이지의 즐겨찾기 아이템이 모두 제거된 경우
+            List<Favorite> favorites = favoriteService.getFavoritesByMember(member);
+            int totalPages = (int) Math.ceil((double) favorites.size() / favoriteSize);
+
+            // 삭제 후 페이지가 없어지는 경우 이전 페이지로 이동
+            if (favoritePage >= totalPages && favoritePage > 0) {
+                model.addAttribute("message", "즐겨찾기가 해제되었습니다.");
+                return "redirect:/mypage?favoritePage=" + (favoritePage - 1) + "&favoriteSize=" + favoriteSize + "&activeTab=favorite";
+            }
+
+            // 삭제 후 현재 페이지로 리다이렉트
+            model.addAttribute("message", "즐겨찾기가 해제되었습니다.");
+            return "redirect:/mypage?favoritePage=" + favoritePage + "&favoriteSize=" + favoriteSize + "&activeTab=favorite";
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 레스토랑을 찾을 수 없습니다.");
+            model.addAttribute("error", "해당 레스토랑을 찾을 수 없습니다.");
+            return "mypage";
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("즐겨찾기 해제 중 오류가 발생했습니다.");
+            model.addAttribute("error", "즐겨찾기 해제 중 오류가 발생했습니다.");
+            return "mypage";
         }
     }
-
 
     @GetMapping("/mypage")
     public String myPage(HttpSession session, Model model,

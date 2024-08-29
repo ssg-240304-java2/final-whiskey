@@ -9,7 +9,6 @@ $(document).ready(function () {
     $('#saveReply').click(saveInquiryReply);
 });
 
-// 문의 내역 전체 조회
 function loadInquiries(restaurantId, pageNumber) {
     $.ajax({
         url: `/restaurant/${restaurantId}/owner-inquiries?pageNumber=${pageNumber}&pageSize=5`,
@@ -25,9 +24,15 @@ function loadInquiries(restaurantId, pageNumber) {
                 tr.append('<td>' + inquiry.writer.name + '</td>');
                 tr.append('<td>' + inquiry.content + '</td>');
                 tr.append('<td>' + new Date(inquiry.createdAt).toLocaleString() + '</td>');
-                tr.append('<td>' + (inquiry.reply ? '답변완료' : '미답변') + '</td>');
+                
+                // 답변 여부에 따라 다른 뱃지 스타일 적용
+                const badgeClass = inquiry.reply ? 'badge-answered' : 'badge-unanswered';
+                const badgeText = inquiry.reply ? '답변완료' : '미답변';
+                tr.append('<td><span class="' + badgeClass + '">' + badgeText + '</span></td>');
+                
+                // 상세보기 버튼 스타일 변경
                 tr.append('<td>' +
-                    `<button class="btn btn-sm btn-primary view-inquiry" data-id=${inquiry.id} onclick=inquiryDetail(${inquiry.id})>보기</button>` +
+                    `<button class="btn-view-inquiry" data-id=${inquiry.id} onclick=inquiryDetail(${inquiry.id})>상세보기</button>` +
                     '</td>');
                 $inquiriesTable.append(tr);
             });
@@ -39,6 +44,7 @@ function loadInquiries(restaurantId, pageNumber) {
         }
     });
 }
+
 
 // 문의 내역 상세 보기
 function inquiryDetail(inquiryId) {

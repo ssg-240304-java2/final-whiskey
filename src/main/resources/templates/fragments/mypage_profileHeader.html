@@ -4,10 +4,14 @@
         <img th:src="${profileImageUrl}" alt="프로필 이미지" class="profile-image">
         <div class="profile-info">
             <h1 th:text="${name}">사용자 이름</h1>
-            <p th:text="${'• 가입일: ' + joinDate}"> • 가입일</p>
+            <p th:text="'• 가입일 : ' + ${#temporals.format(member.createdAt, 'yyyy년 MM월 dd일 a hh:mm')}">
+                가입일
+            </p>
             <div class="profile-stats">
                 <span><i class="fas fa-star"></i> <span th:text="${reviewCount}">0</span>개의 리뷰</span>
             </div>
         </div>
     </div>
 </div>
+
+
