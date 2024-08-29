@@ -3,6 +3,7 @@ package com.whiskey.rvcom.entity.restaurant;
 import jakarta.persistence.*;
 import lombok.*;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tbl_open_close_time")
 @Entity

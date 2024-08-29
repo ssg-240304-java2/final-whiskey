@@ -6,12 +6,14 @@ import com.whiskey.rvcom.entity.restaurant.WeeklyOpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.repository.MenuRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
+import com.whiskey.rvcom.restaurant.dto.OperatingHourDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
 import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -234,5 +236,16 @@ public class RestaurantService {
         Menu menu = entityManager.find(Menu.class, m.getId());
         menu.setName(m.getName());
         menu.setPrice(m.getPrice());
+    }
+
+    @Transactional
+    public void modifyOperatingHour(Long restaurantId, Map<String, OperatingHourDTO> operatingHours) {
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setMonday(operatingHours.get("월").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("월").getOpen(), operatingHours.get("월").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setTuesday(operatingHours.get("화").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("화").getOpen(), operatingHours.get("화").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setWednesday(operatingHours.get("수").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("수").getOpen(), operatingHours.get("수").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setThursday(operatingHours.get("목").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("목").getOpen(), operatingHours.get("목").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setFriday(operatingHours.get("금").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("금").getOpen(), operatingHours.get("금").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setSaturday(operatingHours.get("토").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("토").getOpen(), operatingHours.get("토").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setSunday(operatingHours.get("일").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("일").getOpen(), operatingHours.get("일").getClose(), true) : null);
     }
 }

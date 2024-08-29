@@ -85,9 +85,7 @@ function loadRestaurantInfo() {
             if (document.getElementById("displayOperatingHours") !== null) {
                 const days = ["월", "화", "수", "목", "금", "토", "일"];
                 const operatingHoursList = document.getElementById("displayOperatingHours");
-                console.log("operatingHoursList : " + operatingHoursList);
                 operatingHoursList.innerHTML = "";
-                console.log("operatingHoursList : " + operatingHoursList);
                 for (let day of days) {
                     var li = document.createElement("li");
                     li.textContent = `${day} : ` + data.operatingHours[day];
@@ -146,7 +144,7 @@ function loadRestaurantInfo() {
         .catch((error) => console.error("음식점 정보 로드 실패:", error));
 }
 
-// 음식점 정보 수정 요청을 보내는 함수
+// 음식점 정보 수정 함수
 function sendModificationRequest() {
     const formData = new FormData(document.getElementById("restaurantInfoForm"));
     formData.append("modificationReason", document.getElementById("modificationReason").value);
@@ -157,27 +155,41 @@ function sendModificationRequest() {
     days.forEach((day) => {
         const operateCheckbox = document.getElementById(`operate${day}`);
         if (operateCheckbox.checked) {
+            var dayOpenOption = document.getElementById(`openTime${day}`);
+            var dayCloseOption = document.getElementById(`closeTime${day}`);
             operatingHours[day] = {
-                open: document.getElementById(`openTime${day}`).textContent,
-                close: document.getElementById(`closeTime${day}`).textContent,
+                isOpen: true,
+                open: dayOpenOption.options[dayOpenOption.selectedIndex].textContent,
+                close: dayCloseOption.options[dayCloseOption.selectedIndex].textContent,
+            };
+        } else {
+            operatingHours[day] = {
+                isOpen: false,
+                open: "",
+                close: "",
             };
         }
     });
-    formData.append("operatingHours", JSON.stringify(operatingHours));
 
-    // TODO: 백엔드 개발 - POST /api/restaurant/request-modification 엔드포인트 구현
-    // 요청 데이터: FormData 객체 (음식점 정보 + 수정 사유 + 영업 시간)
-    // 응답 데이터: { success: true/false, message: "처리 결과 메시지" }
-    fetch('/api/restaurant/request-modification', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            alert('음식점 정보 수정 요청이 성공적으로 전송되었습니다. 관리자 검토 후 처리됩니다.');
+    var restaurantId = document.getElementById("restaurantId").value;
+
+    // TODO: 백엔드 개발 - POST /api/restaurant/modification 엔드포인트 구현
+    $.ajax({
+        url: `/api/restaurant/modification/${restaurantId}`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({operatingHours}),
+        success: function (response) {
+            console.log('Operating hours updated successfully:', response);
             $('#modificationRequestModal').modal('hide');
-        })
-        .catch(error => console.error('음식점 정보 수정 요청 실패:', error));
+            loadRestaurantInfo();
+        },
+        error: function (xhr, status, error) {
+            console.error('Error updating operating hours:', error);
+            $('#modificationRequestModal').modal('hide');
+        }
+    });
+
 }
 
 // 음식점 삭제 요청을 보내는 함수
