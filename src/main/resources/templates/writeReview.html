@@ -31,44 +31,56 @@
             <div th:replace="fragments/reviewTextarea :: reviewTextarea"></div>
             <div th:replace="fragments/photoUpload :: photoUpload"></div>
             <div th:replace="fragments/reviewSubmitButtons :: reviewSubmitButtons"></div> -->
-        </form>
+<!--        </form>-->
         <form id="reviewForm" th:action="@{/review/save}" method="post" enctype="multipart/form-data">
             <input type="hidden" id="restaurantId" name="restaurantId" th:value="${restaurantId}">
             <input type="hidden" id="receiptId" name="receiptDataId" th:value="${receiptId}">
             
-            <div class="form-group">
-                <label for="rating">별점</label>
-                <select id="rating" name="rating" required>
-                    <option value="ONE_STAR">★☆☆☆☆</option>
-                    <option value="TWO_STAR">★★☆☆☆</option>
-                    <option value="THREE_STAR">★★★☆☆</option>
-                    <option value="FOUR_STAR">★★★★☆</option>
-                    <option value="FIVE_STAR">★★★★★</option>
-                </select>
-            </div>
+<!--            <div class="form-group">-->
+<!--                <label for="rating">별점</label>-->
+<!--                <select id="rating" name="rating" required>-->
+<!--                    <option value="ONE_STAR">★☆☆☆☆</option>-->
+<!--                    <option value="TWO_STAR">★★☆☆☆</option>-->
+<!--                    <option value="THREE_STAR">★★★☆☆</option>-->
+<!--                    <option value="FOUR_STAR">★★★★☆</option>-->
+<!--                    <option value="FIVE_STAR">★★★★★</option>-->
+<!--                </select>-->
+<!--            </div>-->
+            <div th:replace="fragments/starRating :: starRating"></div>
 
-            <div class="form-group">
-                <label for="title">리뷰 내용</label>
-                <input id="title" name="title" required />
-            </div>
+<!--            <div class="form-group">-->
+<!--                <label for="title">리뷰 내용</label>-->
+<!--                <input id="title" name="title" required />-->
+<!--            </div>-->
+<!--            -->
+<!--            <div class="form-group">-->
+<!--                <label for="content">리뷰 내용</label>-->
+<!--                <textarea id="content" name="content" rows="5" required></textarea>-->
+<!--            </div>-->
+<!--            -->
+<!--            <div class="form-group">-->
+<!--                <label for="images">이미지 업로드 (1~5개)</label>-->
+<!--                <input type="file" id="images" name="images" multiple accept="image/*" required>-->
+<!--            </div>-->
+
+            <div th:replace="fragments/reviewTextarea :: reviewHeaderarea"></div>
+            <div th:replace="fragments/reviewTextarea :: reviewTextarea"></div>
+            <div th:replace="fragments/photoUpload :: photoUpload"></div>
+            <div th:replace="fragments/reviewSubmitButtons :: reviewSubmitButtons"></div>
             
-            <div class="form-group">
-                <label for="content">리뷰 내용</label>
-                <textarea id="content" name="content" rows="5" required></textarea>
-            </div>
-            
-            <div class="form-group">
-                <label for="images">이미지 업로드 (1~5개)</label>
-                <input type="file" id="images" name="images" multiple accept="image/*" required>
-            </div>
-            
-            <button type="submit">리뷰 등록</button>
+<!--            <button type="submit">리뷰 등록</button>-->
         </form>
     </div>
 
     <script>
         // TODO: 백엔드 개발자는 레스토랑 정보를 동적으로 불러오는 API를 구현해야 합니다.
         // 레스토랑 ID를 기반으로 이름과 주소를 가져와 페이지에 표시하는 기능이 필요합니다.
+
+        // DOM 요소가 로드된 후 실행되는 함수입니다.
+        document.addEventListener('DOMContentLoaded', function() {
+            // 별점을 업데이트합니다.
+            updateStars();
+        });
 
         // 별점을 나타내는 요소들을 선택합니다.
         const stars = document.querySelectorAll('.star');
@@ -81,6 +93,7 @@
                 // 클릭된 별의 data-rating 속성 값을 가져와 rating 변수에 저장합니다.
                 rating = star.getAttribute('data-rating');
                 console.log('Rating:', rating);
+                console.log('**Type of Rating:', typeof rating);
 
                 // 별점 표시를 업데이트합니다.
                 updateStars();
@@ -128,8 +141,8 @@
             // 폼 데이터 생성
             // const formData = new FormData(this);
             let submitFormData = new FormData();
-            submitFormData.append('title', document.getElementById('title').value);
-            submitFormData.append('content', document.getElementById('content').value);
+            submitFormData.append('title', document.getElementById('reviewTitle').value);
+            submitFormData.append('content', document.getElementById('reviewText').value);
             submitFormData.append('rating', rating);
             submitFormData.append('images', imageFileIdsAsString);
             submitFormData.append('restaurantId', document.getElementById('restaurantId').value);
@@ -138,8 +151,8 @@
             console.log('restaurantId : ', document.getElementById('restaurantId').value);
             console.log('receiptDataId : ', document.getElementById('receiptId').value);
             console.log('rating : ', rating);
-            console.log('title : ', document.getElementById('title').value);
-            console.log('content : ', document.getElementById('content').value);
+            console.log('title : ', document.getElementById('reviewTitle').value);
+            console.log('content : ', document.getElementById('reviewText').value);
             console.log('images : ', imageFileIdsAsString);
 
             $.ajax({
@@ -150,7 +163,7 @@
                 contentType: false,
                 success: function (data) {
                     alert("리뷰가 성공적으로 등록되었습니다.");
-                    window.location.href = data.redirectUrl;
+                    window.location.href = `/restaurant/${document.getElementById('restaurantId').value}/reviews`;
                 },
                 error: function (error) {
                     console.log("리뷰 등록 오류 : ", error);
