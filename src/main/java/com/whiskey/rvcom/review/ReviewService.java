@@ -74,7 +74,10 @@ public class ReviewService {
                 ratingPhase.append("☆");
             }
         }
-        ratingPhase.append(" ").append(rating);
+        ratingPhase.append(" ");
+
+        // rating 값을 소수점 아래 1자리까지만 표시
+        ratingPhase.append(String.format("%.1f", rating));
 
         Map<String, Object> attributes = new HashMap<>();
         attributes.put("ratingPhase", ratingPhase.toString());

@@ -57,7 +57,8 @@ public class OwnerFragmentController {
         double avgRating = reviewService.getAverageRatingForRestaurant(reviews); // 평균 별점 도출
 //        model.addAttribute("avgRating", avgRating);
         // avgRating / 5 형태로 출력되도록
-        String ratingPhase = avgRating + " / 5";
+        String ratingPhase = String.format("%.1f", avgRating) + " / 5";
+        // ratingPhase.append(String.format("%.1f", rating));
 //        model.addAttribute("avgRating", ratingPhase);   // todo. 평균평점 바인딩
 
         // 리뷰 목록에서 최근순으로 3개만 가져오기
