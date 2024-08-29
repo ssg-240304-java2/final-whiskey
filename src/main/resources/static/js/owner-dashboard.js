@@ -79,6 +79,9 @@ document.addEventListener('DOMContentLoaded', function () {
 // <<<<<<< feat/owner_review_bind
     // 초기 로드 시 대시보드 프래그먼트 로드
     loadFragment('dashboard');
+    
+    // 대시보드 로드 시 미답변 문의 카운트 업데이트
+    updateUnansweredInquiryCount();
 // =======
 //     function loadContent(targetId) {
 //         // 모든 링크에서 'active' 클래스 제거
@@ -151,6 +154,9 @@ function initializeModals() {
 function initDashboard() {
     console.log('Dashboard initialized');
     // 대시보드 특정 초기화 로직 (필요한 경우)
+    updateUnansweredInquiryCount();
+    // 기타 대시보드 특정 초기화 로직
+
 }
 
 function initRestaurantInfo() {
@@ -183,4 +189,24 @@ function unansweredInquiryCount() {
         }
     });
 }
+
+// 미답변 문의 카운트를 업데이트하는 함수
+function updateUnansweredInquiryCount() {
+    const restaurantId = document.getElementById('restaurantId').value;
+    fetch(`/restaurant/${restaurantId}/inquiries/unanswered-count`)
+        .then(response => response.json())
+        .then(count => {
+            const element = document.querySelector('.unansweredInquiryCount');
+            if (element) {
+                element.textContent = count + '건';
+            } else {
+                console.warn("'.unansweredInquiryCount' 요소를 찾을 수 없습니다.");
+            }
+        })
+        .catch(error => {
+            console.error("미답변 문의 수를 불러오는 중 오류 발생", error);
+        });
+}
+
+
 // 다른 페이지들의 초기화 함수도 필요에 따라 추가
