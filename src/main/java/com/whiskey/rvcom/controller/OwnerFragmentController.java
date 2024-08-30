@@ -90,12 +90,12 @@ public class OwnerFragmentController {
         int weeklyReviewCount = getWeeklyReviewCount(reviews);
         int unansweredInquiryCount = restaurantInquiryService.getUnansweredInquiryCount(restaurant.getId());
 
-        double avgRating = reviewService.getAverageRatingForRestaurant(reviews); // 평균 별점 도출
-//        model.addAttribute("avgRating", avgRating);
-        // avgRating / 5 형태로 출력되도록
-        String ratingPhase = String.format("%.1f", avgRating) + " / 5";
+        double avgRatingAsDouble = reviewService.getAverageRatingForRestaurant(reviews); // 평균 별점 도출
+//        model.addAttribute("avgRatingAsDouble", avgRatingAsDouble);
+        // avgRatingAsDouble / 5 형태로 출력되도록
+//        String ratingPhase = String.format("%.1f", avgRatingAsDouble) + " / 5";
         // ratingPhase.append(String.format("%.1f", rating));
-//        model.addAttribute("avgRating", ratingPhase);   // todo. 평균평점 바인딩
+//        model.addAttribute("avgRatingAsDouble", ratingPhase);   // todo. 평균평점 바인딩
 
         model.addAttribute("reviewCount", reviewCount);
         model.addAttribute("avgRating", ratingPhase);
