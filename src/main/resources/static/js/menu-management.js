@@ -29,7 +29,7 @@ function initializeMenuManagement() {
     // 메뉴 리스트 렌더링
     function renderMenus(menus) {
         menuList.innerHTML = '';
-        menus.forEach(menu => {
+        for (let menu of menus) {
             const menuItem = document.createElement('div');
             menuItem.className = 'col-md-3 mb-4';
             menuItem.innerHTML = `
@@ -44,7 +44,23 @@ function initializeMenuManagement() {
                 </div>
             `;
             menuList.appendChild(menuItem);
-        });
+        }
+        // menus.forEach(menu => {
+        //     const menuItem = document.createElement('div');
+        //     menuItem.className = 'col-md-3 mb-4';
+        //     menuItem.innerHTML = `
+        //         <div class="card">
+        //             <img src="${menu.image}" class="card-img-top" alt="${menu.name}">
+        //             <div class="card-body">
+        //                 <h5 class="card-title">${menu.name}</h5>
+        //                 <p class="card-text"><strong>${menu.price.toLocaleString()}원</strong></p>
+        //                 <button class="btn btn-sm btn-primary edit-menu" data-id="${menu.id}">수정</button>
+        //                 <button class="btn btn-sm btn-danger delete-menu" data-id="${menu.id}">삭제</button>
+        //             </div>
+        //         </div>
+        //     `;
+        //     menuList.appendChild(menuItem);
+        // });
 
         // 수정 및 삭제 버튼에 이벤트 리스너 추가
         document.querySelectorAll('.edit-menu').forEach(btn => {
@@ -167,17 +183,17 @@ function initializeMenuManagement() {
             success: function (response) {
                 alert("메뉴 저장에 성공했습니다.");
                 console.log("response : ", response);
-                renderMenus();
+                menuModal.hide();
+                updateMenuList();
             },
             error: function (error) {
                 alert("메뉴 저장에 실패했습니다.");
                 console.log("error : ", error);
-                renderMenus();
+                menuModal.hide();
+                updateMenuList();
             }
         });
 
-        menuModal.hide();
-        updateMenuList();
     });
 
     async function uploadFileToServer(file) {

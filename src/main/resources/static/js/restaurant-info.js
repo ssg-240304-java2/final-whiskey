@@ -1,6 +1,5 @@
 // 음식점 정보 관리 기능
 function initRestaurantInfo() {
-    console.log('Restaurant Info initialized');
     // 음식점 정보 로드
     loadRestaurantInfo();
 
@@ -82,7 +81,7 @@ function loadRestaurantInfo() {
             }
 
             // 영업 시간 정보 표시
-            if (document.getElementById("displayOperatingHours") !== null) {
+            if ($('.nav-item')[1].children[0].classList.contains('active')) {
                 const days = ["월", "화", "수", "목", "금", "토", "일"];
                 const operatingHoursList = document.getElementById("displayOperatingHours");
                 operatingHoursList.innerHTML = "";
@@ -93,7 +92,7 @@ function loadRestaurantInfo() {
                 }
 
                 // 영업 시간 정보 설정
-                days.forEach((day) => {
+                for (let day of days) {
                     const operateCheckbox = document.getElementById(`operate${day}`);
                     const openTimeSelect = document.getElementById(`openTime${day}`);
                     const closeTimeSelect = document.getElementById(`closeTime${day}`);
@@ -117,28 +116,28 @@ function loadRestaurantInfo() {
                     } else {
                         operateCheckbox.checked = false;
                     }
-                });
-            }
+                }
 
-            // 수정 모달 폼에 데이터 설정
-            if (document.getElementById("restaurantName") !== null) {
-                document.getElementById("restaurantName").value = data.name;
-            }
-            if (document.getElementById("restaurantNumber") !== null) {
-                document.getElementById("restaurantNumber").value = data.number;
-            }
-            if (document.getElementById("restaurantAddress") !== null) {
-                document.getElementById("restaurantAddress").value = data.address;
-            }
-            if (document.getElementById("ownerName") !== null) {
-                document.getElementById("ownerName").value = data.ownerName;
-            }
-            if (document.getElementById("category") !== null) {
-                document.getElementById('category').options.forEach((option) => {
-                    if (option.value === data.category) {
-                        option.selected = true;
+                // 수정 모달 폼에 데이터 설정
+                if (document.getElementById("restaurantName") !== null) {
+                    document.getElementById("restaurantName").value = data.name;
+                }
+                if (document.getElementById("restaurantNumber") !== null) {
+                    document.getElementById("restaurantNumber").value = data.number;
+                }
+                if (document.getElementById("restaurantAddress") !== null) {
+                    document.getElementById("restaurantAddress").value = data.address;
+                }
+                if (document.getElementById("ownerName") !== null) {
+                    document.getElementById("ownerName").value = data.ownerName;
+                }
+                if (document.getElementById("category") !== null) {
+                    for (let option of document.getElementById('category').options) {
+                        if (option.value === data.category) {
+                            option.selected = true;
+                        }
                     }
-                });
+                }
             }
         })
         .catch((error) => console.error("음식점 정보 로드 실패:", error));
