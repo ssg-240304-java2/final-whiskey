@@ -92,32 +92,34 @@ function loadRestaurantInfo() {
                     operatingHoursList.appendChild(li);
                 }
 
-                // 영업 시간 정보 설정
-                days.forEach((day) => {
-                    const operateCheckbox = document.getElementById(`operate${day}`);
-                    const openTimeSelect = document.getElementById(`openTime${day}`);
-                    const closeTimeSelect = document.getElementById(`closeTime${day}`);
+                if ($('.nav-item')[4].children[0].classList.contains('active')) {
+                    // 영업 시간 정보 설정
+                    days.forEach((day) => {
+                        const operateCheckbox = document.getElementById(`operate${day}`);
+                        const openTimeSelect = document.getElementById(`openTime${day}`);
+                        const closeTimeSelect = document.getElementById(`closeTime${day}`);
 
-                    console.log(data.operatingHours[day] === "휴무");
+                        console.log(data.operatingHours[day] === "휴무");
 
-                    if (data.operatingHours[day] !== "휴무") {
-                        var hour = data.operatingHours[day].split(" - ");
-                        console.log(hour);
-                        operateCheckbox.checked = true;
-                        for (let option of openTimeSelect.options) {
-                            if (option.textContent === hour[0]) {
-                                option.selected = true;
+                        if (data.operatingHours[day] !== "휴무") {
+                            var hour = data.operatingHours[day].split(" - ");
+                            console.log(hour);
+                            operateCheckbox.checked = true;
+                            for (let option of openTimeSelect.options) {
+                                if (option.textContent === hour[0]) {
+                                    option.selected = true;
+                                }
                             }
-                        }
-                        for (let option of closeTimeSelect.options) {
-                            if (option.textContent === hour[1]) {
-                                option.selected = true;
+                            for (let option of closeTimeSelect.options) {
+                                if (option.textContent === hour[1]) {
+                                    option.selected = true;
+                                }
                             }
+                        } else {
+                            operateCheckbox.checked = false;
                         }
-                    } else {
-                        operateCheckbox.checked = false;
-                    }
-                });
+                    });
+                }
             }
 
             // 수정 모달 폼에 데이터 설정
