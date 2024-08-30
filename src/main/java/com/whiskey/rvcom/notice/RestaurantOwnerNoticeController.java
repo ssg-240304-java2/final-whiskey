@@ -38,7 +38,7 @@ public class RestaurantOwnerNoticeController {
      */
     @PostMapping("/restaurant/{restaurantId}/notice")
     public void save(@PathVariable Long restaurantId, @RequestBody RestaurantNoticeRequestDTO request) {
-        noticeService.save(request, restaurantId);
+        noticeService.save(restaurantId, request);
     }
 
     /**

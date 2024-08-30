@@ -23,23 +23,6 @@ public class RestaurantInquiryService {
     private final RestaurantInquiryRepository inquiryRepository;
     private final RestaurantRepository restaurantRepository;
 
-    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(Long restaurantId) {
-        return inquiryRepository.findAllByRestaurantId(restaurantId).stream()
-                .sorted(Comparator.comparing(RestaurantInquiry::getCreatedAt).reversed())
-                .map(it -> new RestaurantInquiryResponseDTO(
-                        it.getId(),
-                        it.getContent(),
-                        it.getWriter().getId(),
-                        it.getWriter().getName(),
-                        it.getCreatedAt(),
-                        it.getReply() != null ?
-                                new RestaurantInquiryReplyResponseDTO(
-                                it.getReply().getContent(),
-                                it.getReply().getCreatedAt()
-                        ) : null
-                )).toList();
-    }
-
     public Page<RestaurantInquiry> getPagedRestaurantInquiries(Long restaurantId, Pageable pageable) {
         return inquiryRepository.getPagedRestaurantInquiries(restaurantId, pageable);
     }

@@ -38,7 +38,7 @@ public class RestaurantNoticeService {
     }
 
     @Transactional
-    public void save(RestaurantNoticeRequestDTO request, Long restaurantId) {
+    public void save(Long restaurantId, RestaurantNoticeRequestDTO request) {
         Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
         noticeRepository.save(new RestaurantNotice(request.title(), request.content(), restaurant));
     }
