@@ -71,8 +71,6 @@ function renderRestaurantTable(restaurants) {
                 <td><span class="report-status ${getStatusClass(restaurant.registrationStatus)}">${restaurant.registrationStatus}</span></td>
                 <td>
                     <button class="btn btn-sm btn-primary" onclick="viewDetails(${restaurant.id})">상세보기</button>
-                    <button class="btn btn-sm btn-success" onclick="approveRegistration(${restaurant.id})">승인</button>
-                    <button class="btn btn-sm btn-danger" onclick="rejectRegistration(${restaurant.id})">거절</button>
                 </td>
             </tr>
         `;
