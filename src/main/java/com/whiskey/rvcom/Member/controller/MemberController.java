@@ -125,7 +125,7 @@ public class MemberController {
         }
 
         if (!member.isActive()) {
-            model.addAttribute("alertMessage", "해당 계정은 비활성화되어 있습니다. 관리자에게 문의하세요.");
+            model.addAttribute("error", "해당 계정은 비활성화되어 있습니다. 관리자에게 문의하세요.");
             return "login";
         }
 
