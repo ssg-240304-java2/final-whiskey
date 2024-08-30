@@ -38,6 +38,7 @@
         </div>
         <div class="review-actions">
             <button th:id="${'review-like-button-' + id}" class="like-button" th:onclick="'addReviewLike(' + ${id} + ')'">
+                <span th:text="'👍 좋아요 (' + ${likes.size()} + ')'"></span>
 <!--                <span th:text="'👍 좋아요 (' + ${likes.size()} + ')'"></span> :: Not use span, 그냥 그대로 타임리프값 직접 바인딩 -->
 <!--                code here..-->
             </button>
