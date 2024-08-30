@@ -33,7 +33,8 @@
                 <a th:if="${isAuthenticated} and ${userRole != 'ADMIN'}" href="/mypage" class="nav-btn">
                     <i class="fas fa-user"></i> 마이페이지
                 </a>
-                <a th:if="${isAuthenticated} and ${userRole == 'USER'}" href="/businessregister/register-store" class="nav-btn">
+                <a th:if="${isAuthenticated} and ${userRole == 'USER'}" href="/businessregister/register-store"
+                   class="nav-btn">
                     <i class="fas fa-store"></i> 입점 신청
                 </a>
                 <a th:if="${isAuthenticated} and ${userRole == 'OWNER'}" href="/owner-dashboard" class="nav-btn">
@@ -51,6 +52,15 @@
 
             window.location.href = "/search-results?search=" + encodeURIComponent(searchText);
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById('search-text');
+            searchInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    searchRestaurant();
+                }
+            });
+        });
     </script>
 </header>
 </body>
