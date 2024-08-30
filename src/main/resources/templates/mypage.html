@@ -45,11 +45,11 @@
                                 <!-- Filled stars -->
                                 <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, review.rating.value)}"></i>
                                 <!-- Empty stars -->
-                                <i class="far fa-star" th:each="i : ${#numbers.sequence(review.rating.value + 1, 5)}"></i>
-                                <span th:text="${review.rating.value}">4.0</span>
+                                <i class="far fa-star" th:each="i : ${#numbers.sequence(1, 5 - review.rating.value)}" th:if="${review.rating.value < 5}"></i>
+                                <span th:text="${review.rating.value}"></span>
                             </div>
                             <p class="review-text" th:text="${review.content}">리뷰 내용</p>
-                            <span class="review-date" th:text="${#temporals.format(review.createdAt, 'yyyy년 MM월 dd일')}">2023년 5월 20일</span>
+                            <span class="review-date" th:text="${#temporals.format(review.createdAt, 'yyyy년 MM월 dd일')}"></span>
                         </div>
                     </div>
                 </div>
