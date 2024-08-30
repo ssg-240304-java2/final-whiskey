@@ -240,6 +240,16 @@ public class MemberController {
             restaurantRatingsMap.put(favorite.getRestaurant().getId(), averageRating);
         }
 
+        // 즐겨찾기된 레스토랑의 이미지 URL 맵
+        Map<Long, String> restaurantImageMap = new HashMap<>();
+        for (Favorite favorite : paginatedFavorites) {
+            String imageUrl = "https://via.placeholder.com/300x200"; // 기본 이미지
+            if (favorite.getRestaurant().getCoverImage() != null) {
+                imageUrl = ImagePathParser.parse(favorite.getRestaurant().getCoverImage().getUuidFileName());
+            }
+            restaurantImageMap.put(favorite.getRestaurant().getId(), imageUrl);
+        }
+
         int totalPages = (int) Math.ceil((double) reviews.size() / size);
         int favoriteTotalPages = (int) Math.ceil((double) favorites.size() / favoriteSize);
 
@@ -250,6 +260,7 @@ public class MemberController {
         model.addAttribute("reviewImagesMap", reviewImagesMap); // 리뷰 이미지 URL 맵
         model.addAttribute("restaurantRatingsMap", restaurantRatingsMap); // 레스토랑 평점 맵
         model.addAttribute("favorites", paginatedFavorites); // 즐겨찾기된 레스토랑 목록 추가
+        model.addAttribute("restaurantImageMap", restaurantImageMap); // 레스토랑 이미지 URL 맵 추가
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("favoriteCurrentPage", favoritePage);
@@ -259,6 +270,7 @@ public class MemberController {
 
         return "mypage";
     }
+
 
     @PostMapping("/checkLoginId")
     public ResponseEntity<Map<String, Boolean>> checkLoginId(@RequestParam String loginId) {
