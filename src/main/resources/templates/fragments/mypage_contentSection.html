@@ -21,9 +21,10 @@
         function confirmDeactivation() {
             if (confirm("회원 탈퇴 하시겠습니까?")) {
                 const protocol = window.location.protocol;
-                const url = `${protocol}//${window.location.host}/deactivateAccount`;
+                const host = window.location.host;
+                const deactivateUrl = `${protocol}//${host}/deactivateAccount`;
 
-                fetch(url, {
+                fetch(deactivateUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -32,7 +33,8 @@
                     .then(response => {
                         if (response.ok) {
                             alert("회원 탈퇴가 완료되었습니다.");
-                            window.location.href = `${protocol}//${window.location.host}/mainPage`;
+                            const mainPageUrl = `${protocol}//${host}/mainPage`;
+                            window.location.href = mainPageUrl;
                         } else {
                             alert("회원 탈퇴 중 오류가 발생했습니다.");
                         }
@@ -43,6 +45,8 @@
                     });
             }
         }
+
     </script>
+
 
 </section>
