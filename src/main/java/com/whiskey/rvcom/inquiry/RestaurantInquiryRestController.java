@@ -12,28 +12,22 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 public class RestaurantInquiryRestController {
     private final RestaurantInquiryService inquiryService;
 
-//    @GetMapping("/restaurant/{restaurantId}/user-inquiries")
-//    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(@PathVariable Long restaurantId) {
-//        return inquiryService.findAllByRestaurantId(restaurantId);
-//    }
     /**
      * 음식점의 문의글 조회하기(답변 포함, 사용자 페이지)
      * @param restaurantId
      * @return 문의글
      */
     @GetMapping("/restaurant/{restaurantId}/user-inquiries")
-    public Page<RestaurantInquiry> getPagedInquiries(
+    public Page<RestaurantInquiry> getPagedUserInquiries(
             @PathVariable Long restaurantId,
             @RequestParam(defaultValue = "1") int pageNumber,
-            @RequestParam(defaultValue = "5") int pageSize){
+            @RequestParam(defaultValue = "5") int pageSize) {
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return inquiryService.getPagedRestaurantInquiries(restaurantId, pageRequest);
     }
@@ -44,7 +38,7 @@ public class RestaurantInquiryRestController {
      * @return 문의글
      */
     @GetMapping("/restaurant/{restaurantId}/owner-inquiries")
-    public Page<RestaurantInquiry> getPagedRestaurantInquiries(
+    public Page<RestaurantInquiry> getPagedOwnerInquiries(
             @PathVariable Long restaurantId,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "5") int pageSize
@@ -80,7 +74,11 @@ public class RestaurantInquiryRestController {
      * @param session
      */
     @PostMapping("/restaurant/{restaurantId}/inquiry")
-    public void save(@PathVariable Long restaurantId, @RequestBody RestaurantInquiryRequestDTO request, HttpSession session) {
+    public void save(
+            @PathVariable Long restaurantId,
+            @RequestBody RestaurantInquiryRequestDTO request,
+            HttpSession session
+    ) {
         Member member = (Member) session.getAttribute("member");
         inquiryService.save(restaurantId, request, member);
     }
