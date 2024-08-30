@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     setupTabs();
     setupModals();
     setupReports();
-    setupReviewAndCommentReports();
     setInitialTab();
     RestaurantDetail.favorite.init();
 });
@@ -70,12 +69,72 @@ window.RestaurantDetail.favorite = {
 function setupReports() {
     let idx;
 
-    // 모달 열기
-    document
-        .getElementById("restaurantReport")
-        .addEventListener("click", function () {
-            document.getElementById("modal").style.display = "block";
-        });
+    const reportModal = document.getElementById("reportModal");
+    const closeBtn = reportModal.querySelector(".close-btn");
+    const form = document.getElementById("reportForm");
+
+    // 식당신고 버튼 클릭 시 로그인 여부 확인 후 모달 열기
+    document.getElementById("restaurantReport").addEventListener("click", function () {
+
+        fetch('/report/valid', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(response => response.json()) // Expecting a JSON response from the server
+            .then(data => {
+                if (data.success) {
+                    // If the user is logged in, show the modal
+                    document.getElementById("modal").style.display = "block";
+                } else {
+                    // If the user is not logged in, show an alert
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Request failed", error);
+            })
+    });
+
+    // 리뷰 및 댓글 신고 버튼 클릭 시 로그인 여부 확인 후 모달 열기
+    document.addEventListener("click", function(e) {
+
+        if (e.target.classList.contains("review-report") || e.target.classList.contains("comment-report")) {
+            fetch('/report/valid', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                }
+            })
+                .then(response => response.json()) // Expecting a JSON response from the server
+                .then(data => {
+                    if (data.success) {
+                        // 버튼의 id 값을 가져옴 (예: "commentReport123", "reviewReport45")
+                        const fullId = e.target.id;
+                        console.log(fullId)
+
+                        // 정규 표현식을 사용하여 "reviewReport" 또는 "commentReport" 접두사 제거 후 숫자만 추출
+                        const id = fullId.replace(/^(reviewReport|commentReport)/, "");
+                        console.log(id)
+
+                        // 타입을 결정 (commentReport 또는 reviewReport 접두사에 따라)
+                        const type = fullId.startsWith("reviewReport") ? "review" : "comment";
+                        console.log(type)
+                        // 모달 열기 함수 호출
+                        openReportModal(type, id);
+
+                    } else {
+                        // If the user is not logged in, show an alert
+                        alert(data.message);
+                        console.log("알럿 밑 부분")
+                    }
+                })
+                .catch(error => {
+                    console.error("Request failed", error);
+                });
+        }
+    });
 
     // 모달 닫기
     document
@@ -135,42 +194,51 @@ function setupReports() {
                     );
                 });
         });
-}
 
-function setupReviewAndCommentReports() {
-    const reportModal = document.getElementById("reportModal");
-    const closeBtn = reportModal.querySelector(".close-btn");
-    const form = document.getElementById("reportForm");
+    // 리뷰,댓글 신고 모달 submit 클릭 이벤트
+    document.getElementById("reportForm").addEventListener("submit", function submitReport() {
+        // 폼에서 타입과 ID 가져오기
+        const type = document.getElementById("reportType").value;
+        const targetId = document.getElementById("reportTargetId").value;
+        const reportTitile = document.getElementById("reportTitle").value;
+        const reportContent = document.getElementById("reportContent").value;
 
-    // 리뷰 및 댓글 신고 버튼 클릭 이벤트
-    document.addEventListener("click", function(e) {
-        if (e.target.classList.contains("review-report") || e.target.classList.contains("comment-report")) {
-            e.stopPropagation();  // 이벤트 전파를 막음
+        // 타입에 따라 URL 설정
+        const url = type === "review" ? "/reviewreport/regist" : "/reviewcommentreport/regist";
 
-            // 버튼의 id 값을 가져옴 (예: "commentReport123", "reviewReport45")
-            const fullId = e.target.id;
+        // JSON 데이터를 생성
+        const data = {
+            title: reportTitile,  // 여기에 적절한 제목을 설정합니다.
+            content: reportContent,  // 여기에 적절한 내용 입력
+            reportedAt: new Date().toISOString(), // ISO 형식의 현재 시간
+            isChecked: false,  // 초기 상태로 설정
+            isVisible: true,  // 초기 상태로 설정
+            id: targetId
+        };
 
-            // 정규 표현식을 사용하여 "reviewReport" 또는 "commentReport" 접두사 제거 후 숫자만 추출
-            const id = fullId.replace(/^(reviewReport|commentReport)/, "");
-
-            // 타입을 결정 (commentReport 또는 reviewReport 접두사에 따라)
-            const type = fullId.startsWith("reviewReport") ? "review" : "comment";
-
-            // 모달 열기 함수 호출
-            openReportModal(type, id);
-        }
+        // 신고 데이터 전송
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  // JSON 형식으로 보낸다는 것을 서버에 알림
+            },
+            body: JSON.stringify(data)  // 데이터를 JSON 문자열로 변환하여 전송
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .then(data => {
+                alert("신고가 접수되었습니다.");
+                document.getElementById("reportModal").style.display = "none";
+                document.getElementById("reportForm").reset();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("신고 접수 중 오류가 발생했습니다.");
+            });
     });
-
-    // 모달 닫기
-    closeBtn.onclick = function() {
-        reportModal.style.display = "none";
-    }
-
-    // 폼 제출
-    form.onsubmit = function(e) {
-        e.preventDefault();
-        submitReport();
-    }
 }
 
 function openReportModal(type, id) {
@@ -184,56 +252,6 @@ function openReportModal(type, id) {
         console.error("No target ID found for reporting");
     }
 }
-
-function submitReport() {
-    // 폼에서 타입과 ID 가져오기
-    const type = document.getElementById("reportType").value;
-    const targetId = document.getElementById("reportTargetId").value;
-    const reportTitile = document.getElementById("reportTitle").value;
-    const reportContent = document.getElementById("reportContent").value;
-
-    // 타입에 따라 URL 설정
-    const url = type === "review" ? "/reviewreport/regist" : "/reviewcommentreport/regist";
-
-    // JSON 데이터를 생성
-    const data = {
-        title: reportTitile,  // 여기에 적절한 제목을 설정합니다.
-        content: reportContent,  // 여기에 적절한 내용 입력
-        reportedAt: new Date().toISOString(), // ISO 형식의 현재 시간
-        isChecked: false,  // 초기 상태로 설정
-        isVisible: true,  // 초기 상태로 설정
-        id: targetId
-    };
-
-    // 신고 데이터 전송
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'  // JSON 형식으로 보낸다는 것을 서버에 알림
-        },
-        body: JSON.stringify(data)  // 데이터를 JSON 문자열로 변환하여 전송
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-        })
-        .then(data => {
-            alert("신고가 접수되었습니다.");
-            document.getElementById("reportModal").style.display = "none";
-            document.getElementById("reportForm").reset();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("신고 접수 중 오류가 발생했습니다.");
-        });
-}
-
-// 초기화 함수 호출
-setupReviewAndCommentReports();
-
-//////////////////////////////
-
 
 
 function setupTabs() {

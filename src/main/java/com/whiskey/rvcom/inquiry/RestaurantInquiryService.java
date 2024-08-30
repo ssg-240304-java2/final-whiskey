@@ -6,7 +6,6 @@ import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryReplyResponseDTO;
 import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryRequestDTO;
 import com.whiskey.rvcom.inquiry.dto.RestaurantInquiryResponseDTO;
-import com.whiskey.rvcom.repository.MemberRepository;
 import com.whiskey.rvcom.repository.RestaurantInquiryRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,37 +23,20 @@ public class RestaurantInquiryService {
     private final RestaurantInquiryRepository inquiryRepository;
     private final RestaurantRepository restaurantRepository;
 
-    // TODO: 음식점의 문의글 조회하기
-    public List<RestaurantInquiryResponseDTO> findAllByRestaurantId(Long restaurantId) {
-        return inquiryRepository.findAllByRestaurantId(restaurantId).stream()
-                .sorted(Comparator.comparing(RestaurantInquiry::getCreatedAt).reversed())
-                .map(it -> new RestaurantInquiryResponseDTO(
-                        it.getId(),
-                        it.getContent(),
-                        it.getWriter().getId(),
-                        it.getWriter().getName(),
-                        it.getCreatedAt(),
-                        it.getReply() != null ?
-                                new RestaurantInquiryReplyResponseDTO(
-                                it.getReply().getContent(),
-                                it.getReply().getCreatedAt()
-                        ) : null
-                )).toList();
-    }
-
-    // TODO: 음식점의 문의글 조회하기 (페이지네이션)
     public Page<RestaurantInquiry> getPagedRestaurantInquiries(Long restaurantId, Pageable pageable) {
         return inquiryRepository.getPagedRestaurantInquiries(restaurantId, pageable);
     }
 
-    // TODO: 문의 작성
+    public int getUnansweredInquiryCount(Long restaurantId) {
+        return inquiryRepository.countUnansweredInquiries(restaurantId);
+    }
+
     @Transactional
     public void save(Long restaurantId, RestaurantInquiryRequestDTO request, Member member) {
         Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
         inquiryRepository.save(new RestaurantInquiry(member, restaurant, request.content()));
     }
 
-    // TODO: 문의 삭제
     @Transactional
     public void delete(Long inquiryId) {
         RestaurantInquiry inquiry = inquiryRepository.findById(inquiryId)

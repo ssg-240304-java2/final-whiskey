@@ -75,6 +75,11 @@
     font-size: 16px;
 }
 
+.answer-owner {
+    font-weight: bold;
+    font-size: 16px;
+}
+
 .inquiry-location {
     color: #666;
     font-size: 14px;
@@ -129,4 +134,26 @@
 .current-page {
     margin: 0 10px;
     font-weight: bold;
+    cursor: pointer;
+}
+
+.current-page.active {
+    text-decoration: underline;
+}
+
+.current-page:hover {
+    background-color: #e0e0e0;
+}
+
+.delete-inquiry {
+    background-color: #FF6347;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.delete-inquiry:hover {
+    background-color: #c41200;
 }

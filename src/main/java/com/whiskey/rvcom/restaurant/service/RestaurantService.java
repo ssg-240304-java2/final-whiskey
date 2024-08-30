@@ -4,14 +4,19 @@ import com.whiskey.rvcom.entity.restaurant.OpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.WeeklyOpenCloseTime;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
+import com.whiskey.rvcom.entity.review.Review;
 import com.whiskey.rvcom.repository.MenuRepository;
 import com.whiskey.rvcom.repository.RestaurantRepository;
+import com.whiskey.rvcom.restaurant.dto.OperatingHourDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantCardDTO;
 import com.whiskey.rvcom.restaurant.dto.RestaurantSearchResultDTO;
+import com.whiskey.rvcom.review.ReviewService;
 import com.whiskey.rvcom.util.ImagePathParser;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -22,16 +27,19 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
     private final EntityManager entityManager;
 
-    public RestaurantService(RestaurantRepository restaurantRepository, MenuRepository menuRepository, EntityManager entityManager) {
-        this.restaurantRepository = restaurantRepository;
-        this.menuRepository = menuRepository;
-        this.entityManager = entityManager;
-    }
+    private final ReviewService reviewService;
+
+//    public RestaurantService(RestaurantRepository restaurantRepository, MenuRepository menuRepository, EntityManager entityManager) {
+//        this.restaurantRepository = restaurantRepository;
+//        this.menuRepository = menuRepository;
+//        this.entityManager = entityManager;
+//    }
 
     public List<RestaurantCardDTO> getNearbyRestaurantByLocation(double latitude, double longitude) {
 
@@ -207,7 +215,65 @@ public class RestaurantService {
     }
 
     public List<RestaurantSearchResultDTO> getRestaurantsBySearchText(String searchText) {
-        return restaurantRepository.searchByNameAndMenu(searchText);
+        List<RestaurantSearchResultDTO> restaurantSearchResultDTOS = restaurantRepository.searchByNameAndMenu(searchText);
+
+        // set bannerImageFileName / reviewAndRatingPhase / topReviewContent'
+        String bannerImageFileName;
+        String reviewAndRatingPhase;
+        String topReviewContent;
+
+        for (RestaurantSearchResultDTO restaurantSearchResultDTO : restaurantSearchResultDTOS) {
+            Long id = restaurantSearchResultDTO.getId();
+            Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+
+            // bannerImageFileName
+            if (restaurant.getCoverImage() != null) {
+                bannerImageFileName = ImagePathParser.parse(restaurant.getCoverImage().getUuidFileName());
+                restaurantSearchResultDTO.setBannerImageFileName(bannerImageFileName);
+            } else restaurantSearchResultDTO.setBannerImageFileName(null);
+
+            // reviewAndRatingPhase
+            StringBuilder reviewAndRatingPhaseBuilder = new StringBuilder();
+            // ★★☆☆☆ 2.5(104 리뷰)  형태로 표시되도록
+            double rating = reviewService.getAverageRatingForRestaurant(reviewService.getReviewsByRestaurantAsList(restaurant));
+            int ratingInt = (int) rating;
+            for (int i = 0; i < 5; i++) {
+                if (i < ratingInt) {
+                    reviewAndRatingPhaseBuilder.append("★");
+                } else {
+                    reviewAndRatingPhaseBuilder.append("☆");
+                }
+            }
+            reviewAndRatingPhaseBuilder.append(" ");
+
+//            String.format("%.1f", rating)
+            reviewAndRatingPhaseBuilder.append(String.format("%.1f", rating));
+
+//            reviewAndRatingPhaseBuilder.append(" (").append(reviewService.getReviewsByRestaurantAsList(restaurant).size()).append(" 리뷰)");
+
+            restaurantSearchResultDTO.setReviewAndRatingPhase(reviewAndRatingPhaseBuilder.toString());
+
+            // topReviewContent
+            List<Review> reviews = reviewService.getReviewsByRestaurantAsList(restaurant);
+            reviews.removeIf(Review::isSuspended);
+
+            int reviewCount = reviews.size();
+            restaurantSearchResultDTO.setReviewCount(reviewCount);
+
+            // 좋아요 개수가 가장 많은 리뷰 1개 가져오기
+            reviews.sort((r1, r2) -> Integer.compare(r2.getLikes().size(), r1.getLikes().size()));
+
+            if (reviews.size() > 0) {
+                topReviewContent = reviews.get(0).getContent();
+                restaurantSearchResultDTO.setTopReviewContent(topReviewContent);
+            } else restaurantSearchResultDTO.setTopReviewContent(null);
+
+            // bannerImageFilePath =
+        }
+
+//        restaurantSearchResultDTOS.forEach();
+
+        return restaurantSearchResultDTOS;
     }
 
     public Restaurant getRestaurantByOwnerId(Long id) {
@@ -234,5 +300,17 @@ public class RestaurantService {
         Menu menu = entityManager.find(Menu.class, m.getId());
         menu.setName(m.getName());
         menu.setPrice(m.getPrice());
+        menu.setImage(m.getImage());
+    }
+
+    @Transactional
+    public void modifyOperatingHour(Long restaurantId, Map<String, OperatingHourDTO> operatingHours) {
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setMonday(operatingHours.get("월").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("월").getOpen(), operatingHours.get("월").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setTuesday(operatingHours.get("화").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("화").getOpen(), operatingHours.get("화").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setWednesday(operatingHours.get("수").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("수").getOpen(), operatingHours.get("수").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setThursday(operatingHours.get("목").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("목").getOpen(), operatingHours.get("목").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setFriday(operatingHours.get("금").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("금").getOpen(), operatingHours.get("금").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setSaturday(operatingHours.get("토").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("토").getOpen(), operatingHours.get("토").getClose(), true) : null);
+        entityManager.find(Restaurant.class, restaurantId).getWeeklyOpenCloseTime().setSunday(operatingHours.get("일").getIsOpen() ? new OpenCloseTime(null, operatingHours.get("일").getOpen(), operatingHours.get("일").getClose(), true) : null);
     }
 }

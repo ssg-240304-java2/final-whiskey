@@ -20,22 +20,18 @@
 <!-- 헤더는 여기에 들어갑니다 -->
 
 <!-- TODO: 검색 배너 정보를 동적으로 생성 (검색어, 결과 수, 위치, 카테고리 등) -->
-<div class="search-banner" style="background-image: url('https://placehold.co/1200x200');">
+<div class="search-banner"
+     style="background-image: url('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/44/0b/8c/mobo-bar-is-our-contemporary.jpg?w=600&h=-1&s=1');">
     <div class="container">
         <div class="search-info">
             <h1 class="search-title" th:text="'검색 결과:' + ${searchText}">검색 결과: 없음</h1>
             <div class="search-meta">
                 <div class="result-count">
-                    <span class="count">300개의 결과</span>
                 </div>
                 <div class="location-category">
-                    <span class="location">인천시</span>
-                    <span class="category">• 이탈리안 • 파스타 • 피자</span>
                 </div>
             </div>
             <div class="search-filters">
-                <span class="filter">가격대: ₩₩</span>
-                <span class="filter">평점: ★★★★☆ 이상</span>
             </div>
         </div>
     </div>
@@ -55,7 +51,7 @@
                 <!--                <div th:replace="fragments/resultCard :: resultCard(${restaurant.getId()}, ${restaurant.getName()}, '★★★★☆ 4', 302, '₩₩', ${restaurant.getCategory().name()}, ${restaurant.getAddress().getName()}, '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>-->
                 <div style="display: inline;" th:each="restaurant: ${restaurantSearchResult}">
                     <div th:each="restaurant: ${restaurantSearchResult}"
-                         th:replace="fragments/resultCard :: resultCard(${restaurant.getId()}, ${restaurantSearchResult.indexOf(restaurant)}, ${restaurant.getName()}, '★★★★☆ 4', 302, '₩₩', ${restaurant.getCategory().name()}, ${restaurant.getAddress().getName()}, '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>
+                         th:replace="fragments/resultCard :: resultCard(${restaurant.getId()}, ${restaurantSearchResult.indexOf(restaurant)}, ${restaurant.getName()}, ${restaurant.getReviewAndRatingPhase()}, ${restaurant.getReviewCount()}, '₩₩', ${restaurant.getCategory().name()}, ${restaurant.getAddress().getName()}, ${restaurant.getTopReviewContent()}, ${restaurant.getBannerImageFileName()!=null?restaurant.getBannerImageFileName():null})"></div>
                 </div>
                 <!-- 검색 결과 카드 사용 예시 -->
                 <!--                <div th:replace="fragments/resultCard :: resultCard(1, '맛있는 파스타', '★★★★☆ 4', 302, '₩₩', '이탈리안, 파스타', '인천시 남동구 구월동', '파스타가 정말 맛있어요! 분위기도 좋고 서비스도 친절해요.')"></div>-->

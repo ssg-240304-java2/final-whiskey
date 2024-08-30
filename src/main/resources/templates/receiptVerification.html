@@ -14,6 +14,7 @@
 <body>
     <!-- hiddeninput 영역 -->
     <input type="hidden" id="restaurantId" th:value="${restaurantId}">
+    <input type="hidden" id="restaurantName" th:value="${restaurant.getName()}">
 
     <div class="container">
         <div id="loadingUI" class="loading-ui" style="display: none;">
@@ -110,11 +111,11 @@
         }
 
         // 파일 입력 변경 이벤트를 처리합니다.
-        fileInput.addEventListener('change', function() {
+        fileInput.addEventListener('change', async function() {
             handleFiles(this.files);
 
             const file = this.files[0];
-            if(file) uploadFileToServer(file);
+            if(file) await uploadFileToServer(file);
         });
 
         // 파일을 처리하고 미리보기를 표시하는 함수입니다.
@@ -163,23 +164,64 @@
         async function verifyReceipt() {
             try {
                 showLoadingUI(); // 로딩 UI 표시
-                const file = document.getElementById('fileInput').files[0];
+                // const file = document.getElementById('fileInput').files[0];
+
+                const file = dataURLtoFile(preview.src, 'receipt.jpg');
+
                 if (!file) {
                     throw new Error('파일을 선택해주세요.');
                 }
+                // const uuidFileName = await uploadFileToServer(file);
                 const uuidFileName = await uploadFileToServer(file);
                 ocrResponseObject = await ocrProcess(uuidFileName);
 
                 if (ocrResponseObject && Object.keys(ocrResponseObject).length > 0) {
-                    alert('영수증 인증이 완료되었습니다.');
-                    nextStepBtn.style.display = 'block';
+                    alert('영수증 인식이 완료되었습니다.');
                     updateReceiptInfo(ocrResponseObject);
+
+                    nextStepBtn.style.display = 'block';
+                    // 음식점명과 영수증 객체에 기재된 음식점명의 유사도를 계산하여
+                    // 0.7 이상이면 자동으로 다음 단계로 넘어가도록 처리
+                    let restaurantName = document.getElementById('restaurantName').value;
+                    // let similarity = stringSimilarity.compareTwoStrings(restaurantName, ocrResponseObject.storeName);
+                    // const text1 = "I love JavaScript programming";
+                    // const text2 = "JavaScript programming is love";
+                    //
+                    // const similarity = cosineSimilarity(text1, text2);
+                    // console.log("Cosine Similarity: ", similarity);
+
+                    // const similarity = cosineSimilarity(restaurantName, ocrResponseObject.storeName);
+                    const similarity = cosineSimilarity(restaurantName, ocrResponseObject.storeName);
+                    // const similarity = cosineSimilarity(restaurantName, "해피타임 강남점");
+                    console.log('음식점명 유사도:', similarity);
+
+                    if (similarity >= 0.6) {
+                        console.log('인증 통과');
+
+                        /*
+                        document.getElementById('storeName').textContent = receiptData.storeName;
+                        document.getElementById('receiptDate').textContent = new Date(receiptData.paidAt).toLocaleDateString();
+                        document.getElementById('totalAmount').textContent = receiptData.totalPrice.toLocaleString() + '원';
+                        document.getElementById('menuItems').textContent = receiptData.paidItems.map(item => item.itemName).join(', ');
+                         */
+                        // 위 항목들을 각각 체크하여 하나의 항목이라도 채워질 수 없는 경우
+                        // alert("인증에 필요한 정보가 부족합니다. 다시 시도해주세요."); 를 띄우고
+                        // return 처리
+                        // 인증에 필요한 정보가 모두 채워진 경우
+                        // 다음 단계로 넘어가는 버튼을 노출
+                        nextStepBtn.style.display = 'block';
+
+                        // 영수증 정보 패널을 표시
+                        document.getElementById('receiptInfo').style.display = 'block';
+                    } else {
+                        alert('올바르지 않은 영수증입니다. 지점명과 영수증에 기재된 지점을 확인 후 다시 시도해주세요.');
+                    }
                 } else {
                     alert('영수증 인식에 실패했습니다. 다른 이미지를 시도해주세요.');
                 }
             } catch (error) {
-                console.error('영수증 인증 오류:', error);
                 alert('영수증 인증에 실패했습니다: ' + error.message);
+                console.error('영수증 인증 오류:', error);
             } finally {
                 hideLoadingUI(); // 로딩 UI 숨김
             }
@@ -191,6 +233,51 @@
             document.getElementById('totalAmount').textContent = receiptData.totalPrice.toLocaleString() + '원';
             document.getElementById('menuItems').textContent = receiptData.paidItems.map(item => item.itemName).join(', ');
             document.getElementById('receiptInfo').style.display = 'block';
+        }
+
+        function termFrequencyMap(str) {
+            const words = str.split(' ');
+            const termFreq = {};
+            words.forEach(word => {
+                termFreq[word] = (termFreq[word] || 0) + 1;
+            });
+            return termFreq;
+        }
+
+        function addKeysToDict(map, dict) {
+            for (let key in map) {
+                dict[key] = true;
+            }
+        }
+
+        function cosineSimilarity(strA, strB) {
+            const termFreqA = termFrequencyMap(strA);
+            const termFreqB = termFrequencyMap(strB);
+
+            const dict = {};
+            addKeysToDict(termFreqA, dict);
+            addKeysToDict(termFreqB, dict);
+
+            let dotProduct = 0;
+            let magnitudeA = 0;
+            let magnitudeB = 0;
+
+            for (let key in dict) {
+                const x = termFreqA[key] || 0;
+                const y = termFreqB[key] || 0;
+                dotProduct += x * y;
+                magnitudeA += x * x;
+                magnitudeB += y * y;
+            }
+
+            magnitudeA = Math.sqrt(magnitudeA);
+            magnitudeB = Math.sqrt(magnitudeB);
+
+            if (magnitudeA && magnitudeB) {
+                return dotProduct / (magnitudeA * magnitudeB);
+            } else {
+                return 0;
+            }
         }
 
         async function sendReceiptData(receiptDataObject) {
@@ -375,7 +462,7 @@
         // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
 
         // 캡처 버튼 클릭 이벤트를 처리합니다.
-        captureBtn.addEventListener('click', () => {
+        captureBtn.addEventListener('click', async () => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             canvas.getContext('2d').drawImage(video, 0, 0);
@@ -385,7 +472,7 @@
             retakeBtn.style.display = 'inline-block';
 
             // TODO: 
-            verifyBtn.style.display = 'block';
+            // verifyBtn.style.display = 'block';
 
             // 촬영 버튼 클릭 시 '촬영하기' 버튼을 숨김 처리 후
             // '다시 찍기' 버튼을 노출 처리
@@ -395,7 +482,25 @@
             // receiptInfo.style.display = 'block'; // TODO: 이 버튼은 영수증 인증하기 버튼 클릭 시 노출되어야 함
             // TODO: 캡처된 이미지를 서버로 전송하여 OCR 처리를 수행하는 API를 호출해야 합니다.
             // TODO: OCR 결과를 받아 영수증 정보를 추출하고 화면에 표시해야 합니다.
+
+            const file = dataURLtoFile(imageDataUrl, 'receipt.jpg');
+            if(file) await uploadFileToServer(file);
+
+            verifyBtn.style.display = 'block';
         });
+
+        // Data URL을 File 객체로 변환하는 함수
+        function dataURLtoFile(dataurl, filename) {
+            const arr = dataurl.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, { type: mime });
+        }
 
         // 재촬영 버튼 클릭 이벤트를 처리합니다.
         retakeBtn.addEventListener('click', () => {
@@ -409,7 +514,50 @@
             // 캡처된 이미지를 미리보기에서 숨김 처리
         });
 
-    
+        function termFrequencyMap(str) {
+            const words = str.split(' ');
+            const termFreq = {};
+            words.forEach(word => {
+                termFreq[word] = (termFreq[word] || 0) + 1;
+            });
+            return termFreq;
+        }
+
+        function addKeysToDict(map, dict) {
+            for (let key in map) {
+                dict[key] = true;
+            }
+        }
+
+        function cosineSimilarity(strA, strB) {
+            const termFreqA = termFrequencyMap(strA);
+            const termFreqB = termFrequencyMap(strB);
+
+            const dict = {};
+            addKeysToDict(termFreqA, dict);
+            addKeysToDict(termFreqB, dict);
+
+            let dotProduct = 0;
+            let magnitudeA = 0;
+            let magnitudeB = 0;
+
+            for (let key in dict) {
+                const x = termFreqA[key] || 0;
+                const y = termFreqB[key] || 0;
+                dotProduct += x * y;
+                magnitudeA += x * x;
+                magnitudeB += y * y;
+            }
+
+            magnitudeA = Math.sqrt(magnitudeA);
+            magnitudeB = Math.sqrt(magnitudeB);
+
+            if (magnitudeA && magnitudeB) {
+                return dotProduct / (magnitudeA * magnitudeB);
+            } else {
+                return 0;
+            }
+        }
     </script>
 </body>
 </html>

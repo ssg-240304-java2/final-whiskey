@@ -2,12 +2,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="resultCard(id, number, name, rating, reviewCount, priceRange, cuisine, location, comment)">
+<div th:fragment="resultCard(id, number, name, rating, reviewCount, priceRange, cuisine, location, comment, bannerImagePath)">
     <a th:href="@{/restaurant/{id}/info(id=${id})}" class="result-card-link" th:id="${number}">
         <div class="result-card">
-            <img src="https://via.placeholder.com/150x150" th:alt="${name}" class="restaurant-image">
+            <div>
+                <img th:if="${bannerImagePath!=null}" th:src="@{${bannerImagePath}}" class="restaurant-image">
+                <div th:if="${bannerImagePath==null}"
+                     class="skeleton-image restaurant-image-placeholder">
+                    등록된 이미지가 없습니다.
+                </div>
+            </div>
+            <!--            <img src="https://via.placeholder.com/150x150" th:alt="${name}" class="restaurant-image">-->
             <div class="restaurant-info">
-                <h3 th:text="${number + '. ' + name}">1. 레스토랑 이름</h3>
+                <!--                <h3 th:text="${number + '. ' + name}">1. 레스토랑 이름</h3>-->
+                <h3 th:text="${name}">1. 레스토랑 이름</h3>
                 <div class="rating" th:text="${rating + ' (' + reviewCount + ' 리뷰)'}">★★★★☆ 4.5 (302 리뷰)</div>
                 <p th:text="${priceRange + ' • ' + cuisine + ' • ' + location}">₩₩ • 요리 종류 • 위치</p>
                 <p th:text="${comment}">"레스토랑 설명"</p>

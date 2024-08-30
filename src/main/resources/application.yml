@@ -11,6 +11,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
   security:
     oauth2:
       client:
@@ -26,6 +31,7 @@ spring:
           google:
             client-id: ${{secrets.GOOGLE_CLIENT_ID}}
             client-secret: ${{secrets.GOOGLE_CLIENT_SECRET}}
+            redirect-uri: "https://web.dokalab.site/login/oauth2/code/google"
             scope: profile, email
 
         provider:

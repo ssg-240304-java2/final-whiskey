@@ -84,11 +84,48 @@ textarea {
     box-sizing: border-box;
 }
 
+input#reviewTitle {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+input#reviewTitle:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(211, 35, 35, 0.1);
+}
+
 textarea:focus {
     outline: none;
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(211, 35, 35, 0.1);
 }
+
+/*
+photoUpload 버튼 스타일
+#photoUpload
+
+submit버튼과 비슷한 스타일로 작성
+ */
+/*input#photoUpload {*/
+/*    padding: 12px 25px;*/
+/*    border: none;*/
+/*    border-radius: 8px;*/
+/*    cursor: pointer;*/
+/*    font-size: 16px;*/
+/*    font-weight: 600;*/
+/*    transition: all 0.3s ease;*/
+/*    background-color: var(--primary-color);*/
+/*    color: var(--white);*/
+/*}*/
+
 
 .review-length {
     font-size: 14px;

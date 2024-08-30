@@ -30,10 +30,20 @@ public interface RestaurantInquiryRepository extends JpaRepository<RestaurantInq
             where i.restaurant.id = :restaurantId
             and i.deletedAt is null
             and (r is null or r.deletedAt is null)
+            order by i.createdAt desc
             """)
     Page<RestaurantInquiry> getPagedRestaurantInquiries(@Param("restaurantId") Long restaurantId, Pageable pageable);
 
     Optional<RestaurantInquiry> findByReplyId(Long replyId);
 
     Optional<RestaurantInquiry> findByContent(String content);
+
+    @Query("""
+            select count(i)
+            from RestaurantInquiry i
+            where i.restaurant.id = :restaurantId
+            and i.reply is null
+            and i.deletedAt is null
+            """)
+    int countUnansweredInquiries(Long restaurantId);
 }

@@ -71,11 +71,11 @@ public class TestController {
 //        return "owner/dashboard";
 //    }
 
-    @GetMapping("/adminMain")
-    // 관리자-신고 페이지로 이동
-    public String getAdminReport() {
-        return "admin/adminMain";
-    }
+//    @GetMapping("/adminMain")
+//    // 관리자-신고 페이지로 이동
+//    public String getAdminReport() {
+//        return "admin/adminMain";
+//    }
 
     @GetMapping("/adminReport")
     public void adminReport() {

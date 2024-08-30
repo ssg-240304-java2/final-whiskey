@@ -83,6 +83,7 @@ public class ImageFileService {
         String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
         // 서버의 특정 디렉토리를 지정합니다. 예를 들어, "/app/multipartfiletest/"
         Path uploadDir = Paths.get("/app/multipartfiletest/");
+//        Path uploadDir = Paths.get("/Users/awesome/Test/");
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }
@@ -114,5 +115,10 @@ public class ImageFileService {
     private boolean isImageFile(String filePath) {
         String extension = filePath.substring(filePath.lastIndexOf(".") + 1).toLowerCase();
         return ALLOWED_EXTENSIONS.contains(extension);
+    }
+
+    // id로 imageFile엔티티 반환
+    public ImageFile getImageFile(Long id) {
+        return imageFileRepository.findById(id).orElse(null);
     }
 }

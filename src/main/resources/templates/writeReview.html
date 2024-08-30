@@ -6,6 +6,7 @@
     <title>리뷰 작성 - Foodfolio</title>
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/writeReview.css}">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
         
     </style>
@@ -25,11 +26,49 @@
 
         <h1>리뷰 작성</h1>
 
-        <form id="reviewForm">
+        <!-- <form id="reviewForm">
             <div th:replace="fragments/starRating :: starRating"></div>
             <div th:replace="fragments/reviewTextarea :: reviewTextarea"></div>
             <div th:replace="fragments/photoUpload :: photoUpload"></div>
+            <div th:replace="fragments/reviewSubmitButtons :: reviewSubmitButtons"></div> -->
+<!--        </form>-->
+        <form id="reviewForm" th:action="@{/review/save}" method="post" enctype="multipart/form-data">
+            <input type="hidden" id="restaurantId" name="restaurantId" th:value="${restaurantId}">
+            <input type="hidden" id="receiptId" name="receiptDataId" th:value="${receiptId}">
+            
+<!--            <div class="form-group">-->
+<!--                <label for="rating">별점</label>-->
+<!--                <select id="rating" name="rating" required>-->
+<!--                    <option value="ONE_STAR">★☆☆☆☆</option>-->
+<!--                    <option value="TWO_STAR">★★☆☆☆</option>-->
+<!--                    <option value="THREE_STAR">★★★☆☆</option>-->
+<!--                    <option value="FOUR_STAR">★★★★☆</option>-->
+<!--                    <option value="FIVE_STAR">★★★★★</option>-->
+<!--                </select>-->
+<!--            </div>-->
+            <div th:replace="fragments/starRating :: starRating"></div>
+
+<!--            <div class="form-group">-->
+<!--                <label for="title">리뷰 내용</label>-->
+<!--                <input id="title" name="title" required />-->
+<!--            </div>-->
+<!--            -->
+<!--            <div class="form-group">-->
+<!--                <label for="content">리뷰 내용</label>-->
+<!--                <textarea id="content" name="content" rows="5" required></textarea>-->
+<!--            </div>-->
+<!--            -->
+<!--            <div class="form-group">-->
+<!--                <label for="images">이미지 업로드 (1~5개)</label>-->
+<!--                <input type="file" id="images" name="images" multiple accept="image/*" required>-->
+<!--            </div>-->
+
+            <div th:replace="fragments/reviewTextarea :: reviewHeaderarea"></div>
+            <div th:replace="fragments/reviewTextarea :: reviewTextarea"></div>
+            <div th:replace="fragments/photoUpload :: photoUpload"></div>
             <div th:replace="fragments/reviewSubmitButtons :: reviewSubmitButtons"></div>
+            
+<!--            <button type="submit">리뷰 등록</button>-->
         </form>
     </div>
 
@@ -37,10 +76,16 @@
         // TODO: 백엔드 개발자는 레스토랑 정보를 동적으로 불러오는 API를 구현해야 합니다.
         // 레스토랑 ID를 기반으로 이름과 주소를 가져와 페이지에 표시하는 기능이 필요합니다.
 
+        // DOM 요소가 로드된 후 실행되는 함수입니다.
+        document.addEventListener('DOMContentLoaded', function() {
+            // 별점을 업데이트합니다.
+            updateStars();
+        });
+
         // 별점을 나타내는 요소들을 선택합니다.
         const stars = document.querySelectorAll('.star');
         // 현재 선택된 별점을 저장하는 변수입니다.
-        let rating = 0;
+        let rating = 5;     // need. 항목 변경사항에 따라 값을 동적으로 변화하도록 하는 로직 작성: 반드시 1~5 사이의 값이어야 함
 
         // 각 별점 요소에 클릭 이벤트를 추가합니다.
         stars.forEach(star => {
@@ -48,6 +93,7 @@
                 // 클릭된 별의 data-rating 속성 값을 가져와 rating 변수에 저장합니다.
                 rating = star.getAttribute('data-rating');
                 console.log('Rating:', rating);
+                console.log('**Type of Rating:', typeof rating);
 
                 // 별점 표시를 업데이트합니다.
                 updateStars();
@@ -68,35 +114,90 @@
         }
 
         // 리뷰 폼 제출 이벤트를 처리합니다.
-        document.getElementById('reviewForm').addEventListener('submit', (e) => {
-            // 폼의 기본 제출 동작을 막습니다.
+        document.getElementById('reviewForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            // 리뷰 텍스트와 업로드된 사진들을 가져옵니다.
-            const reviewText = document.getElementById('reviewText').value;
-            const photos = document.getElementById('photoUpload').files;
 
-            // TODO: 백엔드 개발자는 리뷰 제출을 처리하는 API를 구현해야 합니다.
-            // 별점(rating), 리뷰 텍스트(reviewText), 사진(photos)을 서버로 전송하고 저장하는 기능이 필요합니다.
-            // 또한 리뷰 제출 후 성공/실패 여부를 클라이언트에 알려주는 응답 처리도 구현해야 합니다.
+            // 업로드된 이미지 목록 가져오기
+            const images = document.getElementById('images').files; // Type: File[]
+            if (images.length < 1 || images.length > 5) {
+                alert('이미지는 1개 이상 5개 이하로 업로드해주세요.');
+                return;
+            }
+            console.log('업로드된 이미지 목록 : ', images);
+
+            // todo. 이미지 업로드 로직 추가
+            // desc. 파일은 하나씩 업로드한다.
+            let uploadedImageFileIds = [];    // 리뷰 객체 등록 시 사용할 이미지 파일 이름 목록
+
+            for(let img of images) {
+                let uploadedFileId = await uploadeReviewImages(img);
+                uploadedImageFileIds.push(uploadedFileId);
+            }
+
+            console.log('업로드된 이미지 파일 ID 목록 : ', uploadedImageFileIds);
+
+            let imageFileIdsAsString = uploadedImageFileIds.join(' ');
+
+            // 폼 데이터 생성
+            // const formData = new FormData(this);
+            let submitFormData = new FormData();
+            submitFormData.append('title', document.getElementById('reviewTitle').value);
+            submitFormData.append('content', document.getElementById('reviewText').value);
+            submitFormData.append('rating', rating);
+            submitFormData.append('images', imageFileIdsAsString);
+            submitFormData.append('restaurantId', document.getElementById('restaurantId').value);
+            submitFormData.append('receiptDataId', document.getElementById('receiptId').value);
+
+            console.log('restaurantId : ', document.getElementById('restaurantId').value);
+            console.log('receiptDataId : ', document.getElementById('receiptId').value);
+            console.log('rating : ', rating);
+            console.log('title : ', document.getElementById('reviewTitle').value);
+            console.log('content : ', document.getElementById('reviewText').value);
+            console.log('images : ', imageFileIdsAsString);
+
+            $.ajax({
+                url: "/review/saveReview",
+                type: "POST",
+                data: submitFormData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    alert("리뷰가 성공적으로 등록되었습니다.");
+                    window.location.href = `/restaurant/${document.getElementById('restaurantId').value}/reviews`;
+                },
+                error: function (error) {
+                    console.log("리뷰 등록 오류 : ", error);
+                    alert("리뷰 등록 중 오류가 발생했습니다.");
+                },
+            })
+
             // $.ajax({
-            //     url: "",
-            //     type: "POST",
-            //     contentType: "application/json",
-            //     data: JSON.stringify({
-            //         rating: rating,
-            //         reviewText: reviewText,
-            //         photos: photos,
-            //         receiptData:
-            //     }),
+            //     url: ""
             // })
 
-
-            console.log('Rating:', rating);
-            console.log('Review:', reviewText);
-            console.log('Photos:', photos);
-
-            // 리뷰 등록 완료 메시지를 표시합니다.
-            alert('리뷰가 성공적으로 등록되었습니다!');
+            // AJAX를 사용하여 서버에 데이터 전송
+            // fetch(this.action, {
+            //     method: 'POST',
+            //     body: formData
+            // })
+            // .then(response => {
+            //     if (response.ok) {
+            //         return response.json();
+            //     }
+            //     throw new Error('서버 응답 오류');
+            // })
+            // .then(data => {
+            //     if (data.success) {
+            //         alert('리뷰가 성공적으로 등록되었습니다.');
+            //         window.location.href = data.redirectUrl;
+            //     } else {
+            //         alert('리뷰 등록에 실패했습니다: ' + data.message);
+            //     }
+            // })
+            // .catch(error => {
+            //     console.error('Error:', error);
+            //     alert('리뷰 등록 중 오류가 발생했습니다.');
+            // });
         });
 
         // 취소 버튼 기능
@@ -136,6 +237,32 @@
         // TODO: 백엔드 개발자는 업로드된 사진의 용량, 형식, 개수를 서버 측에서 검증하는 로직을 구현해야 합니다.
         // 허용된 이미지 형식만 업로드 가능하도록 하고, 최대 5장까지만 저장되도록 제한해야 합니다.
         // 또한 각 이미지의 최대 용량도 서버 측에서 체크해야 합니다.
+
+        async function uploadeReviewImages(img) {
+            console.log('파일 업로드 시작 : ', img);
+            const formData = new FormData();
+            formData.append('file', img);
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "/review/uploadReviewImage",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        // alert("파일 업로드 성공 : " + data);
+                        console.log(`[${img}] 파일의 업로드 완료 : ${data}`);
+                        resolve(data);
+                    },
+                    error: function (error) {
+                        console.log("파일 업로드 오류 : ", error);
+                        alert("파일 업로드 중 오류가 발생했습니다.");
+                        reject(error);
+                    },
+                })
+            });
+        }
     </script>
 </body>
 </html>

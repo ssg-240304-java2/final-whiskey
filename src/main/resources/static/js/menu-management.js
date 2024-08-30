@@ -29,7 +29,7 @@ function initializeMenuManagement() {
     // 메뉴 리스트 렌더링
     function renderMenus(menus) {
         menuList.innerHTML = '';
-        menus.forEach(menu => {
+        for (let menu of menus) {
             const menuItem = document.createElement('div');
             menuItem.className = 'col-md-3 mb-4';
             menuItem.innerHTML = `
@@ -44,7 +44,23 @@ function initializeMenuManagement() {
                 </div>
             `;
             menuList.appendChild(menuItem);
-        });
+        }
+        // menus.forEach(menu => {
+        //     const menuItem = document.createElement('div');
+        //     menuItem.className = 'col-md-3 mb-4';
+        //     menuItem.innerHTML = `
+        //         <div class="card">
+        //             <img src="${menu.image}" class="card-img-top" alt="${menu.name}">
+        //             <div class="card-body">
+        //                 <h5 class="card-title">${menu.name}</h5>
+        //                 <p class="card-text"><strong>${menu.price.toLocaleString()}원</strong></p>
+        //                 <button class="btn btn-sm btn-primary edit-menu" data-id="${menu.id}">수정</button>
+        //                 <button class="btn btn-sm btn-danger delete-menu" data-id="${menu.id}">삭제</button>
+        //             </div>
+        //         </div>
+        //     `;
+        //     menuList.appendChild(menuItem);
+        // });
 
         // 수정 및 삭제 버튼에 이벤트 리스너 추가
         document.querySelectorAll('.edit-menu').forEach(btn => {
@@ -87,7 +103,7 @@ function initializeMenuManagement() {
         let paginatedMenus = [];
         for (let i = start; i < start + itemsPerPage; i++) {
             if (menus[i] !== undefined) {
-                menus[i].image = menus[i].image != null ? menus[i].image : 'https://via.placeholder.com/150';
+                menus[i].image = menus[i].image != null ? "https://kr.object.ncloudstorage.com/whiskey-file/" + menus[i].image.uuidFileName : 'https://via.placeholder.com/150';
                 paginatedMenus.push(menus[i]);
             }
         }
@@ -143,16 +159,23 @@ function initializeMenuManagement() {
     }
 
     // 메뉴 저장 (추가 또는 수정)
-    saveMenuBtn.addEventListener('click', () => {
+    saveMenuBtn.addEventListener('click', async () => {
+        // TODO: 백엔드 API 호출하여 메뉴 저장
+        const menuImage = document.getElementById('menuImage').files[0];
+        var menuImageId = null;
+        if (menuImage) {
+            menuImageId = await uploadFileToServer(menuImage);
+        }
+
         const menuData = {
             id: document.getElementById('menuId').value,
             name: document.getElementById('menuName').value,
             price: document.getElementById('menuPrice').value,
-            restaurantId: document.getElementById('restaurantId').value
+            restaurantId: document.getElementById('restaurantId').value,
             // TODO: 이미지 처리 로직 추가
+            image: menuImageId
         };
 
-        // TODO: 백엔드 API 호출하여 메뉴 저장
         $.ajax({
             type: "POST",
             url: "/api/restaurant/saveMenu",
@@ -160,15 +183,39 @@ function initializeMenuManagement() {
             success: function (response) {
                 alert("메뉴 저장에 성공했습니다.");
                 console.log("response : ", response);
+                menuModal.hide();
+                updateMenuList();
             },
             error: function (error) {
                 alert("메뉴 저장에 실패했습니다.");
                 console.log("error : ", error);
+                menuModal.hide();
+                updateMenuList();
             }
         });
-        menuModal.hide();
-        updateMenuList();
+
     });
+
+    async function uploadFileToServer(file) {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/menu/image/upload', {
+                method: 'POST',
+                body: formData
+            });
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(errorMessage);
+            }
+            return await response.text(); // UUID 파일명 반환
+        } catch (error) {
+            console.error('파일 업로드 오류:', error);
+            alert('파일 업로드에 실패했습니다: ' + error.message);
+            throw error;
+        }
+    }
 
     // 초기 메뉴 리스트 로드
     updateMenuList();

@@ -1,9 +1,12 @@
 package com.whiskey.rvcom.review;
 
 import com.whiskey.rvcom.ImageFile.ImageFileService;
+import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.receipt.ReceiptData;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.repository.RestaurantRepository;
+import com.whiskey.rvcom.restaurant.service.RestaurantService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,11 +26,25 @@ public class ReceiptVerificationController {
     private final RestaurantRepository restaurantRepository;
     private final ImageFileService imageFileService;
     private final ReceiptApi receiptApi;
+    private final RestaurantService restaurantService;
 
     @GetMapping("verify/{restaurantId}")
-    public String verifyReceipt(@PathVariable Long restaurantId, Model model) {
+    public String verifyReceipt(@PathVariable Long restaurantId, Model model, HttpSession session) {
+        // 로그인한 사용자의 정보를 가져옴
+        Member member = (Member) session.getAttribute("member");
+
+        // 로그인한 사용자의 정보가 없으면 로그인 페이지로 이동
+        // todo. 메시지 출력해주도록 변경
+        if (member == null) {
+            return "redirect:/login";
+        }
+
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+
         // 영수증 인증 페이지로 이동
         model.addAttribute("restaurantId", restaurantId);
+        model.addAttribute("restaurant", restaurant);
+
         return "receiptVerification";
     }
 

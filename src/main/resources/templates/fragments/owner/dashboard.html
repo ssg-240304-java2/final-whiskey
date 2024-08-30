@@ -1,101 +1,119 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="dashboard">
-        <!-- 음식점 이름 표시 -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <h2 class="restaurant-name">추형진의 기똥찬 레스토랑</h2>
-                <!-- TODO: 실제 음식점 이름 데이터 연동 -->
-                <!-- <h2 class="restaurant-name" th:text="${restaurant.name}">음식점 이름</h2> -->
-            </div>
+<div th:fragment="dashboard">
+    <!-- 음식점 이름 표시 -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="restaurant-name" id="displayRestaurantName"></h2>
+            <!-- TODO: 실제 음식점 이름 데이터 연동 -->
+            <!-- <h2 class="restaurant-name" th:text="${restaurant.name}">음식점 이름</h2> -->
         </div>
-        
-        <div class="row">
-            <!-- 핵심 통계 -->
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">총 리뷰 수</h5>
-                        <p class="card-text">152개</p>
-                        <!-- TODO: 실제 총 리뷰 수 데이터 연동 -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">신규 리뷰</h5>
-                        <p class="card-text">5개</p>
-                        <!-- TODO: 실제 신규 리뷰 수 데이터 연동 -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">미답변 문의</h5>
-                        <p class="card-text">3건</p>
-                        <!-- TODO: 실제 미답변 문의 수 데이터 연동 -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">평균 평점</h5>
-                        <p class="card-text">4.5 / 5</p>
-                        <!-- TODO: 실제 평균 평점 데이터 연동 -->
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
 
-        <!-- 최근 리뷰 섹션 -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">최근 리뷰</h5>
-                        <ul class="list-group list-group-flush">
-                            <!-- TODO: 실제 최근 리뷰 데이터 연동 -->
-                            <li class="list-group-item">맛있어요! 또 방문하고 싶어요.</li>
-                            <li class="list-group-item">서비스가 친절해요.</li>
-                            <li class="list-group-item">분위기가 좋아요.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">인기 리뷰 TOP 3</h5>
-                        <ul class="list-group list-group-flush">
-                            <!-- TODO: 실제 좋아요 수가 많은 리뷰 데이터 연동 -->
-                            <li class="list-group-item">최고의 맛집! 추천합니다. (좋아요 50개)</li>
-                            <li class="list-group-item">가성비 좋고 맛있어요. (좋아요 45개)</li>
-                            <li class="list-group-item">특별한 날에 가기 좋아요. (좋아요 40개)</li>
-                        </ul>
-                    </div>
+    <div class="row">
+        <!-- 핵심 통계 -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">총 리뷰 수</h5>
+                    <p class="card-text" th:text="${reviewCount}">152개</p>
+                    <!-- TODO: 실제 총 리뷰 수 데이터 연동 -->
                 </div>
             </div>
         </div>
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">신규 리뷰</h5>
+                    <p class="card-text" th:text="${weeklyReviewCount}">5개</p>
+                    <!-- TODO: 실제 신규 리뷰 수 데이터 연동 -->
+                </div>
+            </div>
+        </div>
+        <!-- 실제 미답변 문의 수 데이터 연동 -->
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">미답변 문의</h5>
+                    <p class="card-text" th:text="${unansweredInquiryCount}">0건</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">평균 평점</h5>
+                    <p class="card-text" th:text="${avgRating}">4.5 / 5</p>
+                    <!-- TODO: 실제 평균 평점 데이터 연동 -->
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <!-- 빠른 링크 -->
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">빠른 링크</h5>
-                        <div class="d-flex justify-content-around">
-                            <a href="#" class="btn btn-primary">리뷰 페이지 보기</a>
-                            <a href="#" class="btn btn-secondary">내 음식점 정보</a>
-                            <a href="#" class="btn btn-info">미답변 문의 관리</a>
-                        </div>
+    <!-- 최근 리뷰 섹션 -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">최근 리뷰</h5>
+                    <ul class="list-group list-group-flush">
+                        <!-- TODO: 실제 최근 리뷰 데이터 연동 -->
+<!--                        <li class="list-group-item">맛있어요! 또 방문하고 싶어요.</li>-->
+<!--                        <li class="list-group-item">서비스가 친절해요.</li>-->
+<!--                        <li class="list-group-item">분위기가 좋아요.</li>-->
+                        <li class="list-group-item" th:each="recentReview : ${recentReviews}" th:text="${recentReview.title}">분위기가 좋아요.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">인기 리뷰 TOP 3</h5>
+                    <ul class="list-group list-group-flush">
+                        <!-- TODO: 실제 좋아요 수가 많은 리뷰 데이터 연동 -->
+                        <li class="list-group-item">최고의 맛집! 추천합니다. (좋아요 50개)</li>
+                        <li class="list-group-item">가성비 좋고 맛있어요. (좋아요 45개)</li>
+                        <li class="list-group-item">특별한 날에 가기 좋아요. (좋아요 40개)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 빠른 링크 섹션 -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">빠른 링크</h5>
+                    <div class="d-flex justify-content-around flex-wrap">
+                        <!-- 대시보드 링크 -->
+                        <a href="#" class="btn btn-primary quick-link-btn" data-bs-target="dashboard">
+                            <i class="fas fa-home mr-2"></i> 대시보드
+                        </a>
+                        <!-- 음식점 정보 링크 -->
+                        <a href="#" class="btn btn-secondary quick-link-btn" data-bs-target="restaurant-info">
+                            <i class="fas fa-utensils mr-2"></i> 음식점 정보
+                        </a>
+                        <!-- 문의 내역 링크 -->
+                        <a href="#" class="btn btn-info quick-link-btn" data-bs-target="inquiries">
+                            <i class="fas fa-question-circle mr-2"></i> 문의 내역
+                        </a>
+                        <!-- 공지사항 링크 -->
+                        <a href="#" class="btn btn-warning quick-link-btn" data-bs-target="notices">
+                            <i class="fas fa-bullhorn mr-2"></i> 공지사항
+                        </a>
+                        <!-- 메뉴 관리 링크 -->
+                        <a href="#" class="btn btn-success quick-link-btn" data-bs-target="menu-management">
+                            <i class="fas fa-list mr-2"></i> 메뉴 관리
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>

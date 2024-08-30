@@ -3,30 +3,26 @@ package com.whiskey.rvcom.restaurant.controller;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.entity.restaurant.menu.Menu;
 import com.whiskey.rvcom.entity.review.*;
-import com.whiskey.rvcom.repository.ReviewRepository;
+import com.whiskey.rvcom.restaurant.dto.RestaurantOperatingHoursDTO;
 import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import com.whiskey.rvcom.review.ReviewService;
 import com.whiskey.rvcom.util.ImagePathParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/restaurant")
 @RequiredArgsConstructor
 public class restaurantController {
     private final RestaurantService restaurantService;
     private final ReviewService reviewService;
-    private final ReviewRepository reviewRepository;
 
-    @GetMapping("/{restaurantId}/{tab}")
+    @GetMapping("/restaurant/{restaurantId}/{tab}")
     public String getRestaurantDetailWithTab(Model model, @PathVariable Long restaurantId, @PathVariable String tab) {
         // TODO: restaurantId와 tab에 따른 데이터 로딩 로직 구현
         // TODO: 모델에 restaurantId와 tab 정보 추가
@@ -65,6 +61,15 @@ public class restaurantController {
         String onlyStars = ratingPhase.replaceAll("[0-9.]", "").trim();
 
         List<Review> reviews = (List<Review>) reviewAttributes.get("reviews");
+
+        // 최신순으로 정렬된 리뷰 리스트 복사
+        List<Review> recentReviews = reviews.stream()
+                .sorted((r1, r2) -> r2.getCreatedAt().compareTo(r1.getCreatedAt()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("reviews", recentReviews);
+
+
         // review 내의 isSuspended가 false인 review만 가져오기
         reviews.removeIf(Review::isSuspended);
 
@@ -81,8 +86,15 @@ public class restaurantController {
         model.addAttribute("ratingOnlyStars", onlyStars);
 
         model.addAttribute("ratingPhase", reviewAttributes.get("ratingPhase"));
-        model.addAttribute("reviews", reviews);
+
 
         return "restaurantDetail";
+    }
+
+    @PostMapping(value = "/api/restaurant/modification/{restaurantId}", consumes = "application/json")
+    @ResponseBody
+    public String modifyRestaurantInfo(@PathVariable Long restaurantId, @RequestBody RestaurantOperatingHoursDTO restaurantOperatingHours) {
+        restaurantService.modifyOperatingHour(restaurantId, restaurantOperatingHours.getOperatingHours());
+        return "확인";
     }
 }
