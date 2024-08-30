@@ -82,8 +82,8 @@ public class ImageFileService {
     private String saveFileLocally(MultipartFile multipartFile) throws IOException {
         String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
         // 서버의 특정 디렉토리를 지정합니다. 예를 들어, "/app/multipartfiletest/"
-        Path uploadDir = Paths.get("/app/multipartfiletest/");
-//        Path uploadDir = Paths.get("/Users/awesome/Test/");
+//        Path uploadDir = Paths.get("/app/multipartfiletest/");
+        Path uploadDir = Paths.get("/Users/awesome/Test/");
         if (!Files.exists(uploadDir)) {
             Files.createDirectories(uploadDir);
         }

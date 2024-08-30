@@ -5,6 +5,7 @@ import com.whiskey.rvcom.entity.member.Member;
 import com.whiskey.rvcom.entity.receipt.ReceiptData;
 import com.whiskey.rvcom.entity.restaurant.Restaurant;
 import com.whiskey.rvcom.repository.RestaurantRepository;
+import com.whiskey.rvcom.restaurant.service.RestaurantService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ public class ReceiptVerificationController {
     private final RestaurantRepository restaurantRepository;
     private final ImageFileService imageFileService;
     private final ReceiptApi receiptApi;
+    private final RestaurantService restaurantService;
 
     @GetMapping("verify/{restaurantId}")
     public String verifyReceipt(@PathVariable Long restaurantId, Model model, HttpSession session) {
@@ -37,8 +39,12 @@ public class ReceiptVerificationController {
             return "redirect:/login";
         }
 
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+
         // 영수증 인증 페이지로 이동
         model.addAttribute("restaurantId", restaurantId);
+        model.addAttribute("restaurant", restaurant);
+
         return "receiptVerification";
     }
 
