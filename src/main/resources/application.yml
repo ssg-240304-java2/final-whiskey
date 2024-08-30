@@ -31,6 +31,7 @@ spring:
           google:
             client-id: ${{secrets.GOOGLE_CLIENT_ID}}
             client-secret: ${{secrets.GOOGLE_CLIENT_SECRET}}
+            redirect-uri: "https://web.dokalab.site/login/oauth2/code/google"
             scope: profile, email
 
         provider:
