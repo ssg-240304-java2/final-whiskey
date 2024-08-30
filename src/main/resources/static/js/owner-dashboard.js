@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const sidebar = document.getElementById('sidebar');
 
     if (sidebarToggle) {
-        sidebarToggle.addEventListener('click', function() {
+        sidebarToggle.addEventListener('click', function () {
             sidebar.classList.toggle('active');
         });
     }
-    
+
     // 로고 클릭 이벤트 리스너 추가
     const logo = document.querySelector('.foodfolio-logo');
     logo.addEventListener('click', function (e) {
@@ -24,14 +24,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // 화면 크기 변경 시 사이드바 상태 조정
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         if (window.innerWidth >= 768) {
             sidebar.classList.remove('active');
         }
     });
 
     // 콘텐츠 영역 클릭 시 모바일에서 사이드바 닫기
-    contentArea.addEventListener('click', function() {
+    contentArea.addEventListener('click', function () {
         if (window.innerWidth < 768) {
             sidebar.classList.remove('active');
         }
@@ -79,14 +79,14 @@ document.addEventListener('DOMContentLoaded', function () {
 // <<<<<<< feat/owner_review_bind
     // 초기 로드 시 대시보드 프래그먼트 로드
     loadFragment('dashboard');
-    
+
     // 대시보드 로드 시 미답변 문의 카운트 업데이트
     updateUnansweredInquiryCount();
 // =======
 //     function loadContent(targetId) {
 //         // 모든 링크에서 'active' 클래스 제거
 //         sidebarLinks.forEach(l => l.classList.remove('active'));
-        
+
 //         // 해당하는 사이드바 링크에 'active' 클래스 추가
 //         const activeLink = document.querySelector(`#sidebar .nav-link[data-bs-target="#${targetId}"]`);
 //         if (activeLink) {
@@ -153,10 +153,10 @@ function initializeModals() {
 // 대시보드 초기화 함수
 function initDashboard() {
     console.log('Dashboard initialized');
+    loadRestaurantInfo();
     // 대시보드 특정 초기화 로직 (필요한 경우)
     updateUnansweredInquiryCount();
     // 기타 대시보드 특정 초기화 로직
-
 }
 
 function initRestaurantInfo() {
@@ -181,10 +181,10 @@ function unansweredInquiryCount() {
         url: `/restaurant/${restaurantId}/inquiries/unanswered-count`,
         type: 'GET',
         cache: false,
-        success: function(count) {
+        success: function (count) {
             $('.unansweredInquiryCount').text(count + '건');
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error("미답변 문의 수를 불러오는 중 오류 발생", status, error);
         }
     });
