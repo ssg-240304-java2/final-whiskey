@@ -89,18 +89,28 @@ public class ReviewController {
     @PostMapping("/reviewlike/add")
     @ResponseBody
     public ResponseEntity<Long> addLikeToReview(@RequestParam("reviewId") Long reviewNo, HttpSession session) { // need. 좋아요 처리할 사용자 정보 추가 필요
+        System.out.println("리뷰 좋아요 추가 요청 받음");
         Review dest = reviewService.getReviewById(reviewNo);
         Member member = (Member) session.getAttribute("member");
+
+        if(member == null) {
+            System.out.println("로그인한 사용자 정보가 없습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
         ReviewLike reviewLike = reviewLikeService.getReviewLikeByReviewAndMember(dest, member);
 
         // 이미 해당 리뷰에 좋아요를 누른 경우 좋아요 취소(토글처리)
         if (reviewLike == null) {
+            System.out.println("이미 좋아요를 누른 리뷰입니다.");
+            System.out.println("좋아요 취소 처리");
             reviewLike = new ReviewLike();
             reviewLike.setReview(dest);
             reviewLike.setMember(member);
             reviewLikeService.addReviewLike(reviewLike);
         } else {
+            System.out.println("좋아요를 누르지 않은 리뷰입니다.");
+            System.out.println("좋아요 추가 처리");
             reviewLikeService.removeReviewLike(reviewLike);
         }
 
@@ -129,7 +139,7 @@ public class ReviewController {
     //                },
     //            })
     @PostMapping("/saveReview")
-    public void saveReview(
+    public ResponseEntity<Void> saveReview(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
             @RequestParam("rating") int rating,
@@ -179,7 +189,7 @@ public class ReviewController {
             case 5:
                 destReview.setRating(Rating.FIVE_STAR);
                 break;
-            default:
+            default:    // edge-case(Exception)
                 destReview.setRating(Rating.ONE_STAR);
         }
 
@@ -190,23 +200,70 @@ public class ReviewController {
 //            ReviewImage reviewImage = new ReviewImage();
 //            destReview.getReviewImages().add(reviewImage);
 //        });
-        reviewService.saveReview(destReview);
 
-//        ReviewImage reviewImage = new ReviewImage();
-//        reviewImage.setReview(destReview);
-        List<ReviewImage> reviewImages = new ArrayList<>();
-        for(var imageId : imageFileIdList) {
-            ImageFile imageFile = imageFileService.getImageFile(imageId);
+        System.out.println("1차 저장 시도");
+        reviewService.saveReview(destReview);
+        System.out.println("1차 저장 완료");
+        System.out.println("배당받은 리뷰 ID: " + destReview.getId());
+
+        System.out.println("이미지 파일 처리 시작");
+//        List<ReviewImage> reviewImages = new ArrayList<>();
+        destReview.setReviewImages(new ArrayList<>());
+        for (Long l : imageFileIdList) {
+            System.out.println("처리할 이미지 파일 ID: " + l);
+            ImageFile imageFile = imageFileService.getImageFile(l);
+            System.out.println("가져온 이미지 엔티티 데이터: " + imageFile.getId());
+            System.out.println("가져온 이미지 엔티티의 originalFileName: " + imageFile.getOriginalFileName());
+            System.out.println("가져온 이미지 엔티티의 uuidFileName: " + imageFile.getUuidFileName());
+
             ReviewImage reviewImage = new ReviewImage();
             reviewImage.setImageFile(imageFile);
             reviewImage.setReview(destReview);
 
-            reviewImages.add(reviewImage);
+            // 리뷰이미지 엔티티 저장하여 영속화
+            System.out.println("ReviewImage 객체 생성 및 영속화");
+            reviewImageService.addReviewImage(reviewImage);
+
+            destReview.getReviewImages().add(reviewImage);
+
+            System.out.println("ReviewImage 객체 생성 및 저장 완료");
         }
 
-        destReview.setReviewImages(reviewImages);
-
+        System.out.println("2차 저장 시도");
         reviewService.saveReview(destReview);
+        System.out.println("2차 저장 완료");
+
+
+
+//        ReviewImage reviewImage = new ReviewImage();
+//        reviewImage.setReview(destReview);
+//        System.out.println("이미지 파일 처리 시작");
+//        List<ReviewImage> reviewImages = new ArrayList<>();
+//        System.out.println("ReviewImage 리스트 생성");
+//        for(var imageId : imageFileIdList) {
+//            System.out.println("처리할 이미지 파일 ID: " + imageId);
+//            ImageFile imageFile = imageFileService.getImageFile(imageId);
+//            System.out.println("가져온 이미지 엔티티 데이터: " + imageFile.getId());
+//
+//            System.out.println("ReviewImage 객체 생성");
+//            ReviewImage reviewImage = new ReviewImage();
+//            reviewImage.setImageFile(imageFile);
+//            reviewImage.setReview(destReview);
+//            System.out.println("ReviewImage 객체 생성 완료 : " + reviewImage);
+//
+//            reviewImages.add(reviewImage);
+//            System.out.println("ReviewImage 리스트에 추가 완료");
+//        }
+//        System.out.println("이미지 파일 처리 완료");
+//
+//        destReview.setReviewImages(reviewImages);
+//        System.out.println("생성된 ReviewImage 리스트를 Review 객체에 추가 완료");
+//
+//        System.out.println("2차 리뷰 저장 시도");
+//        reviewService.saveReview(destReview);
+//        System.out.println("2차 리뷰 저장 완료");
+
+        return ResponseEntity.ok().build();
     }
 
 //    @PostMapping("/save")

@@ -10,6 +10,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
+@ToString(exclude = "review")
 public class ReviewImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

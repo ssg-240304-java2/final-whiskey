@@ -61,6 +61,15 @@ public class restaurantController {
         String onlyStars = ratingPhase.replaceAll("[0-9.]", "").trim();
 
         List<Review> reviews = (List<Review>) reviewAttributes.get("reviews");
+
+        // 최신순으로 정렬된 리뷰 리스트 복사
+        List<Review> recentReviews = reviews.stream()
+                .sorted((r1, r2) -> r2.getCreatedAt().compareTo(r1.getCreatedAt()))
+                .collect(Collectors.toList());
+
+        model.addAttribute("reviews", recentReviews);
+
+
         // review 내의 isSuspended가 false인 review만 가져오기
         reviews.removeIf(Review::isSuspended);
 
@@ -77,7 +86,7 @@ public class restaurantController {
         model.addAttribute("ratingOnlyStars", onlyStars);
 
         model.addAttribute("ratingPhase", reviewAttributes.get("ratingPhase"));
-        model.addAttribute("reviews", reviews);
+
 
         return "restaurantDetail";
     }

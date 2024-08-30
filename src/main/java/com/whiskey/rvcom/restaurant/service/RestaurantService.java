@@ -244,7 +244,11 @@ public class RestaurantService {
                     reviewAndRatingPhaseBuilder.append("☆");
                 }
             }
-            reviewAndRatingPhaseBuilder.append(" ").append(rating);
+            reviewAndRatingPhaseBuilder.append(" ");
+
+//            String.format("%.1f", rating)
+            reviewAndRatingPhaseBuilder.append(String.format("%.1f", rating));
+
 //            reviewAndRatingPhaseBuilder.append(" (").append(reviewService.getReviewsByRestaurantAsList(restaurant).size()).append(" 리뷰)");
 
             restaurantSearchResultDTO.setReviewAndRatingPhase(reviewAndRatingPhaseBuilder.toString());

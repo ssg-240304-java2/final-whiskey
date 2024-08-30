@@ -154,22 +154,44 @@ function submitCommentAsync(reviewId) {
 }
 
 
-document.addEventListener('click', function (e) {
-    if (e.target && e.target.classList.contains('like-button')) {
-        const reviewId = e.target.id.split('-')[3];
+// document.addEventListener('click', function (e) {
+//     if (e.target && e.target.classList.contains('like-button')) {
+//         const reviewId = e.target.id.split('-')[3];
+//
+//         $.ajax({
+//             method: 'POST',
+//             url: '/reviewlike/add',
+//             data: {reviewId: reviewId},
+//             success: function (data) {
+//                 console.log('좋아요 수 : ' + data);
+//                 e.target.innerHTML = '👍 좋아요 (' + data + ')';
+//             },
+//             error: function (error) {
+//                 alert('로그인이 필요합니다.');
+//                 console.log(error);
+//             }
+//         });
+//     }
+// });
 
-        $.ajax({
-            method: 'POST',
-            url: '/reviewlike/add',
-            data: {reviewId: reviewId},
-            success: function (data) {
-                console.log('좋아요 수 : ' + data);
-                e.target.innerHTML = '👍 좋아요 (' + data + ')';
-            },
-            error: function (error) {
-                alert('로그인이 필요합니다.');
-                console.log(error);
-            }
-        });
-    }
-});
+function addReviewLike(id) {
+    console.log(`좋아요 추가: 리뷰 ID ${id}`);
+
+    $.ajax({
+        method: 'POST',
+        url: '/review/reviewlike/add',
+        data: {reviewId: id},
+        success: function (data) {
+            console.log('좋아요 수 : ' + data);
+            const likeButton = document.getElementById(`review-like-button-${id}`);
+
+            // todo. 회원정보 대조하여 좋아요 여부 확인 후
+            // 좋아요 버튼 내 텍스트에 볼드체 설정
+            likeButton.innerHTML = `👍 좋아요 (${data})`;
+        },
+        error: function (error) {
+            alert('로그인이 필요합니다.');
+            console.log(error);
+        }
+    });
+}
