@@ -200,24 +200,19 @@
 
                         /*
                         document.getElementById('storeName').textContent = receiptData.storeName;
-            document.getElementById('receiptDate').textContent = new Date(receiptData.paidAt).toLocaleDateString();
-            document.getElementById('totalAmount').textContent = receiptData.totalPrice.toLocaleString() + '원';
-            document.getElementById('menuItems').textContent = receiptData.paidItems.map(item => item.itemName).join(', ');
+                        document.getElementById('receiptDate').textContent = new Date(receiptData.paidAt).toLocaleDateString();
+                        document.getElementById('totalAmount').textContent = receiptData.totalPrice.toLocaleString() + '원';
+                        document.getElementById('menuItems').textContent = receiptData.paidItems.map(item => item.itemName).join(', ');
                          */
                         // 위 항목들을 각각 체크하여 하나의 항목이라도 채워질 수 없는 경우
                         // alert("인증에 필요한 정보가 부족합니다. 다시 시도해주세요."); 를 띄우고
                         // return 처리
-                        if(ocrResponseObject.storeName === "" || ocrResponseObject.paidAt === "" || ocrResponseObject.totalPrice === 0 || ocrResponseObject.paidItems.length === 0) {
-                            alert("인증에 필요한 정보가 부족합니다. 다시 시도해주세요.");
-                            return;
-                        } else {
-                            // 인증에 필요한 정보가 모두 채워진 경우
-                            // 다음 단계로 넘어가는 버튼을 노출
-                            nextStepBtn.style.display = 'block';
+                        // 인증에 필요한 정보가 모두 채워진 경우
+                        // 다음 단계로 넘어가는 버튼을 노출
+                        nextStepBtn.style.display = 'block';
 
-                            // 영수증 정보 패널을 표시
-                            document.getElementById('receiptInfo').style.display = 'block';
-                        }
+                        // 영수증 정보 패널을 표시
+                        document.getElementById('receiptInfo').style.display = 'block';
                     } else {
                         alert('올바르지 않은 영수증입니다. 지점명과 영수증에 기재된 지점을 확인 후 다시 시도해주세요.');
                     }
@@ -225,8 +220,8 @@
                     alert('영수증 인식에 실패했습니다. 다른 이미지를 시도해주세요.');
                 }
             } catch (error) {
-                console.error('영수증 인증 오류:', error);
                 alert('영수증 인증에 실패했습니다: ' + error.message);
+                console.error('영수증 인증 오류:', error);
             } finally {
                 hideLoadingUI(); // 로딩 UI 숨김
             }
