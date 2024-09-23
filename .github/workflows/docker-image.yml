@@ -76,8 +76,9 @@ jobs:
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker stop ${{ vars.APP_NAME }}
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker rm -f ${{ vars.APP_NAME }}
+            echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker network create my_custom_network || true  # 네트워크 생성
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker pull ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:main
-            echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker run -d --name ${{ vars.APP_NAME }} -p 50321:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:main
+            echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker run -d --name ${{ vars.APP_NAME }} --network my_custom_network -p 50321:8080 ${{ secrets.DOCKER_USERNAME }}/${{ vars.APP_NAME }}:main  # 네트워크 설정
             echo ${{ secrets.DEV_NCP_PASSWORD }} | sudo -S docker image prune -f
 
   deploy_devel:
